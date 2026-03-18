@@ -13,6 +13,7 @@ import {
 } from 'antd'
 import {
   AppstoreOutlined,
+  AuditOutlined,
   DownOutlined,
   BellOutlined,
   DashboardOutlined,
@@ -61,6 +62,7 @@ function getUserInitials(fullName?: string, email?: string): string {
 function selectedMenuKeyForRoute(route: string): string {
   if (route.startsWith('license-management')) return 'license-management'
   if (route.startsWith('affiliations')) return 'affiliations'
+  if (route.startsWith('inspection')) return 'inspection'
   if (route.startsWith('users-roles')) return 'users-roles'
   if (route.startsWith('regulator-settings')) return 'regulator-settings'
   if (route.startsWith('dashboard')) return 'dashboard'
@@ -123,6 +125,11 @@ export default function AppLayout({
           key: 'affiliations',
           icon: <PartitionOutlined />,
           label: 'Affiliations',
+        },
+        {
+          key: 'inspection',
+          icon: <AuditOutlined />,
+          label: 'Inspection',
         },
       ],
     },

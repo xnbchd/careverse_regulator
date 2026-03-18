@@ -5,6 +5,7 @@ import AppLayout from '@/components/AppLayout'
 import ProfileView from '@/components/ProfileView'
 import RoadmapShell from '@/components/RoadmapShell'
 import UnauthorizedPage from '@/components/UnauthorizedPage'
+import InspectionView from '@/components/inspection'
 import { useAuthStore } from '@/stores/authStore'
 
 const DEFAULT_FAVICON = '/assets/careverse_regulator/compliance-360/favicon.svg?v=20260313a'
@@ -16,6 +17,7 @@ const KNOWN_ROUTES = new Set([
   'users-roles',
   'regulator-settings',
   'license-management',
+  'inspection',
   'notifications-center',
   'profile',
 ])
@@ -49,6 +51,10 @@ const ROUTE_META: Record<string, RouteMeta> = {
   'license-management': {
     title: 'License Management',
     subtitle: 'Process approvals, renewals, and enforcement outcomes.',
+  },
+  inspection: {
+    title: 'Inspection Management',
+    subtitle: 'Schedule and view facility inspections.',
   },
   'notifications-center': {
     title: 'Notifications Center',
@@ -229,6 +235,7 @@ export default function App() {
             description="Coordinate application intake, renewals, and enforcement decisions."
           />
         )}
+        {route === 'inspection' && <InspectionView onNavigate={navigate} company={user?.company} />}
         {route === 'notifications-center' && (
           <RoadmapShell
             title="Notifications Center"
