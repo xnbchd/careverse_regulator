@@ -1,14 +1,22 @@
-import { Table, Button } from 'antd'
+import { Table, Button, Badge } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { ProCard } from '@ant-design/pro-components'
-import type { Inspection } from '@/stores/inspectionStore'
+import type { Inspection } from '@/types/inspection'
 import StatusBadge from './StatusBadge'
+import dayjs from 'dayjs'
 
 interface InspectionTableProps {
   inspections: Inspection[]
   selectedRowKeys: React.Key[]
   onSelectionChange: (keys: React.Key[]) => void
   onViewInspection: (inspection: Inspection) => void
+}
+
+function isInspectionOverdue(inspection: Inspection): boolean {
+  if (inspection.status !== 'Pending') return false
+  const today = dayjs().startOf('day')
+  const inspectionDate = dayjs(inspection.date, 'DD/MM/YYYY')
+  return inspectionDate.isBefore(today)
 }
 
 export default function InspectionTable({
@@ -51,7 +59,12 @@ export default function InspectionTable({
       dataIndex: 'status',
       key: 'status',
       width: 180,
-      render: (status: Inspection['status']) => <StatusBadge status={status} />,
+      render: (status: Inspection['status'], record: Inspection) => {
+        if (isInspectionOverdue(record)) {
+          return <Badge color="red" text="Overdue" />
+        }
+        return <StatusBadge status={status} />
+      },
     },
     {
       title: 'Action',

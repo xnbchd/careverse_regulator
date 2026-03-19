@@ -1,11 +1,19 @@
-import { Card, Button, Space } from 'antd'
+import { Card, Button, Space, Tag } from 'antd'
 import { CalendarOutlined, UserOutlined, FileTextOutlined } from '@ant-design/icons'
-import type { Inspection } from '@/stores/inspectionStore'
+import type { Inspection } from '@/types/inspection'
 import StatusBadge from './StatusBadge'
+import dayjs from 'dayjs'
 
 interface InspectionCardProps {
   inspection: Inspection
   onView: (inspection: Inspection) => void
+}
+
+function isInspectionOverdue(inspection: Inspection): boolean {
+  if (inspection.status !== 'Pending') return false
+  const today = dayjs().startOf('day')
+  const inspectionDate = dayjs(inspection.date, 'DD/MM/YYYY')
+  return inspectionDate.isBefore(today)
 }
 
 export default function InspectionCard({ inspection, onView }: InspectionCardProps) {
@@ -14,19 +22,24 @@ export default function InspectionCard({ inspection, onView }: InspectionCardPro
       style={{
         marginBottom: '12px',
         borderRadius: '8px',
-        border: '1px solid #EAECF0',
+        border: isInspectionOverdue(inspection) ? '2px solid #ff4d4f' : '1px solid #EAECF0',
       }}
       bodyStyle={{ padding: '16px' }}
     >
       <div style={{ marginBottom: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-          <div>
-            <div style={{ fontSize: '12px', color: '#667085', marginBottom: '4px' }}>
-              {inspection.inspectionId}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div>
+              <div style={{ fontSize: '12px', color: '#667085', marginBottom: '4px' }}>
+                {inspection.inspectionId}
+              </div>
+              <div style={{ fontSize: '16px', fontWeight: 600, color: '#101828' }}>
+                {inspection.facilityName}
+              </div>
             </div>
-            <div style={{ fontSize: '16px', fontWeight: 600, color: '#101828' }}>
-              {inspection.facilityName}
-            </div>
+            {isInspectionOverdue(inspection) && (
+              <Tag color="red" style={{ marginLeft: '8px' }}>Overdue</Tag>
+            )}
           </div>
           <StatusBadge status={inspection.status} />
         </div>

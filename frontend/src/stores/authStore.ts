@@ -5,6 +5,7 @@ import {
   getBootData,
   getCompanyBrandingFromBoot,
   getPortalAccessFromBoot,
+  fetchAndCacheCsrfToken,
 } from '@/utils/boot'
 
 const allowedRoles = new Set([
@@ -126,6 +127,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   accessMessage: null,
 
   initialize: async () => {
+    // Fetch CSRF token if not available (for dev mode on port 8080)
+    if (!window.csrf_token && !window.frappe?.boot?.csrf_token) {
+      await fetchAndCacheCsrfToken()
+    }
+
     const bootUser = mapBootUser()
     if (bootUser) {
       const roleAllowed = hasRoleAccess(bootUser.roles)

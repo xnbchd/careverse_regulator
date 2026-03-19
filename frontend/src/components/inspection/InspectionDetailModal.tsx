@@ -1,7 +1,7 @@
 import { Modal, Button, Divider, Space } from 'antd'
 import { CalendarOutlined, UserOutlined, IdcardOutlined, FileTextOutlined, CheckCircleOutlined } from '@ant-design/icons'
 import { useResponsive } from '@/hooks/useResponsive'
-import type { Inspection } from '@/stores/inspectionStore'
+import type { Inspection } from '@/types/inspection'
 import StatusBadge from './StatusBadge'
 
 interface InspectionDetailModalProps {

@@ -69,8 +69,70 @@ export function getBootData(): BootPayload | undefined {
   return window.frappe?.boot
 }
 
+let cachedCsrfToken: string | undefined
+
+function getCsrfFromCookie(): string | undefined {
+  const match = document.cookie.match(/csrf_token=([^;]+)/)
+  return match ? match[1] : undefined
+}
+
 export function getCsrfToken(): string | undefined {
-  return window.csrf_token || window.frappe?.boot?.csrf_token
+  // Try to get from window first
+  const token = window.csrf_token || window.frappe?.boot?.csrf_token
+  if (token) {
+    cachedCsrfToken = token
+    return token
+  }
+
+  // Try to get from cookie (for dev mode)
+  const cookieToken = getCsrfFromCookie()
+  if (cookieToken) {
+    cachedCsrfToken = cookieToken
+    return cookieToken
+  }
+
+  // Return cached token if available
+  return cachedCsrfToken
+}
+
+export async function fetchAndCacheCsrfToken(): Promise<void> {
+  try {
+    // For dev mode, fetch boot data from Frappe using GET (no CSRF required)
+    const response = await fetch('/api/method/careverse_regulator.www.compliance_360.get_context_for_dev', {
+      method: 'GET',
+      credentials: 'include'
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch boot data')
+    }
+
+    const data = await response.json()
+    const boot = data.message
+
+    // Set boot data if available
+    if (boot) {
+      if (!window.frappe) {
+        window.frappe = {}
+      }
+      window.frappe.boot = boot
+
+      // Get CSRF token from boot
+      if (boot.csrf_token) {
+        cachedCsrfToken = boot.csrf_token
+        window.csrf_token = boot.csrf_token
+      }
+    }
+
+    // Also try to get from cookie as fallback
+    const csrfFromCookie = getCsrfFromCookie()
+    if (csrfFromCookie && !cachedCsrfToken) {
+      cachedCsrfToken = csrfFromCookie
+      window.csrf_token = csrfFromCookie
+    }
+  } catch (error) {
+    console.error('Failed to fetch CSRF token:', error)
+  }
 }
 
 export function getActiveCompanyFromBoot(): string | null {

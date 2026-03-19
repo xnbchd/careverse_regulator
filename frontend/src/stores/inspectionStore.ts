@@ -1,97 +1,115 @@
 import { create } from 'zustand'
-
-export interface Inspection {
-  id: string
-  inspectionId: string
-  facilityName: string
-  date: string
-  inspector: string
-  noteToInspector: string
-  status: 'Non Compliant' | 'Completed' | 'Pending'
-  company?: string
-}
+import type { Inspection, Facility, Professional } from '@/types/inspection'
+import * as inspectionApi from '@/api/inspectionApi'
 
 export interface InspectionState {
   inspections: Inspection[]
+  facilities: Facility[]
+  professionals: Professional[]
+  loading: boolean
+  facilitiesLoading: boolean
+  professionalsLoading: boolean
+  error: string | null
   activeTab: 'scheduled' | 'findings'
   setActiveTab: (tab: 'scheduled' | 'findings') => void
-  applyMockForCompany: (company?: string | null) => void
+  fetchInspections: () => Promise<void>
+  fetchFacilities: () => Promise<void>
+  fetchProfessionals: () => Promise<void>
+  createInspection: (formData: {
+    facility: string
+    inspector: string
+    date: string
+    note: string
+  }) => Promise<void>
+  deleteInspection: (id: string) => Promise<void>
 }
 
-function buildMockInspections(company?: string | null): Inspection[] {
-  const companyLabel = company || 'Default Company'
-
-  const facilities = [
-    'Makueni Health Centre',
-    'Shalom Health Centre',
-    'Nairobi West Hospital',
-    'Kisumu Medical Center',
-    'Mombasa General Hospital',
-    'Nakuru County Referral Hospital',
-    'Eldoret Medical Center',
-    'Thika Level 5 Hospital',
-    'Garissa Provincial Hospital',
-    'Machakos Level 5 Hospital',
-    'Nyeri Teaching Hospital',
-    'Kakamega County Hospital',
-    'Kisii Teaching Hospital',
-    'Kitale District Hospital',
-    'Embu Level 5 Hospital',
-    'Malindi Sub-County Hospital',
-    'Naivasha District Hospital',
-    'Kericho County Referral Hospital',
-    'Bungoma County Hospital',
-    'Bomet Health Centre',
-  ]
-
-  const inspectors = [
-    'John Doe',
-    'Jane Smith',
-    'Dr. James Mwangi',
-    'Dr. Sarah Kimani',
-    'Inspector David Omondi',
-    'Inspector Mary Wanjiru',
-  ]
-
-  const notes = [
-    'Check safety compliance',
-    'Verify equipment maintenance records',
-    'Review staff credentials',
-    'Inspect emergency response protocols',
-    'Evaluate infection control measures',
-    'Check pharmaceutical storage compliance',
-    'Verify patient records management',
-    'Assess waste disposal procedures',
-    'Review fire safety measures',
-    'Inspect medical gas systems',
-  ]
-
-  const statuses: Inspection['status'][] = ['Non Compliant', 'Completed', 'Pending']
-
-  return facilities.map((facility, index) => {
-    const dayOffset = Math.floor(index / 3)
-    const date = new Date(2024, 1, 21 + dayOffset) // Feb 21, 2024 onwards
-    const formattedDate = date.toLocaleDateString('en-GB').replace(/\//g, '/')
-
-    return {
-      id: String(index + 1),
-      inspectionId: `I${102 + index}`,
-      facilityName: facility,
-      date: formattedDate,
-      inspector: inspectors[index % inspectors.length],
-      noteToInspector: notes[index % notes.length],
-      status: statuses[index % statuses.length],
-      company: companyLabel,
-    }
-  })
-}
-
-export const useInspectionStore = create<InspectionState>((set) => ({
-  inspections: buildMockInspections(),
+export const useInspectionStore = create<InspectionState>((set, get) => ({
+  inspections: [],
+  facilities: [],
+  professionals: [],
+  loading: false,
+  facilitiesLoading: false,
+  professionalsLoading: false,
+  error: null,
   activeTab: 'scheduled',
+
   setActiveTab: (tab) => set({ activeTab: tab }),
-  applyMockForCompany: (company?: string | null) =>
-    set({
-      inspections: buildMockInspections(company),
-    }),
+
+  fetchInspections: async () => {
+    set({ loading: true, error: null })
+    try {
+      const inspections = await inspectionApi.listInspections()
+      set({ inspections, loading: false })
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Failed to fetch inspections',
+        loading: false
+      })
+    }
+  },
+
+  fetchFacilities: async () => {
+    set({ facilitiesLoading: true })
+    try {
+      const facilities = await inspectionApi.listFacilities()
+      set({ facilities, facilitiesLoading: false })
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Failed to fetch facilities',
+        facilitiesLoading: false
+      })
+    }
+  },
+
+  fetchProfessionals: async () => {
+    set({ professionalsLoading: true })
+    try {
+      const professionals = await inspectionApi.listProfessionals()
+      set({ professionals, professionalsLoading: false })
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Failed to fetch professionals',
+        professionalsLoading: false
+      })
+    }
+  },
+
+  createInspection: async (formData) => {
+    set({ loading: true, error: null })
+    try {
+      const payload = inspectionApi.createInspectionFromForm(formData)
+      const newInspection = await inspectionApi.createInspection(payload)
+      set({
+        inspections: [...get().inspections, newInspection],
+        loading: false
+      })
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Failed to create inspection',
+        loading: false
+      })
+      throw error
+    }
+  },
+
+  deleteInspection: async (id) => {
+    set({ loading: true, error: null })
+    try {
+      await inspectionApi.deleteInspection(id)
+      set({
+        inspections: get().inspections.filter(inspection => inspection.id !== id),
+        loading: false
+      })
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : 'Failed to delete inspection',
+        loading: false
+      })
+      throw error
+    }
+  },
 }))
+
+// Initialize inspections on store creation
+useInspectionStore.getState().fetchInspections()

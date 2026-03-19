@@ -13,7 +13,7 @@ import subprocess
 from typing import Optional, Tuple
 
 MANIFEST_PATH = "../careverse_regulator/public/compliance-360/.vite/manifest.json"
-HTML_TEMPLATE_PATH = "../careverse_regulator/www/compliance-360.html"
+HTML_TEMPLATE_PATH = "../careverse_regulator/www/compliance_360.html"
 ASSET_PREFIX = "/assets/careverse_regulator/compliance-360/assets/"
 
 
@@ -68,7 +68,8 @@ def extract_asset_hashes() -> Tuple[Optional[str], Optional[str]]:
     with open(MANIFEST_PATH, "r", encoding="utf-8") as handle:
         manifest = json.load(handle)
 
-    entry = manifest.get("index.html")
+    # Look for main entry point (src/main.tsx)
+    entry = manifest.get("src/main.tsx") or manifest.get("index.html")
     if not entry:
         return None, None
 

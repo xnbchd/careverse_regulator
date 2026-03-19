@@ -1,5 +1,5 @@
 import { Tag } from 'antd'
-import type { Inspection } from '@/stores/inspectionStore'
+import type { Inspection } from '@/types/inspection'
 
 interface StatusBadgeProps {
   status: Inspection['status']

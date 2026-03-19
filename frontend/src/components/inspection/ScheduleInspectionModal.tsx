@@ -1,4 +1,4 @@
-import { Modal, Select, DatePicker, Input, Button } from 'antd'
+import { Modal, Select, DatePicker, Input, Button, Alert } from 'antd'
 import { useResponsive } from '@/hooks/useResponsive'
 import dayjs from 'dayjs'
 
@@ -13,8 +13,10 @@ interface ScheduleInspectionModalProps {
     note: string
   }
   setFormData: (data: ScheduleInspectionModalProps['formData']) => void
-  facilities: string[]
-  inspectors: string[]
+  facilities: Array<{ value: string; label: string }>
+  inspectors: Array<{ value: string; label: string }>
+  loading?: boolean
+  error?: string | null
 }
 
 export default function ScheduleInspectionModal({
@@ -25,6 +27,8 @@ export default function ScheduleInspectionModal({
   setFormData,
   facilities,
   inspectors,
+  loading = false,
+  error = null,
 }: ScheduleInspectionModalProps) {
   const { isMobile } = useResponsive()
 
@@ -48,6 +52,17 @@ export default function ScheduleInspectionModal({
       bodyStyle={isMobile ? { maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' } : {}}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '24px' }}>
+        {error && (
+          <Alert
+            message="Error"
+            description={error}
+            type="error"
+            showIcon
+            closable
+            style={{ marginBottom: '8px' }}
+          />
+        )}
+
         <div>
           <label
             style={{
@@ -71,10 +86,7 @@ export default function ScheduleInspectionModal({
             filterOption={(input, option) =>
               (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
             }
-            options={facilities.map((facility) => ({
-              label: facility,
-              value: facility,
-            }))}
+            options={facilities}
           />
         </div>
 
@@ -95,10 +107,12 @@ export default function ScheduleInspectionModal({
             onChange={(value) => setFormData({ ...formData, inspector: value })}
             style={{ width: '100%' }}
             size="large"
-            options={inspectors.map((inspector) => ({
-              label: inspector,
-              value: inspector,
-            }))}
+            showSearch
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            options={inspectors}
           />
         </div>
 
@@ -120,6 +134,11 @@ export default function ScheduleInspectionModal({
             format="DD/MM/YYYY"
             style={{ width: '100%' }}
             size="large"
+            disabledDate={(current) => {
+              // Disable dates before today (start of day)
+              const today = dayjs().startOf('day')
+              return current && current.valueOf() < today.valueOf()
+            }}
           />
         </div>
 
@@ -149,6 +168,7 @@ export default function ScheduleInspectionModal({
             size={isMobile ? 'middle' : 'large'}
             onClick={onClose}
             block={isMobile}
+            disabled={loading}
             style={{
               width: isMobile ? '100%' : '48%',
               borderColor: '#11b5a1',
@@ -162,6 +182,7 @@ export default function ScheduleInspectionModal({
             size={isMobile ? 'middle' : 'large'}
             onClick={onSubmit}
             disabled={!formData.facility || !formData.inspector || !formData.date}
+            loading={loading}
             block={isMobile}
             style={{
               width: isMobile ? '100%' : '48%',

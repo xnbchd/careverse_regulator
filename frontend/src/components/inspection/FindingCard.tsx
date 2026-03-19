@@ -1,6 +1,6 @@
 import { Card, Button, Space, Tag } from 'antd'
 import { CalendarOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import type { Finding } from '@/stores/findingsStore'
+import type { Finding } from '@/types/inspection'
 import FindingsBadge from './FindingsBadge'
 
 interface FindingCardProps {
@@ -45,9 +45,10 @@ export default function FindingCard({ finding, onView }: FindingCardProps) {
           <InfoCircleOutlined style={{ color: '#667085', marginTop: '2px' }} />
           <span style={{ flex: 1, lineHeight: '20px' }}>{finding.description}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', color: '#475467' }}>
-          <CalendarOutlined style={{ color: '#667085' }} />
-          <span>Due: {finding.dueDate}</span>
+        <div style={{ fontSize: '13px', color: '#667085' }}>
+          {finding.inspectionDate && `Inspection: ${finding.inspectionDate}`}
+          {finding.dueDate && ` | Due: ${finding.dueDate}`}
+          {finding.resolvedDate && ` | Resolved: ${finding.resolvedDate}`}
         </div>
       </Space>
 

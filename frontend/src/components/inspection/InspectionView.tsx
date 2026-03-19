@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { Button, Empty } from 'antd'
 import { ProCard } from '@ant-design/pro-components'
 import { useInspectionStore } from '@/stores/inspectionStore'
-import type { Inspection } from '@/stores/inspectionStore'
+import type { Inspection, Finding } from '@/types/inspection'
 import { useFindingsStore } from '@/stores/findingsStore'
-import type { Finding } from '@/stores/findingsStore'
+import * as inspectionApi from '@/api/inspectionApi'
 import { useResponsive } from '@/hooks/useResponsive'
+import { showSuccess, showError, extractErrorMessage } from '@/utils/toast'
 import InspectionTable from './InspectionTable'
 import InspectionCard from './InspectionCard'
 import InspectionFilters from './InspectionFilters'
@@ -14,7 +15,7 @@ import InspectionDetailModal from './InspectionDetailModal'
 import FindingsTable from './FindingsTable'
 import FindingCard from './FindingCard'
 import FindingsFilters from './FindingsFilters'
-import FindingsDetailModal from './FindingsDetailModal'
+import FindingsDrawer from './FindingsDrawer'
 import dayjs from 'dayjs'
 
 interface InspectionViewProps {
@@ -23,8 +24,8 @@ interface InspectionViewProps {
 }
 
 export default function InspectionView({ onNavigate, company }: InspectionViewProps) {
-  const { inspections, activeTab, setActiveTab, applyMockForCompany } = useInspectionStore()
-  const { findings, applyMockForCompany: applyFindingsMock } = useFindingsStore()
+  const { inspections, facilities, professionals, loading, error, activeTab, setActiveTab, fetchInspections, fetchFacilities, fetchProfessionals, createInspection } = useInspectionStore()
+  const { findings, fetchFindings } = useFindingsStore()
   const { isMobile, isTablet } = useResponsive()
 
   // Inspection tab state
@@ -37,10 +38,12 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [formData, setFormData] = useState({
     facility: '',
-    inspector: 'John Doe',
+    inspector: '',
     date: dayjs().format('DD/MM/YYYY'),
     note: '',
   })
+  const [submitting, setSubmitting] = useState(false)
+  const [modalError, setModalError] = useState<string | null>(null)
 
   // Findings tab state
   const [findingsSearchText, setFindingsSearchText] = useState('')
@@ -48,19 +51,20 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
   const [selectedFindingStatuses, setSelectedFindingStatuses] = useState<string[]>(['all'])
   const [findingsSortOrder, setFindingsSortOrder] = useState<'asc' | 'desc' | 'recent'>('asc')
   const [selectedFindingRowKeys, setSelectedFindingRowKeys] = useState<React.Key[]>([])
-  const [selectedFinding, setSelectedFinding] = useState<Finding | null>(null)
+  const [selectedInspectionForDrawer, setSelectedInspectionForDrawer] = useState<Inspection | null>(null)
+  const [loadingInspectionDetails, setLoadingInspectionDetails] = useState(false)
   const [isFindingModalVisible, setIsFindingModalVisible] = useState(false)
 
   useEffect(() => {
-    applyMockForCompany(company)
-    applyFindingsMock(company)
-  }, [applyMockForCompany, applyFindingsMock, company])
+    fetchInspections()
+    fetchFacilities()
+    fetchProfessionals()
+    fetchFindings()
+  }, [])
 
-  // Get unique facilities and inspectors for the dropdowns
-  const allFacilities = Array.from(new Set(inspections.map((i) => i.facilityName))).sort()
-  const allInspectors = Array.from(
-    new Set(inspections.map((i) => i.inspector))
-  ).sort()
+  // Get facilities and professionals from the store
+  const allFacilities = facilities.map((f) => ({ value: f.name, label: f.facility_name }))
+  const allInspectors = professionals.map((p) => ({ value: p.name, label: p.professional_name }))
 
   const filteredInspections = inspections
     .filter((inspection) => {
@@ -79,14 +83,27 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
       return 0
     })
 
-  const handleScheduleInspection = () => {
-    setIsModalVisible(false)
-    setFormData({
-      facility: '',
-      inspector: 'John Doe',
-      date: dayjs().format('DD/MM/YYYY'),
-      note: '',
-    })
+  const handleScheduleInspection = async () => {
+    setSubmitting(true)
+    setModalError(null)
+
+    try {
+      await createInspection(formData)
+      showSuccess('Inspection scheduled successfully')
+      setIsModalVisible(false)
+      setFormData({
+        facility: '',
+        inspector: '',
+        date: dayjs().format('DD/MM/YYYY'),
+        note: '',
+      })
+    } catch (error) {
+      const errorMessage = extractErrorMessage(error)
+      setModalError(errorMessage)
+      showError(errorMessage)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handleViewInspection = (inspection: Inspection) => {
@@ -114,9 +131,19 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
       return 0
     })
 
-  const handleViewFinding = (finding: Finding) => {
-    setSelectedFinding(finding)
-    setIsFindingModalVisible(true)
+  const handleViewFinding = async (finding: Finding) => {
+    if (!finding.inspectionId || loadingInspectionDetails) return
+
+    setLoadingInspectionDetails(true)
+    try {
+      const fullInspection = await inspectionApi.getInspection(finding.inspectionId)
+      setSelectedInspectionForDrawer(fullInspection)
+      setIsFindingModalVisible(true)
+    } catch (error) {
+      showError('Failed to load inspection details')
+    } finally {
+      setLoadingInspectionDetails(false)
+    }
   }
 
   return (
@@ -176,7 +203,10 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
           <Button
             type="primary"
             size={isMobile ? 'middle' : 'large'}
-            onClick={() => setIsModalVisible(true)}
+            onClick={() => {
+              setIsModalVisible(true)
+              setModalError(null)
+            }}
             block={isMobile}
             style={{
               backgroundColor: '#11b5a1',
@@ -335,12 +365,17 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
 
       <ScheduleInspectionModal
         open={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
+        onClose={() => {
+          setIsModalVisible(false)
+          setModalError(null)
+        }}
         onSubmit={handleScheduleInspection}
         formData={formData}
         setFormData={setFormData}
         facilities={allFacilities}
         inspectors={allInspectors}
+        loading={submitting}
+        error={modalError}
       />
 
       <InspectionDetailModal
@@ -352,13 +387,13 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
         inspection={selectedInspection}
       />
 
-      <FindingsDetailModal
+      <FindingsDrawer
         open={isFindingModalVisible}
         onClose={() => {
           setIsFindingModalVisible(false)
-          setSelectedFinding(null)
+          setSelectedInspectionForDrawer(null)
         }}
-        finding={selectedFinding}
+        inspection={selectedInspectionForDrawer}
       />
     </div>
   )
