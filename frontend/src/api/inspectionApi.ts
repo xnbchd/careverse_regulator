@@ -14,7 +14,7 @@ import type {
   Professional,
 } from '@/types/inspection'
 
-const INSPECTION_DOCTYPE = 'Inspection'
+const INSPECTION_DOCTYPE = 'Inspection Record'
 
 export function transformFinding(backendFinding: BackendFinding, parentInspection?: Inspection): Finding {
   return {
@@ -42,7 +42,7 @@ export function transformInspection(backendInspection: BackendInspection): Inspe
     id: backendInspection.name,
     inspectionId: backendInspection.name,
     facilityName: backendInspection.facility_name || backendInspection.facility,
-    date: formatDateForFrontend(backendInspection.inspection_date),
+    date: formatDateForFrontend(backendInspection.scheduled_date),
     inspector: backendInspection.professional_name || backendInspection.professional,
     noteToInspector: backendInspection.note_to_inspector,
     status: backendInspection.status,
@@ -69,14 +69,14 @@ export function formatDateForFrontend(backendDate: string): string {
 
 export async function listInspections(): Promise<Inspection[]> {
   const response = await apiRequest<{ message: BackendInspection[] }>(
-    `/api/method/careverse_regulator.api.inspection.get_inspections_with_names`
+    `/api/method/compliance_360.api.inspection.get_inspections_with_names`
   )
   return response.message.map(transformInspection)
 }
 
 export async function getInspection(name: string): Promise<Inspection> {
   const response = await apiRequest<{ message: BackendInspection }>(
-    `/api/method/careverse_regulator.api.inspection.get_inspection_with_names?name=${encodeURIComponent(name)}`
+    `/api/method/compliance_360.api.inspection.get_inspection_with_names?name=${encodeURIComponent(name)}`
   )
   return transformInspection(response.message)
 }
@@ -123,7 +123,7 @@ export function createInspectionFromForm(formData: {
   return {
     facility: formData.facility,
     professional: formData.inspector,
-    inspection_date: formatDateForBackend(formData.date),
+    scheduled_date: formatDateForBackend(formData.date),
     note_to_inspector: formData.note,
     status: 'Pending',
   }
@@ -131,14 +131,14 @@ export function createInspectionFromForm(formData: {
 
 export async function listFacilities(): Promise<Facility[]> {
   const response = await apiRequest<FrappeListResponse<Facility>>(
-    `/api/resource/Facility?fields=["name","facility_name"]&filters=[["disabled","=",0]]`
+    `/api/resource/Facility Record?fields=["name","facility_name"]`
   )
   return response.data
 }
 
 export async function listProfessionals(): Promise<Professional[]> {
   const response = await apiRequest<FrappeListResponse<Professional>>(
-    `/api/resource/Professional?fields=["name","professional_name"]&filters=[["disabled","=",0]]`
+    `/api/resource/Professional Record?fields=["name","full_name"]&filters=[["active","=",1]]`
   )
   return response.data
 }

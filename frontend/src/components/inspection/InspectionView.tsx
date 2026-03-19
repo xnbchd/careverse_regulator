@@ -64,7 +64,7 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
 
   // Get facilities and professionals from the store
   const allFacilities = facilities.map((f) => ({ value: f.name, label: f.facility_name }))
-  const allInspectors = professionals.map((p) => ({ value: p.name, label: p.professional_name }))
+  const allInspectors = professionals.map((p) => ({ value: p.name, label: p.full_name }))
 
   const filteredInspections = inspections
     .filter((inspection) => {

@@ -16,7 +16,7 @@ export interface BackendInspection {
   name: string
   facility: string
   facility_name?: string
-  inspection_date: string
+  scheduled_date: string
   professional: string
   professional_name?: string
   note_to_inspector: string
@@ -37,7 +37,7 @@ export interface FrappeDocResponse {
 
 export interface CreateInspectionPayload {
   facility: string
-  inspection_date: string
+  scheduled_date: string
   professional: string
   note_to_inspector: string
   status?: 'Non Compliant' | 'Completed' | 'Pending'
@@ -46,7 +46,7 @@ export interface CreateInspectionPayload {
 
 export interface UpdateInspectionPayload {
   facility?: string
-  inspection_date?: string
+  scheduled_date?: string
   professional?: string
   note_to_inspector?: string
   status?: 'Non Compliant' | 'Completed' | 'Pending'
@@ -59,7 +59,7 @@ export interface Facility {
 
 export interface Professional {
   name: string
-  professional_name: string
+  full_name: string
 }
 
 export interface Attachment {

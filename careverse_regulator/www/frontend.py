@@ -1,7 +1,7 @@
 import frappe
 from frappe.utils import get_system_timezone
 
-from careverse_regulator.api.tenant import build_tenant_payload
+from compliance_360.api.tenant import build_tenant_payload
 
 no_cache = 1
 

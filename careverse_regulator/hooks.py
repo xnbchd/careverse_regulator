@@ -19,14 +19,7 @@ after_migrate = [
     "careverse_regulator.build.run_frontend_build",
 ]
 
-on_session_creation = "careverse_regulator.api.tenant.initialize_session_company"
-
-# Permission Query Conditions for multi-tenant filtering
-permission_query_conditions = {
-	"Inspection": "careverse_regulator.careverse_regulator.doctype.inspection.inspection.get_permission_query_conditions",
-	"Facility": "careverse_regulator.careverse_regulator.doctype.facility.facility.get_permission_query_conditions",
-	"Professional": "careverse_regulator.careverse_regulator.doctype.professional.professional.get_permission_query_conditions"
-}
+on_session_creation = "compliance_360.api.tenant.initialize_session_company"
 
 website_route_rules = [
     {"from_route": "/login", "to_route": "login"},
