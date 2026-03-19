@@ -12,6 +12,8 @@ import type {
   UpdateInspectionPayload,
   Facility,
   Professional,
+  PaginatedResponse,
+  PaginationMeta,
 } from '@/types/inspection'
 
 const INSPECTION_DOCTYPE = 'Inspection Record'
@@ -67,11 +69,42 @@ export function formatDateForFrontend(backendDate: string): string {
   return dayjs(backendDate, 'YYYY-MM-DD').format('DD/MM/YYYY')
 }
 
-export async function listInspections(): Promise<Inspection[]> {
-  const response = await apiRequest<{ message: BackendInspection[] }>(
-    `/api/method/compliance_360.api.inspection.get_inspections_with_names`
+export interface InspectionFilters {
+  search?: string
+  startDate?: string // YYYY-MM-DD
+  endDate?: string // YYYY-MM-DD
+  sortBy?: string
+  sortOrder?: 'asc' | 'desc'
+  severity?: string // For findings: comma-separated list
+  status?: string // For inspections/findings: comma-separated list
+}
+
+export async function listInspections(
+  page: number = 1,
+  pageSize: number = 20,
+  filters?: InspectionFilters
+): Promise<PaginatedResponse<Inspection>> {
+  // Build query params
+  const params = new URLSearchParams({
+    page: page.toString(),
+    page_size: pageSize.toString(),
+  })
+
+  if (filters?.search) params.append('search', filters.search)
+  if (filters?.startDate) params.append('start_date', filters.startDate)
+  if (filters?.endDate) params.append('end_date', filters.endDate)
+  if (filters?.sortBy) params.append('sort_by', filters.sortBy)
+  if (filters?.sortOrder) params.append('sort_order', filters.sortOrder)
+  if (filters?.status) params.append('status', filters.status)
+
+  // Fetch scheduled inspections (defaults to Pending if no status specified)
+  const response = await apiRequest<{ message: PaginatedResponse<BackendInspection> }>(
+    `/api/method/compliance_360.api.inspection.get_scheduled_inspections?${params.toString()}`
   )
-  return response.message.map(transformInspection)
+  return {
+    data: response.message.data.map(transformInspection),
+    pagination: response.message.pagination
+  }
 }
 
 export async function getInspection(name: string): Promise<Inspection> {
@@ -143,12 +176,29 @@ export async function listProfessionals(): Promise<Professional[]> {
   return response.data
 }
 
-export async function listFindings(): Promise<Finding[]> {
-  // First get list of inspections (with finding_count but no nested findings)
-  const inspectionsList = await listInspections()
+export async function listFindings(filters?: InspectionFilters): Promise<Finding[]> {
+  // Build query params
+  const params = new URLSearchParams({
+    page: '1',
+    page_size: '1000',
+  })
 
-  // Filter to inspections that have findings
-  const inspectionsWithFindings = inspectionsList.filter(i => (i.findingCount || 0) > 0)
+  if (filters?.search) params.append('search', filters.search)
+  if (filters?.startDate) params.append('start_date', filters.startDate)
+  if (filters?.endDate) params.append('end_date', filters.endDate)
+  if (filters?.sortBy) params.append('sort_by', filters.sortBy)
+  if (filters?.sortOrder) params.append('sort_order', filters.sortOrder)
+  if (filters?.severity) params.append('severity', filters.severity)
+  if (filters?.status) params.append('status', filters.status)
+
+  // Fetch ONLY Completed or Non Compliant inspections
+  const response = await apiRequest<{ message: PaginatedResponse<BackendInspection> }>(
+    `/api/method/compliance_360.api.inspection.get_inspection_findings?${params.toString()}`
+  )
+
+  const inspectionsWithFindings = response.message.data
+    .map(transformInspection)
+    .filter(i => (i.findingCount || 0) > 0)
 
   // Fetch full details in batches of 10 to avoid overwhelming browser
   const fullInspections = await batchPromises(

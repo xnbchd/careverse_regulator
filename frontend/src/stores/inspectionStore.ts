@@ -1,6 +1,7 @@
 import { create } from 'zustand'
-import type { Inspection, Facility, Professional } from '@/types/inspection'
+import type { Inspection, Facility, Professional, PaginationMeta } from '@/types/inspection'
 import * as inspectionApi from '@/api/inspectionApi'
+import type { InspectionFilters } from '@/api/inspectionApi'
 
 export interface InspectionState {
   inspections: Inspection[]
@@ -11,8 +12,13 @@ export interface InspectionState {
   professionalsLoading: boolean
   error: string | null
   activeTab: 'scheduled' | 'findings'
+  pagination: PaginationMeta | null
+  currentPage: number
+  pageSize: number
   setActiveTab: (tab: 'scheduled' | 'findings') => void
-  fetchInspections: () => Promise<void>
+  fetchInspections: (page?: number, filters?: InspectionFilters) => Promise<void>
+  setPage: (page: number) => void
+  setPageSize: (pageSize: number) => void
   fetchFacilities: () => Promise<void>
   fetchProfessionals: () => Promise<void>
   createInspection: (formData: {
@@ -33,14 +39,34 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
   professionalsLoading: false,
   error: null,
   activeTab: 'scheduled',
+  pagination: null,
+  currentPage: 1,
+  pageSize: 20,
 
   setActiveTab: (tab) => set({ activeTab: tab }),
 
-  fetchInspections: async () => {
+  setPage: (page) => {
+    set({ currentPage: page })
+    get().fetchInspections(page)
+  },
+
+  setPageSize: (pageSize) => {
+    set({ pageSize, currentPage: 1 })
+    get().fetchInspections(1)
+  },
+
+  fetchInspections: async (page, filters) => {
+    const currentPage = page || get().currentPage
+    const pageSize = get().pageSize
     set({ loading: true, error: null })
     try {
-      const inspections = await inspectionApi.listInspections()
-      set({ inspections, loading: false })
+      const response = await inspectionApi.listInspections(currentPage, pageSize, filters)
+      set({
+        inspections: response.data,
+        pagination: response.pagination,
+        currentPage,
+        loading: false
+      })
     } catch (error) {
       set({
         error: error instanceof Error ? error.message : 'Failed to fetch inspections',

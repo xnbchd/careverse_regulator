@@ -1,7 +1,9 @@
 import { useState } from 'react'
-import { Input, Button, Popover, Radio, Space } from 'antd'
+import { Input, Button, Popover, Radio, Space, Badge } from 'antd'
 import { SearchOutlined, FilterOutlined, SortAscendingOutlined } from '@ant-design/icons'
 import { useResponsive } from '@/hooks/useResponsive'
+import DateRangeSelector, { type DateRange } from './DateRangeSelector'
+import FilterTags, { type FilterTag } from './FilterTags'
 
 interface InspectionFiltersProps {
   searchText: string
@@ -10,6 +12,9 @@ interface InspectionFiltersProps {
   onStatusChange: (statuses: string[]) => void
   sortOrder: 'asc' | 'desc' | 'recent'
   onSortChange: (order: 'asc' | 'desc' | 'recent') => void
+  dateRange: DateRange | null
+  onDateRangeChange: (range: DateRange | null) => void
+  activeFilterCount?: number
 }
 
 export default function InspectionFilters({
@@ -19,10 +24,55 @@ export default function InspectionFilters({
   onStatusChange,
   sortOrder,
   onSortChange,
+  dateRange,
+  onDateRangeChange,
+  activeFilterCount = 0,
 }: InspectionFiltersProps) {
   const [filterOpen, setFilterOpen] = useState(false)
   const [sortOpen, setSortOpen] = useState(false)
   const [tempStatuses, setTempStatuses] = useState(selectedStatuses)
+  const { isMobile } = useResponsive()
+
+  // Build filter tags
+  const filterTags: FilterTag[] = []
+
+  // Status filter tag
+  if (!selectedStatuses.includes('all')) {
+    const statusLabel = selectedStatuses[0] === 'completed'
+      ? 'Completed'
+      : selectedStatuses[0] === 'non compliant'
+      ? 'Non Compliant'
+      : 'Pending'
+    filterTags.push({
+      key: 'status',
+      label: `Status: ${statusLabel}`,
+      onRemove: () => onStatusChange(['all']),
+    })
+  }
+
+  // Date range filter tag
+  if (dateRange) {
+    filterTags.push({
+      key: 'date',
+      label: dateRange.label,
+      onRemove: () => onDateRangeChange(null),
+    })
+  }
+
+  // Search filter tag
+  if (searchText) {
+    filterTags.push({
+      key: 'search',
+      label: `Search: "${searchText}"`,
+      onRemove: () => onSearchChange(''),
+    })
+  }
+
+  const handleClearAllFilters = () => {
+    onStatusChange(['all'])
+    onDateRangeChange(null)
+    onSearchChange('')
+  }
 
   const handleApplyFilter = () => {
     onStatusChange(tempStatuses)
@@ -110,49 +160,64 @@ export default function InspectionFilters({
     </div>
   )
 
-  const { isMobile } = useResponsive()
-
   return (
-    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: '12px', alignItems: isMobile ? 'stretch' : 'center', width: isMobile ? '100%' : 'auto' }}>
-      <Input
-        placeholder="Search by facility name"
-        prefix={<SearchOutlined />}
-        value={searchText}
-        onChange={(e) => onSearchChange(e.target.value)}
-        style={{ width: isMobile ? '100%' : 400 }}
-      />
-      <div style={{ display: 'flex', gap: '12px' }}>
-        <Popover
-          content={filterContent}
-          title={null}
-          trigger="click"
-          open={filterOpen}
-          onOpenChange={handleFilterOpenChange}
-          placement="bottomRight"
-        >
-          <Button
-            icon={<FilterOutlined />}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: isMobile ? 1 : 'none' }}
+    <div style={{ width: isMobile ? '100%' : 'auto' }}>
+      {/* Filter Controls */}
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: '12px', alignItems: isMobile ? 'stretch' : 'center', marginBottom: filterTags.length > 0 ? '12px' : 0 }}>
+        <Input
+          placeholder="Search by facility name"
+          prefix={<SearchOutlined />}
+          value={searchText}
+          onChange={(e) => onSearchChange(e.target.value)}
+          style={{ width: isMobile ? '100%' : 400 }}
+        />
+        <div style={{ display: 'flex', gap: isMobile ? '12px' : '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ position: 'relative' }}>
+            <Popover
+              content={filterContent}
+              title={null}
+              trigger="click"
+              open={filterOpen}
+              onOpenChange={handleFilterOpenChange}
+              placement="bottomRight"
+            >
+              <Badge count={activeFilterCount} offset={[-8, 8]}>
+                <Button
+                  icon={<FilterOutlined />}
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: isMobile ? 1 : 'none' }}
+                >
+                  {!isMobile && 'Filters'}
+                </Button>
+              </Badge>
+            </Popover>
+          </div>
+
+          <DateRangeSelector
+            value={dateRange}
+            onChange={onDateRangeChange}
+            showLabel={!isMobile}
+          />
+
+          <Popover
+            content={sortContent}
+            title={null}
+            trigger="click"
+            open={sortOpen}
+            onOpenChange={setSortOpen}
+            placement="bottomRight"
           >
-            {!isMobile && 'Filters'}
-          </Button>
-        </Popover>
-        <Popover
-          content={sortContent}
-          title={null}
-          trigger="click"
-          open={sortOpen}
-          onOpenChange={setSortOpen}
-          placement="bottomRight"
-        >
-          <Button
-            icon={<SortAscendingOutlined />}
-            style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: isMobile ? 1 : 'none' }}
-          >
-            {!isMobile && 'Sort'}
-          </Button>
-        </Popover>
+            <Button
+              icon={<SortAscendingOutlined />}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: isMobile ? 1 : 'none' }}
+            >
+              {!isMobile && 'Sort'}
+            </Button>
+          </Popover>
+        </div>
       </div>
+
+      {/* Active Filter Tags */}
+      <FilterTags tags={filterTags} onClearAll={filterTags.length > 1 ? handleClearAllFilters : undefined} />
     </div>
   )
 }

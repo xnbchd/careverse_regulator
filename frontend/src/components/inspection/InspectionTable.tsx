@@ -73,9 +73,14 @@ export default function InspectionTable({
       render: (_, record: Inspection) => (
         <Button
           type="primary"
-          size="small"
           onClick={() => onViewInspection(record)}
-          style={{ backgroundColor: '#11b5a1', borderColor: '#11b5a1' }}
+          style={{
+            backgroundColor: '#11b5a1',
+            borderColor: '#11b5a1',
+            borderRadius: '8px',
+            height: '36px',
+            padding: '4px 15px',
+          }}
         >
           View
         </Button>

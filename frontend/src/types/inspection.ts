@@ -31,6 +31,20 @@ export interface FrappeListResponse<T> {
   data: T[]
 }
 
+export interface PaginationMeta {
+  page: number
+  page_size: number
+  total_count: number
+  total_pages: number
+  has_next: boolean
+  has_prev: boolean
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  pagination: PaginationMeta
+}
+
 export interface FrappeDocResponse {
   data: BackendInspection
 }

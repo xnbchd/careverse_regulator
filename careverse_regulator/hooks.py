@@ -19,7 +19,7 @@ after_migrate = [
     "careverse_regulator.build.run_frontend_build",
 ]
 
-on_session_creation = "compliance_360.api.tenant.initialize_session_company"
+on_session_creation = "careverse_regulator.api.tenant.initialize_session_company"
 
 website_route_rules = [
     {"from_route": "/login", "to_route": "login"},

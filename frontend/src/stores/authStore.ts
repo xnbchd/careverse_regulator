@@ -114,7 +114,7 @@ function mapAccessFromBoot(): { companyAllowed: boolean; accessIssue: AuthState[
 }
 
 async function fetchUserContext() {
-  const response = await fetch('/api/method/compliance_360.api.tenant.get_user_context', { credentials: 'include' })
+  const response = await fetch('/api/method/careverse_regulator.api.tenant.get_user_context', { credentials: 'include' })
   const payload = (await response.json().catch(() => ({}))) as UserContextResponse
   return payload?.message || {}
 }

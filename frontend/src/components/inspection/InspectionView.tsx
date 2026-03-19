@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Empty } from 'antd'
+import { Button, Empty, Badge } from 'antd'
 import { ProCard } from '@ant-design/pro-components'
 import { useInspectionStore } from '@/stores/inspectionStore'
 import type { Inspection, Finding } from '@/types/inspection'
@@ -10,12 +10,14 @@ import { showSuccess, showError, extractErrorMessage } from '@/utils/toast'
 import InspectionTable from './InspectionTable'
 import InspectionCard from './InspectionCard'
 import InspectionFilters from './InspectionFilters'
+import type { DateRange } from './DateRangeSelector'
 import ScheduleInspectionModal from './ScheduleInspectionModal'
 import InspectionDetailModal from './InspectionDetailModal'
 import FindingsTable from './FindingsTable'
 import FindingCard from './FindingCard'
 import FindingsFilters from './FindingsFilters'
 import FindingsDrawer from './FindingsDrawer'
+import PaginationControls from './PaginationControls'
 import dayjs from 'dayjs'
 
 interface InspectionViewProps {
@@ -24,12 +26,13 @@ interface InspectionViewProps {
 }
 
 export default function InspectionView({ onNavigate, company }: InspectionViewProps) {
-  const { inspections, facilities, professionals, loading, error, activeTab, setActiveTab, fetchInspections, fetchFacilities, fetchProfessionals, createInspection } = useInspectionStore()
+  const { inspections, facilities, professionals, loading, error, activeTab, setActiveTab, pagination, setPage, fetchInspections, fetchFacilities, fetchProfessionals, createInspection } = useInspectionStore()
   const { findings, fetchFindings } = useFindingsStore()
   const { isMobile, isTablet } = useResponsive()
 
   // Inspection tab state
   const [searchText, setSearchText] = useState('')
+  const [dateRange, setDateRange] = useState<DateRange | null>(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isInspectionDetailModalVisible, setIsInspectionDetailModalVisible] = useState(false)
   const [selectedInspection, setSelectedInspection] = useState<Inspection | null>(null)
@@ -47,6 +50,7 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
 
   // Findings tab state
   const [findingsSearchText, setFindingsSearchText] = useState('')
+  const [findingsDateRange, setFindingsDateRange] = useState<DateRange | null>(null)
   const [selectedSeverities, setSelectedSeverities] = useState<string[]>(['all'])
   const [selectedFindingStatuses, setSelectedFindingStatuses] = useState<string[]>(['all'])
   const [findingsSortOrder, setFindingsSortOrder] = useState<'asc' | 'desc' | 'recent'>('asc')
@@ -55,33 +59,94 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
   const [loadingInspectionDetails, setLoadingInspectionDetails] = useState(false)
   const [isFindingModalVisible, setIsFindingModalVisible] = useState(false)
 
+  // Calculate active findings filter count
+  const activeFindingsFiltersCount =
+    (findingsSearchText ? 1 : 0) +
+    (!selectedSeverities.includes('all') ? 1 : 0) +
+    (!selectedFindingStatuses.includes('all') ? 1 : 0) +
+    (findingsDateRange ? 1 : 0)
+
   useEffect(() => {
     fetchInspections()
     fetchFacilities()
     fetchProfessionals()
-    fetchFindings()
   }, [])
+
+  // Fetch inspections when filters change (Scheduled Inspections tab)
+  useEffect(() => {
+    if (activeTab === 'scheduled') {
+      const filters: any = {}
+      if (searchText) filters.search = searchText
+      if (dateRange) {
+        filters.startDate = dateRange.start
+        filters.endDate = dateRange.end
+      }
+      if (sortOrder === 'asc') {
+        filters.sortBy = 'facility_name'
+        filters.sortOrder = 'asc'
+      } else if (sortOrder === 'desc') {
+        filters.sortBy = 'facility_name'
+        filters.sortOrder = 'desc'
+      } else {
+        filters.sortBy = 'modified'
+        filters.sortOrder = 'desc'
+      }
+
+      // Add status filter (only if not 'all')
+      if (!selectedStatuses.includes('all')) {
+        filters.status = selectedStatuses.join(',')
+      }
+
+      fetchInspections(1, filters)
+    }
+  }, [searchText, selectedStatuses, dateRange, sortOrder, activeTab])
+
+  // Fetch findings when filters change (Findings tab)
+  useEffect(() => {
+    if (activeTab === 'findings') {
+      const filters: any = {}
+      if (findingsSearchText) filters.search = findingsSearchText
+      if (findingsDateRange) {
+        filters.startDate = findingsDateRange.start
+        filters.endDate = findingsDateRange.end
+      }
+      if (findingsSortOrder === 'asc') {
+        filters.sortBy = 'facility_name'
+        filters.sortOrder = 'asc'
+      } else if (findingsSortOrder === 'desc') {
+        filters.sortBy = 'facility_name'
+        filters.sortOrder = 'desc'
+      } else {
+        filters.sortBy = 'modified'
+        filters.sortOrder = 'desc'
+      }
+
+      // Add severity filter (API-driven)
+      if (!selectedSeverities.includes('all')) {
+        filters.severity = selectedSeverities.join(',')
+      }
+
+      // Add status filter (API-driven)
+      if (!selectedFindingStatuses.includes('all')) {
+        filters.status = selectedFindingStatuses.join(',')
+      }
+
+      fetchFindings(filters)
+    }
+  }, [findingsSearchText, selectedSeverities, selectedFindingStatuses, findingsDateRange, findingsSortOrder, activeTab])
 
   // Get facilities and professionals from the store
   const allFacilities = facilities.map((f) => ({ value: f.name, label: f.facility_name }))
   const allInspectors = professionals.map((p) => ({ value: p.name, label: p.full_name }))
 
+  // Calculate active filter count for inspections
+  const activeInspectionFiltersCount =
+    (searchText ? 1 : 0) +
+    (!selectedStatuses.includes('all') ? 1 : 0) +
+    (dateRange ? 1 : 0)
+
+  // Use inspections directly from store (API-filtered)
   const filteredInspections = inspections
-    .filter((inspection) => {
-      const matchesSearch = inspection.facilityName.toLowerCase().includes(searchText.toLowerCase())
-      const matchesStatus =
-        selectedStatuses.includes('all') || selectedStatuses.includes(inspection.status.toLowerCase())
-      return matchesSearch && matchesStatus
-    })
-    .sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.facilityName.localeCompare(b.facilityName)
-      } else if (sortOrder === 'desc') {
-        return b.facilityName.localeCompare(a.facilityName)
-      }
-      // For 'recent', we could sort by date if we had proper date parsing
-      return 0
-    })
 
   const handleScheduleInspection = async () => {
     setSubmitting(true)
@@ -111,25 +176,8 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
     setIsInspectionDetailModalVisible(true)
   }
 
-  // Findings filtering and sorting
+  // Use findings directly from store (API-filtered)
   const filteredFindings = findings
-    .filter((finding) => {
-      const matchesSearch = finding.facilityName.toLowerCase().includes(findingsSearchText.toLowerCase())
-      const matchesSeverity =
-        selectedSeverities.includes('all') || selectedSeverities.includes(finding.severity.toLowerCase())
-      const matchesStatus =
-        selectedFindingStatuses.includes('all') ||
-        selectedFindingStatuses.includes(finding.status.toLowerCase())
-      return matchesSearch && matchesSeverity && matchesStatus
-    })
-    .sort((a, b) => {
-      if (findingsSortOrder === 'asc') {
-        return a.facilityName.localeCompare(b.facilityName)
-      } else if (findingsSortOrder === 'desc') {
-        return b.facilityName.localeCompare(a.facilityName)
-      }
-      return 0
-    })
 
   const handleViewFinding = async (finding: Finding) => {
     if (!finding.inspectionId || loadingInspectionDetails) return
@@ -245,25 +293,20 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: isMobile ? 'column' : 'row',
-                  justifyContent: 'space-between',
-                  alignItems: isMobile ? 'stretch' : 'center',
+                  justifyContent: 'flex-end',
                   marginBottom: isMobile ? '16px' : '24px',
-                  gap: isMobile ? '12px' : '0',
                 }}
               >
-                {!isMobile && (
-                  <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#000', margin: 0 }}>
-                    List View of Scheduled Inspections
-                  </h3>
-                )}
                 <InspectionFilters
                   searchText={searchText}
                   onSearchChange={setSearchText}
                   selectedStatuses={selectedStatuses}
                   onStatusChange={setSelectedStatuses}
+                  dateRange={dateRange}
+                  onDateRangeChange={setDateRange}
                   sortOrder={sortOrder}
                   onSortChange={setSortOrder}
+                  activeFilterCount={activeInspectionFiltersCount}
                 />
               </div>
 
@@ -285,6 +328,12 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
                   onViewInspection={handleViewInspection}
                 />
               )}
+
+              <PaginationControls
+                pagination={pagination}
+                onPageChange={setPage}
+                isMobile={isMobile}
+              />
             </>
           )}
         </>
@@ -316,18 +365,10 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: isMobile ? 'column' : 'row',
-                  justifyContent: 'space-between',
-                  alignItems: isMobile ? 'stretch' : 'center',
+                  justifyContent: 'flex-end',
                   marginBottom: isMobile ? '16px' : '24px',
-                  gap: isMobile ? '12px' : '0',
                 }}
               >
-                {!isMobile && (
-                  <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: '#000', margin: 0 }}>
-                    List View of Inspection Findings
-                  </h3>
-                )}
                 <FindingsFilters
                   searchText={findingsSearchText}
                   onSearchChange={setFindingsSearchText}
@@ -335,8 +376,11 @@ export default function InspectionView({ onNavigate, company }: InspectionViewPr
                   onSeverityChange={setSelectedSeverities}
                   selectedStatuses={selectedFindingStatuses}
                   onStatusChange={setSelectedFindingStatuses}
+                  dateRange={findingsDateRange}
+                  onDateRangeChange={setFindingsDateRange}
                   sortOrder={findingsSortOrder}
                   onSortChange={setFindingsSortOrder}
+                  activeFilterCount={activeFindingsFiltersCount}
                 />
               </div>
 

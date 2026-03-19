@@ -69,9 +69,14 @@ export default function FindingsTable({
       render: (_, record: Finding) => (
         <Button
           type="primary"
-          size="small"
           onClick={() => onViewFinding(record)}
-          style={{ backgroundColor: '#11b5a1', borderColor: '#11b5a1' }}
+          style={{
+            backgroundColor: '#11b5a1',
+            borderColor: '#11b5a1',
+            borderRadius: '8px',
+            height: '36px',
+            padding: '4px 15px',
+          }}
         >
           View
         </Button>
