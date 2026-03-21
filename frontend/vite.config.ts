@@ -2,14 +2,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react'
-import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
+import { tanstackRouter } from '@tanstack/router-vite-plugin'
 import proxyOptions from './proxyOptions';
+import tailwindcss from '@tailwindcss/vite'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
-	plugins: [TanStackRouterVite(), react()],
+	plugins: [tanstackRouter(), react(), tailwindcss()],
 	// Allow for hot reloading in development
 	// Developmnet (npm run dev) : /compliance-360/
 	// Production (npm run build) : /assets/careverse_regulator/compliance-360/
