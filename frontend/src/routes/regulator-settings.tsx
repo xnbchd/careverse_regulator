@@ -3,7 +3,7 @@ import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
 
-const RoadmapShell = lazy(() => import('@/components/RoadmapShell'))
+const RegulatorSettingsView = lazy(() => import('@/components/settings/RegulatorSettingsView'))
 
 function RegulatorSettingsComponent() {
   const navigate = Route.useNavigate()
@@ -33,10 +33,7 @@ function RegulatorSettingsComponent() {
       user={user}
     >
       <div className="hq-page-wrap">
-        <RoadmapShell
-          title="Regulator Settings"
-          description="Configure governance defaults and compliance policy thresholds."
-        />
+        <RegulatorSettingsView />
       </div>
     </AppLayout>
   )

@@ -3,7 +3,7 @@ import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
 
-const RoadmapShell = lazy(() => import('@/components/RoadmapShell'))
+const UserAdministrationView = lazy(() => import('@/components/users/UserAdministrationView'))
 
 function UsersRolesComponent() {
   const navigate = Route.useNavigate()
@@ -33,10 +33,7 @@ function UsersRolesComponent() {
       user={user}
     >
       <div className="hq-page-wrap">
-        <RoadmapShell
-          title="User & Role Administration"
-          description="Manage onboarding, role assignment, and permission boundaries."
-        />
+        <UserAdministrationView />
       </div>
     </AppLayout>
   )

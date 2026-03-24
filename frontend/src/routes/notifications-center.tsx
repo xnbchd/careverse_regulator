@@ -3,7 +3,7 @@ import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
 
-const RoadmapShell = lazy(() => import('@/components/RoadmapShell'))
+const NotificationsView = lazy(() => import('@/components/notifications/NotificationsView'))
 
 function NotificationsCenterComponent() {
   const navigate = Route.useNavigate()
@@ -33,10 +33,7 @@ function NotificationsCenterComponent() {
       user={user}
     >
       <div className="hq-page-wrap">
-        <RoadmapShell
-          title="Notifications Center"
-          description="Review platform alerts, reminders, and operational follow-up items."
-        />
+        <NotificationsView />
       </div>
     </AppLayout>
   )
