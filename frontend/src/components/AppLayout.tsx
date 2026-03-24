@@ -19,6 +19,7 @@ import {
   BarChart3,
   FileText,
   FileEdit,
+  ScrollText,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
@@ -73,6 +74,7 @@ function selectedMenuKeyForRoute(route: string): string {
   if (route.startsWith('analytics')) return 'analytics'
   if (route.startsWith('documents')) return 'documents'
   if (route.startsWith('forms')) return 'forms'
+  if (route.startsWith('audit-logs')) return 'audit-logs'
   if (route.startsWith('users-roles')) return 'users-roles'
   if (route.startsWith('regulator-settings')) return 'regulator-settings'
   if (route.startsWith('dashboard')) return 'dashboard'
@@ -167,6 +169,11 @@ export default function AppLayout({
           key: 'users-roles',
           icon: Users,
           label: 'Users & Roles',
+        },
+        {
+          key: 'audit-logs',
+          icon: ScrollText,
+          label: 'Audit Logs',
         },
         {
           key: 'regulator-settings',
