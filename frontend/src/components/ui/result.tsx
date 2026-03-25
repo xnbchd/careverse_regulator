@@ -38,8 +38,8 @@ const statusConfig = {
   },
   '404': {
     icon: AlertCircle,
-    color: 'text-gray-500',
-    bgColor: 'bg-gray-50 dark:bg-gray-950',
+    color: 'text-muted-foreground',
+    bgColor: 'bg-muted/50 dark:bg-muted/50',
   },
   '500': {
     icon: XCircle,

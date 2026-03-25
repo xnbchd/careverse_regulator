@@ -121,7 +121,7 @@ function LicenseDetailPage() {
                           <XCircle className="h-4 w-4 mr-2" />
                           Suspend
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleAction('SET_EXPIRED', 'Expired')} className="text-gray-600">
+                        <DropdownMenuItem onClick={() => handleAction('SET_EXPIRED', 'Expired')} className="text-muted-foreground">
                           <XCircle className="h-4 w-4 mr-2" />
                           Set Expired
                         </DropdownMenuItem>

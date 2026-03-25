@@ -29,7 +29,7 @@ const typeColors = {
   alert: 'text-red-500',
   reminder: 'text-blue-500',
   followup: 'text-orange-500',
-  system: 'text-gray-500',
+  system: 'text-muted-foreground',
 }
 
 const priorityColors = {

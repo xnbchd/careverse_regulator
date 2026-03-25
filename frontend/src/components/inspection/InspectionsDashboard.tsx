@@ -62,7 +62,7 @@ export function InspectionsDashboard() {
       <div className="flex items-center justify-between gap-4 py-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+            <p className="font-medium text-foreground truncate">
               {item.facility_name}
             </p>
             {isValidDate && (

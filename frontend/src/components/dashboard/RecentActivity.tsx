@@ -22,8 +22,8 @@ const activityTypeColors: Record<string, string> = {
   created: 'bg-blue-500',
   updated: 'bg-yellow-500',
   suspended: 'bg-orange-500',
-  expired: 'bg-gray-500',
-  default: 'bg-gray-400',
+  expired: 'bg-muted-foreground/60',
+  default: 'bg-muted-foreground/50',
 }
 
 export function RecentActivity({
@@ -56,13 +56,13 @@ export function RecentActivity({
                     }`}
                   />
                   {index < displayActivities.length - 1 && (
-                    <div className="w-0.5 h-full bg-gray-200 mt-1" />
+                    <div className="w-0.5 h-full bg-muted mt-1" />
                   )}
                 </div>
 
                 {/* Activity content */}
                 <div className="flex-1 pb-4">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-foreground">
                     {activity.description}
                   </p>
                   <div className="flex items-center gap-2 mt-1 text-xs text-muted-foreground">

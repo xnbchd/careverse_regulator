@@ -29,15 +29,15 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
       <div className="space-y-4">
         <div className="animate-pulse space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-24 h-24 bg-gray-200 rounded-lg" />
+            <div className="w-24 h-24 bg-muted rounded-lg" />
             <div className="flex-1 space-y-3">
-              <div className="h-8 bg-gray-200 rounded w-3/4" />
-              <div className="h-4 bg-gray-200 rounded w-1/2" />
+              <div className="h-8 bg-muted rounded w-3/4" />
+              <div className="h-4 bg-muted rounded w-1/2" />
             </div>
           </div>
           <div className="space-y-2">
-            <div className="h-4 bg-gray-200 rounded" />
-            <div className="h-4 bg-gray-200 rounded w-5/6" />
+            <div className="h-4 bg-muted rounded" />
+            <div className="h-4 bg-muted rounded w-5/6" />
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
           <Building2 className="w-12 h-12 text-blue-600/70" />
         </div>
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1 text-start">{facility.facilityName}</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-1 text-start">{facility.facilityName}</h2>
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
               <ShieldCheck className="w-4 h-4" />
@@ -116,40 +116,40 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
           {/* Facility Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {facility.category && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Building2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">Category</p>
+                  <p className="text-sm font-medium text-foreground text-start">Category</p>
                   <p className="text-sm text-muted-foreground text-start">{facility.category}</p>
                 </div>
               </div>
             )}
 
             {facility.owner && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Users className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">Owner</p>
+                  <p className="text-sm font-medium text-foreground text-start">Owner</p>
                   <p className="text-sm text-muted-foreground text-start">{facility.owner}</p>
                 </div>
               </div>
             )}
 
             {facility.numberOfBeds && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Bed className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">Number of Beds</p>
+                  <p className="text-sm font-medium text-foreground text-start">Number of Beds</p>
                   <p className="text-sm text-muted-foreground text-start">{facility.numberOfBeds}</p>
                 </div>
               </div>
             )}
 
             {(facility.county || facility.subCounty || facility.ward) && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">Location</p>
+                  <p className="text-sm font-medium text-foreground text-start">Location</p>
                   <div className="text-sm text-muted-foreground space-y-0.5">
                     {facility.county && <p className="text-start">{facility.county} County</p>}
                     {facility.subCounty && <p className="text-xs text-start">{facility.subCounty} Sub-County</p>}
@@ -165,24 +165,24 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
               <div className="flex items-center gap-2 mb-3">
                 <Clock className="w-5 h-5 text-blue-600" />
-                <h3 className="text-sm font-semibold text-gray-900 text-start">Operating Hours</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">Operating Hours</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
                 {facility.openWholeDay !== undefined && (
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${facility.openWholeDay ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div className={`w-2 h-2 rounded-full ${facility.openWholeDay ? 'bg-green-500' : 'bg-muted-foreground/30'}`} />
                     <span className="text-muted-foreground">24/7 Service</span>
                   </div>
                 )}
                 {facility.openWeekends !== undefined && (
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${facility.openWeekends ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div className={`w-2 h-2 rounded-full ${facility.openWeekends ? 'bg-green-500' : 'bg-muted-foreground/30'}`} />
                     <span className="text-muted-foreground">Open Weekends</span>
                   </div>
                 )}
                 {facility.openPublicHoliday !== undefined && (
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${facility.openPublicHoliday ? 'bg-green-500' : 'bg-gray-300'}`} />
+                    <div className={`w-2 h-2 rounded-full ${facility.openPublicHoliday ? 'bg-green-500' : 'bg-muted-foreground/30'}`} />
                     <span className="text-muted-foreground">Open Holidays</span>
                   </div>
                 )}
@@ -196,7 +196,7 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Users className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-gray-900 text-start">Affiliated Professionals</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">Affiliated Professionals</h3>
               </div>
               <div className="border rounded-lg overflow-hidden overflow-x-auto">
                 <Table>
@@ -257,18 +257,18 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Award className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-gray-900 text-start">Active Licenses</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">Active Licenses</h3>
               </div>
               <div className="space-y-2">
                 {facility.licenses.map((license, index) => (
                   <div
                     key={index}
-                    className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary/20 transition-colors"
+                    className="p-4 bg-muted/50 rounded-lg border border-border hover:border-primary/20 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <EntityLink type="license" id={license.licenseNumber}>
-                          <span className="font-medium text-gray-900 font-mono text-sm mb-1 text-start block">
+                          <span className="font-medium text-foreground font-mono text-sm mb-1 text-start block">
                             {license.licenseNumber}
                           </span>
                         </EntityLink>
@@ -301,10 +301,10 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
         <TabsContent value="contact" className="space-y-3 mt-0">
           <div className="space-y-3">
             {facility.telephoneNumber && (
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Phone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 mb-1 text-start">Phone Number</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">Phone Number</p>
                   <a
                     href={`tel:${facility.telephoneNumber}`}
                     className="text-sm text-primary hover:underline text-start block"
@@ -316,10 +316,10 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
             )}
 
             {facility.officialEmail && (
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 mb-1 text-start">Email Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">Email Address</p>
                   <a
                     href={`mailto:${facility.officialEmail}`}
                     className="text-sm text-primary hover:underline break-all text-start block"
@@ -331,10 +331,10 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
             )}
 
             {facility.physicalAddress && (
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 mb-1 text-start">Physical Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">Physical Address</p>
                   <p className="text-sm text-muted-foreground whitespace-pre-line text-start">
                     {facility.physicalAddress}
                   </p>
@@ -354,7 +354,7 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
         <TabsContent value="map" className="mt-0">
           <div className="flex items-center gap-2 mb-4">
             <Map className="w-5 h-5 text-muted-foreground" />
-            <h3 className="text-sm font-semibold text-gray-900 text-start">Facility Location</h3>
+            <h3 className="text-sm font-semibold text-foreground text-start">Facility Location</h3>
           </div>
           <FacilityMap
             facilityName={facility.facilityName}

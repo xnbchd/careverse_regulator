@@ -268,7 +268,7 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
                         {Object.entries(selectedLog.changesBefore).map(([key, value]) => (
                           <div key={key}>
                             <p className="text-xs text-muted-foreground mb-1">{key}</p>
-                            <p className="text-sm font-mono bg-white p-2 rounded border">
+                            <p className="text-sm font-mono bg-background p-2 rounded border">
                               {formatChangeValue(value)}
                             </p>
                           </div>
@@ -289,7 +289,7 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
                         {Object.entries(selectedLog.changesAfter).map(([key, value]) => (
                           <div key={key}>
                             <p className="text-xs text-muted-foreground mb-1">{key}</p>
-                            <p className="text-sm font-mono bg-white p-2 rounded border">
+                            <p className="text-sm font-mono bg-background p-2 rounded border">
                               {formatChangeValue(value)}
                             </p>
                           </div>

@@ -52,7 +52,7 @@ export function AffiliationsDashboard() {
           <p className="font-medium text-foreground truncate">
             {item.professional_full_name}
           </p>
-          <p className="text-sm text-gray-600 truncate">
+          <p className="text-sm text-muted-foreground truncate">
             {item.facility_name}
           </p>
           <p className="text-xs text-muted-foreground mt-1">

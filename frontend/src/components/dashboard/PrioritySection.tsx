@@ -42,7 +42,7 @@ export function PrioritySection<T>({
             {items.map((item, index) => (
               <div
                 key={index}
-                className="border-l-4 border-yellow-400 pl-4 py-2 hover:bg-gray-50 transition-colors"
+                className="border-l-4 border-yellow-400 pl-4 py-2 hover:bg-muted/50 transition-colors"
               >
                 {renderItem(item)}
               </div>

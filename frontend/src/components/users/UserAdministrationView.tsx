@@ -14,12 +14,12 @@ const roleColors = {
   Inspector: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
   Reviewer: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
   Analyst: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
-  Viewer: 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
+  Viewer: 'bg-muted text-foreground dark:bg-gray-900 dark:text-gray-200',
 }
 
 const statusColors = {
   active: 'bg-green-500',
-  inactive: 'bg-gray-400',
+  inactive: 'bg-muted-foreground/50',
   suspended: 'bg-red-500',
 }
 
@@ -82,7 +82,7 @@ export default function UserAdministrationView() {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-muted dark:bg-muted flex items-center justify-center">
                 <Eye className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </div>
               <div>

@@ -55,7 +55,7 @@ export function StatusDistribution({
                       {item.count} ({percentage}%)
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                  <div className="w-full bg-muted rounded-full h-2.5">
                     <div
                       className="h-2.5 rounded-full transition-all duration-300"
                       style={{
@@ -131,7 +131,7 @@ export function StatusDistribution({
               x="100"
               y="95"
               textAnchor="middle"
-              className="text-2xl font-bold fill-gray-900"
+              className="text-2xl font-bold fill-foreground"
             >
               {total}
             </text>
@@ -139,7 +139,7 @@ export function StatusDistribution({
               x="100"
               y="110"
               textAnchor="middle"
-              className="text-xs fill-gray-600"
+              className="text-xs fill-muted-foreground"
             >
               Total
             </text>
@@ -152,7 +152,7 @@ export function StatusDistribution({
                 key={index}
                 className={`flex items-center justify-between p-2 rounded ${
                   onSegmentClick
-                    ? 'cursor-pointer hover:bg-gray-50'
+                    ? 'cursor-pointer hover:bg-muted/50'
                     : ''
                 }`}
                 onClick={() => onSegmentClick?.(segment.status)}

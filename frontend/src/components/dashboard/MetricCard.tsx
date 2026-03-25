@@ -80,7 +80,7 @@ export function MetricCard({
                       ? 'text-green-600'
                       : trend.startsWith('-')
                         ? 'text-red-600'
-                        : 'text-gray-600'
+                        : 'text-muted-foreground'
                   )}
                 >
                   {trend}

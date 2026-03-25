@@ -121,7 +121,7 @@ export function ApplicationsDashboard() {
           <p className="font-medium text-foreground truncate">
             {app.facilityName}
           </p>
-          <p className="text-sm text-gray-600 truncate">
+          <p className="text-sm text-muted-foreground truncate">
             {app.applicationType} • {app.licenseTypeName}
           </p>
           <p className="text-xs text-muted-foreground mt-1">

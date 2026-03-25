@@ -28,15 +28,15 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
       <div className="space-y-4">
         <div className="animate-pulse space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-24 h-24 bg-gray-200 rounded-full" />
+            <div className="w-24 h-24 bg-muted rounded-full" />
             <div className="flex-1 space-y-3">
-              <div className="h-8 bg-gray-200 rounded w-3/4" />
-              <div className="h-4 bg-gray-200 rounded w-1/2" />
+              <div className="h-8 bg-muted rounded w-3/4" />
+              <div className="h-4 bg-muted rounded w-1/2" />
             </div>
           </div>
           <div className="space-y-2">
-            <div className="h-4 bg-gray-200 rounded" />
-            <div className="h-4 bg-gray-200 rounded w-5/6" />
+            <div className="h-4 bg-muted rounded" />
+            <div className="h-4 bg-muted rounded w-5/6" />
           </div>
         </div>
       </div>
@@ -59,7 +59,7 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
           <User className="w-12 h-12 text-primary/70" />
         </div>
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1 text-start">{professional.fullName}</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-1 text-start">{professional.fullName}</h2>
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
               <IdCard className="w-4 h-4" />
@@ -116,10 +116,10 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
           {/* Professional Details */}
           <div className="space-y-3">
             {professional.specialty && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <GraduationCap className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">Specialty</p>
+                  <p className="text-sm font-medium text-foreground text-start">Specialty</p>
                   <p className="text-sm text-muted-foreground text-start">{professional.specialty}</p>
                   {professional.subSpecialty && (
                     <p className="text-xs text-muted-foreground mt-1 text-start">
@@ -131,20 +131,20 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             )}
 
             {professional.typeOfPractice && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Briefcase className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">Type of Practice</p>
+                  <p className="text-sm font-medium text-foreground text-start">Type of Practice</p>
                   <p className="text-sm text-muted-foreground text-start">{professional.typeOfPractice}</p>
                 </div>
               </div>
             )}
 
             {professional.licenseNumber && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Award className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">License Number</p>
+                  <p className="text-sm font-medium text-foreground text-start">License Number</p>
                   <EntityLink type="license" id={professional.licenseNumber}>
                     <span className="text-sm text-muted-foreground font-mono text-start">{professional.licenseNumber}</span>
                   </EntityLink>
@@ -153,10 +153,10 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             )}
 
             {professional.nationality && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">Nationality</p>
+                  <p className="text-sm font-medium text-foreground text-start">Nationality</p>
                   <p className="text-sm text-muted-foreground text-start">{professional.nationality}</p>
                   {professional.county && (
                     <p className="text-xs text-muted-foreground mt-1 text-start">County: {professional.county}</p>
@@ -172,7 +172,7 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Building2 className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-gray-900 text-start">Current Affiliations</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">Current Affiliations</h3>
               </div>
               <div className="border rounded-lg overflow-hidden overflow-x-auto">
                 <Table>
@@ -233,18 +233,18 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Award className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-gray-900 text-start">Active Licenses</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">Active Licenses</h3>
               </div>
               <div className="space-y-2">
                 {professional.licenses.map((license, index) => (
                   <div
                     key={index}
-                    className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary/20 transition-colors"
+                    className="p-4 bg-muted/50 rounded-lg border border-border hover:border-primary/20 transition-colors"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <EntityLink type="license" id={license.licenseNumber}>
-                          <span className="font-medium text-gray-900 font-mono text-sm mb-1 text-start block">
+                          <span className="font-medium text-foreground font-mono text-sm mb-1 text-start block">
                             {license.licenseNumber}
                           </span>
                         </EntityLink>
@@ -276,10 +276,10 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
         <TabsContent value="contact" className="space-y-3 mt-0">
           <div className="space-y-3">
             {professional.emailAddress && (
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 mb-1 text-start">Email Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">Email Address</p>
                   <a
                     href={`mailto:${professional.emailAddress}`}
                     className="text-sm text-primary hover:underline break-all text-start block"
@@ -291,10 +291,10 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             )}
 
             {professional.phoneNumber && (
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Phone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 mb-1 text-start">Phone Number</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">Phone Number</p>
                   <a
                     href={`tel:${professional.phoneNumber}`}
                     className="text-sm text-primary hover:underline text-start block"
@@ -306,10 +306,10 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             )}
 
             {professional.postalAddress && (
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 mb-1 text-start">Postal Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">Postal Address</p>
                   <p className="text-sm text-muted-foreground whitespace-pre-line text-start">
                     {professional.postalAddress}
                   </p>

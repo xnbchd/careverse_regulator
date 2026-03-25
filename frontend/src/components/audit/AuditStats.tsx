@@ -239,7 +239,7 @@ export function AuditStats() {
                             severity === 'critical' && 'bg-red-500',
                             severity === 'high' && 'bg-orange-500',
                             severity === 'medium' && 'bg-blue-500',
-                            severity === 'low' && 'bg-gray-500'
+                            severity === 'low' && 'bg-muted-foreground/60'
                           )}
                           style={{ width: `${percentage}%` }}
                         />

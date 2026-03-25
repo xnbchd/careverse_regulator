@@ -160,7 +160,7 @@ export function getCategoryColor(category: DocumentCategory): string {
     [DocumentCategory.APPLICATION]: 'text-orange-600 bg-orange-50 border-orange-200',
     [DocumentCategory.AFFILIATION]: 'text-teal-600 bg-teal-50 border-teal-200',
     [DocumentCategory.COMPLIANCE]: 'text-indigo-600 bg-indigo-50 border-indigo-200',
-    [DocumentCategory.CORRESPONDENCE]: 'text-gray-600 bg-gray-50 border-gray-200',
+    [DocumentCategory.CORRESPONDENCE]: 'text-muted-foreground bg-muted/50 border-border',
     [DocumentCategory.OTHER]: 'text-slate-600 bg-slate-50 border-slate-200',
   }
   return colors[category]

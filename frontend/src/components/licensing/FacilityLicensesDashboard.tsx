@@ -51,7 +51,7 @@ export function FacilityLicensesDashboard() {
           <p className="font-medium text-foreground truncate">
             {item.owner}
           </p>
-          <p className="text-sm text-gray-600 truncate">
+          <p className="text-sm text-muted-foreground truncate">
             License #{item.license_number} • {item.facility_type}
           </p>
           <p className="text-xs text-red-600 font-medium mt-1">
