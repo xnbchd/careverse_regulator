@@ -1,9 +1,28 @@
+import json
+import os
+
 import frappe
 from frappe.utils import get_system_timezone
 
 from careverse_regulator.api.tenant import build_tenant_payload
 
 no_cache = True
+
+
+def get_vite_assets():
+    """Read the Vite manifest to get current asset filenames."""
+    app_path = frappe.get_app_path("careverse_regulator")
+    manifest_path = os.path.join(app_path, "public", "compliance-360", ".vite", "manifest.json")
+    try:
+        with open(manifest_path) as f:
+            manifest = json.load(f)
+        entry = manifest.get("src/main.tsx", {})
+        return {
+            "main_js": entry.get("file", ""),
+            "main_css": entry.get("css", [""])[0] if entry.get("css") else "",
+        }
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        return {"main_js": "", "main_css": ""}
 
 
 def get_context(context):
@@ -16,6 +35,11 @@ def get_context(context):
     context.no_cache = True
     context.no_header = True
     context.no_breadcrumbs = True
+
+    # Resolve asset paths from Vite manifest
+    assets = get_vite_assets()
+    context.main_js = assets["main_js"]
+    context.main_css = assets["main_css"]
 
     return context
 
@@ -57,6 +81,7 @@ def get_boot():
             "site_name": frappe.local.site,
             "read_only_mode": frappe.flags.read_only,
             "system_timezone": get_system_timezone(),
+            "socketio_port": frappe.conf.get("socketio_port") or 9000,
             "active_company": active_company,
             "company_display_name": company_display_name,
             "company_abbr": company_abbr,

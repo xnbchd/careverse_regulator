@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 
 const RegulatorSettingsView = lazy(() => import('@/components/settings/RegulatorSettingsView'))
 
@@ -40,5 +41,6 @@ function RegulatorSettingsComponent() {
 }
 
 export const Route = createFileRoute('/regulator-settings')({
+  loader: () => useSettingsStore.getState().initialize(),
   component: RegulatorSettingsComponent,
 })

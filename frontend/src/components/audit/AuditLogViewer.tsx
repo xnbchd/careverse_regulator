@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAuditStore } from '@/stores/auditStore'
 import { format } from 'date-fns'
 import {
@@ -60,7 +60,6 @@ export function AuditLogViewer() {
     filters,
     isLoading,
     isExporting,
-    fetchLogs,
     setFilters,
     clearFilters,
     setPage,
@@ -70,11 +69,6 @@ export function AuditLogViewer() {
 
   const [searchQuery, setSearchQuery] = useState(filters.query || '')
   const [showFilters, setShowFilters] = useState(false)
-
-  // Fetch logs on mount
-  useEffect(() => {
-    fetchLogs()
-  }, [fetchLogs])
 
   // Handle search
   const handleSearch = () => {

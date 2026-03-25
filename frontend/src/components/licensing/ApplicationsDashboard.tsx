@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useLicensingStore } from '@/stores/licensingStore'
 import {
@@ -22,12 +22,7 @@ import type { LicenseApplication } from '@/types/license'
 
 export function ApplicationsDashboard() {
   const navigate = useNavigate()
-  const { applications, applicationsLoading, fetchApplications } = useLicensingStore()
-
-  // Load applications for dashboard (fetch more data for accurate metrics)
-  useEffect(() => {
-    fetchApplications(1, { page_size: 100 })
-  }, [fetchApplications])
+  const { applications, applicationsLoading } = useLicensingStore()
 
   // Compute metrics
   const metrics = useMemo(() => {
@@ -123,7 +118,7 @@ export function ApplicationsDashboard() {
     return (
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-gray-900 truncate">
+          <p className="font-medium text-foreground truncate">
             {app.facilityName}
           </p>
           <p className="text-sm text-gray-600 truncate">

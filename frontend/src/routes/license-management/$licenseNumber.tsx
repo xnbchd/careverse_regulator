@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLicensingStore } from '@/stores/licensingStore'
 import { useAuthStore } from '@/stores/authStore'
 import AppLayout from '@/components/AppLayout'
@@ -23,10 +23,9 @@ function LicenseDetailPage() {
   const user = useAuthStore((state) => state.user)
   const { getLicense, updateLicense } = useLicensingStore()
 
-  const [license, setLicense] = useState<License | null>(null)
-  const [loading, setLoading] = useState(true)
+  const loaderData = Route.useLoaderData()
+  const [license, setLicense] = useState<License | null>(loaderData)
   const [actionLoading, setActionLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const handleNavigate = (route: string) => {
     navigate({ to: `/${route}` as any })
@@ -43,23 +42,6 @@ function LicenseDetailPage() {
   const handleBack = () => {
     navigate({ to: '/license-management' })
   }
-
-  useEffect(() => {
-    async function fetchLicense() {
-      setLoading(true)
-      setError(null)
-      try {
-        const data = await getLicense(licenseNumber)
-        setLicense(data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load license')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchLicense()
-  }, [licenseNumber])
 
   const handleAction = async (action: LicenseAction, actionName: string) => {
     if (!license) return
@@ -99,25 +81,7 @@ function LicenseDetailPage() {
           </Button>
         </div>
 
-        {loading && (
-          <Card>
-            <CardContent className="py-12">
-              <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {error && !loading && (
-          <Card className="border-destructive">
-            <CardContent className="py-8">
-              <p className="text-center text-destructive">{error}</p>
-            </CardContent>
-          </Card>
-        )}
-
-        {license && !loading && (
+        {license && (
           <div className="space-y-6">
             {/* Header Card with Actions */}
             <Card>
@@ -262,5 +226,7 @@ function LicenseDetailPage() {
 }
 
 export const Route = createFileRoute('/license-management/$licenseNumber')({
+  loader: async ({ params }) =>
+    useLicensingStore.getState().getLicense(params.licenseNumber),
   component: LicenseDetailPage,
 })

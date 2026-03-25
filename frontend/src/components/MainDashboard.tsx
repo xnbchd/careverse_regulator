@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useAffiliationStore } from '@/stores/affiliationStore'
 import { useLicensingStore } from '@/stores/licensingStore'
@@ -29,11 +29,10 @@ interface MainDashboardProps {
 export default function MainDashboard({ onNavigate, company }: MainDashboardProps) {
   const navigate = useNavigate()
 
-  // Load data from all stores
+  // Load data from all stores (fetched by route loader)
   const {
     affiliations,
     loading: affiliationsLoading,
-    fetchAffiliations,
   } = useAffiliationStore()
 
   const {
@@ -41,19 +40,9 @@ export default function MainDashboard({ onNavigate, company }: MainDashboardProp
     applications,
     licensesLoading,
     applicationsLoading,
-    fetchLicenses,
-    fetchApplications,
   } = useLicensingStore()
 
-  const { inspections, loading: inspectionsLoading, fetchInspections } = useInspectionStore()
-
-  // Load all data (fetch more for accurate metrics)
-  useEffect(() => {
-    fetchAffiliations(1, { page_size: 100 })
-    fetchLicenses(1, { page_size: 100 })
-    fetchApplications(1, { page_size: 100 })
-    fetchInspections(1, { page_size: 100 })
-  }, [fetchAffiliations, fetchLicenses, fetchApplications, fetchInspections])
+  const { inspections, loading: inspectionsLoading } = useInspectionStore()
 
   // Aggregate metrics across all sections
   const aggregateMetrics = useMemo(() => {
@@ -190,7 +179,7 @@ export default function MainDashboard({ onNavigate, company }: MainDashboardProp
     <div className="space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Regulator Dashboard</h1>
+        <h1 className="text-3xl font-bold text-foreground">Regulator Dashboard</h1>
         <p className="text-muted-foreground mt-1">
           Overview of all compliance activities and priority actions
         </p>
@@ -200,24 +189,24 @@ export default function MainDashboard({ onNavigate, company }: MainDashboardProp
       <QuickActions actions={quickActions} title="Navigate to Sections" />
 
       {/* Primary Metrics - Items Requiring Attention */}
-      <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200">
+      <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 shadow-md dark:from-orange-950/40 dark:to-yellow-950/30 dark:border-orange-800 dark:shadow-none">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm font-medium text-orange-900 mb-1">
+              <p className="text-sm font-medium text-orange-900 dark:text-orange-300 mb-1">
                 Priority Actions Required
               </p>
-              <p className="text-4xl font-bold text-orange-900">
+              <p className="text-4xl font-bold text-orange-900 dark:text-orange-200">
                 {aggregateMetrics.totalRequiringAttention}
               </p>
-              <p className="text-sm text-orange-700 mt-2">
+              <p className="text-sm text-orange-700 dark:text-orange-400 mt-2">
                 {aggregateMetrics.pendingAffiliations} affiliations •{' '}
                 {aggregateMetrics.pendingApplications} applications •{' '}
                 {aggregateMetrics.expiringSoonLicenses} expiring •{' '}
                 {aggregateMetrics.overdueInspections} overdue
               </p>
             </div>
-            <AlertTriangle className="h-12 w-12 text-orange-600" />
+            <AlertTriangle className="h-12 w-12 text-orange-600 dark:text-orange-400" />
           </div>
         </CardContent>
       </Card>

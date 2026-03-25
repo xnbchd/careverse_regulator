@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useAuditStore } from '@/stores/auditStore'
 import {
   Card,
@@ -27,11 +26,7 @@ import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
 
 export function AuditStats() {
-  const { stats, isLoadingStats, fetchStats } = useAuditStore()
-
-  useEffect(() => {
-    fetchStats()
-  }, [fetchStats])
+  const { stats, isLoadingStats } = useAuditStore()
 
   if (isLoadingStats) {
     return (

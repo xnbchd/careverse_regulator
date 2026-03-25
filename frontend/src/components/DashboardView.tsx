@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { ArrowDown, ArrowRight, ArrowUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -33,11 +32,7 @@ function countyToneClass(level: 'Critical' | 'High' | 'Moderate' | 'Stable') {
 }
 
 export default function DashboardView({ emptyState, onNavigate, company }: DashboardViewProps) {
-  const { priorityQueues, recentActivity, companyBoards, countyRiskItems, applyMockForCompany } = useDashboardStore()
-
-  useEffect(() => {
-    applyMockForCompany(company)
-  }, [applyMockForCompany, company])
+  const { priorityQueues, recentActivity, companyBoards, countyRiskItems } = useDashboardStore()
 
   const visibleQueues = priorityQueues.slice(0, 4)
   const visibleActivity = recentActivity.slice(0, 4)

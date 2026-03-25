@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAffiliationStore } from '@/stores/affiliationStore'
 import { useAuthStore } from '@/stores/authStore'
 import AppLayout from '@/components/AppLayout'
@@ -17,10 +17,9 @@ function AffiliationDetailPage() {
   const user = useAuthStore((state) => state.user)
   const { getAffiliation, approveAffiliation, rejectAffiliation } = useAffiliationStore()
 
-  const [affiliation, setAffiliation] = useState<Affiliation | null>(null)
-  const [loading, setLoading] = useState(true)
+  const loaderData = Route.useLoaderData()
+  const [affiliation, setAffiliation] = useState<Affiliation | null>(loaderData)
   const [actionLoading, setActionLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const handleNavigate = (route: string) => {
     navigate({ to: `/${route}` as any })
@@ -37,23 +36,6 @@ function AffiliationDetailPage() {
   const handleBack = () => {
     navigate({ to: '/affiliations' })
   }
-
-  useEffect(() => {
-    async function fetchAffiliation() {
-      setLoading(true)
-      setError(null)
-      try {
-        const data = await getAffiliation(affiliationId)
-        setAffiliation(data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load affiliation')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchAffiliation()
-  }, [affiliationId])
 
   const handleApprove = async () => {
     if (!affiliation) return
@@ -111,28 +93,8 @@ function AffiliationDetailPage() {
           </Button>
         </div>
 
-        {/* Loading State */}
-        {loading && (
-          <Card>
-            <CardContent className="py-12">
-              <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Error State */}
-        {error && !loading && (
-          <Card className="border-destructive">
-            <CardContent className="py-8">
-              <p className="text-center text-destructive">{error}</p>
-            </CardContent>
-          </Card>
-        )}
-
         {/* Affiliation Details */}
-        {affiliation && !loading && (
+        {affiliation && (
           <div className="space-y-6">
             {/* Header Card with Actions */}
             <Card>
@@ -292,5 +254,7 @@ function AffiliationDetailPage() {
 }
 
 export const Route = createFileRoute('/affiliations/$affiliationId')({
+  loader: async ({ params }) =>
+    useAffiliationStore.getState().getAffiliation(params.affiliationId),
   component: AffiliationDetailPage,
 })

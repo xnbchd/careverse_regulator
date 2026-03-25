@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LayoutGrid, List, Upload as UploadIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useDocumentStore } from '@/stores/documentStore'
@@ -39,10 +39,6 @@ export default function DocumentManagementView() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const [previewOpen, setPreviewOpen] = useState(false)
-
-  useEffect(() => {
-    fetchDocuments()
-  }, [fetchDocuments])
 
   const handleSearchChange = (params: Partial<DocumentSearchParams>) => {
     setSearchParams({ ...searchParams, ...params, page: 1 })

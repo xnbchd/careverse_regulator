@@ -13,27 +13,27 @@ export interface MetricCardProps {
 }
 
 const variantStyles = {
-  success: 'bg-green-50 border-green-200 hover:bg-green-100',
-  warning: 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100',
-  danger: 'bg-red-50 border-red-200 hover:bg-red-100',
-  info: 'bg-blue-50 border-blue-200 hover:bg-blue-100',
-  neutral: 'bg-gray-50 border-gray-200 hover:bg-gray-100',
+  success: 'bg-green-50 border-green-200 hover:bg-green-100 shadow-md dark:bg-green-950/40 dark:border-green-800 dark:hover:bg-green-950/60 dark:shadow-none',
+  warning: 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100 shadow-md dark:bg-yellow-950/40 dark:border-yellow-800 dark:hover:bg-yellow-950/60 dark:shadow-none',
+  danger: 'bg-red-50 border-red-200 hover:bg-red-100 shadow-md dark:bg-red-950/40 dark:border-red-800 dark:hover:bg-red-950/60 dark:shadow-none',
+  info: 'bg-blue-50 border-blue-200 hover:bg-blue-100 shadow-md dark:bg-blue-950/40 dark:border-blue-800 dark:hover:bg-blue-950/60 dark:shadow-none',
+  neutral: 'bg-gray-50 border-gray-200 hover:bg-gray-100 shadow-md dark:bg-gray-900/40 dark:border-gray-700 dark:hover:bg-gray-900/60 dark:shadow-none',
 }
 
 const variantTextStyles = {
-  success: 'text-green-700',
-  warning: 'text-yellow-700',
-  danger: 'text-red-700',
-  info: 'text-blue-700',
-  neutral: 'text-gray-700',
+  success: 'text-green-700 dark:text-green-400',
+  warning: 'text-yellow-700 dark:text-yellow-400',
+  danger: 'text-red-700 dark:text-red-400',
+  info: 'text-blue-700 dark:text-blue-400',
+  neutral: 'text-gray-700 dark:text-gray-300',
 }
 
 const variantIconStyles = {
-  success: 'text-green-600',
-  warning: 'text-yellow-600',
-  danger: 'text-red-600',
-  info: 'text-blue-600',
-  neutral: 'text-gray-600',
+  success: 'text-green-600 dark:text-green-400',
+  warning: 'text-yellow-600 dark:text-yellow-400',
+  danger: 'text-red-600 dark:text-red-400',
+  info: 'text-blue-600 dark:text-blue-400',
+  neutral: 'text-gray-600 dark:text-gray-400',
 }
 
 export function MetricCard({

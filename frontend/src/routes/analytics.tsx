@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
+import { useAnalyticsStore } from '@/stores/analyticsStore'
 
 const AnalyticsDashboard = lazy(() => import('@/components/analytics/AnalyticsDashboard'))
 
@@ -38,5 +39,6 @@ function AnalyticsComponent() {
 }
 
 export const Route = createFileRoute('/analytics')({
+  loader: () => useAnalyticsStore.getState().fetchDashboardData(),
   component: AnalyticsComponent,
 })

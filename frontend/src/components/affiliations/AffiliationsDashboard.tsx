@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import { useAffiliationStore } from '@/stores/affiliationStore'
 import {
@@ -19,29 +18,15 @@ import {
 import { formatDistanceToNow } from 'date-fns'
 import dayjs from 'dayjs'
 import { Button } from '@/components/ui/button'
-import { getAffiliationDashboardStats, type AffiliationDashboardStats } from '@/api/affiliationApi'
+import type { AffiliationDashboardStats } from '@/api/affiliationApi'
+import { getRouteApi } from '@tanstack/react-router'
+
+const routeApi = getRouteApi('/affiliations/')
 
 export function AffiliationsDashboard() {
   const navigate = useNavigate()
   const { approveAffiliation, rejectAffiliation } = useAffiliationStore()
-  const [dashboardData, setDashboardData] = useState<AffiliationDashboardStats | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  // Load dashboard stats from backend
-  useEffect(() => {
-    async function loadStats() {
-      setLoading(true)
-      try {
-        const stats = await getAffiliationDashboardStats()
-        setDashboardData(stats)
-      } catch (error) {
-        console.error('Failed to load affiliation dashboard stats:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    loadStats()
-  }, [])
+  const dashboardData = routeApi.useLoaderData() as AffiliationDashboardStats
 
   // Quick actions
   const quickActions = [
@@ -64,7 +49,7 @@ export function AffiliationsDashboard() {
     return (
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-gray-900 truncate">
+          <p className="font-medium text-foreground truncate">
             {item.professional_full_name}
           </p>
           <p className="text-sm text-gray-600 truncate">
@@ -109,22 +94,11 @@ export function AffiliationsDashboard() {
     )
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading dashboard...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Affiliations Management</h1>
+        <h1 className="text-3xl font-bold text-foreground">Affiliations Management</h1>
         <p className="text-muted-foreground mt-1">
           Overview of professional affiliations with health facilities
         </p>

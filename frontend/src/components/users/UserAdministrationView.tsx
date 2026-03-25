@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -26,7 +25,6 @@ const statusColors = {
 
 export default function UserAdministrationView() {
   const {
-    initialize,
     filters,
     roles,
     updateFilters,
@@ -34,10 +32,6 @@ export default function UserAdministrationView() {
   } = useUserStore()
 
   const users = useUserStore(getFilteredUsers)
-
-  useEffect(() => {
-    initialize()
-  }, [initialize])
 
   return (
     <div className="space-y-6">

@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
+import { useUserStore } from '@/stores/userStore'
 
 const UserAdministrationView = lazy(() => import('@/components/users/UserAdministrationView'))
 
@@ -40,5 +41,6 @@ function UsersRolesComponent() {
 }
 
 export const Route = createFileRoute('/users-roles')({
+  loader: () => useUserStore.getState().initialize(),
   component: UsersRolesComponent,
 })

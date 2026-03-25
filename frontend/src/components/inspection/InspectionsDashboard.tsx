@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, getRouteApi } from '@tanstack/react-router'
 import {
   MetricCard,
   StatusDistribution,
@@ -21,30 +20,15 @@ import { differenceInDays } from 'date-fns'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import { Button } from '@/components/ui/button'
-import { getDashboardStats, type DashboardStats } from '@/api/inspectionApi'
+import type { DashboardStats } from '@/api/inspectionApi'
 
 dayjs.extend(customParseFormat)
 
+const routeApi = getRouteApi('/inspections/')
+
 export function InspectionsDashboard() {
   const navigate = useNavigate()
-  const [dashboardData, setDashboardData] = useState<DashboardStats | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  // Load dashboard stats from backend
-  useEffect(() => {
-    async function loadStats() {
-      setLoading(true)
-      try {
-        const stats = await getDashboardStats()
-        setDashboardData(stats)
-      } catch (error) {
-        console.error('Failed to load dashboard stats:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    loadStats()
-  }, [])
+  const dashboardData = routeApi.useLoaderData() as DashboardStats
 
   // Quick actions
   const quickActions = [
@@ -78,16 +62,16 @@ export function InspectionsDashboard() {
       <div className="flex items-center justify-between gap-4 py-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="font-medium text-gray-900 truncate">
+            <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
               {item.facility_name}
             </p>
             {isValidDate && (
               <span className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${
                 daysUntilDue === 0
-                  ? 'bg-red-100 text-red-700'
+                  ? 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400'
                   : daysUntilDue <= 3
-                    ? 'bg-orange-100 text-orange-700'
-                    : 'bg-blue-100 text-blue-700'
+                    ? 'bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-400'
+                    : 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400'
               }`}>
                 {daysUntilDue === 0
                   ? 'Today'
@@ -119,22 +103,11 @@ export function InspectionsDashboard() {
     status: item.status,
   })) || []
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading dashboard...</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Inspections Management</h1>
+        <h1 className="text-3xl font-bold text-foreground">Inspections Management</h1>
         <p className="text-muted-foreground mt-1">
           Monitor facility inspections and track compliance status
         </p>

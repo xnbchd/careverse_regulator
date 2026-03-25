@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
+import { useDashboardStore } from '@/stores/dashboardStore'
 
 const DashboardView = lazy(() => import('@/components/DashboardView'))
 
@@ -40,5 +41,9 @@ function DashboardEmptyComponent() {
 }
 
 export const Route = createFileRoute('/dashboard/empty')({
+  loader: () => {
+    const company = useAuthStore.getState().user?.company
+    useDashboardStore.getState().applyMockForCompany(company)
+  },
   component: DashboardEmptyComponent,
 })

@@ -2,9 +2,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import AppLayout from '@/components/AppLayout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { useNavigate } from '@tanstack/react-router'
 import { FileText, RefreshCw, AlertCircle, Save } from 'lucide-react'
 import { useFormsStore } from '@/stores/formsStore'
+import { useAuthStore } from '@/stores/authStore'
 import { format } from 'date-fns'
 
 export const Route = createFileRoute('/forms')({
@@ -12,8 +12,21 @@ export const Route = createFileRoute('/forms')({
 })
 
 function FormsPage() {
-  const navigate = useNavigate()
+  const navigate = Route.useNavigate()
+  const user = useAuthStore((state) => state.user)
   const { drafts, deleteDraft } = useFormsStore()
+
+  const handleNavigate = (route: string) => {
+    navigate({ to: `/${route}` as any })
+  }
+
+  const handleLogout = () => {
+    window.location.href = '/logout?redirect-to=/'
+  }
+
+  const handleSwitchToDesk = () => {
+    window.location.href = '/app'
+  }
 
   const getFormTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
@@ -29,11 +42,11 @@ function FormsPage() {
       currentRoute="forms"
       pageTitle="Forms"
       pageSubtitle="Submit applications, renewals, and appeals"
-      onNavigate={() => {}}
-      onOpenNotifications={() => {}}
-      onLogout={() => {}}
-      onSwitchToDesk={() => {}}
-      user={null}
+      onNavigate={handleNavigate}
+      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onLogout={handleLogout}
+      onSwitchToDesk={handleSwitchToDesk}
+      user={user}
     >
       <div className="space-y-6">
         {/* New Forms Section */}
