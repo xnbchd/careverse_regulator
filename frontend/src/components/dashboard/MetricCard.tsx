@@ -13,11 +13,11 @@ export interface MetricCardProps {
 }
 
 const variantStyles = {
-  success: 'bg-green-50 border-green-200 hover:bg-green-100 shadow-md dark:bg-green-950/40 dark:border-green-800 dark:hover:bg-green-950/60 dark:shadow-none',
-  warning: 'bg-yellow-50 border-yellow-200 hover:bg-yellow-100 shadow-md dark:bg-yellow-950/40 dark:border-yellow-800 dark:hover:bg-yellow-950/60 dark:shadow-none',
-  danger: 'bg-red-50 border-red-200 hover:bg-red-100 shadow-md dark:bg-red-950/40 dark:border-red-800 dark:hover:bg-red-950/60 dark:shadow-none',
-  info: 'bg-blue-50 border-blue-200 hover:bg-blue-100 shadow-md dark:bg-blue-950/40 dark:border-blue-800 dark:hover:bg-blue-950/60 dark:shadow-none',
-  neutral: 'bg-gray-50 border-gray-200 hover:bg-gray-100 shadow-md dark:bg-gray-900/40 dark:border-gray-700 dark:hover:bg-gray-900/60 dark:shadow-none',
+  success: 'bg-gradient-to-br from-green-50 to-emerald-100/60 border-green-200 hover:from-green-100 hover:to-emerald-100 shadow-md dark:from-green-950/40 dark:to-emerald-950/30 dark:border-green-800 dark:hover:from-green-950/60 dark:hover:to-emerald-950/50 dark:shadow-none',
+  warning: 'bg-gradient-to-br from-yellow-50 to-amber-100/60 border-yellow-200 hover:from-yellow-100 hover:to-amber-100 shadow-md dark:from-yellow-950/40 dark:to-amber-950/30 dark:border-yellow-800 dark:hover:from-yellow-950/60 dark:hover:to-amber-950/50 dark:shadow-none',
+  danger: 'bg-gradient-to-br from-red-50 to-rose-100/60 border-red-200 hover:from-red-100 hover:to-rose-100 shadow-md dark:from-red-950/40 dark:to-rose-950/30 dark:border-red-800 dark:hover:from-red-950/60 dark:hover:to-rose-950/50 dark:shadow-none',
+  info: 'bg-gradient-to-br from-blue-50 to-sky-100/60 border-blue-200 hover:from-blue-100 hover:to-sky-100 shadow-md dark:from-blue-950/40 dark:to-sky-950/30 dark:border-blue-800 dark:hover:from-blue-950/60 dark:hover:to-sky-950/50 dark:shadow-none',
+  neutral: 'bg-gradient-to-br from-gray-50 to-slate-100/60 border-gray-200 hover:from-gray-100 hover:to-slate-100 shadow-md dark:from-gray-900/40 dark:to-slate-900/30 dark:border-gray-700 dark:hover:from-gray-900/60 dark:hover:to-slate-900/50 dark:shadow-none',
 }
 
 const variantTextStyles = {
