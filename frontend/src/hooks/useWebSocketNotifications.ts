@@ -17,9 +17,10 @@ export function useWebSocketNotifications() {
       return
     }
 
-    // Get or create WebSocket client
-    const client = getWebSocketClient()
-    clientRef.current = client
+    try {
+      // Get or create WebSocket client
+      const client = getWebSocketClient()
+      clientRef.current = client
 
     // Subscribe to notification messages
     const unsubscribeNotification = client.on(
@@ -59,18 +60,22 @@ export function useWebSocketNotifications() {
       console.error('WebSocket error:', error)
     })
 
-    // Connect if not already connected
-    if (!client.isConnected) {
-      client.connect()
-    }
+      // Connect if not already connected
+      if (!client.isConnected) {
+        client.connect()
+      }
 
-    // Cleanup on unmount
-    return () => {
-      unsubscribeNotification()
-      unsubscribeConnect()
-      unsubscribeDisconnect()
-      unsubscribeError()
-      // Note: We don't disconnect here because other components might be using it
+      // Cleanup on unmount
+      return () => {
+        unsubscribeNotification()
+        unsubscribeConnect()
+        unsubscribeDisconnect()
+        unsubscribeError()
+        // Note: We don't disconnect here because other components might be using it
+      }
+    } catch (error) {
+      console.error('Failed to initialize WebSocket notifications:', error)
+      // Fail silently - app should work without WebSocket
     }
   }, [preferences.enabled, preferences.categories, addNotification])
 

@@ -11,6 +11,7 @@ export interface WebSocketConfig {
   reconnectInterval?: number
   heartbeatInterval?: number
   maxReconnectAttempts?: number
+  enabled?: boolean // Allow disabling WebSocket
 }
 
 export class WebSocketClient {
@@ -22,12 +23,14 @@ export class WebSocketClient {
   private connectHandlers: Set<ConnectionHandler> = new Set()
   private disconnectHandlers: Set<ConnectionHandler> = new Set()
   private errorHandlers: Set<ErrorHandler> = new Set()
+  private permanentlyDisabled = false // Flag for permanent disable after connection refused
 
-  private config: Required<WebSocketConfig> = {
+  private config: Required<WebSocketConfig> & { enabled: boolean } = {
     url: this.getWebSocketURL(),
     reconnectInterval: 5000, // 5 seconds
     heartbeatInterval: 30000, // 30 seconds
-    maxReconnectAttempts: 10,
+    maxReconnectAttempts: 3, // Reduced from 10 to 3
+    enabled: import.meta.env.VITE_WS_ENABLED !== 'false', // Can disable via env var
   }
 
   constructor(config?: WebSocketConfig) {
@@ -54,6 +57,12 @@ export class WebSocketClient {
    * Connect to WebSocket server
    */
   connect(): void {
+    // Check if disabled
+    if (!this.config.enabled || this.permanentlyDisabled) {
+      console.log('WebSocket is disabled, skipping connection')
+      return
+    }
+
     if (this.ws?.readyState === WebSocket.OPEN) {
       console.log('WebSocket already connected')
       return
@@ -82,17 +91,32 @@ export class WebSocketClient {
       this.ws.onerror = (error) => {
         console.error('WebSocket error:', error)
         this.errorHandlers.forEach((handler) => handler(error))
+
+        // If connection refused, permanently disable to avoid blocking the app
+        if (this.reconnectAttempts >= 2) {
+          console.warn('WebSocket connection repeatedly failed, disabling reconnection attempts')
+          this.permanentlyDisabled = true
+          this.clearReconnectTimer()
+        }
       }
 
-      this.ws.onclose = () => {
-        console.log('WebSocket disconnected')
+      this.ws.onclose = (event) => {
+        console.log('WebSocket disconnected', event.code, event.reason)
         this.stopHeartbeat()
         this.disconnectHandlers.forEach((handler) => handler())
+
+        // Don't reconnect if connection was refused (1006) or similar errors
+        if (event.code === 1006 && this.reconnectAttempts >= 2) {
+          console.warn('WebSocket connection refused, disabling further attempts')
+          this.permanentlyDisabled = true
+          return
+        }
+
         this.attemptReconnect()
       }
     } catch (error) {
       console.error('Failed to create WebSocket connection:', error)
-      this.attemptReconnect()
+      this.permanentlyDisabled = true // Don't retry on creation errors
     }
   }
 
@@ -200,8 +224,15 @@ export class WebSocketClient {
    * Attempt to reconnect
    */
   private attemptReconnect(): void {
+    // Don't reconnect if permanently disabled
+    if (this.permanentlyDisabled || !this.config.enabled) {
+      console.log('WebSocket reconnection disabled')
+      return
+    }
+
     if (this.reconnectAttempts >= this.config.maxReconnectAttempts) {
       console.error('Max reconnect attempts reached, giving up')
+      this.permanentlyDisabled = true
       return
     }
 
@@ -213,6 +244,16 @@ export class WebSocketClient {
     this.reconnectTimer = setTimeout(() => {
       this.connect()
     }, this.config.reconnectInterval)
+  }
+
+  /**
+   * Clear reconnect timer
+   */
+  private clearReconnectTimer(): void {
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer)
+      this.reconnectTimer = null
+    }
   }
 
   /**
