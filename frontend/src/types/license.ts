@@ -40,6 +40,8 @@ export interface BackendLicense {
   registration_number: string
   category: string
   owner: string
+  facility_name?: string
+  facility_code?: string
   facility_type: string
   license_type: string
   date_of_issuance: string

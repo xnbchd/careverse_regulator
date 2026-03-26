@@ -23,6 +23,8 @@ export function transformLicense(backendLicense: BackendLicense): License {
     registrationNumber: backendLicense.registration_number,
     category: backendLicense.category,
     owner: backendLicense.owner,
+    facilityName: backendLicense.facility_name,
+    facilityCode: backendLicense.facility_code,
     facilityType: backendLicense.facility_type,
     licenseType: backendLicense.license_type,
     dateOfIssuance: formatDateForFrontend(backendLicense.date_of_issuance),
@@ -129,6 +131,11 @@ export async function listLicenses(
   if (filters?.status) params.append('status', filters.status)
   if (filters?.isArchived !== undefined) params.append('is_archived', filters.isArchived ? '1' : '0')
 
+  // Send search to backend (searches across license_number, registration_number, owner, facility_name in backend)
+  if (filters?.search) {
+    params.append('search', filters.search)
+  }
+
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.facility_license.get_health_facility_licenses?${params.toString()}`
   )
@@ -136,19 +143,7 @@ export async function listLicenses(
   const licenses = response.data || response.message || []
   const pagination = response.pagination || {}
 
-  let transformedData = licenses.map(transformLicense)
-
-  // Client-side search filtering
-  if (filters?.search) {
-    const searchLower = filters.search.toLowerCase()
-    transformedData = transformedData.filter(
-      (l) =>
-        l.licenseNumber.toLowerCase().includes(searchLower) ||
-        l.registrationNumber.toLowerCase().includes(searchLower) ||
-        l.owner.toLowerCase().includes(searchLower) ||
-        l.facilityType.toLowerCase().includes(searchLower)
-    )
-  }
+  const transformedData = licenses.map(transformLicense)
 
   // Client-side sorting
   if (filters?.sortBy && filters?.sortOrder) {

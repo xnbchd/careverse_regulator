@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import dayjs from 'dayjs'
 import SubmitAppealModal from '../licensing/SubmitAppealModal'
+import { LicenseCommentsSection } from '../licensing/LicenseCommentsSection'
 
 interface LicenseDrawerProps {
   license: License | null
@@ -172,6 +173,9 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
             <TabsTrigger value="details" className="flex-1 min-w-fit">
               Details
             </TabsTrigger>
+            <TabsTrigger value="comments" className="flex-1 min-w-fit">
+              Comments
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -271,8 +275,8 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
             )}
           </div>
 
-          {/* License Type & Owner */}
-          {(license.licenseType || license.owner) && (
+          {/* License Type & Owner/Name */}
+          {(license.licenseType || license.owner || license.facilityName) && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
               <div className="space-y-3">
                 {license.licenseType && (
@@ -283,12 +287,14 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
                     <p className="text-sm text-foreground text-start">{license.licenseType}</p>
                   </div>
                 )}
-                {license.owner && (
+                {(license.facilityName || license.owner) && (
                   <div>
                     <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
-                      Owner
+                      {license.category === 'Health Professional' ? 'Professional Name' : 'Facility Name'}
                     </p>
-                    <p className="text-sm text-foreground text-start">{license.owner}</p>
+                    <p className="text-sm text-foreground text-start">
+                      {license.facilityName || license.owner}
+                    </p>
                   </div>
                 )}
               </div>
@@ -300,7 +306,7 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
           <div className="flex items-center gap-2 mb-3">
             <Building2 className="w-5 h-5 text-muted-foreground" />
             <h3 className="text-sm font-semibold text-foreground text-start">
-              Associated Facility
+              {license.category === 'Health Professional' ? 'Professional Details' : 'Facility Details'}
             </h3>
           </div>
 
@@ -309,7 +315,7 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
               {license.facilityName && (
                 <div>
                   <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
-                    Facility Name
+                    {license.category === 'Health Professional' ? 'Professional Name' : 'Facility Name'}
                   </p>
                   <EntityLink type="facility" id={license.registrationNumber}>
                     <span className="text-sm font-medium">{license.facilityName}</span>
@@ -320,7 +326,7 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
               {license.facilityCode && (
                 <div>
                   <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
-                    Facility Code
+                    {license.category === 'Health Professional' ? 'Professional Code' : 'Facility Code'}
                   </p>
                   <p className="text-sm text-foreground text-start font-mono">
                     {license.facilityCode}
@@ -340,9 +346,18 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
               {license.facilityType && (
                 <div>
                   <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
-                    Facility Type
+                    {license.category === 'Health Professional' ? 'Professional Type' : 'Facility Type'}
                   </p>
                   <p className="text-sm text-foreground text-start">{license.facilityType}</p>
+                </div>
+              )}
+
+              {license.owner && (
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
+                    Owner
+                  </p>
+                  <p className="text-sm text-foreground text-start">{license.owner}</p>
                 </div>
               )}
             </div>
@@ -430,6 +445,10 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
               </TableBody>
             </Table>
           </div>
+        </TabsContent>
+
+        <TabsContent value="comments" className="space-y-3 mt-0">
+          <LicenseCommentsSection licenseNumber={license.licenseNumber} />
         </TabsContent>
       </Tabs>
 
