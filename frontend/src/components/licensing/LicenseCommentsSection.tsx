@@ -26,8 +26,8 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
     try {
       setLoading(true)
       const response = await fetchLicenseComments(licenseNumber, page, 10)
-      setComments(response.comments)
-      setHasMore(response.pagination.has_next)
+      setComments(response?.comments || [])
+      setHasMore(response?.pagination?.has_next || false)
     } catch (error) {
       console.error('Failed to load comments:', error)
       toast.error('Failed to load comments')
@@ -64,7 +64,7 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-3">
-            <label className="text-sm font-medium text-gray-900 text-start block">
+            <label className="text-sm font-medium text-foreground text-start block">
               Add Comment
             </label>
             <Textarea
@@ -99,7 +99,7 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
 
       {/* Comments List */}
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
           <MessageSquare className="w-4 h-4" />
           Comments ({comments.length})
         </h3>
@@ -129,14 +129,14 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
                 <CardContent className="pt-4">
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-foreground">
                         {comment.created_by}
                       </p>
                       <span className="text-xs text-muted-foreground">
                         {comment.created_at}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-700 whitespace-pre-wrap text-start">
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap text-start">
                       {comment.comment}
                     </p>
                   </div>

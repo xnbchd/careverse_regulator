@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useAnalyticsStore } from '@/stores/analyticsStore'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -31,10 +30,6 @@ export default function AnalyticsDashboard() {
     fetchDashboardData,
     refreshData,
   } = useAnalyticsStore()
-
-  useEffect(() => {
-    fetchDashboardData()
-  }, [fetchDashboardData])
 
   if (loading && !licenseStats) {
     return (

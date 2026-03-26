@@ -17,7 +17,7 @@ export function EntityLink({ type, id, children, className = '' }: EntityLinkPro
         e.stopPropagation()
         openDrawer(type, id)
       }}
-      className={`text-primary underline hover:no-underline cursor-pointer font-medium ${className}`}
+      className={`text-primary dark:text-green-400 underline hover:no-underline cursor-pointer font-medium ${className}`}
       type="button"
     >
       {children}

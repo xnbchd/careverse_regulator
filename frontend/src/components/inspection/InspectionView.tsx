@@ -43,7 +43,7 @@ export default function InspectionView({ company }: InspectionViewProps) {
   const searchParams = useSearch({ from: '/inspections/list' })
   const { openDrawer } = useEntityDrawer()
 
-  const { inspections, facilities, professionals, loading, error, pagination, setPage, fetchInspections, fetchFacilities, fetchProfessionals, createInspection } = useInspectionStore()
+  const { inspections, facilities, professionals, loading, error, pagination, setPage, fetchInspections, createInspection } = useInspectionStore()
   const { findings, fetchFindings } = useFindingsStore()
   const { isMobile, isTablet } = useResponsive()
 
@@ -120,13 +120,6 @@ export default function InspectionView({ company }: InspectionViewProps) {
     (!selectedSeverities.includes('all') ? 1 : 0) +
     (!selectedFindingStatuses.includes('all') ? 1 : 0) +
     (findingsDateRange ? 1 : 0)
-
-  // Initial fetch
-  useEffect(() => {
-    fetchFacilities()
-    fetchProfessionals()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   // Fetch inspections when URL params change (Scheduled Inspections tab)
   useEffect(() => {

@@ -1,9 +1,9 @@
-import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
 
 function LicenseManagementLayoutComponent() {
-  const navigate = useNavigate()
+  const navigate = Route.useNavigate()
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {

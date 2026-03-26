@@ -6,23 +6,22 @@ import { useResponsive } from '@/hooks/useResponsive'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { FileText, Plus, ArrowLeft, CheckCircle, XCircle, Ban } from 'lucide-react'
+import { ArrowLeft, Building2, UserRound, FileText, CheckCircle, XCircle, Ban, Scale } from 'lucide-react'
 import LicensesTable from './LicensesTable'
 import LicenseCard from './LicenseCard'
 import LicensesFilters from './LicensesFilters'
 import ApplicationsTable from './ApplicationsTable'
 import ApplicationCard from './ApplicationCard'
 import ApplicationsFilters from './ApplicationsFilters'
-import ApplicationDetailModal from './ApplicationDetailModal'
+import ProfessionalApplicationsTable from './ProfessionalApplicationsTable'
 import PaginationControls from './PaginationControls'
 import ExportButton from '@/components/shared/ExportButton'
 import SavedFiltersManager from '@/components/shared/SavedFiltersManager'
 import BulkActionsBar from '@/components/shared/BulkActionsBar'
+import BulkActionConfirmDialog from '@/components/shared/BulkActionConfirmDialog'
 import LicenseAppealsView from './LicenseAppealsView'
 import { LicenseAppealsOverview } from './LicenseAppealsOverview'
-import BulkActionConfirmDialog from '@/components/shared/BulkActionConfirmDialog'
-import { cn } from '@/lib/utils'
-import type { LicenseApplication, License, LicenseAction } from '@/types/license'
+import type { LicenseApplication, ProfessionalLicenseApplication, License, LicenseAction } from '@/types/license'
 import type { ExportConfig } from '@/utils/exportUtils'
 import { toast } from 'sonner'
 import dayjs from 'dayjs'
@@ -43,7 +42,9 @@ interface ApplicationFiltersState {
   types?: string[]
 }
 
-export default function LicenseManagementView({ company }: LicenseManagementViewProps) {
+type TabValue = 'facility-applications' | 'professional-applications'
+
+export default function LicenseManagementView({}: LicenseManagementViewProps) {
   const navigate = useNavigate()
   const {
     licenses,
@@ -60,6 +61,13 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     applicationsFilters,
     setApplicationsFilters,
     setApplicationsPage,
+    professionalApplications,
+    professionalApplicationsLoading,
+    professionalApplicationsError,
+    professionalApplicationsPagination,
+    professionalApplicationsFilters,
+    setProfessionalApplicationsFilters,
+    setProfessionalApplicationsPage,
     selectedLicenseIds,
     bulkLicenseActionLoading,
     toggleLicenseSelection,
@@ -71,25 +79,32 @@ export default function LicenseManagementView({ company }: LicenseManagementView
 
   const { isMobile, isTablet } = useResponsive()
 
-  const [activeTab, setActiveTab] = useState<'licenses' | 'appeals' | 'applications'>('licenses')
-  const [selectedApplication, setSelectedApplication] = useState<LicenseApplication | null>(null)
-  const [showApplicationModal, setShowApplicationModal] = useState(false)
+  const [activeTab, setActiveTab] = useState<TabValue>('facility-applications')
 
   // Bulk action dialog state
   const [showBulkActionDialog, setShowBulkActionDialog] = useState(false)
   const [bulkActionType, setBulkActionType] = useState<LicenseAction | null>(null)
 
-  // Licenses filters state
+  // Selection state for application tables
+  const [selectedFacilityAppIds, setSelectedFacilityAppIds] = useState<Set<string>>(new Set())
+  const [selectedProfAppIds, setSelectedProfAppIds] = useState<Set<string>>(new Set())
+
+  // --- Licenses Filters ---
   const [licenseSearchText, setLicenseSearchText] = useState(licensesFilters.search || '')
   const [selectedLicenseStatuses, setSelectedLicenseStatuses] = useState<string[]>(
     licensesFilters.status ? licensesFilters.status.split(',') : ['all']
   )
   const [licenseSortOrder, setLicenseSortOrder] = useState<'asc' | 'desc' | 'recent'>('recent')
 
-  // Applications filters state
-  const [appSearchText, setAppSearchText] = useState(applicationsFilters.search || '')
-  const [selectedAppStatuses, setSelectedAppStatuses] = useState<string[]>(['all'])
-  const [selectedAppTypes, setSelectedAppTypes] = useState<string[]>(['all'])
+  // --- Facility Applications Filters ---
+  const [facilityAppSearchText, setFacilityAppSearchText] = useState(applicationsFilters.search || '')
+  const [selectedFacilityAppStatuses, setSelectedFacilityAppStatuses] = useState<string[]>(['all'])
+  const [selectedFacilityAppTypes, setSelectedFacilityAppTypes] = useState<string[]>(['all'])
+
+  // --- Professional Applications Filters ---
+  const [profAppSearchText, setProfAppSearchText] = useState(professionalApplicationsFilters.search || '')
+  const [selectedProfAppStatuses, setSelectedProfAppStatuses] = useState<string[]>(['all'])
+  const [selectedProfAppTypes, setSelectedProfAppTypes] = useState<string[]>(['all'])
 
   // Debounce license search
   useEffect(() => {
@@ -99,15 +114,23 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     return () => clearTimeout(timer)
   }, [licenseSearchText])
 
-  // Debounce application search
+  // Debounce facility application search
   useEffect(() => {
     const timer = setTimeout(() => {
-      setApplicationsFilters({ ...applicationsFilters, search: appSearchText || undefined })
+      setApplicationsFilters({ ...applicationsFilters, search: facilityAppSearchText || undefined })
     }, 300)
     return () => clearTimeout(timer)
-  }, [appSearchText])
+  }, [facilityAppSearchText])
 
-  // License filters handlers
+  // Debounce professional application search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setProfessionalApplicationsFilters({ ...professionalApplicationsFilters, search: profAppSearchText || undefined })
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [profAppSearchText])
+
+  // --- License Handlers ---
   const handleLicenseStatusChange = (statuses: string[]) => {
     setSelectedLicenseStatuses(statuses)
     const statusFilter = statuses.includes('all') ? undefined : statuses.join(',')
@@ -132,37 +155,63 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     setLicensesFilters({})
   }
 
-  // Application filters handlers
-  const handleAppStatusChange = (statuses: string[]) => {
-    setSelectedAppStatuses(statuses)
-    const statusFilter = statuses.includes('all') ? undefined : statuses.join(',')
-    setApplicationsFilters({ ...applicationsFilters, applicationStatus: statusFilter })
-  }
-
-  const handleAppTypeChange = (types: string[]) => {
-    setSelectedAppTypes(types)
-    const typeFilter = types.includes('all') ? undefined : types[0]
-    setApplicationsFilters({ ...applicationsFilters, applicationType: typeFilter })
-  }
-
-  const handleClearAppFilters = () => {
-    setAppSearchText('')
-    setSelectedAppStatuses(['all'])
-    setSelectedAppTypes(['all'])
-    setApplicationsFilters({})
-  }
-
-  // Row click handlers
   const handleLicenseRowClick = (licenseNumber: string) => {
     navigate({ to: `/license-management/${licenseNumber}` })
   }
 
-  const handleApplicationRowClick = (applicationId: string) => {
-    const app = applications.find((a) => a.licenseApplicationId === applicationId)
-    if (app) {
-      setSelectedApplication(app)
-      setShowApplicationModal(true)
-    }
+  // --- Facility Application Handlers ---
+  const handleFacilityAppStatusChange = (statuses: string[]) => {
+    setSelectedFacilityAppStatuses(statuses)
+    const statusFilter = statuses.includes('all') ? undefined : statuses.join(',')
+    setApplicationsFilters({ ...applicationsFilters, applicationStatus: statusFilter })
+  }
+
+  const handleFacilityAppTypeChange = (types: string[]) => {
+    setSelectedFacilityAppTypes(types)
+    const typeFilter = types.includes('all') ? undefined : types[0]
+    setApplicationsFilters({ ...applicationsFilters, applicationType: typeFilter })
+  }
+
+  const handleClearFacilityAppFilters = () => {
+    setFacilityAppSearchText('')
+    setSelectedFacilityAppStatuses(['all'])
+    setSelectedFacilityAppTypes(['all'])
+    setApplicationsFilters({})
+  }
+
+  const handleFacilityAppRowClick = (applicationId: string) => {
+    navigate({ to: '/license-management/facility-application/$applicationId', params: { applicationId } } as any)
+  }
+
+  // --- Professional Application Handlers ---
+  const handleProfAppStatusChange = (statuses: string[]) => {
+    setSelectedProfAppStatuses(statuses)
+    const statusFilter = statuses.includes('all') ? undefined : statuses.join(',')
+    setProfessionalApplicationsFilters({ ...professionalApplicationsFilters, applicationStatus: statusFilter })
+  }
+
+  const handleProfAppTypeChange = (types: string[]) => {
+    setSelectedProfAppTypes(types)
+    const typeFilter = types.includes('all') ? undefined : types[0]
+    setProfessionalApplicationsFilters({ ...professionalApplicationsFilters, applicationType: typeFilter })
+  }
+
+  const handleClearProfAppFilters = () => {
+    setProfAppSearchText('')
+    setSelectedProfAppStatuses(['all'])
+    setSelectedProfAppTypes(['all'])
+    setProfessionalApplicationsFilters({})
+  }
+
+  const handleProfAppRowClick = (applicationId: string) => {
+    navigate({ to: '/license-management/professional-application/$applicationId', params: { applicationId } } as any)
+  }
+
+  // Selection helpers
+  const toggleSelection = (set: Set<string>, setFn: (s: Set<string>) => void, id: string) => {
+    const next = new Set(set)
+    if (next.has(id)) next.delete(id); else next.add(id)
+    setFn(next)
   }
 
   // Bulk action handlers
@@ -171,8 +220,8 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     setShowBulkActionDialog(true)
   }
 
-  const handleBulkActionConfirm = async (reason?: string) => {
-    if (!bulkActionType) return { succeeded: [], failed: [] }
+  const handleBulkActionConfirm = async () => {
+    if (!bulkActionType) return { succeeded: [] as string[], failed: [] as string[] }
 
     const licenseNumbers = Array.from(selectedLicenseIds)
     const result = await bulkUpdateLicenseStatus(licenseNumbers, bulkActionType)
@@ -207,28 +256,39 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     return labels[action]
   }
 
-  // Calculate active filters
+  // Active filter counts
   const activeLicenseFiltersCount =
     (licenseSearchText ? 1 : 0) +
     (!selectedLicenseStatuses.includes('all') ? 1 : 0) +
     (licenseSortOrder !== 'recent' ? 1 : 0)
 
-  const activeAppFiltersCount =
-    (appSearchText ? 1 : 0) +
-    (!selectedAppStatuses.includes('all') ? 1 : 0) +
-    (!selectedAppTypes.includes('all') ? 1 : 0)
+  const activeFacilityAppFilters =
+    (facilityAppSearchText ? 1 : 0) +
+    (!selectedFacilityAppStatuses.includes('all') ? 1 : 0) +
+    (!selectedFacilityAppTypes.includes('all') ? 1 : 0)
 
-  // Saved filters state tracking
+  const activeProfAppFilters =
+    (profAppSearchText ? 1 : 0) +
+    (!selectedProfAppStatuses.includes('all') ? 1 : 0) +
+    (!selectedProfAppTypes.includes('all') ? 1 : 0)
+
+  // Saved filter state
   const currentLicenseFilters: LicenseFiltersState = {
     search: licenseSearchText || undefined,
     status: selectedLicenseStatuses.includes('all') ? undefined : selectedLicenseStatuses,
     sortOrder: licenseSortOrder,
   }
 
-  const currentApplicationFilters: ApplicationFiltersState = {
-    search: appSearchText || undefined,
-    status: selectedAppStatuses.includes('all') ? undefined : selectedAppStatuses,
-    types: selectedAppTypes.includes('all') ? undefined : selectedAppTypes,
+  const currentFacilityAppFilters: ApplicationFiltersState = {
+    search: facilityAppSearchText || undefined,
+    status: selectedFacilityAppStatuses.includes('all') ? undefined : selectedFacilityAppStatuses,
+    types: selectedFacilityAppTypes.includes('all') ? undefined : selectedFacilityAppTypes,
+  }
+
+  const currentProfAppFilters: ApplicationFiltersState = {
+    search: profAppSearchText || undefined,
+    status: selectedProfAppStatuses.includes('all') ? undefined : selectedProfAppStatuses,
+    types: selectedProfAppTypes.includes('all') ? undefined : selectedProfAppTypes,
   }
 
   // Apply saved filters handlers
@@ -247,46 +307,33 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     }
   }
 
-  const handleApplySavedApplicationFilters = (filters: ApplicationFiltersState) => {
-    setAppSearchText(filters.search || '')
-    setSelectedAppStatuses(filters.status || ['all'])
-    setSelectedAppTypes(filters.types || ['all'])
-
+  const handleApplySavedAppFilters = (filters: ApplicationFiltersState, setSearch: (v: string) => void, setStatuses: (v: string[]) => void, setTypes: (v: string[]) => void, setStoreFilters: (f: any) => void) => {
+    setSearch(filters.search || '')
+    setStatuses(filters.status || ['all'])
+    setTypes(filters.types || ['all'])
     const statusFilter = filters.status?.join(',')
     const typeFilter = filters.types?.[0]
-    setApplicationsFilters({
-      search: filters.search,
-      applicationStatus: statusFilter,
-      applicationType: typeFilter
-    })
+    setStoreFilters({ search: filters.search, applicationStatus: statusFilter, applicationType: typeFilter })
   }
 
   // Filter summary functions
   const getLicenseFilterSummary = (filters: LicenseFiltersState): string => {
     const parts: string[] = []
     if (filters.search) parts.push(`Search: "${filters.search}"`)
-    if (filters.status && filters.status.length > 0) {
-      parts.push(`Status: ${filters.status.join(', ')}`)
-    }
-    if (filters.sortOrder && filters.sortOrder !== 'recent') {
-      parts.push(`Sort: ${filters.sortOrder === 'asc' ? 'A-Z' : 'Z-A'}`)
-    }
+    if (filters.status?.length) parts.push(`Status: ${filters.status.join(', ')}`)
+    if (filters.sortOrder && filters.sortOrder !== 'recent') parts.push(`Sort: ${filters.sortOrder === 'asc' ? 'A-Z' : 'Z-A'}`)
     return parts.join(' • ')
   }
 
-  const getApplicationFilterSummary = (filters: ApplicationFiltersState): string => {
+  const getAppFilterSummary = (filters: ApplicationFiltersState): string => {
     const parts: string[] = []
     if (filters.search) parts.push(`Search: "${filters.search}"`)
-    if (filters.status && filters.status.length > 0) {
-      parts.push(`Status: ${filters.status.join(', ')}`)
-    }
-    if (filters.types && filters.types.length > 0) {
-      parts.push(`Types: ${filters.types.join(', ')}`)
-    }
+    if (filters.status?.length) parts.push(`Status: ${filters.status.join(', ')}`)
+    if (filters.types?.length) parts.push(`Types: ${filters.types.join(', ')}`)
     return parts.join(' • ')
   }
 
-  // Export configurations
+  // Export configs
   const licenseExportConfig: ExportConfig<License> = {
     filename: `licenses-${dayjs().format('YYYY-MM-DD')}`,
     title: 'Facility Licenses Report',
@@ -302,9 +349,9 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     ],
   }
 
-  const applicationExportConfig: ExportConfig<LicenseApplication> = {
-    filename: `applications-${dayjs().format('YYYY-MM-DD')}`,
-    title: 'License Applications Report',
+  const facilityAppExportConfig: ExportConfig<LicenseApplication> = {
+    filename: `facility-applications-${dayjs().format('YYYY-MM-DD')}`,
+    title: 'Facility License Applications Report',
     columns: [
       { key: 'licenseApplicationId', label: 'Application ID' },
       { key: 'facilityName', label: 'Facility Name' },
@@ -316,9 +363,23 @@ export default function LicenseManagementView({ company }: LicenseManagementView
     ],
   }
 
+  const profAppExportConfig: ExportConfig<ProfessionalLicenseApplication> = {
+    filename: `professional-applications-${dayjs().format('YYYY-MM-DD')}`,
+    title: 'Professional License Applications Report',
+    columns: [
+      { key: 'licenseApplicationId', label: 'Application ID' },
+      { key: 'fullName', label: 'Name' },
+      { key: 'registrationNumber', label: 'Registration Number' },
+      { key: 'applicationType', label: 'Application Type' },
+      { key: 'licenseTypeName', label: 'License Type' },
+      { key: 'applicationDate', label: 'Application Date' },
+      { key: 'licenseFee', label: 'License Fee (KES)' },
+      { key: 'applicationStatus', label: 'Status' },
+    ],
+  }
+
   return (
     <div className="space-y-6">
-      {/* Back to Dashboard */}
       <Button
         variant="ghost"
         size="sm"
@@ -329,176 +390,41 @@ export default function LicenseManagementView({ company }: LicenseManagementView
         Back to Dashboard
       </Button>
 
-      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="w-full">
-        <div className="flex items-center justify-between mb-6">
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabValue)} className="w-full">
+        <div className="mb-6">
           <TabsList>
-            <TabsTrigger value="licenses">All Licenses</TabsTrigger>
-            <TabsTrigger value="appeals">License Appeals</TabsTrigger>
-            <TabsTrigger value="applications">Applications</TabsTrigger>
+            <TabsTrigger value="facility-applications">
+              <Building2 className="h-4 w-4 mr-1.5" />
+              Facility Applications
+            </TabsTrigger>
+            <TabsTrigger value="professional-applications">
+              <UserRound className="h-4 w-4 mr-1.5" />
+              Professional Applications
+            </TabsTrigger>
           </TabsList>
         </div>
 
-        {/* All Licenses Tab */}
-        <TabsContent value="licenses" className="space-y-6">
-          <div className="flex justify-between items-start gap-4 flex-wrap">
-            <LicensesFilters
-              searchText={licenseSearchText}
-              onSearchChange={setLicenseSearchText}
-              selectedStatuses={selectedLicenseStatuses}
-              onStatusChange={handleLicenseStatusChange}
-              sortOrder={licenseSortOrder}
-              onSortChange={handleLicenseSortChange}
-              activeFiltersCount={activeLicenseFiltersCount}
-              onClearFilters={handleClearLicenseFilters}
-            />
-            <div className="flex gap-2">
-              <SavedFiltersManager
-                storageKey="license-saved-filters"
-                currentFilters={currentLicenseFilters}
-                onApplyFilters={handleApplySavedLicenseFilters}
-                getFilterSummary={getLicenseFilterSummary}
-              />
-              <ExportButton
-                data={licenses}
-                config={licenseExportConfig}
-                size="default"
-              />
-            </div>
-          </div>
-
-          {licensesError && (
-            <Card className="border-destructive">
-              <CardContent className="py-4">
-                <p className="text-sm text-destructive">{licensesError}</p>
-              </CardContent>
-            </Card>
-          )}
-
-          {isMobile || isTablet ? (
-            <div className="space-y-4">
-              {licenses.map((license) => (
-                <LicenseCard
-                  key={license.id}
-                  license={license}
-                  onClick={() => handleLicenseRowClick(license.licenseNumber)}
-                />
-              ))}
-            </div>
-          ) : (
-            <LicensesTable
-              licenses={licenses}
-              loading={licensesLoading}
-              onRowClick={handleLicenseRowClick}
-              selectedIds={selectedLicenseIds}
-              onToggleSelection={toggleLicenseSelection}
-              onSelectAll={selectAllLicenses}
-              onDeselectAll={deselectAllLicenses}
-            />
-          )}
-
-          {/* Bulk Actions Bar for Licenses */}
-          {activeTab === 'licenses' && (
-            <BulkActionsBar
-              selectedCount={selectedLicenseIds.size}
-              onClear={deselectAllLicenses}
-              actions={[
-                {
-                  label: 'Approve',
-                  onClick: () => handleBulkAction('APPROVE'),
-                  variant: 'default',
-                  icon: <CheckCircle className="w-4 h-4" />,
-                  loading: bulkLicenseActionLoading,
-                },
-                {
-                  label: 'Deny',
-                  onClick: () => handleBulkAction('DENY'),
-                  variant: 'destructive',
-                  icon: <XCircle className="w-4 h-4" />,
-                  loading: bulkLicenseActionLoading,
-                },
-                {
-                  label: 'Suspend',
-                  onClick: () => handleBulkAction('SUSPEND'),
-                  variant: 'secondary',
-                  icon: <Ban className="w-4 h-4" />,
-                  loading: bulkLicenseActionLoading,
-                },
-              ]}
-            />
-          )}
-
-          {licensesPagination && licensesPagination.total_pages > 1 && (
-            <PaginationControls
-              currentPage={licensesPagination.page}
-              totalPages={licensesPagination.total_pages}
-              onPageChange={setLicensesPage}
-              totalCount={licensesPagination.total_count}
-              pageSize={licensesPagination.page_size}
-              isMobile={isMobile}
-            />
-          )}
-
-          {!licensesLoading && licenses.length === 0 && activeLicenseFiltersCount === 0 && (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <div className="rounded-full bg-muted p-6 mb-4">
-                  <FileText className="h-12 w-12 text-muted-foreground" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">No Licenses Found</h3>
-                <p className="text-sm text-muted-foreground text-center max-w-md">
-                  There are currently no facility licenses in the system.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-
-          {!licensesLoading && licenses.length === 0 && activeLicenseFiltersCount > 0 && (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <h3 className="text-lg font-semibold mb-2">No Results Found</h3>
-                <p className="text-sm text-muted-foreground text-center max-w-md mb-4">
-                  No licenses match your current filters.
-                </p>
-                <Button variant="outline" onClick={handleClearLicenseFilters}>
-                  Clear Filters
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-
-        {/* License Appeals Tab */}
-
-        <TabsContent value="appeals" className="space-y-6">
-          <LicenseAppealsOverview />
-          <LicenseAppealsView />
-        </TabsContent>
-
-        {/* Applications Tab */}
-        <TabsContent value="applications" className="space-y-6">
+        {/* ==================== Facility Applications ==================== */}
+        <TabsContent value="facility-applications" className="space-y-6">
           <div className="flex justify-between items-start gap-4 flex-wrap">
             <ApplicationsFilters
-              searchText={appSearchText}
-              onSearchChange={setAppSearchText}
-              selectedStatuses={selectedAppStatuses}
-              onStatusChange={handleAppStatusChange}
-              selectedTypes={selectedAppTypes}
-              onTypeChange={handleAppTypeChange}
-              activeFiltersCount={activeAppFiltersCount}
-              onClearFilters={handleClearAppFilters}
+              searchText={facilityAppSearchText}
+              onSearchChange={setFacilityAppSearchText}
+              selectedStatuses={selectedFacilityAppStatuses}
+              onStatusChange={handleFacilityAppStatusChange}
+              selectedTypes={selectedFacilityAppTypes}
+              onTypeChange={handleFacilityAppTypeChange}
+              activeFiltersCount={activeFacilityAppFilters}
+              onClearFilters={handleClearFacilityAppFilters}
             />
             <div className="flex gap-2">
               <SavedFiltersManager
-                storageKey="application-saved-filters"
-                currentFilters={currentApplicationFilters}
-                onApplyFilters={handleApplySavedApplicationFilters}
-                getFilterSummary={getApplicationFilterSummary}
+                storageKey="facility-application-saved-filters"
+                currentFilters={currentFacilityAppFilters}
+                onApplyFilters={(f) => handleApplySavedAppFilters(f, setFacilityAppSearchText, setSelectedFacilityAppStatuses, setSelectedFacilityAppTypes, setApplicationsFilters)}
+                getFilterSummary={getAppFilterSummary}
               />
-              <ExportButton
-                data={applications}
-                config={applicationExportConfig}
-                size="default"
-              />
+              <ExportButton data={applications} config={facilityAppExportConfig} size="default" />
             </div>
           </div>
 
@@ -513,65 +439,75 @@ export default function LicenseManagementView({ company }: LicenseManagementView
           {isMobile || isTablet ? (
             <div className="space-y-4">
               {applications.map((app) => (
-                <ApplicationCard
-                  key={app.id}
-                  application={app}
-                  onClick={() => handleApplicationRowClick(app.licenseApplicationId)}
-                />
+                <ApplicationCard key={app.id} application={app} onClick={() => handleFacilityAppRowClick(app.licenseApplicationId)} />
               ))}
             </div>
           ) : (
             <ApplicationsTable
               applications={applications}
               loading={applicationsLoading}
-              onRowClick={handleApplicationRowClick}
+              onRowClick={handleFacilityAppRowClick}
+              selectedIds={selectedFacilityAppIds}
+              onToggleSelection={(id) => toggleSelection(selectedFacilityAppIds, setSelectedFacilityAppIds, id)}
+              onSelectAll={() => setSelectedFacilityAppIds(new Set(applications.map(a => a.licenseApplicationId)))}
+              onDeselectAll={() => setSelectedFacilityAppIds(new Set())}
+              emptyState={<EmptyStateInline icon={Building2} title="No Facility Applications Found" description={activeFacilityAppFilters > 0 ? 'No facility applications match your current filters.' : 'There are currently no facility license applications.'} onClear={activeFacilityAppFilters > 0 ? handleClearFacilityAppFilters : undefined} />}
             />
           )}
 
           {applicationsPagination && applicationsPagination.total_pages > 1 && (
-            <PaginationControls
-              currentPage={applicationsPagination.page}
-              totalPages={applicationsPagination.total_pages}
-              onPageChange={setApplicationsPage}
-              totalCount={applicationsPagination.total_count}
-              pageSize={applicationsPagination.page_size}
-              isMobile={isMobile}
-            />
+            <PaginationControls currentPage={applicationsPagination.page} totalPages={applicationsPagination.total_pages} onPageChange={setApplicationsPage} totalCount={applicationsPagination.total_count} pageSize={applicationsPagination.page_size} isMobile={isMobile} />
           )}
+        </TabsContent>
 
-          {!applicationsLoading && applications.length === 0 && (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <div className="rounded-full bg-muted p-6 mb-4">
-                  <FileText className="h-12 w-12 text-muted-foreground" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">No Applications Found</h3>
-                <p className="text-sm text-muted-foreground text-center max-w-md">
-                  {activeAppFiltersCount > 0
-                    ? 'No applications match your current filters.'
-                    : 'There are currently no license applications.'}
-                </p>
-                {activeAppFiltersCount > 0 && (
-                  <Button variant="outline" onClick={handleClearAppFilters} className="mt-4">
-                    Clear Filters
-                  </Button>
-                )}
+        {/* ==================== Professional Applications ==================== */}
+        <TabsContent value="professional-applications" className="space-y-6">
+          <div className="flex justify-between items-start gap-4 flex-wrap">
+            <ApplicationsFilters
+              searchText={profAppSearchText}
+              onSearchChange={setProfAppSearchText}
+              selectedStatuses={selectedProfAppStatuses}
+              onStatusChange={handleProfAppStatusChange}
+              selectedTypes={selectedProfAppTypes}
+              onTypeChange={handleProfAppTypeChange}
+              activeFiltersCount={activeProfAppFilters}
+              onClearFilters={handleClearProfAppFilters}
+            />
+            <div className="flex gap-2">
+              <SavedFiltersManager
+                storageKey="professional-application-saved-filters"
+                currentFilters={currentProfAppFilters}
+                onApplyFilters={(f) => handleApplySavedAppFilters(f, setProfAppSearchText, setSelectedProfAppStatuses, setSelectedProfAppTypes, setProfessionalApplicationsFilters)}
+                getFilterSummary={getAppFilterSummary}
+              />
+              <ExportButton data={professionalApplications} config={profAppExportConfig} size="default" />
+            </div>
+          </div>
+
+          {professionalApplicationsError && (
+            <Card className="border-destructive">
+              <CardContent className="py-4">
+                <p className="text-sm text-destructive">{professionalApplicationsError}</p>
               </CardContent>
             </Card>
           )}
+
+          <ProfessionalApplicationsTable
+            applications={professionalApplications}
+            loading={professionalApplicationsLoading}
+            onRowClick={handleProfAppRowClick}
+            selectedIds={selectedProfAppIds}
+            onToggleSelection={(id) => toggleSelection(selectedProfAppIds, setSelectedProfAppIds, id)}
+            onSelectAll={() => setSelectedProfAppIds(new Set(professionalApplications.map(a => a.licenseApplicationId)))}
+            onDeselectAll={() => setSelectedProfAppIds(new Set())}
+            emptyState={<EmptyStateInline icon={UserRound} title="No Professional Applications Found" description={activeProfAppFilters > 0 ? 'No professional applications match your current filters.' : 'There are currently no professional license applications.'} onClear={activeProfAppFilters > 0 ? handleClearProfAppFilters : undefined} />}
+          />
+
+          {professionalApplicationsPagination && professionalApplicationsPagination.total_pages > 1 && (
+            <PaginationControls currentPage={professionalApplicationsPagination.page} totalPages={professionalApplicationsPagination.total_pages} onPageChange={setProfessionalApplicationsPage} totalCount={professionalApplicationsPagination.total_count} pageSize={professionalApplicationsPagination.page_size} isMobile={isMobile} />
+          )}
         </TabsContent>
       </Tabs>
-
-      {/* Application Detail Modal */}
-      <ApplicationDetailModal
-        isOpen={showApplicationModal}
-        onClose={() => {
-          setShowApplicationModal(false)
-          setSelectedApplication(null)
-        }}
-        application={selectedApplication}
-        loading={false}
-      />
 
       {/* Bulk Action Confirmation Dialog */}
       <BulkActionConfirmDialog
@@ -588,6 +524,21 @@ export default function LicenseManagementView({ company }: LicenseManagementView
         onConfirm={handleBulkActionConfirm}
         variant={bulkActionType === 'DENY' || bulkActionType === 'SUSPEND' ? 'destructive' : 'default'}
       />
+    </div>
+  )
+}
+
+function EmptyStateInline({ icon: Icon, title, description, onClear }: { icon: any; title: string; description: string; onClear?: () => void }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-4">
+      <div className="rounded-full bg-muted p-4 mb-3">
+        <Icon className="h-8 w-8 text-muted-foreground" />
+      </div>
+      <h3 className="text-base font-semibold mb-1">{title}</h3>
+      <p className="text-sm text-muted-foreground text-center max-w-md mb-3">{description}</p>
+      {onClear && (
+        <Button variant="outline" size="sm" onClick={onClear}>Clear Filters</Button>
+      )}
     </div>
   )
 }

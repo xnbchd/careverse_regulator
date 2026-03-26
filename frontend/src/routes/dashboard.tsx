@@ -1,12 +1,15 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
+import { useAffiliationStore } from '@/stores/affiliationStore'
+import { useLicensingStore } from '@/stores/licensingStore'
+import { useInspectionStore } from '@/stores/inspectionStore'
 
-const AnalyticsDashboard = lazy(() => import('@/components/analytics/AnalyticsDashboard'))
+const MainDashboard = lazy(() => import('@/components/MainDashboard'))
 
 function DashboardComponent() {
-  const navigate = useNavigate()
+  const navigate = Route.useNavigate()
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {
@@ -24,19 +27,26 @@ function DashboardComponent() {
   return (
     <AppLayout
       currentRoute="dashboard"
-      pageTitle="Analytics Dashboard"
-      pageSubtitle="Comprehensive analytics across licenses, affiliations, and inspections"
+      pageTitle="Dashboard"
+      pageSubtitle="Compliance signals and priority actions."
       onNavigate={handleNavigate}
       onOpenNotifications={() => handleNavigate('notifications-center')}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
     >
-      <AnalyticsDashboard />
+      <MainDashboard onNavigate={handleNavigate} company={user?.company} />
     </AppLayout>
   )
 }
 
 export const Route = createFileRoute('/dashboard')({
+  loader: () =>
+    Promise.all([
+      useAffiliationStore.getState().fetchAffiliations(1, { page_size: 100 }),
+      useLicensingStore.getState().fetchLicenses(1, { page_size: 100 }),
+      useLicensingStore.getState().fetchApplications(1, { page_size: 100 }),
+      useInspectionStore.getState().fetchInspections(1, { page_size: 100 }),
+    ]),
   component: DashboardComponent,
 })

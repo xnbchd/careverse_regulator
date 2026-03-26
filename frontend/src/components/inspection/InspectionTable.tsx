@@ -15,6 +15,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
   Table,
   TableBody,
   TableCell,
@@ -22,8 +29,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+
 import { EntityLink } from '@/components/entities'
 
 interface InspectionTableProps {
@@ -250,33 +257,71 @@ export default function InspectionTable({
         </div>
 
         {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-4 border-t">
-            <div className="text-sm text-muted-foreground">
+        <div className="flex items-center justify-between px-4 py-4 border-t">
+          <p className="text-sm text-muted-foreground">
+            Showing {table.getRowModel().rows.length} of {inspections.length} inspections
+          </p>
+          <div className="flex items-center gap-2">
+            <Select
+              value={String(pagination.pageSize)}
+              onValueChange={(val) => setPagination((prev) => ({ ...prev, pageSize: Number(val), pageIndex: 0 }))}
+            >
+              <SelectTrigger className="h-9 w-[100px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[10, 20, 50, 100].map((size) => (
+                  <SelectItem key={size} value={String(size)}>
+                    {size} rows
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <span className="text-sm text-muted-foreground whitespace-nowrap">
               Page {currentPage} of {totalPages}
-            </div>
-            <div className="flex items-center gap-2">
+            </span>
+
+            <div className="flex items-center gap-1">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => table.previousPage()}
+                className="h-9 w-9 p-0"
+                onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
-                className="h-8 w-8 p-0"
               >
-                <ChevronLeft className="w-4 h-4 shrink-0" />
+                <ChevronsLeft className="h-4 w-4" />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
+                className="h-9 w-9 p-0"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 w-9 p-0"
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
-                className="h-8 w-8 p-0"
               >
-                <ChevronRight className="w-4 h-4 shrink-0" />
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 w-9 p-0"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
+                <ChevronsRight className="h-4 w-4" />
               </Button>
             </div>
           </div>
-        )}
+        </div>
       </CardContent>
     </Card>
   )

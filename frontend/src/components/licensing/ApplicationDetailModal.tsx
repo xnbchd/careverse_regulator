@@ -38,10 +38,10 @@ export default function ApplicationDetailModal({
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-[600px]">
           <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-3/4" />
+            <div className="h-8 bg-muted rounded w-3/4" />
             <div className="space-y-2">
-              <div className="h-4 bg-gray-200 rounded" />
-              <div className="h-4 bg-gray-200 rounded w-5/6" />
+              <div className="h-4 bg-muted rounded" />
+              <div className="h-4 bg-muted rounded w-5/6" />
             </div>
           </div>
         </DialogContent>
@@ -98,15 +98,15 @@ export default function ApplicationDetailModal({
         <div className="space-y-4 mt-4">
           {/* Facility Information */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
               <Building2 className="w-4 h-4" />
               Facility Information
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Building2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">Facility Name</p>
+                  <p className="text-sm font-medium text-foreground">Facility Name</p>
                   <EntityLink type="facility" id={application.registrationNumber}>
                     <span className="text-sm text-muted-foreground">
                       {application.facilityName}
@@ -115,10 +115,10 @@ export default function ApplicationDetailModal({
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <FileText className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">Registration #</p>
+                  <p className="text-sm font-medium text-foreground">Registration #</p>
                   <p className="text-sm text-muted-foreground font-mono">
                     {application.registrationNumber}
                   </p>
@@ -126,10 +126,10 @@ export default function ApplicationDetailModal({
               </div>
 
               {application.facilityCode && (
-                <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                   <FileText className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">Facility Code</p>
+                    <p className="text-sm font-medium text-foreground">Facility Code</p>
                     <p className="text-sm text-muted-foreground font-mono">
                       {application.facilityCode}
                     </p>
@@ -137,28 +137,28 @@ export default function ApplicationDetailModal({
                 </div>
               )}
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Building2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">Facility Type</p>
+                  <p className="text-sm font-medium text-foreground">Facility Type</p>
                   <p className="text-sm text-muted-foreground">
                     {application.facilityType}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <User className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">Owner</p>
+                  <p className="text-sm font-medium text-foreground">Owner</p>
                   <p className="text-sm text-muted-foreground">{application.owner}</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <FileText className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">Category</p>
+                  <p className="text-sm font-medium text-foreground">Category</p>
                   <p className="text-sm text-muted-foreground">
                     {application.facilityCategory}
                   </p>
@@ -171,12 +171,12 @@ export default function ApplicationDetailModal({
 
           {/* Application Details */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
               <Award className="w-4 h-4" />
               Application Details
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Badge
                   variant="outline"
                   className="mt-0.5 capitalize flex-shrink-0"
@@ -184,26 +184,26 @@ export default function ApplicationDetailModal({
                   {application.applicationType}
                 </Badge>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-foreground">
                     Application Type
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Award className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">License Type</p>
+                  <p className="text-sm font-medium text-foreground">License Type</p>
                   <p className="text-sm text-muted-foreground">
                     {application.licenseTypeName}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Calendar className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-foreground">
                     Application Date
                   </p>
                   <p className="text-sm text-muted-foreground">
@@ -212,20 +212,20 @@ export default function ApplicationDetailModal({
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <DollarSign className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">License Fee</p>
+                  <p className="text-sm font-medium text-foreground">License Fee</p>
                   <p className="text-sm text-muted-foreground">
                     KES {application.licenseFee.toLocaleString()}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg col-span-full">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg col-span-full">
                 <FileText className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-foreground">
                     Regulatory Body
                   </p>
                   <p className="text-sm text-muted-foreground">
@@ -241,12 +241,12 @@ export default function ApplicationDetailModal({
             <>
               <Separator />
               <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                   <MessageSquare className="w-4 h-4" />
                   Remarks
                 </h3>
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <p className="text-sm text-gray-900 whitespace-pre-line">
+                <div className="p-4 bg-muted/50 rounded-lg border border-border">
+                  <p className="text-sm text-foreground whitespace-pre-line">
                     {application.remarks}
                   </p>
                 </div>
@@ -260,7 +260,7 @@ export default function ApplicationDetailModal({
               <>
                 <Separator />
                 <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <FileText className="w-4 h-4" />
                     Compliance Documents
                   </h3>
@@ -268,7 +268,7 @@ export default function ApplicationDetailModal({
                     {application.complianceDocuments.map((doc: any, index: number) => (
                       <div
                         key={index}
-                        className="p-3 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between"
+                        className="p-3 bg-muted/50 rounded-lg border border-border flex items-center justify-between"
                       >
                         <div className="flex items-center gap-2">
                           <FileText className="w-4 h-4 text-muted-foreground" />

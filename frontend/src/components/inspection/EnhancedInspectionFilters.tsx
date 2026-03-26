@@ -112,7 +112,7 @@ export default function EnhancedInspectionFilters({
                     type="checkbox"
                     checked={status.includes(s)}
                     onChange={() => handleStatusToggle(s)}
-                    className="w-4 h-4 rounded border-gray-300"
+                    className="w-4 h-4 rounded border-border"
                   />
                   <span className="text-sm">{s}</span>
                 </label>

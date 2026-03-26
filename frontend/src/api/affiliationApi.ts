@@ -82,25 +82,34 @@ export async function listAffiliations(
   if (filters?.speciality) params.append('speciality', filters.speciality)
   if (filters?.healthFacility) params.append('health_facility', filters.healthFacility)
 
-  // Send search to backend (searches across professional name, facility name, registration numbers, role)
-  if (filters?.search) params.append('search', filters.search)
-
   // Fetch affiliations
-  const response = await apiRequest<any>(
+  // The API sets frappe.local.response directly (no `message` wrapper),
+  // so the HTTP response is { status, data: { affiliations, pagination } }
+  const response = await apiRequest<{ status: string; data?: BackendAffiliationsResponse | any[] }>(
     `/api/method/compliance_360.api.license_management.fetch_hw_affiliations.fetch_professional_affiliations?${params.toString()}`
   )
 
-  // Frappe wraps response as: { message: { affiliations: [...], pagination: {...} } }
-  const backendData = response.message || response
+  const rawData = response.data
+  const backendData: BackendAffiliationsResponse = Array.isArray(rawData) || !rawData
+    ? { affiliations: [], pagination: { current_page: 1, page_size: pageSize, start: 0, end: 0, count: 0 } }
+    : rawData as BackendAffiliationsResponse
   const transformedData = (backendData.affiliations || []).map(transformAffiliation)
 
-  // Apply client-side filtering for status only (search is now handled by backend)
+  // Apply client-side filtering for status and search
   let filteredData = transformedData
   if (filters?.status) {
     const statusList = filters.status.split(',').map(s => s.trim())
     filteredData = filteredData.filter(a => statusList.includes(a.affiliationStatus))
   }
-  // Note: Search filtering is now done on the backend, so we don't filter here
+  if (filters?.search) {
+    const searchLower = filters.search.toLowerCase()
+    filteredData = filteredData.filter(a =>
+      a.healthProfessional.fullName.toLowerCase().includes(searchLower) ||
+      a.healthFacility.facilityName.toLowerCase().includes(searchLower) ||
+      a.healthProfessional.registrationNumber.toLowerCase().includes(searchLower) ||
+      a.role.toLowerCase().includes(searchLower)
+    )
+  }
 
   // Apply client-side sorting
   if (filters?.sortBy && filters?.sortOrder) {
@@ -135,17 +144,16 @@ export async function listAffiliations(
   }
 
   // Transform pagination
-  const pagination = backendData.pagination || {}
-  const totalCount = pagination.count || transformedData.length
+  const totalCount = backendData.pagination.count
   const totalPages = Math.ceil(totalCount / pageSize)
 
   const paginationMeta: AffiliationPaginationMeta = {
-    page: pagination.current_page || page,
-    page_size: pagination.page_size || pageSize,
+    page: backendData.pagination.current_page,
+    page_size: backendData.pagination.page_size,
     total_count: totalCount,
     total_pages: totalPages,
-    has_next: (pagination.current_page || page) < totalPages,
-    has_prev: (pagination.current_page || page) > 1,
+    has_next: backendData.pagination.current_page < totalPages,
+    has_prev: backendData.pagination.current_page > 1,
   }
 
   return {
@@ -218,7 +226,11 @@ export interface AffiliationDashboardStats {
     pending: number
     active: number
     rejected: number
+    confirmed: number
+    inactive: number
     total: number
+    unique_professionals: number
+    unique_facilities: number
   }
   pending_affiliations: Array<{
     id: string
@@ -236,8 +248,31 @@ export interface AffiliationDashboardStats {
   }>
   trend_data: Array<{
     label: string
+    full_label: string
+    new: number
+    active: number
     value: number
+  }>
+  employment_type_distribution: Array<{
+    type: string
+    count: number
     color: string
+  }>
+  role_distribution: Array<{
+    role: string
+    count: number
+  }>
+  facility_staffing: Array<{
+    facility_id: string
+    facility_name: string
+    total: number
+    active: number
+  }>
+  multi_affiliated_professionals: Array<{
+    registration_number: string
+    full_name: string
+    professional_cadre: string | null
+    affiliation_count: number
   }>
 }
 

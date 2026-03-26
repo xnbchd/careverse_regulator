@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAuditStore } from '@/stores/auditStore'
 import { format } from 'date-fns'
 import {
@@ -30,6 +30,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import {
   ChevronLeft,
   ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   Search,
   Download,
   Filter,
@@ -60,21 +62,16 @@ export function AuditLogViewer() {
     filters,
     isLoading,
     isExporting,
-    fetchLogs,
     setFilters,
     clearFilters,
     setPage,
+    setPageSize,
     selectLog,
     exportLogs,
   } = useAuditStore()
 
   const [searchQuery, setSearchQuery] = useState(filters.query || '')
   const [showFilters, setShowFilters] = useState(false)
-
-  // Fetch logs on mount
-  useEffect(() => {
-    fetchLogs()
-  }, [fetchLogs])
 
   // Handle search
   const handleSearch = () => {
@@ -420,55 +417,68 @@ export function AuditLogViewer() {
 
               {/* Pagination */}
               <div className="flex items-center justify-between mt-4">
-                <div className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Showing {startIndex} to {endIndex} of {total.toLocaleString()} entries
-                </div>
+                </p>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPage(page - 1)}
-                    disabled={page === 1 || isLoading}
+                  <Select
+                    value={String(pageSize)}
+                    onValueChange={(val) => setPageSize(Number(val))}
                   >
-                    <ChevronLeft className="w-4 h-4" />
-                    Previous
-                  </Button>
-                  <div className="flex items-center gap-1">
-                    {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                      let pageNum: number
-                      if (totalPages <= 5) {
-                        pageNum = i + 1
-                      } else if (page <= 3) {
-                        pageNum = i + 1
-                      } else if (page >= totalPages - 2) {
-                        pageNum = totalPages - 4 + i
-                      } else {
-                        pageNum = page - 2 + i
-                      }
+                    <SelectTrigger className="h-9 w-[100px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[10, 20, 50, 100].map((size) => (
+                        <SelectItem key={size} value={String(size)}>
+                          {size} rows
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                      return (
-                        <Button
-                          key={pageNum}
-                          variant={page === pageNum ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => setPage(pageNum)}
-                          disabled={isLoading}
-                          className="w-9"
-                        >
-                          {pageNum}
-                        </Button>
-                      )
-                    })}
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">
+                    Page {page} of {totalPages}
+                  </span>
+
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 w-9 p-0"
+                      onClick={() => setPage(1)}
+                      disabled={page === 1 || isLoading}
+                    >
+                      <ChevronsLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 w-9 p-0"
+                      onClick={() => setPage(page - 1)}
+                      disabled={page === 1 || isLoading}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 w-9 p-0"
+                      onClick={() => setPage(page + 1)}
+                      disabled={page === totalPages || isLoading}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-9 w-9 p-0"
+                      onClick={() => setPage(totalPages)}
+                      disabled={page === totalPages || isLoading}
+                    >
+                      <ChevronsRight className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPage(page + 1)}
-                    disabled={page === totalPages || isLoading}
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </Button>
                 </div>
               </div>
             </>

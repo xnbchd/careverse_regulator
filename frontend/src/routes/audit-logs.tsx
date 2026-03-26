@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -8,11 +8,16 @@ import { useAuthStore } from '@/stores/authStore'
 import { BarChart3, List } from 'lucide-react'
 
 export const Route = createFileRoute('/audit-logs')({
+  loader: () =>
+    Promise.all([
+      useAuditStore.getState().fetchLogs(),
+      useAuditStore.getState().fetchStats(),
+    ]),
   component: AuditLogsPage,
 })
 
 function AuditLogsPage() {
-  const navigate = useNavigate()
+  const navigate = Route.useNavigate()
   const user = useAuthStore((state) => state.user)
   const { selectedLog, selectLog } = useAuditStore()
   const [showDetail, setShowDetail] = useState(false)
@@ -28,18 +33,6 @@ function AuditLogsPage() {
   const handleSwitchToDesk = () => {
     window.location.href = '/app'
   }
-
-  // Auto-open detail when log is selected
-  const handleLogSelect = () => {
-    if (selectedLog) {
-      setShowDetail(true)
-    }
-  }
-
-  // Listen for log selection
-  useState(() => {
-    handleLogSelect()
-  })
 
   return (
     <AppLayout

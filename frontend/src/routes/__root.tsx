@@ -20,7 +20,10 @@ function RootComponent() {
 
 export const Route = createRootRoute({
   component: RootComponent,
-  beforeLoad: async () => {
+  beforeLoad: async ({ location }) => {
+    // Skip auth check when already on the unauthorized page to avoid infinite redirect
+    if (location.pathname === '/unauthorized') return
+
     const authState = useAuthStore.getState()
 
     // If guest, redirect to unauthorized page

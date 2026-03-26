@@ -1,14 +1,16 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import AppLayout from '@/components/AppLayout'
 import { DocumentManagementView } from '@/components/documents'
+import { useDocumentStore } from '@/stores/documentStore'
 import { useAuthStore } from '@/stores/authStore'
 
 export const Route = createFileRoute('/documents')({
+  loader: () => useDocumentStore.getState().fetchDocuments(),
   component: DocumentsPage,
 })
 
 function DocumentsPage() {
-  const navigate = useNavigate()
+  const navigate = Route.useNavigate()
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {

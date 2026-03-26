@@ -1,12 +1,14 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLicensingStore } from '@/stores/licensingStore'
 import { useAuthStore } from '@/stores/authStore'
 import AppLayout from '@/components/AppLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import StatusBadge from '@/components/licensing/StatusBadge'
-import { ArrowLeft, FileText, Building2, Calendar, CreditCard, CheckCircle, XCircle, AlertCircle, Eye } from 'lucide-react'
+import { ArrowLeft, FileText, Building2, Calendar, CreditCard, CheckCircle, XCircle, AlertCircle, Eye, Clock } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import dayjs from 'dayjs'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,10 +25,9 @@ function LicenseDetailPage() {
   const user = useAuthStore((state) => state.user)
   const { getLicense, updateLicense } = useLicensingStore()
 
-  const [license, setLicense] = useState<License | null>(null)
-  const [loading, setLoading] = useState(true)
+  const loaderData = Route.useLoaderData()
+  const [license, setLicense] = useState<License | null>(loaderData)
   const [actionLoading, setActionLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const handleNavigate = (route: string) => {
     navigate({ to: `/${route}` as any })
@@ -43,23 +44,6 @@ function LicenseDetailPage() {
   const handleBack = () => {
     navigate({ to: '/license-management' })
   }
-
-  useEffect(() => {
-    async function fetchLicense() {
-      setLoading(true)
-      setError(null)
-      try {
-        const data = await getLicense(licenseNumber)
-        setLicense(data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load license')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchLicense()
-  }, [licenseNumber])
 
   const handleAction = async (action: LicenseAction, actionName: string) => {
     if (!license) return
@@ -99,74 +83,52 @@ function LicenseDetailPage() {
           </Button>
         </div>
 
-        {loading && (
-          <Card>
-            <CardContent className="py-12">
-              <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {error && !loading && (
-          <Card className="border-destructive">
-            <CardContent className="py-8">
-              <p className="text-center text-destructive">{error}</p>
-            </CardContent>
-          </Card>
-        )}
-
-        {license && !loading && (
+        {license && (
           <div className="space-y-6">
-            {/* Header Card with Actions */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-2xl mb-2 font-mono">{license.licenseNumber}</CardTitle>
-                    <StatusBadge status={license.status} className="text-sm" />
-                  </div>
-                  {canPerformActions && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button disabled={actionLoading}>
-                          Actions
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48">
-                        <DropdownMenuItem onClick={() => handleAction('APPROVE', 'Approved')}>
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Approve
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleAction('DENY', 'Denied')}>
-                          <XCircle className="h-4 w-4 mr-2" />
-                          Deny
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleAction('REVIEW', 'Under Review')}>
-                          <Eye className="h-4 w-4 mr-2" />
-                          Review
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleAction('REQUEST_INFO', 'Info Requested')}>
-                          <AlertCircle className="h-4 w-4 mr-2" />
-                          Request Info
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleAction('SUSPEND', 'Suspended')} className="text-orange-600">
-                          <XCircle className="h-4 w-4 mr-2" />
-                          Suspend
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleAction('SET_EXPIRED', 'Expired')} className="text-gray-600">
-                          <XCircle className="h-4 w-4 mr-2" />
-                          Set Expired
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
-                </div>
-              </CardHeader>
-            </Card>
+            {/* Page Header - License Number, Status, Actions */}
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-3">
+                <h2 className="text-2xl font-bold font-mono text-foreground">{license.licenseNumber}</h2>
+                <StatusBadge status={license.status} className="text-sm" />
+              </div>
+              {canPerformActions && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button disabled={actionLoading}>
+                      Actions
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={() => handleAction('APPROVE', 'Approved')}>
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Approve
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleAction('DENY', 'Denied')}>
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Deny
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleAction('REVIEW', 'Under Review')}>
+                      <Eye className="h-4 w-4 mr-2" />
+                      Review
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleAction('REQUEST_INFO', 'Info Requested')}>
+                      <AlertCircle className="h-4 w-4 mr-2" />
+                      Request Info
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleAction('SUSPEND', 'Suspended')} className="text-orange-600">
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Suspend
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleAction('SET_EXPIRED', 'Expired')} className="text-muted-foreground">
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Set Expired
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
 
             {/* License Details */}
             <Card>
@@ -221,39 +183,67 @@ function LicenseDetailPage() {
             </Card>
 
             {/* Dates and Payment */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  Validity and Payment
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Date of Issuance</label>
-                    <p className="mt-1 text-base">{license.dateOfIssuance}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Date of Expiry</label>
-                    <p className="mt-1 text-base">{license.dateOfExpiry}</p>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-muted-foreground">Payment Status</label>
-                    <p className="mt-1 text-base flex items-center gap-2">
-                      <CreditCard className="h-4 w-4 text-muted-foreground" />
-                      <span className="capitalize">{license.paymentStatus}</span>
-                    </p>
-                  </div>
-                  {license.isArchived && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Archived</label>
-                      <p className="mt-1 text-base text-orange-600">Yes</p>
+            {(() => {
+              const expiryDate = dayjs(license.dateOfExpiry, 'DD/MM/YYYY')
+              const daysToExpiry = expiryDate.diff(dayjs(), 'day')
+              const isExpired = daysToExpiry < 0
+              const isExpiringSoon = daysToExpiry >= 0 && daysToExpiry <= 30
+
+              return (
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="flex items-center gap-2">
+                        <Calendar className="h-5 w-5" />
+                        Validity and Payment
+                      </CardTitle>
+                      {license.dateOfExpiry && (
+                        <Badge
+                          variant={isExpired ? 'destructive' : isExpiringSoon ? 'secondary' : 'outline'}
+                          className={`flex items-center gap-1.5 ${
+                            isExpired
+                              ? ''
+                              : isExpiringSoon
+                                ? 'border-orange-500 text-orange-700 dark:text-orange-400'
+                                : 'text-green-700 dark:text-green-400 border-green-500'
+                          }`}
+                        >
+                          <Clock className="h-3.5 w-3.5" />
+                          {isExpired
+                            ? `Expired ${Math.abs(daysToExpiry)} days ago`
+                            : `${daysToExpiry} days to expiry`}
+                        </Badge>
+                      )}
                     </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Date of Issuance</label>
+                        <p className="mt-1 text-base">{license.dateOfIssuance}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Date of Expiry</label>
+                        <p className="mt-1 text-base">{license.dateOfExpiry}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-muted-foreground">Payment Status</label>
+                        <p className="mt-1 text-base flex items-center gap-2">
+                          <CreditCard className="h-4 w-4 text-muted-foreground" />
+                          <span className="capitalize">{license.paymentStatus}</span>
+                        </p>
+                      </div>
+                      {license.isArchived && (
+                        <div>
+                          <label className="text-sm font-medium text-muted-foreground">Archived</label>
+                          <p className="mt-1 text-base text-orange-600">Yes</p>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })()}
           </div>
         )}
       </div>
@@ -262,5 +252,7 @@ function LicenseDetailPage() {
 }
 
 export const Route = createFileRoute('/license-management/$licenseNumber')({
+  loader: async ({ params }) =>
+    useLicensingStore.getState().getLicense(params.licenseNumber),
   component: LicenseDetailPage,
 })

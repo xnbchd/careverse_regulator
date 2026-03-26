@@ -4,6 +4,8 @@ import type {
   LicensePaginationMeta,
   LicenseAction,
   LicenseApplication,
+  ProfessionalLicenseRecord,
+  ProfessionalLicenseApplication,
   FacilityOption,
   CreateLicenseAppealPayload,
 } from '@/types/license'
@@ -29,6 +31,24 @@ export interface LicensingState {
   applicationsPageSize: number
   applicationsFilters: any
 
+  // Professional Licenses
+  professionalLicenses: ProfessionalLicenseRecord[]
+  professionalLicensesLoading: boolean
+  professionalLicensesError: string | null
+  professionalLicensesPagination: LicensePaginationMeta | null
+  professionalLicensesCurrentPage: number
+  professionalLicensesPageSize: number
+  professionalLicensesFilters: any
+
+  // Professional License Applications
+  professionalApplications: ProfessionalLicenseApplication[]
+  professionalApplicationsLoading: boolean
+  professionalApplicationsError: string | null
+  professionalApplicationsPagination: LicensePaginationMeta | null
+  professionalApplicationsCurrentPage: number
+  professionalApplicationsPageSize: number
+  professionalApplicationsFilters: any
+
   // Facilities (for dropdowns)
   facilities: FacilityOption[]
   facilitiesLoading: boolean
@@ -46,12 +66,24 @@ export interface LicensingState {
   updateLicense: (licenseNumber: string, action: LicenseAction) => Promise<void>
   refreshLicenses: () => Promise<void>
 
-  // Actions for Applications
+  // Actions for Professional Licenses
+  setProfessionalLicensesFilters: (filters: any) => void
+  fetchProfessionalLicenses: (page?: number, filters?: any) => Promise<void>
+  setProfessionalLicensesPage: (page: number) => void
+  refreshProfessionalLicenses: () => Promise<void>
+
+  // Actions for Facility License Applications
   setApplicationsFilters: (filters: any) => void
   fetchApplications: (page?: number, filters?: any) => Promise<void>
   setApplicationsPage: (page: number) => void
   setApplicationsPageSize: (pageSize: number) => void
   refreshApplications: () => Promise<void>
+
+  // Actions for Professional License Applications
+  setProfessionalApplicationsFilters: (filters: any) => void
+  fetchProfessionalApplications: (page?: number, filters?: any) => Promise<void>
+  setProfessionalApplicationsPage: (page: number) => void
+  refreshProfessionalApplications: () => Promise<void>
 
   // Actions for Facilities
   fetchFacilities: () => Promise<void>
@@ -84,6 +116,24 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
   applicationsCurrentPage: 1,
   applicationsPageSize: 20,
   applicationsFilters: {},
+
+  // Professional Licenses state
+  professionalLicenses: [],
+  professionalLicensesLoading: false,
+  professionalLicensesError: null,
+  professionalLicensesPagination: null,
+  professionalLicensesCurrentPage: 1,
+  professionalLicensesPageSize: 20,
+  professionalLicensesFilters: {},
+
+  // Professional Applications state
+  professionalApplications: [],
+  professionalApplicationsLoading: false,
+  professionalApplicationsError: null,
+  professionalApplicationsPagination: null,
+  professionalApplicationsCurrentPage: 1,
+  professionalApplicationsPageSize: 20,
+  professionalApplicationsFilters: {},
 
   // Facilities state
   facilities: [],
@@ -167,6 +217,44 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
     await get().fetchLicenses(licensesCurrentPage, licensesFilters)
   },
 
+  // Professional Licenses actions
+  setProfessionalLicensesFilters: (filters) => {
+    set({ professionalLicensesFilters: filters, professionalLicensesCurrentPage: 1 })
+    get().fetchProfessionalLicenses(1, filters)
+  },
+
+  setProfessionalLicensesPage: (page) => {
+    set({ professionalLicensesCurrentPage: page })
+    get().fetchProfessionalLicenses(page)
+  },
+
+  fetchProfessionalLicenses: async (page, filters) => {
+    const currentPage = page || get().professionalLicensesCurrentPage
+    const currentFilters = filters || get().professionalLicensesFilters
+    const pageSize = get().professionalLicensesPageSize
+
+    set({ professionalLicensesLoading: true, professionalLicensesError: null })
+    try {
+      const response = await licensingApi.listProfessionalLicenses(currentPage, pageSize, currentFilters)
+      set({
+        professionalLicenses: response.data,
+        professionalLicensesPagination: response.pagination,
+        professionalLicensesCurrentPage: currentPage,
+        professionalLicensesLoading: false,
+      })
+    } catch (error) {
+      set({
+        professionalLicensesError: error instanceof Error ? error.message : 'Failed to fetch professional licenses',
+        professionalLicensesLoading: false,
+      })
+    }
+  },
+
+  refreshProfessionalLicenses: async () => {
+    const { professionalLicensesCurrentPage, professionalLicensesFilters } = get()
+    await get().fetchProfessionalLicenses(professionalLicensesCurrentPage, professionalLicensesFilters)
+  },
+
   // Applications actions
   setApplicationsFilters: (filters) => {
     set({ applicationsFilters: filters, applicationsCurrentPage: 1 })
@@ -208,6 +296,44 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
   refreshApplications: async () => {
     const { applicationsCurrentPage, applicationsFilters } = get()
     await get().fetchApplications(applicationsCurrentPage, applicationsFilters)
+  },
+
+  // Professional Applications actions
+  setProfessionalApplicationsFilters: (filters) => {
+    set({ professionalApplicationsFilters: filters, professionalApplicationsCurrentPage: 1 })
+    get().fetchProfessionalApplications(1, filters)
+  },
+
+  setProfessionalApplicationsPage: (page) => {
+    set({ professionalApplicationsCurrentPage: page })
+    get().fetchProfessionalApplications(page)
+  },
+
+  fetchProfessionalApplications: async (page, filters) => {
+    const currentPage = page || get().professionalApplicationsCurrentPage
+    const currentFilters = filters || get().professionalApplicationsFilters
+    const pageSize = get().professionalApplicationsPageSize
+
+    set({ professionalApplicationsLoading: true, professionalApplicationsError: null })
+    try {
+      const response = await licensingApi.listProfessionalLicenseApplications(currentPage, pageSize, currentFilters)
+      set({
+        professionalApplications: response.data,
+        professionalApplicationsPagination: response.pagination,
+        professionalApplicationsCurrentPage: currentPage,
+        professionalApplicationsLoading: false,
+      })
+    } catch (error) {
+      set({
+        professionalApplicationsError: error instanceof Error ? error.message : 'Failed to fetch professional license applications',
+        professionalApplicationsLoading: false,
+      })
+    }
+  },
+
+  refreshProfessionalApplications: async () => {
+    const { professionalApplicationsCurrentPage, professionalApplicationsFilters } = get()
+    await get().fetchProfessionalApplications(professionalApplicationsCurrentPage, professionalApplicationsFilters)
   },
 
   // Facilities actions
@@ -295,4 +421,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
 
 // Initialize on store creation
 useLicensingStore.getState().fetchLicenses()
+useLicensingStore.getState().fetchProfessionalLicenses()
+useLicensingStore.getState().fetchApplications()
+useLicensingStore.getState().fetchProfessionalApplications()
 useLicensingStore.getState().fetchFacilities()

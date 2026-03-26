@@ -250,7 +250,7 @@ export function getEntityLabel(entity: AuditEntity): string {
 
 export function getSeverityColor(severity: AuditSeverity): string {
   const colors: Record<AuditSeverity, string> = {
-    [AuditSeverity.LOW]: 'text-gray-600 bg-gray-50 border-gray-200',
+    [AuditSeverity.LOW]: 'text-muted-foreground bg-muted/50 border-border',
     [AuditSeverity.MEDIUM]: 'text-blue-600 bg-blue-50 border-blue-200',
     [AuditSeverity.HIGH]: 'text-orange-600 bg-orange-50 border-orange-200',
     [AuditSeverity.CRITICAL]: 'text-red-600 bg-red-50 border-red-200',

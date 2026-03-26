@@ -1,12 +1,13 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
+import { useSettingsStore } from '@/stores/settingsStore'
 
 const RegulatorSettingsView = lazy(() => import('@/components/settings/RegulatorSettingsView'))
 
 function RegulatorSettingsComponent() {
-  const navigate = useNavigate()
+  const navigate = Route.useNavigate()
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {
@@ -40,5 +41,6 @@ function RegulatorSettingsComponent() {
 }
 
 export const Route = createFileRoute('/regulator-settings')({
+  loader: () => useSettingsStore.getState().initialize(),
   component: RegulatorSettingsComponent,
 })

@@ -115,7 +115,8 @@
             gap: 12px;
         }
 
-        .navbar-logo img { width: 36px; height: 36px; }
+        .navbar-logo img.nav-icon { width: 36px; height: 36px; }
+        .navbar-logo img.nav-wordmark { height: 24px; width: auto; }
 
         .navbar-logo span {
             font-size: 1.125rem;
@@ -501,10 +502,7 @@
         <nav class="navbar">
             <div class="navbar-content wrap">
                 <div class="navbar-logo">
-                    {% if logo %}
-                    <img src="{{ logo }}" alt="{{ app_name }}">
-                    {% endif %}
-                    <span>{{ app_name }}</span>
+                    <img class="nav-wordmark" src="/assets/careverse_regulator/compliance-360/compliance-logo.svg" alt="{{ app_name }}">
                 </div>
                 <div class="navbar-actions">
                     <a href="{{ cta_secondary_link }}" class="btn btn-outline">{{ cta_secondary_text }}</a>
@@ -652,7 +650,7 @@
             <div class="wrap">
                 <div class="ft-grid">
                     <div class="ft-brand">
-                        <strong style="font-size: 15px;">{{ app_name }}</strong>
+                        <img src="/assets/careverse_regulator/compliance-360/compliance-logo.svg" alt="{{ app_name }}" style="height: 22px; width: auto;">
                         <p>Healthcare Management Platform for compliance tracking and operational excellence.</p>
                     </div>
                     <div class="ft-col">

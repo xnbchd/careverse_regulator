@@ -177,11 +177,7 @@ async function fetchProfessional(id: string): Promise<Professional> {
       role: aff.role,
       status: aff.status,
     })),
-    licenses: (data.licenses || []).map((lic: any) => ({
-      licenseNumber: lic.license_number,
-      status: lic.status,
-      expiryDate: lic.expiry_date,
-    })),
+    licenses: data.licenses || [],
   }
 }
 
@@ -221,11 +217,7 @@ async function fetchFacility(id: string): Promise<Facility> {
       role: aff.role,
       status: aff.status,
     })),
-    licenses: (data.licenses || []).map((lic: any) => ({
-      licenseNumber: lic.license_number,
-      status: lic.status,
-      expiryDate: lic.expiry_date,
-    })),
+    licenses: data.licenses || [],
   }
 }
 

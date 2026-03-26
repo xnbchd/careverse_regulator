@@ -40,11 +40,6 @@ interface AuditState {
   isLoadingHistory: boolean
   isExporting: boolean
 
-  // Error states
-  error: string | null
-  statsError: string | null
-  historyError: string | null
-
   // Actions - Fetch
   fetchLogs: (params?: AuditLogSearchParams) => Promise<void>
   fetchLog: (logId: string) => Promise<void>
@@ -91,13 +86,10 @@ export const useAuditStore = create<AuditState>((set, get) => ({
   isLoadingStats: false,
   isLoadingHistory: false,
   isExporting: false,
-  error: null,
-  statsError: null,
-  historyError: null,
 
   // Fetch logs with filters and pagination
   fetchLogs: async (params?: AuditLogSearchParams) => {
-    set({ isLoading: true, error: null })
+    set({ isLoading: true })
     try {
       const currentFilters = get().filters
       const searchParams = { ...currentFilters, ...params }
@@ -111,12 +103,9 @@ export const useAuditStore = create<AuditState>((set, get) => ({
         total: response.total,
         totalPages: response.totalPages,
         filters: searchParams,
-        error: null,
       })
-    } catch (error: any) {
+    } catch (error) {
       console.error('Failed to fetch audit logs:', error)
-      const errorMessage = error?.message || 'Failed to fetch audit logs. The backend may not be configured yet.'
-      set({ error: errorMessage })
       // Keep existing data on error
     } finally {
       set({ isLoading: false })

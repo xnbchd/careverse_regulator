@@ -51,36 +51,41 @@ export function LicenseAppealsOverview() {
       label: 'Total Appeals',
       value: stats.total,
       icon: FileText,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-blue-600 dark:text-blue-400',
+      bgColor: 'bg-blue-50 dark:bg-blue-950/30',
+      borderColor: 'border-blue-100 dark:border-blue-800',
     },
     {
       label: 'Pending',
       value: stats.pending,
       icon: Clock,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50',
+      color: 'text-orange-600 dark:text-orange-400',
+      bgColor: 'bg-orange-50 dark:bg-orange-950/30',
+      borderColor: 'border-orange-100 dark:border-orange-800',
     },
     {
       label: 'Approved',
       value: stats.approved,
       icon: CheckCircle,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
+      color: 'text-green-600 dark:text-green-400',
+      bgColor: 'bg-green-50 dark:bg-green-950/30',
+      borderColor: 'border-green-100 dark:border-green-800',
     },
     {
       label: 'Rejected',
       value: stats.rejected,
       icon: XCircle,
-      color: 'text-red-600',
-      bgColor: 'bg-red-50',
+      color: 'text-red-600 dark:text-red-400',
+      bgColor: 'bg-red-50 dark:bg-red-950/30',
+      borderColor: 'border-red-100 dark:border-red-800',
     },
     {
       label: 'Info Requested',
       value: stats.infoRequested,
       icon: AlertCircle,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-50',
+      color: 'text-yellow-600 dark:text-yellow-400',
+      bgColor: 'bg-yellow-50 dark:bg-yellow-950/30',
+      borderColor: 'border-yellow-100 dark:border-yellow-800',
     },
   ]
 
@@ -94,7 +99,7 @@ export function LicenseAppealsOverview() {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {[1, 2, 3, 4, 5].map((i) => (
               <div key={i} className="animate-pulse">
-                <div className="h-24 bg-gray-200 rounded-lg"></div>
+                <div className="h-24 bg-muted rounded-lg"></div>
               </div>
             ))}
           </div>
@@ -115,11 +120,11 @@ export function LicenseAppealsOverview() {
             return (
               <div
                 key={stat.label}
-                className={`${stat.bgColor} rounded-lg p-4 border border-gray-100`}
+                className={`${stat.bgColor} rounded-lg p-4 border ${stat.borderColor}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <p className="text-sm text-gray-600 mb-1">{stat.label}</p>
+                    <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
                     <p className={`text-2xl font-bold ${stat.color}`}>
                       {stat.value}
                     </p>

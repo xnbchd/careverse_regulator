@@ -1,19 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { lazy } from 'react'
-import { useAuthStore } from '@/stores/authStore'
+import { listAffiliations } from '@/api/affiliationApi'
 
-const AffiliationsView = lazy(() => import('@/components/affiliations'))
+const AffiliationsListTable = lazy(() => import('@/components/affiliations/AffiliationsListTable'))
 
-function AffiliationsListComponent() {
-  const user = useAuthStore((state) => state.user)
+function AffiliationsListPage() {
+  const affiliations = Route.useLoaderData()
 
   return (
     <div className="hq-page-wrap">
-      <AffiliationsView company={user?.company} />
+      <AffiliationsListTable affiliations={affiliations} />
     </div>
   )
 }
 
 export const Route = createFileRoute('/affiliations/list')({
-  component: AffiliationsListComponent,
+  loader: async () => {
+    const response = await listAffiliations(1, 1000)
+    return response.data || []
+  },
+  component: AffiliationsListPage,
 })

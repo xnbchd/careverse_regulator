@@ -77,10 +77,26 @@ export interface LicenseApplication {
   licenseApplicationId: string
   facilityName: string
   facilityCode?: string
+  hieFacilityId?: string
   registrationNumber: string
-  facilityCategory: string
-  owner: string
-  facilityType: string
+  facilityCategory?: string
+  owner?: string
+  facilityType?: string
+  kephLevel?: string
+  licenseStatus?: string
+  county?: string
+  subCounty?: string
+  ward?: string
+  constituency?: string
+  telephoneNumber?: string
+  officialEmail?: string
+  physicalAddress?: string
+  numberOfBeds?: number
+  industry?: string
+  openLateNight?: boolean
+  openWholeDay?: boolean
+  openWeekends?: boolean
+  openPublicHoliday?: boolean
   licenseTypeName: string
   applicationStatus: 'Pending' | 'Issued' | 'Info Requested' | 'Denied'
   applicationType: 'New' | 'Renewal'
@@ -102,6 +118,72 @@ export interface BackendLicenseApplication {
   license_fee: number
   remarks?: string
   compliance_documents?: any[]
+}
+
+// Professional License
+export interface ProfessionalLicenseRecord {
+  id: string
+  licenseNumber: string
+  name: string
+  registrationNumber: string
+  identificationType: string
+  identificationNumber: string
+  category: string
+  licenseType: string
+  degree: string
+  placeOfPractice: string
+  county: string
+  dateOfIssuance: string
+  dateOfExpiry: string
+  paymentStatus: string
+  licenseStatus: LicenseStatus
+  isArchived: boolean
+}
+
+export interface BackendProfessionalLicense {
+  license_number: string
+  name: string
+  registration_number: string
+  identification_type: string
+  identification_number: string
+  category: string
+  license_type: string
+  degree: string
+  place_of_practice: string
+  county: string
+  date_of_issuance: string
+  date_of_expiry: string
+  payment_status: string
+  license_status: LicenseStatus
+  is_archived: boolean
+}
+
+// Professional License Application
+export interface ProfessionalLicenseApplication {
+  id: string
+  licenseApplicationId: string
+  fullName: string
+  registrationNumber: string
+  identificationType?: string
+  identificationNumber?: string
+  country?: string
+  nationality?: string
+  categoryOfPractice: string
+  placeOfPractice: string
+  county: string
+  instituteOfGraduation?: string
+  degree?: string
+  address?: string
+  email?: string
+  phone?: string
+  licenseTypeName: string
+  applicationStatus: 'Pending' | 'Issued' | 'Info Requested' | 'Denied'
+  applicationType: 'New' | 'Renewal'
+  applicationDate: string
+  regulatoryBody?: string
+  licenseFee: number
+  remarks?: string
+  complianceDocuments?: any[]
 }
 
 // License Appeal

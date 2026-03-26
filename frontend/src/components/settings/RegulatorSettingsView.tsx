@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -14,7 +13,6 @@ export default function RegulatorSettingsView() {
     settings,
     hasChanges,
     isSaving,
-    initialize,
     updateGovernance,
     updateThresholds,
     updateSystem,
@@ -22,10 +20,6 @@ export default function RegulatorSettingsView() {
     resetSettings,
     resetToDefaults,
   } = useSettingsStore()
-
-  useEffect(() => {
-    initialize()
-  }, [initialize])
 
   const handleSave = async () => {
     try {

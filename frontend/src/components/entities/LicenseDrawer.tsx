@@ -21,7 +21,6 @@ import {
   Clock,
   AlertCircle,
   MessageSquare,
-  RefreshCw,
 } from 'lucide-react'
 import dayjs from 'dayjs'
 import SubmitAppealModal from '../licensing/SubmitAppealModal'
@@ -40,15 +39,15 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
       <div className="space-y-4">
         <div className="animate-pulse space-y-4">
           <div className="flex items-center gap-4">
-            <div className="w-24 h-24 bg-gray-200 rounded-lg" />
+            <div className="w-24 h-24 bg-muted rounded-lg" />
             <div className="flex-1 space-y-3">
-              <div className="h-8 bg-gray-200 rounded w-3/4" />
-              <div className="h-4 bg-gray-200 rounded w-1/2" />
+              <div className="h-8 bg-muted rounded w-3/4" />
+              <div className="h-4 bg-muted rounded w-1/2" />
             </div>
           </div>
           <div className="space-y-2">
-            <div className="h-4 bg-gray-200 rounded" />
-            <div className="h-4 bg-gray-200 rounded w-5/6" />
+            <div className="h-4 bg-muted rounded" />
+            <div className="h-4 bg-muted rounded w-5/6" />
           </div>
         </div>
       </div>
@@ -95,7 +94,7 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
           <Award className="w-12 h-12 text-green-600/70" />
         </div>
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1 text-start font-mono">
+          <h2 className="text-2xl font-bold text-foreground mb-1 text-start font-mono">
             {license.licenseNumber}
           </h2>
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -148,16 +147,6 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
             Submit Appeal
           </Button>
         )}
-        {(isExpiringSoon || isExpired || license.status === 'Expired') && (
-          <Button
-            variant="default"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Renew License
-          </Button>
-        )}
       </div>
 
       {/* Tabbed Content */}
@@ -185,27 +174,27 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
             <div
               className={`p-4 rounded-lg border ${
                 isExpired
-                  ? 'bg-red-50 border-red-200'
-                  : 'bg-orange-50 border-orange-200'
+                  ? 'bg-red-50 border-red-200 dark:bg-red-950/30 dark:border-red-800'
+                  : 'bg-orange-50 border-orange-200 dark:bg-orange-950/30 dark:border-orange-800'
               }`}
             >
               <div className="flex items-start gap-3">
                 <AlertCircle
                   className={`w-5 h-5 mt-0.5 ${
-                    isExpired ? 'text-red-600' : 'text-orange-600'
+                    isExpired ? 'text-red-600 dark:text-red-400' : 'text-orange-600 dark:text-orange-400'
                   }`}
                 />
                 <div className="flex-1">
                   <h3
                     className={`text-sm font-semibold mb-1 ${
-                      isExpired ? 'text-red-900' : 'text-orange-900'
+                      isExpired ? 'text-red-900 dark:text-red-300' : 'text-orange-900 dark:text-orange-300'
                     }`}
                   >
                     {isExpired ? 'License Expired' : 'License Expiring Soon'}
                   </h3>
                   <p
                     className={`text-sm ${
-                      isExpired ? 'text-red-700' : 'text-orange-700'
+                      isExpired ? 'text-red-700 dark:text-red-400' : 'text-orange-700 dark:text-orange-400'
                     }`}
                   >
                     {isExpired
@@ -219,10 +208,10 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
 
           {/* License Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
               <Calendar className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 text-start">
+                <p className="text-sm font-medium text-foreground text-start">
                   Date of Issuance
                 </p>
                 <p className="text-sm text-muted-foreground text-start">
@@ -231,10 +220,10 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
               <Clock className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 text-start">
+                <p className="text-sm font-medium text-foreground text-start">
                   Date of Expiry
                 </p>
                 <p className="text-sm text-muted-foreground text-start">
@@ -247,10 +236,10 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
             </div>
 
             {license.paymentStatus && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <DollarSign className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">
+                  <p className="text-sm font-medium text-foreground text-start">
                     Payment Status
                   </p>
                   <p className="text-sm text-muted-foreground text-start">
@@ -261,10 +250,10 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
             )}
 
             {license.category && (
-              <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <FileText className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 text-start">
+                  <p className="text-sm font-medium text-foreground text-start">
                     Category
                   </p>
                   <p className="text-sm text-muted-foreground text-start">
@@ -277,22 +266,22 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
 
           {/* License Type & Owner/Name */}
           {(license.licenseType || license.owner || license.facilityName) && (
-            <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-100 dark:border-blue-800">
               <div className="space-y-3">
                 {license.licenseType && (
                   <div>
-                    <p className="text-xs font-medium text-gray-700 mb-1 text-start">
+                    <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1 text-start">
                       License Type
                     </p>
-                    <p className="text-sm text-gray-900 text-start">{license.licenseType}</p>
+                    <p className="text-sm text-foreground text-start">{license.licenseType}</p>
                   </div>
                 )}
                 {(license.facilityName || license.owner) && (
                   <div>
-                    <p className="text-xs font-medium text-gray-700 mb-1 text-start">
+                    <p className="text-xs font-semibold text-blue-700 dark:text-blue-300 mb-1 text-start">
                       {license.category === 'Health Professional' ? 'Professional Name' : 'Facility Name'}
                     </p>
-                    <p className="text-sm text-gray-900 text-start">
+                    <p className="text-sm text-foreground text-start">
                       {license.facilityName || license.owner}
                     </p>
                   </div>
@@ -305,16 +294,16 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
         <TabsContent value="facility" className="space-y-3 mt-0">
           <div className="flex items-center gap-2 mb-3">
             <Building2 className="w-5 h-5 text-muted-foreground" />
-            <h3 className="text-sm font-semibold text-gray-900 text-start">
+            <h3 className="text-sm font-semibold text-foreground text-start">
               {license.category === 'Health Professional' ? 'Professional Details' : 'Facility Details'}
             </h3>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="p-4 bg-muted/50 rounded-lg border border-border">
             <div className="space-y-3">
               {license.facilityName && (
                 <div>
-                  <p className="text-xs font-medium text-gray-700 mb-1 text-start">
+                  <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
                     {license.category === 'Health Professional' ? 'Professional Name' : 'Facility Name'}
                   </p>
                   <EntityLink type="facility" id={license.registrationNumber}>
@@ -325,17 +314,17 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
 
               {license.facilityCode && (
                 <div>
-                  <p className="text-xs font-medium text-gray-700 mb-1 text-start">
+                  <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
                     {license.category === 'Health Professional' ? 'Professional Code' : 'Facility Code'}
                   </p>
-                  <p className="text-sm text-gray-900 text-start font-mono">
+                  <p className="text-sm text-foreground text-start font-mono">
                     {license.facilityCode}
                   </p>
                 </div>
               )}
 
               <div>
-                <p className="text-xs font-medium text-gray-700 mb-1 text-start">
+                <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
                   Registration Number
                 </p>
                 <EntityLink type="facility" id={license.registrationNumber}>
@@ -345,19 +334,19 @@ export function LicenseDrawer({ license, loading }: LicenseDrawerProps) {
 
               {license.facilityType && (
                 <div>
-                  <p className="text-xs font-medium text-gray-700 mb-1 text-start">
+                  <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
                     {license.category === 'Health Professional' ? 'Professional Type' : 'Facility Type'}
                   </p>
-                  <p className="text-sm text-gray-900 text-start">{license.facilityType}</p>
+                  <p className="text-sm text-foreground text-start">{license.facilityType}</p>
                 </div>
               )}
 
               {license.owner && (
                 <div>
-                  <p className="text-xs font-medium text-gray-700 mb-1 text-start">
+                  <p className="text-xs font-medium text-muted-foreground mb-1 text-start">
                     Owner
                   </p>
-                  <p className="text-sm text-gray-900 text-start">{license.owner}</p>
+                  <p className="text-sm text-foreground text-start">{license.owner}</p>
                 </div>
               )}
             </div>
