@@ -16,7 +16,7 @@ def get_vite_assets():
     try:
         with open(manifest_path) as f:
             manifest = json.load(f)
-        entry = manifest.get("src/main.tsx", {})
+        entry = manifest.get("index.html", {}) or manifest.get("src/main.tsx", {})
         return {
             "main_js": entry.get("file", ""),
             "main_css": entry.get("css", [""])[0] if entry.get("css") else "",

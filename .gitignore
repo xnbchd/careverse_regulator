@@ -36,9 +36,10 @@ venv.bak/
 node_modules/
 jspm_packages/
 
-# Vite build artifacts (manifest is regenerated on each build)
+# Vite build artifacts (manifest + bundled assets are regenerated on each build)
 .vite/
 */.vite/
+careverse_regulator/public/compliance-360/assets/
 
 # IDEs and editors
 .vscode/
