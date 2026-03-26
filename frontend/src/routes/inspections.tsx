@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
@@ -18,7 +18,7 @@ const inspectionSearchSchema = z.object({
 export type InspectionSearch = z.infer<typeof inspectionSearchSchema>
 
 function InspectionLayoutComponent() {
-  const navigate = Route.useNavigate()
+  const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {

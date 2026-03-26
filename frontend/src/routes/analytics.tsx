@@ -1,42 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { lazy } from 'react'
-import AppLayout from '@/components/AppLayout'
-import { useAuthStore } from '@/stores/authStore'
-
-const AnalyticsDashboard = lazy(() => import('@/components/analytics/AnalyticsDashboard'))
-
-function AnalyticsComponent() {
-  const navigate = Route.useNavigate()
-  const user = useAuthStore((state) => state.user)
-
-  const handleNavigate = (route: string) => {
-    navigate({ to: `/${route}` as any })
-  }
-
-  const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
-  }
-
-  const handleSwitchToDesk = () => {
-    window.location.href = '/app'
-  }
-
-  return (
-    <AppLayout
-      currentRoute="analytics"
-      pageTitle="Analytics"
-      pageSubtitle="Comprehensive compliance metrics and operational insights."
-      onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
-      onLogout={handleLogout}
-      onSwitchToDesk={handleSwitchToDesk}
-      user={user}
-    >
-      <AnalyticsDashboard />
-    </AppLayout>
-  )
-}
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/analytics')({
-  component: AnalyticsComponent,
+  beforeLoad: () => {
+    // Permanent redirect to dashboard
+    throw redirect({ to: '/dashboard', replace: true })
+  }
 })

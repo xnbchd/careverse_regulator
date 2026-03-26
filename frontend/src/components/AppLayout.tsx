@@ -124,11 +124,6 @@ export default function AppLayout({
       label: 'Dashboard',
     },
     {
-      key: 'analytics',
-      icon: BarChart3,
-      label: 'Analytics',
-    },
-    {
       key: 'documents',
       icon: FileText,
       label: 'Documents',

@@ -82,29 +82,25 @@ export async function listAffiliations(
   if (filters?.speciality) params.append('speciality', filters.speciality)
   if (filters?.healthFacility) params.append('health_facility', filters.healthFacility)
 
+  // Send search to backend (searches across professional name, facility name, registration numbers, role)
+  if (filters?.search) params.append('search', filters.search)
+
   // Fetch affiliations
-  const response = await apiRequest<{ message: BackendAffiliationsResponse }>(
+  const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.fetch_hw_affiliations.fetch_professional_affiliations?${params.toString()}`
   )
 
-  const backendData = response.message
-  const transformedData = backendData.affiliations.map(transformAffiliation)
+  // Frappe wraps response as: { message: { affiliations: [...], pagination: {...} } }
+  const backendData = response.message || response
+  const transformedData = (backendData.affiliations || []).map(transformAffiliation)
 
-  // Apply client-side filtering for status and search
+  // Apply client-side filtering for status only (search is now handled by backend)
   let filteredData = transformedData
   if (filters?.status) {
     const statusList = filters.status.split(',').map(s => s.trim())
     filteredData = filteredData.filter(a => statusList.includes(a.affiliationStatus))
   }
-  if (filters?.search) {
-    const searchLower = filters.search.toLowerCase()
-    filteredData = filteredData.filter(a =>
-      a.healthProfessional.fullName.toLowerCase().includes(searchLower) ||
-      a.healthFacility.facilityName.toLowerCase().includes(searchLower) ||
-      a.healthProfessional.registrationNumber.toLowerCase().includes(searchLower) ||
-      a.role.toLowerCase().includes(searchLower)
-    )
-  }
+  // Note: Search filtering is now done on the backend, so we don't filter here
 
   // Apply client-side sorting
   if (filters?.sortBy && filters?.sortOrder) {
@@ -139,16 +135,17 @@ export async function listAffiliations(
   }
 
   // Transform pagination
-  const totalCount = backendData.pagination.count
+  const pagination = backendData.pagination || {}
+  const totalCount = pagination.count || transformedData.length
   const totalPages = Math.ceil(totalCount / pageSize)
 
   const paginationMeta: AffiliationPaginationMeta = {
-    page: backendData.pagination.current_page,
-    page_size: backendData.pagination.page_size,
+    page: pagination.current_page || page,
+    page_size: pagination.page_size || pageSize,
     total_count: totalCount,
     total_pages: totalPages,
-    has_next: backendData.pagination.current_page < totalPages,
-    has_prev: backendData.pagination.current_page > 1,
+    has_next: (pagination.current_page || page) < totalPages,
+    has_prev: (pagination.current_page || page) > 1,
   }
 
   return {

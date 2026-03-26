@@ -18,6 +18,8 @@ import PaginationControls from './PaginationControls'
 import ExportButton from '@/components/shared/ExportButton'
 import SavedFiltersManager from '@/components/shared/SavedFiltersManager'
 import BulkActionsBar from '@/components/shared/BulkActionsBar'
+import LicenseAppealsView from './LicenseAppealsView'
+import { LicenseAppealsOverview } from './LicenseAppealsOverview'
 import BulkActionConfirmDialog from '@/components/shared/BulkActionConfirmDialog'
 import { cn } from '@/lib/utils'
 import type { LicenseApplication, License, LicenseAction } from '@/types/license'
@@ -69,7 +71,7 @@ export default function LicenseManagementView({ company }: LicenseManagementView
 
   const { isMobile, isTablet } = useResponsive()
 
-  const [activeTab, setActiveTab] = useState<'licenses' | 'applications'>('licenses')
+  const [activeTab, setActiveTab] = useState<'licenses' | 'appeals' | 'applications'>('licenses')
   const [selectedApplication, setSelectedApplication] = useState<LicenseApplication | null>(null)
   const [showApplicationModal, setShowApplicationModal] = useState(false)
 
@@ -330,12 +332,13 @@ export default function LicenseManagementView({ company }: LicenseManagementView
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="w-full">
         <div className="flex items-center justify-between mb-6">
           <TabsList>
-            <TabsTrigger value="licenses">Licenses</TabsTrigger>
+            <TabsTrigger value="licenses">All Licenses</TabsTrigger>
+            <TabsTrigger value="appeals">License Appeals</TabsTrigger>
             <TabsTrigger value="applications">Applications</TabsTrigger>
           </TabsList>
         </div>
 
-        {/* Licenses Tab */}
+        {/* All Licenses Tab */}
         <TabsContent value="licenses" className="space-y-6">
           <div className="flex justify-between items-start gap-4 flex-wrap">
             <LicensesFilters
@@ -462,6 +465,13 @@ export default function LicenseManagementView({ company }: LicenseManagementView
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        {/* License Appeals Tab */}
+
+        <TabsContent value="appeals" className="space-y-6">
+          <LicenseAppealsOverview />
+          <LicenseAppealsView />
         </TabsContent>
 
         {/* Applications Tab */}

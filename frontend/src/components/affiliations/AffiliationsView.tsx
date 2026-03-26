@@ -35,6 +35,7 @@ export default function AffiliationsView({ company }: AffiliationsViewProps) {
     deselectAll,
     bulkApprove,
     bulkReject,
+    fetchAffiliations,
   } = useAffiliationStore()
   const { addNotification } = useNotificationStore()
   const { isMobile, isTablet } = useResponsive()
@@ -60,6 +61,11 @@ export default function AffiliationsView({ company }: AffiliationsViewProps) {
 
     return () => clearTimeout(timer)
   }, [searchText])
+
+  // Fetch affiliations on mount
+  useEffect(() => {
+    fetchAffiliations()
+  }, [])
 
   // Handle status filter change
   const handleStatusChange = (statuses: string[]) => {

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/authStore'
 const UserAdministrationView = lazy(() => import('@/components/users/UserAdministrationView'))
 
 function UsersRolesComponent() {
-  const navigate = Route.useNavigate()
+  const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {

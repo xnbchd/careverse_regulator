@@ -176,7 +176,7 @@ export async function listFacilities(): Promise<Facility[]> {
 
 export async function listProfessionals(): Promise<Professional[]> {
   const response = await apiRequest<FrappeListResponse<Professional>>(
-    `/api/resource/Professional Record?fields=["name","full_name"]&filters=[["active","=",1]]`
+    `/api/resource/Professional Record?fields=["name","full_name"]`
   )
   return response.data
 }

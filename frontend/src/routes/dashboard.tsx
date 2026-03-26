@@ -1,12 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { lazy } from 'react'
 import AppLayout from '@/components/AppLayout'
 import { useAuthStore } from '@/stores/authStore'
 
-const MainDashboard = lazy(() => import('@/components/MainDashboard'))
+const AnalyticsDashboard = lazy(() => import('@/components/analytics/AnalyticsDashboard'))
 
 function DashboardComponent() {
-  const navigate = Route.useNavigate()
+  const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {
@@ -24,15 +24,15 @@ function DashboardComponent() {
   return (
     <AppLayout
       currentRoute="dashboard"
-      pageTitle="Dashboard"
-      pageSubtitle="Compliance signals and priority actions."
+      pageTitle="Analytics Dashboard"
+      pageSubtitle="Comprehensive analytics across licenses, affiliations, and inspections"
       onNavigate={handleNavigate}
       onOpenNotifications={() => handleNavigate('notifications-center')}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
     >
-      <MainDashboard onNavigate={handleNavigate} company={user?.company} />
+      <AnalyticsDashboard />
     </AppLayout>
   )
 }

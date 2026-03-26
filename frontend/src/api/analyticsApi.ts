@@ -39,7 +39,7 @@ export interface AnalyticsDashboardResponse {
     completed: number
     pending: number
     failed: number
-  }
+  } | null
   compliance_metrics: {
     compliance_rate: number
     average_processing_time: number
@@ -81,13 +81,13 @@ function transformAnalyticsResponse(data: AnalyticsDashboardResponse) {
       rejected: data.affiliation_stats.rejected,
       inactive: data.affiliation_stats.inactive,
     } as AffiliationStatistics,
-    inspectionStats: {
+    inspectionStats: data.inspection_stats ? {
       total: data.inspection_stats.total,
       scheduled: data.inspection_stats.scheduled,
       completed: data.inspection_stats.completed,
       pending: data.inspection_stats.pending,
       failed: data.inspection_stats.failed,
-    } as InspectionStatistics,
+    } as InspectionStatistics : null,
     complianceMetrics: {
       complianceRate: data.compliance_metrics.compliance_rate,
       averageProcessingTime: data.compliance_metrics.average_processing_time,
@@ -109,10 +109,15 @@ export async function fetchAnalyticsDashboard(dateRange?: { start: string; end: 
         start_date: dateRange?.start,
         end_date: dateRange?.end,
       },
-      cache: true,
+      cache: false, // Disable cache temporarily to debug
       cacheTime: 2 * 60 * 1000, // Cache for 2 minutes
     }
   )
+
+  if (!response.message || !response.message.license_stats) {
+    console.error('Invalid analytics response structure:', response)
+    throw new Error('Invalid response structure from analytics API')
+  }
 
   return transformAnalyticsResponse(response.message)
 }

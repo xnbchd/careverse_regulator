@@ -96,7 +96,7 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
           <TabsList className="inline-flex w-auto min-w-full">
             <TabsTrigger value="overview" className="flex-1 min-w-fit">Overview</TabsTrigger>
             <TabsTrigger value="professionals" className="flex-1 min-w-fit whitespace-nowrap">
-              <span className="truncate">Professionals</span>
+              <span className="truncate">Affiliations</span>
               {facility.affiliations && facility.affiliations.length > 0 && (
                 <span className="ml-1.5 text-xs">({facility.affiliations.length})</span>
               )}

@@ -54,8 +54,8 @@ export default function LicensesTable({
             )}
             <TableHead>License #</TableHead>
             <TableHead>Registration #</TableHead>
-            <TableHead>Facility Type</TableHead>
-            <TableHead>Owner</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Facility/Professional</TableHead>
             <TableHead>Issuance Date</TableHead>
             <TableHead>Expiry Date</TableHead>
             <TableHead>Payment</TableHead>
@@ -102,11 +102,17 @@ export default function LicensesTable({
                       {license.licenseNumber}
                     </EntityLink>
                   </TableCell>
-                <TableCell className="font-mono text-sm">{license.registrationNumber}</TableCell>
-                <TableCell>{license.facilityType}</TableCell>
+                <TableCell className="font-mono text-sm">
+                  <span onClick={(e) => e.stopPropagation()}>
+                    {license.registrationNumber}
+                  </span>
+                </TableCell>
+                <TableCell>{license.facilityType || license.licenseType}</TableCell>
                 <TableCell>
                   <EntityLink type="facility" id={license.registrationNumber}>
-                    {license.owner}
+                    <span className="max-w-[200px] truncate inline-block" title={license.facilityName || license.owner || 'N/A'}>
+                      {license.facilityName || license.owner || 'N/A'}
+                    </span>
                   </EntityLink>
                 </TableCell>
                 <TableCell>{license.dateOfIssuance}</TableCell>
