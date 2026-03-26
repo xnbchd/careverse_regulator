@@ -27,19 +27,24 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
     }
   }, [open, clearSearch])
 
+  const DOCTYPE_TO_ENTITY: Record<string, EntityType> = {
+    'Professional Record': 'professional',
+    'Facility Record': 'facility',
+    'License Records': 'license',
+    'Inspection Record': 'inspection',
+  }
+
   const handleResultClick = (doctype: string, name: string) => {
-    // Map doctype to EntityType (lowercase)
-    const entityType = doctype.toLowerCase() as EntityType
+    const entityType = DOCTYPE_TO_ENTITY[doctype]
+    if (entityType) {
+      openDrawer(entityType, name)
+    }
 
-    // Open drawer with entity
-    openDrawer(entityType, name)
-
-    // Close modal
     onOpenChange(false)
   }
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange}>
+    <CommandDialog open={open} onOpenChange={onOpenChange} shouldFilter={false}>
       <CommandInput
         placeholder="Search for professionals, licenses, facilities..."
         value={query}

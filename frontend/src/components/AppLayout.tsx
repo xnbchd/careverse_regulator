@@ -20,13 +20,14 @@ import {
   FileText,
   FileEdit,
   ScrollText,
-
+  Search,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import NotificationCenter from "@/components/shared/NotificationCenter";
+import { GlobalSearch } from "@/components/shared/GlobalSearch";
 
 import {
   DropdownMenu,
@@ -95,6 +96,7 @@ export default function AppLayout({
   const { isMobile, isTablet } = useResponsive();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
 
   const mode = useThemeStore((state) => state.mode);
@@ -420,11 +422,16 @@ export default function AppLayout({
             {!isMobile && !isTablet && (
               <Button
                 variant="outline"
-                className="w-80 justify-start text-muted-foreground font-normal"
+                className="w-80 justify-between text-muted-foreground font-normal"
                 onClick={() => setSearchOpen(true)}
               >
-                <Search className="w-4 h-4 mr-2" />
-                <span>Search... (⌘K)</span>
+                <span className="flex items-center">
+                  <Search className="w-4 h-4 mr-2" />
+                  Search...
+                </span>
+                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                  <span className="text-xs">⌘</span>K
+                </kbd>
               </Button>
             )}
 

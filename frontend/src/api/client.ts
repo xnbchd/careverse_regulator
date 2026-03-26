@@ -158,6 +158,17 @@ async function makeRequest<T>(
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), timeout)
 
+  // If caller provided a signal, forward its abort to our controller
+  const externalSignal = fetchOptions.signal as AbortSignal | undefined
+  if (externalSignal) {
+    if (externalSignal.aborted) {
+      controller.abort()
+    } else {
+      externalSignal.addEventListener('abort', () => controller.abort(), { once: true })
+    }
+    delete fetchOptions.signal
+  }
+
   try {
     // Store in-flight request
     const requestPromise = fetch(fullURL, {

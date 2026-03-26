@@ -2,7 +2,14 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { apiClient } from '@/api/client'
 import type { SearchResultGroup, FrappeGlobalSearchResponse } from '@/types/search'
 
-const SUPPORTED_DOCTYPES = ['Professional', 'Facility', 'License', 'Inspection']
+const SUPPORTED_DOCTYPES = [
+  'Professional Record',
+  'Facility Record',
+  'License Records',
+  'Inspection Record',
+  'Facility License Application',
+  'Professional License Application',
+]
 const DEBOUNCE_MS = 300
 
 export function useGlobalSearch() {
