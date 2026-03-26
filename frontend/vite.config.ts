@@ -37,7 +37,7 @@ export default defineConfig(({ command }) => ({
 		manifest: true,
 		sourcemap: true,
 		rollupOptions: {
-			input: path.resolve(dirname, 'src/main.tsx'),
+			input: path.resolve(dirname, 'index.html'),
 			output: {
 				manualChunks: undefined,
 			},
