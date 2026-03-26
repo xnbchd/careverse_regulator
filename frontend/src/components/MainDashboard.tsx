@@ -280,7 +280,7 @@ export default function MainDashboard({ onNavigate, company }: MainDashboardProp
             </div>
             <button
               onClick={() => navigate({ to: '/affiliations' })}
-              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
             >
               View Dashboard
             </button>
@@ -320,7 +320,7 @@ export default function MainDashboard({ onNavigate, company }: MainDashboardProp
             </div>
             <button
               onClick={() => navigate({ to: '/license-management' })}
-              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
             >
               View Dashboard
             </button>
@@ -362,7 +362,7 @@ export default function MainDashboard({ onNavigate, company }: MainDashboardProp
             </div>
             <button
               onClick={() => navigate({ to: '/inspections' })}
-              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
+              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
             >
               View Dashboard
             </button>

@@ -43,8 +43,6 @@ import type { PortalUser } from "@/types/auth";
 import { useThemeStore } from "@/stores/themeStore";
 import { cn } from "@/lib/utils";
 
-const FALLBACK_BRAND_ICON =
-  "/assets/careverse_regulator/compliance-360/favicon.svg?v=20260313a";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -96,7 +94,7 @@ export default function AppLayout({
   const { isMobile, isTablet } = useResponsive();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
-  const [brandLogoFailed, setBrandLogoFailed] = useState(false);
+
   const mode = useThemeStore((state) => state.mode);
   const toggleMode = useThemeStore((state) => state.toggleMode);
   const isDarkMode = mode === "dark";
@@ -119,11 +117,6 @@ export default function AppLayout({
   const brandTitle =
     user?.companyDisplayName || user?.company || "Compliance360";
   const brandSubtitle = user?.companyAbbr || "Regulator Portal";
-  const brandLogoUrl = user?.companyLogo || FALLBACK_BRAND_ICON;
-
-  useEffect(() => {
-    setBrandLogoFailed(false);
-  }, [brandLogoUrl]);
 
   const menuItems = [
     {
@@ -280,20 +273,12 @@ export default function AppLayout({
           collapsed ? "justify-center" : "justify-start",
         )}
       >
-        <div className="w-9 h-9 shrink-0 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-base font-semibold overflow-hidden">
-          {brandLogoUrl && !brandLogoFailed ? (
-            <img
-              src={brandLogoUrl}
-              alt={brandTitle}
-              className="w-full h-full object-cover"
-              onError={() => setBrandLogoFailed(true)}
-            />
-          ) : (
-            (brandTitle || "C").trim().charAt(0).toUpperCase()
-          )}
-        </div>
-        {!collapsed && (
-          <div className="min-w-0 flex-1">
+        {collapsed ? (
+          <div className="w-9 h-9 shrink-0 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary text-base font-semibold">
+            {(brandTitle || "C").trim().charAt(0).toUpperCase()}
+          </div>
+        ) : (
+          <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold leading-snug line-clamp-2">
               {brandTitle}
             </p>
@@ -363,6 +348,14 @@ export default function AppLayout({
                   <PanelLeftClose className="w-4 h-4" />
                 )}
               </Button>
+
+              <div className="h-8 w-px bg-border" />
+
+              <img
+                src={`${import.meta.env.BASE_URL}compliance-logo.svg`}
+                alt="Compliance360"
+                className="h-7 w-auto object-contain"
+              />
 
               <div className="h-8 w-px bg-border" />
 

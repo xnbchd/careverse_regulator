@@ -1,8 +1,8 @@
-# PR: License Application Detail Pages, Affiliation UX Cleanup, and Chart Fixes
+# PR: License Application Detail Pages, Affiliation UX Cleanup, Chart Fixes, and Theme Updates
 
 ## Summary
 
-Replaces the right-side drawer for license applications with full detail pages, redesigns the facility application page layout for better UX, fixes the donut chart component, makes Application ID columns sticky, and removes all approve/reject CTAs from affiliations (regulator is view-only).
+Replaces the right-side drawer for license applications with full detail pages, redesigns the facility application page layout for better UX, fixes the donut chart component, makes Application ID columns sticky, removes all approve/reject CTAs from affiliations (regulator is view-only), adds Compliance360 header logo, updates sidebar branding, and applies new primary color theme with dark mode text contrast fixes.
 
 ## Changes
 
@@ -42,7 +42,7 @@ Both pages load application data via TanStack Router loaders using new single-fe
 
 ### StatusDistribution Chart Fix
 
-- Fixed single-segment (360°) SVG arc bug — renders a `<circle>` instead of a collapsed arc path when one status has 100% of data
+- Fixed single-segment (360) SVG arc bug — renders a `<circle>` instead of a collapsed arc path when one status has 100% of data
 - Fixed empty data crash (`Math.max(...[])` returning `-Infinity`)
 - Fixed SVG fill colors — replaced `fill-card`/`fill-foreground` CSS classes with inline `fill="var(--card)"` for proper SVG rendering
 - Added "No data available" empty state for both pie and bar modes
@@ -65,6 +65,27 @@ The regulator does not approve or reject affiliations; they only view status. Re
 - Removed `ApplicationDrawer` import and all drawer-related state
 - Row click handlers now navigate to detail pages
 
+### Header Logo
+
+- Added Compliance360 SVG logo in the header bar between the sidebar collapse button and the page title, separated by vertical splitters
+
+### Sidebar Branding Update
+
+- Removed logo image from sidebar header
+- Collapsed sidebar now shows an avatar with the first character of the regulator name
+- Expanded sidebar shows regulator name and subtitle as text only
+
+### Theme: Primary Color Update (`#11b5a1`)
+
+- Changed `--primary` to `#11b5a1` (oklch(0.694 0.123 181.083)) in both light and dark themes
+- Updated `--primary-foreground` to match the new hue
+
+### Dark Mode Button Text Contrast
+
+- Default button variant (`button.tsx`): added `dark:text-background` for readable dark text on teal background
+- Default badge variant (`badge.tsx`): added `dark:text-background`
+- Dashboard buttons (`MainDashboard.tsx`): added `dark:text-background` to hardcoded `bg-primary` buttons
+
 ## Files Changed
 
 ### Frontend (`frontend/src/`)
@@ -81,10 +102,21 @@ The regulator does not approve or reject affiliations; they only view status. Re
 | `components/licensing/ApplicationsTable.tsx` | Sticky ID column only, navigate on click |
 | `components/licensing/ProfessionalApplicationsTable.tsx` | Sticky ID column only, navigate on click |
 | `components/licensing/ApplicationsDashboard.tsx` | Minor cleanup |
-| `components/dashboard/StatusDistribution.tsx` | Fixed 360° arc bug, empty data, SVG fills |
+| `components/dashboard/StatusDistribution.tsx` | Fixed 360 arc bug, empty data, SVG fills |
 | `routes/affiliations/$affiliationId.tsx` | Removed AppLayout, removed CTAs, redesigned layout |
 | `components/affiliations/AffiliationsDashboard.tsx` | Removed approve/reject CTAs, view-only |
 | `components/affiliations/AffiliationsView.tsx` | Removed bulk approve/reject bar and dialogs |
+| `components/AppLayout.tsx` | Removed sidebar logo, added header logo, cleaned up unused state |
+| `components/MainDashboard.tsx` | Added `dark:text-background` to bg-primary buttons |
+| `components/ui/button.tsx` | Added `dark:text-background` to default variant |
+| `components/ui/badge.tsx` | Added `dark:text-background` to default variant |
+| `index.css` | Updated `--primary` and `--primary-foreground` for both light and dark themes |
+
+### Public Assets
+
+| File | Change |
+|------|--------|
+| `frontend/public/compliance-logo.svg` | **New** — Compliance360 header logo |
 
 ## Testing
 
@@ -97,3 +129,7 @@ The regulator does not approve or reject affiliations; they only view status. Re
 - [ ] Visit `/affiliations/$id` — verify no Approve/Reject buttons, read-only view
 - [ ] Visit `/affiliations` dashboard — verify no Approve/Reject on pending items
 - [ ] Visit `/affiliations/list` — verify no bulk action bar
+- [ ] Verify Compliance360 logo appears in header between collapse button and page title
+- [ ] Verify sidebar shows regulator name text (expanded) or first-character avatar (collapsed), no logo image
+- [ ] Toggle dark mode — verify primary-colored buttons and badges have dark readable text
+- [ ] Verify primary color is teal (`#11b5a1`) across both light and dark modes
