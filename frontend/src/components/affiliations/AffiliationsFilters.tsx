@@ -1,7 +1,7 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,33 +9,33 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-} from '@/components/ui/dropdown-menu'
-import { Search, Filter, X, ArrowUpDown } from 'lucide-react'
-import { cn } from '@/lib/utils'
+} from "@/components/ui/dropdown-menu"
+import { Search, Filter, X, ArrowUpDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface AffiliationsFiltersProps {
   searchText: string
   onSearchChange: (value: string) => void
   selectedStatuses: string[]
   onStatusChange: (statuses: string[]) => void
-  sortOrder: 'asc' | 'desc' | 'recent'
-  onSortChange: (order: 'asc' | 'desc' | 'recent') => void
+  sortOrder: "asc" | "desc" | "recent"
+  onSortChange: (order: "asc" | "desc" | "recent") => void
   activeFiltersCount: number
   onClearFilters: () => void
 }
 
 const statusOptions = [
-  { value: 'all', label: 'All Statuses' },
-  { value: 'Active', label: 'Active' },
-  { value: 'Pending', label: 'Pending' },
-  { value: 'Inactive', label: 'Inactive' },
-  { value: 'Rejected', label: 'Rejected' },
+  { value: "all", label: "All Statuses" },
+  { value: "Active", label: "Active" },
+  { value: "Pending", label: "Pending" },
+  { value: "Inactive", label: "Inactive" },
+  { value: "Rejected", label: "Rejected" },
 ]
 
 const sortOptions = [
-  { value: 'recent', label: 'Recent First' },
-  { value: 'asc', label: 'Name A-Z' },
-  { value: 'desc', label: 'Name Z-A' },
+  { value: "recent", label: "Recent First" },
+  { value: "asc", label: "Name A-Z" },
+  { value: "desc", label: "Name Z-A" },
 ]
 
 export default function AffiliationsFilters({
@@ -49,15 +49,15 @@ export default function AffiliationsFilters({
   onClearFilters,
 }: AffiliationsFiltersProps) {
   const handleStatusToggle = (value: string) => {
-    if (value === 'all') {
-      onStatusChange(['all'])
+    if (value === "all") {
+      onStatusChange(["all"])
     } else {
       const newStatuses = selectedStatuses.includes(value)
-        ? selectedStatuses.filter((s) => s !== value && s !== 'all')
-        : [...selectedStatuses.filter((s) => s !== 'all'), value]
+        ? selectedStatuses.filter((s) => s !== value && s !== "all")
+        : [...selectedStatuses.filter((s) => s !== "all"), value]
 
       if (newStatuses.length === 0) {
-        onStatusChange(['all'])
+        onStatusChange(["all"])
       } else {
         onStatusChange(newStatuses)
       }
@@ -85,7 +85,7 @@ export default function AffiliationsFilters({
               <Button variant="outline" className="gap-2">
                 <Filter className="h-4 w-4" />
                 Status
-                {!selectedStatuses.includes('all') && (
+                {!selectedStatuses.includes("all") && (
                   <Badge variant="secondary" className="ml-1 h-5 px-1.5">
                     {selectedStatuses.length}
                   </Badge>
@@ -122,7 +122,7 @@ export default function AffiliationsFilters({
                 <DropdownMenuCheckboxItem
                   key={option.value}
                   checked={sortOrder === option.value}
-                  onCheckedChange={() => onSortChange(option.value as 'asc' | 'desc' | 'recent')}
+                  onCheckedChange={() => onSortChange(option.value as "asc" | "desc" | "recent")}
                 >
                   {option.label}
                 </DropdownMenuCheckboxItem>

@@ -1,17 +1,17 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Separator } from '@/components/ui/separator'
-import { Button } from '@/components/ui/button'
-import { useNotificationStore, createNotification } from '@/stores/notificationStore'
-import { toast } from 'sonner'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+import { useNotificationStore, createNotification } from "@/stores/notificationStore"
+import { toast } from "sonner"
 
 export default function NotificationSettings() {
   const { preferences, updatePreferences, addNotification } = useNotificationStore()
 
   const handleToggleEnabled = (enabled: boolean) => {
     updatePreferences({ enabled })
-    toast.success(`Notifications ${enabled ? 'enabled' : 'disabled'}`)
+    toast.success(`Notifications ${enabled ? "enabled" : "disabled"}`)
   }
 
   const handleToggleToasts = (showToasts: boolean) => {
@@ -21,11 +21,14 @@ export default function NotificationSettings() {
   const handleToggleSound = (playSound: boolean) => {
     updatePreferences({ playSound })
     if (playSound) {
-      toast.success('Sound notifications enabled')
+      toast.success("Sound notifications enabled")
     }
   }
 
-  const handleToggleCategory = (category: keyof typeof preferences.categories, enabled: boolean) => {
+  const handleToggleCategory = (
+    category: keyof typeof preferences.categories,
+    enabled: boolean
+  ) => {
     updatePreferences({
       categories: {
         ...preferences.categories,
@@ -35,24 +38,24 @@ export default function NotificationSettings() {
   }
 
   const handleTestNotification = () => {
-    addNotification(createNotification.systemUpdate('This is a test notification'))
-    toast.success('Test notification sent')
+    addNotification(createNotification.systemUpdate("This is a test notification"))
+    toast.success("Test notification sent")
   }
 
   const categoryLabels = {
-    affiliation: 'Affiliations',
-    license: 'Licenses',
-    inspection: 'Inspections',
-    system: 'System',
-    bulk_action: 'Bulk Actions',
+    affiliation: "Affiliations",
+    license: "Licenses",
+    inspection: "Inspections",
+    system: "System",
+    bulk_action: "Bulk Actions",
   }
 
   const categoryDescriptions = {
-    affiliation: 'Professional affiliation approvals and status changes',
-    license: 'License approvals, denials, renewals, and expiry warnings',
-    inspection: 'Inspection scheduling and completion notifications',
-    system: 'System updates, maintenance, and important announcements',
-    bulk_action: 'Completion status of bulk operations',
+    affiliation: "Professional affiliation approvals and status changes",
+    license: "License approvals, denials, renewals, and expiry warnings",
+    inspection: "Inspection scheduling and completion notifications",
+    system: "System updates, maintenance, and important announcements",
+    bulk_action: "Completion status of bulk operations",
   }
 
   return (
@@ -67,9 +70,7 @@ export default function NotificationSettings() {
       <Card>
         <CardHeader>
           <CardTitle>General Settings</CardTitle>
-          <CardDescription>
-            Control your notification preferences
-          </CardDescription>
+          <CardDescription>Control your notification preferences</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
@@ -79,10 +80,7 @@ export default function NotificationSettings() {
                 Receive notifications for important events
               </p>
             </div>
-            <Switch
-              checked={preferences.enabled}
-              onCheckedChange={handleToggleEnabled}
-            />
+            <Switch checked={preferences.enabled} onCheckedChange={handleToggleEnabled} />
           </div>
 
           <Separator />
@@ -122,9 +120,7 @@ export default function NotificationSettings() {
       <Card>
         <CardHeader>
           <CardTitle>Notification Categories</CardTitle>
-          <CardDescription>
-            Choose which types of notifications you want to receive
-          </CardDescription>
+          <CardDescription>Choose which types of notifications you want to receive</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {Object.entries(preferences.categories).map(([category, enabled]) => (
@@ -144,7 +140,7 @@ export default function NotificationSettings() {
                   disabled={!preferences.enabled}
                 />
               </div>
-              {category !== 'bulk_action' && <Separator className="mt-6" />}
+              {category !== "bulk_action" && <Separator className="mt-6" />}
             </div>
           ))}
         </CardContent>
@@ -153,9 +149,7 @@ export default function NotificationSettings() {
       <Card>
         <CardHeader>
           <CardTitle>Test Notifications</CardTitle>
-          <CardDescription>
-            Send a test notification to see how it appears
-          </CardDescription>
+          <CardDescription>Send a test notification to see how it appears</CardDescription>
         </CardHeader>
         <CardContent>
           <Button onClick={handleTestNotification} disabled={!preferences.enabled}>

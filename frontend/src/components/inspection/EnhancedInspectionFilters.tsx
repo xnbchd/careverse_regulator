@@ -1,22 +1,18 @@
-import { useState } from 'react'
-import { Search, X, Filter, Calendar } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { useState } from "react"
+import { Search, X, Filter, Calendar } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Calendar as CalendarComponent } from '@/components/ui/calendar'
-import dayjs from 'dayjs'
+} from "@/components/ui/select"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import dayjs from "dayjs"
 
 interface EnhancedInspectionFiltersProps {
   search: string
@@ -52,8 +48,8 @@ export default function EnhancedInspectionFilters({
   }
 
   const handleQuickDateRange = (days: number) => {
-    const end = dayjs().format('YYYY-MM-DD')
-    const start = dayjs().subtract(days, 'day').format('YYYY-MM-DD')
+    const end = dayjs().format("YYYY-MM-DD")
+    const start = dayjs().subtract(days, "day").format("YYYY-MM-DD")
     onDateRangeChange({ start, end })
     setIsDatePickerOpen(false)
   }
@@ -61,17 +57,17 @@ export default function EnhancedInspectionFilters({
   const handleCustomDateRange = () => {
     if (customStart && customEnd) {
       onDateRangeChange({
-        start: dayjs(customStart).format('YYYY-MM-DD'),
-        end: dayjs(customEnd).format('YYYY-MM-DD'),
+        start: dayjs(customStart).format("YYYY-MM-DD"),
+        end: dayjs(customEnd).format("YYYY-MM-DD"),
       })
       setIsDatePickerOpen(false)
     }
   }
 
   const getDateRangeLabel = () => {
-    if (!dateRange) return 'Date Range'
-    const start = dayjs(dateRange.start).format('MMM D')
-    const end = dayjs(dateRange.end).format('MMM D, YYYY')
+    if (!dateRange) return "Date Range"
+    const start = dayjs(dateRange.start).format("MMM D")
+    const end = dayjs(dateRange.end).format("MMM D, YYYY")
     return `${start} - ${end}`
   }
 
@@ -106,7 +102,7 @@ export default function EnhancedInspectionFilters({
           <PopoverContent className="w-56" align="start">
             <div className="space-y-2">
               <p className="text-sm font-medium mb-2">Filter by Status</p>
-              {['Pending', 'Completed', 'Non Compliant'].map((s) => (
+              {["Pending", "Completed", "Non Compliant"].map((s) => (
                 <label key={s} className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
@@ -139,26 +135,18 @@ export default function EnhancedInspectionFilters({
               <div>
                 <p className="text-sm font-medium mb-2">Quick Select</p>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleQuickDateRange(7)}
-                  >
+                  <Button variant="outline" size="sm" onClick={() => handleQuickDateRange(7)}>
                     Last 7 days
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleQuickDateRange(30)}
-                  >
+                  <Button variant="outline" size="sm" onClick={() => handleQuickDateRange(30)}>
                     Last 30 days
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      const start = dayjs().startOf('month').format('YYYY-MM-DD')
-                      const end = dayjs().endOf('month').format('YYYY-MM-DD')
+                      const start = dayjs().startOf("month").format("YYYY-MM-DD")
+                      const end = dayjs().endOf("month").format("YYYY-MM-DD")
                       onDateRangeChange({ start, end })
                       setIsDatePickerOpen(false)
                     }}
@@ -169,8 +157,11 @@ export default function EnhancedInspectionFilters({
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      const start = dayjs().subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
-                      const end = dayjs().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
+                      const start = dayjs()
+                        .subtract(1, "month")
+                        .startOf("month")
+                        .format("YYYY-MM-DD")
+                      const end = dayjs().subtract(1, "month").endOf("month").format("YYYY-MM-DD")
                       onDateRangeChange({ start, end })
                       setIsDatePickerOpen(false)
                     }}
@@ -217,12 +208,7 @@ export default function EnhancedInspectionFilters({
         </Popover>
 
         {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClearFilters}
-            className="h-9 ml-auto"
-          >
+          <Button variant="ghost" size="sm" onClick={onClearFilters} className="h-9 ml-auto">
             Clear All
           </Button>
         )}
@@ -235,7 +221,7 @@ export default function EnhancedInspectionFilters({
             <Badge variant="secondary" className="gap-1">
               Search: "{search}"
               <button
-                onClick={() => onSearchChange('')}
+                onClick={() => onSearchChange("")}
                 className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
               >
                 <X className="w-3 h-3" />

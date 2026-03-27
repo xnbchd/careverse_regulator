@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 import {
   AlertDialog,
   AlertDialogContent,
@@ -6,18 +6,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
-import { deleteUser, updateUser } from '@/api/userManagementApi'
-import { showSuccess, showError } from '@/utils/toast'
-import type { FrappeUser } from '@/types/user'
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
+import { deleteUser, updateUser } from "@/api/userManagementApi"
+import { showSuccess, showError } from "@/utils/toast"
+import type { FrappeUser } from "@/types/user"
 
 interface DisableUserDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   user: FrappeUser | null
-  action: 'disable' | 'enable'
+  action: "disable" | "enable"
   onSuccess: () => void
 }
 
@@ -35,7 +35,7 @@ export default function DisableUserDialog({
 
     setSubmitting(true)
     try {
-      if (action === 'disable') {
+      if (action === "disable") {
         await deleteUser(user.name)
         showSuccess(`${user.full_name || user.email} has been disabled`)
       } else {
@@ -51,25 +51,26 @@ export default function DisableUserDialog({
     }
   }
 
-  const displayName = user?.full_name || user?.email || 'this user'
+  const displayName = user?.full_name || user?.email || "this user"
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {action === 'disable' ? 'Disable User Account' : 'Enable User Account'}
+            {action === "disable" ? "Disable User Account" : "Enable User Account"}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {action === 'disable' ? (
+            {action === "disable" ? (
               <>
-                This will disable <span className="font-medium text-foreground">{displayName}</span>&apos;s
-                account. They will no longer be able to log in to the portal.
+                This will disable <span className="font-medium text-foreground">{displayName}</span>
+                &apos;s account. They will no longer be able to log in to the portal.
               </>
             ) : (
               <>
-                This will re-enable <span className="font-medium text-foreground">{displayName}</span>&apos;s
-                account. They will be able to log in again.
+                This will re-enable{" "}
+                <span className="font-medium text-foreground">{displayName}</span>&apos;s account.
+                They will be able to log in again.
               </>
             )}
           </AlertDialogDescription>
@@ -79,19 +80,19 @@ export default function DisableUserDialog({
             Cancel
           </Button>
           <Button
-            variant={action === 'disable' ? 'destructive' : 'default'}
+            variant={action === "disable" ? "destructive" : "default"}
             onClick={handleConfirm}
             disabled={submitting}
           >
             {submitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {action === 'disable' ? 'Disabling...' : 'Enabling...'}
+                {action === "disable" ? "Disabling..." : "Enabling..."}
               </>
-            ) : action === 'disable' ? (
-              'Disable User'
+            ) : action === "disable" ? (
+              "Disable User"
             ) : (
-              'Enable User'
+              "Enable User"
             )}
           </Button>
         </AlertDialogFooter>

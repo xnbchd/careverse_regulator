@@ -1,6 +1,6 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import AppLayout from '@/components/AppLayout'
-import { useAuthStore } from '@/stores/authStore'
+import { createFileRoute, Outlet } from "@tanstack/react-router"
+import AppLayout from "@/components/AppLayout"
+import { useAuthStore } from "@/stores/authStore"
 
 function AffiliationsLayoutComponent() {
   const navigate = Route.useNavigate()
@@ -11,11 +11,11 @@ function AffiliationsLayoutComponent() {
   }
 
   const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
+    window.location.href = "/logout?redirect-to=/"
   }
 
   const handleSwitchToDesk = () => {
-    window.location.href = '/app'
+    window.location.href = "/app"
   }
 
   return (
@@ -24,7 +24,7 @@ function AffiliationsLayoutComponent() {
       pageTitle="Affiliation Operations"
       pageSubtitle="Review professional affiliations and manage confirmations."
       onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onOpenNotifications={() => handleNavigate("notifications-center")}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
@@ -34,6 +34,6 @@ function AffiliationsLayoutComponent() {
   )
 }
 
-export const Route = createFileRoute('/affiliations')({
+export const Route = createFileRoute("/affiliations")({
   component: AffiliationsLayoutComponent,
 })

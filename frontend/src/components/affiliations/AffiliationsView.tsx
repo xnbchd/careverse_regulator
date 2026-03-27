@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { useAffiliationStore } from '@/stores/affiliationStore'
-import { useResponsive } from '@/hooks/useResponsive'
-import AffiliationsTable from './AffiliationsTable'
-import AffiliationCard from './AffiliationCard'
-import AffiliationsFilters from './AffiliationsFilters'
-import PaginationControls from './PaginationControls'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Users, ArrowLeft } from 'lucide-react'
+import { useEffect, useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { useAffiliationStore } from "@/stores/affiliationStore"
+import { useResponsive } from "@/hooks/useResponsive"
+import AffiliationsTable from "./AffiliationsTable"
+import AffiliationCard from "./AffiliationCard"
+import AffiliationsFilters from "./AffiliationsFilters"
+import PaginationControls from "./PaginationControls"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Users, ArrowLeft } from "lucide-react"
 
 interface AffiliationsViewProps {
   company?: string | null
@@ -32,12 +32,12 @@ export default function AffiliationsView({}: AffiliationsViewProps) {
   const { isMobile, isTablet } = useResponsive()
 
   // Local state for filters
-  const [searchText, setSearchText] = useState(filters.search || '')
+  const [searchText, setSearchText] = useState(filters.search || "")
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>(
-    filters.status ? filters.status.split(',') : ['all']
+    filters.status ? filters.status.split(",") : ["all"]
   )
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'recent'>(
-    filters.sortOrder === 'desc' ? 'desc' : filters.sortOrder === 'asc' ? 'asc' : 'recent'
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "recent">(
+    filters.sortOrder === "desc" ? "desc" : filters.sortOrder === "asc" ? "asc" : "recent"
   )
 
   // Debounce search text
@@ -52,27 +52,27 @@ export default function AffiliationsView({}: AffiliationsViewProps) {
   // Handle status filter change
   const handleStatusChange = (statuses: string[]) => {
     setSelectedStatuses(statuses)
-    const statusFilter = statuses.includes('all') ? undefined : statuses.join(',')
+    const statusFilter = statuses.includes("all") ? undefined : statuses.join(",")
     setFilters({ ...filters, status: statusFilter })
   }
 
   // Handle sort order change
-  const handleSortChange = (order: 'asc' | 'desc' | 'recent') => {
+  const handleSortChange = (order: "asc" | "desc" | "recent") => {
     setSortOrder(order)
-    if (order === 'asc') {
-      setFilters({ ...filters, sortBy: 'professional_name', sortOrder: 'asc' })
-    } else if (order === 'desc') {
-      setFilters({ ...filters, sortBy: 'professional_name', sortOrder: 'desc' })
+    if (order === "asc") {
+      setFilters({ ...filters, sortBy: "professional_name", sortOrder: "asc" })
+    } else if (order === "desc") {
+      setFilters({ ...filters, sortBy: "professional_name", sortOrder: "desc" })
     } else {
-      setFilters({ ...filters, sortBy: 'start_date', sortOrder: 'desc' })
+      setFilters({ ...filters, sortBy: "start_date", sortOrder: "desc" })
     }
   }
 
   // Handle clear filters
   const handleClearFilters = () => {
-    setSearchText('')
-    setSelectedStatuses(['all'])
-    setSortOrder('recent')
+    setSearchText("")
+    setSelectedStatuses(["all"])
+    setSortOrder("recent")
     setFilters({})
   }
 
@@ -89,8 +89,8 @@ export default function AffiliationsView({}: AffiliationsViewProps) {
   // Calculate active filters count
   const activeFiltersCount =
     (searchText ? 1 : 0) +
-    (!selectedStatuses.includes('all') ? 1 : 0) +
-    (sortOrder !== 'recent' ? 1 : 0)
+    (!selectedStatuses.includes("all") ? 1 : 0) +
+    (sortOrder !== "recent" ? 1 : 0)
 
   // Render empty state
   if (!loading && affiliations.length === 0 && activeFiltersCount === 0) {
@@ -115,7 +115,7 @@ export default function AffiliationsView({}: AffiliationsViewProps) {
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => navigate({ to: '/affiliations' })}
+        onClick={() => navigate({ to: "/affiliations" })}
         className="-ml-2"
       >
         <ArrowLeft className="h-4 w-4 mr-1" />

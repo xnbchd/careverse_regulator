@@ -1,0 +1,23 @@
+# Build outputs
+dist/
+build/
+.vite/
+
+# Dependencies
+node_modules/
+
+# Generated files
+src/routeTree.gen.ts
+coverage/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env*
+
+# Misc
+.DS_Store
+*.log

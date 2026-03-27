@@ -1,22 +1,22 @@
-import { useState } from 'react'
-import { LayoutGrid, List, Upload as UploadIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useDocumentStore } from '@/stores/documentStore'
-import DocumentUpload from './DocumentUpload'
-import DocumentList from './DocumentList'
-import DocumentGrid from './DocumentGrid'
-import DocumentFilters from './DocumentFilters'
-import DocumentPreview from './DocumentPreview'
-import { Card } from '@/components/ui/card'
-import type { DocumentSearchParams } from '@/types/document'
+import { useState } from "react"
+import { LayoutGrid, List, Upload as UploadIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useDocumentStore } from "@/stores/documentStore"
+import DocumentUpload from "./DocumentUpload"
+import DocumentList from "./DocumentList"
+import DocumentGrid from "./DocumentGrid"
+import DocumentFilters from "./DocumentFilters"
+import DocumentPreview from "./DocumentPreview"
+import { Card } from "@/components/ui/card"
+import type { DocumentSearchParams } from "@/types/document"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Skeleton } from '@/components/ui/skeleton'
+} from "@/components/ui/dialog"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function DocumentManagementView() {
   const {
@@ -36,7 +36,7 @@ export default function DocumentManagementView() {
     clearSelection,
   } = useDocumentStore()
 
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const [previewOpen, setPreviewOpen] = useState(false)
 
@@ -48,8 +48,8 @@ export default function DocumentManagementView() {
     setSearchParams({
       page: 1,
       pageSize: 20,
-      sortBy: 'uploadedAt',
-      sortOrder: 'desc',
+      sortBy: "uploadedAt",
+      sortOrder: "desc",
     })
   }
 
@@ -61,12 +61,12 @@ export default function DocumentManagementView() {
   const handleDownload = (documentId: string) => {
     const doc = documents.find((d) => d.id === documentId)
     if (doc?.downloadUrl) {
-      window.open(doc.downloadUrl, '_blank')
+      window.open(doc.downloadUrl, "_blank")
     }
   }
 
   const handleDelete = async (documentId: string) => {
-    if (confirm('Are you sure you want to delete this document?')) {
+    if (confirm("Are you sure you want to delete this document?")) {
       await deleteDocument(documentId)
     }
   }
@@ -87,9 +87,7 @@ export default function DocumentManagementView() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">Document Management</h2>
-          <p className="text-muted-foreground">
-            Manage and organize all regulatory documents
-          </p>
+          <p className="text-muted-foreground">Manage and organize all regulatory documents</p>
         </div>
         <Button onClick={() => setUploadDialogOpen(true)}>
           <UploadIcon className="w-4 h-4 mr-2" />
@@ -111,25 +109,25 @@ export default function DocumentManagementView() {
         <div className="text-sm text-muted-foreground">
           {total > 0 ? (
             <>
-              Showing {(page - 1) * pageSize + 1}-
-              {Math.min(page * pageSize, total)} of {total} documents
+              Showing {(page - 1) * pageSize + 1}-{Math.min(page * pageSize, total)} of {total}{" "}
+              documents
             </>
           ) : (
-            'No documents found'
+            "No documents found"
           )}
         </div>
         <div className="flex gap-2">
           <Button
-            variant={viewMode === 'grid' ? 'default' : 'outline'}
+            variant={viewMode === "grid" ? "default" : "outline"}
             size="icon"
-            onClick={() => setViewMode('grid')}
+            onClick={() => setViewMode("grid")}
           >
             <LayoutGrid className="w-4 h-4" />
           </Button>
           <Button
-            variant={viewMode === 'list' ? 'default' : 'outline'}
+            variant={viewMode === "list" ? "default" : "outline"}
             size="icon"
-            onClick={() => setViewMode('list')}
+            onClick={() => setViewMode("list")}
           >
             <List className="w-4 h-4" />
           </Button>
@@ -143,7 +141,7 @@ export default function DocumentManagementView() {
             <Skeleton key={i} className="h-20 w-full" />
           ))}
         </div>
-      ) : viewMode === 'grid' ? (
+      ) : viewMode === "grid" ? (
         <DocumentGrid
           documents={documents}
           onView={handleView}
@@ -162,11 +160,7 @@ export default function DocumentManagementView() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1}
-          >
+          <Button variant="outline" onClick={() => setPage(page - 1)} disabled={page === 1}>
             Previous
           </Button>
           <span className="text-sm text-muted-foreground">
@@ -187,9 +181,7 @@ export default function DocumentManagementView() {
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Upload Documents</DialogTitle>
-            <DialogDescription>
-              Upload new documents to the system
-            </DialogDescription>
+            <DialogDescription>Upload new documents to the system</DialogDescription>
           </DialogHeader>
           <DocumentUpload onUploadComplete={handleUploadComplete} />
         </DialogContent>
@@ -200,9 +192,7 @@ export default function DocumentManagementView() {
         document={selectedDocument}
         open={previewOpen}
         onClose={handleClosePreview}
-        onDownload={() =>
-          selectedDocument && handleDownload(selectedDocument.id)
-        }
+        onDownload={() => selectedDocument && handleDownload(selectedDocument.id)}
       />
     </div>
   )

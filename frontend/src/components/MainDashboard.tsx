@@ -1,13 +1,9 @@
-import { useMemo } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { useAffiliationStore } from '@/stores/affiliationStore'
-import { useLicensingStore } from '@/stores/licensingStore'
-import { useInspectionStore } from '@/stores/inspectionStore'
-import {
-  MetricCard,
-  StatusDistribution,
-  QuickActions,
-} from '@/components/dashboard'
+import { useMemo } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { useAffiliationStore } from "@/stores/affiliationStore"
+import { useLicensingStore } from "@/stores/licensingStore"
+import { useInspectionStore } from "@/stores/inspectionStore"
+import { MetricCard, StatusDistribution, QuickActions } from "@/components/dashboard"
 import {
   Clock,
   AlertTriangle,
@@ -18,10 +14,10 @@ import {
   TrendingUp,
   Activity,
   ArrowRight,
-} from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { differenceInDays, isBefore } from 'date-fns'
+} from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { differenceInDays, isBefore } from "date-fns"
 
 interface MainDashboardProps {
   onNavigate: (route: string) => void
@@ -32,17 +28,9 @@ export default function MainDashboard({}: MainDashboardProps) {
   const navigate = useNavigate()
 
   // Load data from all stores (fetched by route loader)
-  const {
-    affiliations,
-    loading: affiliationsLoading,
-  } = useAffiliationStore()
+  const { affiliations, loading: affiliationsLoading } = useAffiliationStore()
 
-  const {
-    licenses,
-    applications,
-    licensesLoading,
-    applicationsLoading,
-  } = useLicensingStore()
+  const { licenses, applications, licensesLoading, applicationsLoading } = useLicensingStore()
 
   const { inspections, loading: inspectionsLoading } = useInspectionStore()
 
@@ -51,61 +39,49 @@ export default function MainDashboard({}: MainDashboardProps) {
     const now = new Date()
 
     // Affiliations metrics
-    const pendingAffiliations = affiliations.filter(
-      (a) => a.affiliationStatus === 'Pending'
-    ).length
-    const activeAffiliations = affiliations.filter(
-      (a) => a.affiliationStatus === 'Active'
-    ).length
+    const pendingAffiliations = affiliations.filter((a) => a.affiliationStatus === "Pending").length
+    const activeAffiliations = affiliations.filter((a) => a.affiliationStatus === "Active").length
 
     // Licenses metrics
     const expiringSoonLicenses = licenses.filter((l) => {
       const daysUntilExpiry = differenceInDays(new Date(l.dateOfExpiry), now)
-      return daysUntilExpiry > 0 && daysUntilExpiry <= 30 && l.status === 'Active'
+      return daysUntilExpiry > 0 && daysUntilExpiry <= 30 && l.status === "Active"
     }).length
 
-    const activeLicenses = licenses.filter((l) => l.status === 'Active').length
-    const suspendedLicenses = licenses.filter((l) => l.status === 'Suspended').length
-    const deniedLicenses = licenses.filter((l) => l.status === 'Denied').length
+    const activeLicenses = licenses.filter((l) => l.status === "Active").length
+    const suspendedLicenses = licenses.filter((l) => l.status === "Suspended").length
+    const deniedLicenses = licenses.filter((l) => l.status === "Denied").length
 
     // Applications metrics
-    const pendingApplications = applications.filter(
-      (a) => a.applicationStatus === 'Pending'
-    ).length
+    const pendingApplications = applications.filter((a) => a.applicationStatus === "Pending").length
     const inReviewApplications = applications.filter(
-      (a) => a.applicationStatus === 'In Review'
+      (a) => a.applicationStatus === "In Review"
     ).length
 
     // Inspections metrics
     const overdueInspections = inspections.filter((i) => {
       const inspectionDate = new Date(i.date)
-      return i.status === 'Pending' && isBefore(inspectionDate, now)
+      return i.status === "Pending" && isBefore(inspectionDate, now)
     }).length
 
     const dueSoonInspections = inspections.filter((i) => {
       const inspectionDate = new Date(i.date)
       const daysUntilDue = differenceInDays(inspectionDate, now)
-      return i.status === 'Pending' && daysUntilDue >= 0 && daysUntilDue <= 7
+      return i.status === "Pending" && daysUntilDue >= 0 && daysUntilDue <= 7
     }).length
 
-    const completedInspections = inspections.filter(
-      (i) => i.status === 'Completed'
-    ).length
+    const completedInspections = inspections.filter((i) => i.status === "Completed").length
 
-    const nonCompliantInspections = inspections.filter(
-      (i) => i.status === 'Non Compliant'
-    ).length
+    const nonCompliantInspections = inspections.filter((i) => i.status === "Non Compliant").length
 
     // Total items requiring attention
     const totalRequiringAttention =
-      pendingAffiliations +
-      expiringSoonLicenses +
-      pendingApplications +
-      overdueInspections
+      pendingAffiliations + expiringSoonLicenses + pendingApplications + overdueInspections
 
     // Compliance rate
     const totalLicenses = licenses.length
-    const complianceRate = totalLicenses > 0 ? Math.round((activeLicenses / totalLicenses) * 100) : 0
+    const complianceRate =
+      totalLicenses > 0 ? Math.round((activeLicenses / totalLicenses) * 100) : 0
 
     return {
       pendingAffiliations,
@@ -133,25 +109,24 @@ export default function MainDashboard({}: MainDashboardProps) {
   const overallStatusDistribution = useMemo(() => {
     return [
       {
-        status: 'Pending Review',
-        count:
-          aggregateMetrics.pendingAffiliations + aggregateMetrics.pendingApplications,
-        color: '#f59e0b',
+        status: "Pending Review",
+        count: aggregateMetrics.pendingAffiliations + aggregateMetrics.pendingApplications,
+        color: "#f59e0b",
       },
       {
-        status: 'Active/Compliant',
+        status: "Active/Compliant",
         count: aggregateMetrics.activeAffiliations + aggregateMetrics.activeLicenses,
-        color: '#10b981',
+        color: "#10b981",
       },
       {
-        status: 'Expiring Soon',
+        status: "Expiring Soon",
         count: aggregateMetrics.expiringSoonLicenses,
-        color: '#ef4444',
+        color: "#ef4444",
       },
       {
-        status: 'Overdue',
+        status: "Overdue",
         count: aggregateMetrics.overdueInspections,
-        color: '#dc2626',
+        color: "#dc2626",
       },
     ].filter((item) => item.count > 0)
   }, [aggregateMetrics])
@@ -160,21 +135,21 @@ export default function MainDashboard({}: MainDashboardProps) {
   const quickActions = useMemo(
     () => [
       {
-        label: 'Affiliations',
-        onClick: () => navigate({ to: '/affiliations' }),
-        variant: 'default' as const,
+        label: "Affiliations",
+        onClick: () => navigate({ to: "/affiliations" }),
+        variant: "default" as const,
         icon: Users,
       },
       {
-        label: 'Licenses',
-        onClick: () => navigate({ to: '/license-management' }),
-        variant: 'default' as const,
+        label: "Licenses",
+        onClick: () => navigate({ to: "/license-management" }),
+        variant: "default" as const,
         icon: FileText,
       },
       {
-        label: 'Inspections',
-        onClick: () => navigate({ to: '/inspections' }),
-        variant: 'default' as const,
+        label: "Inspections",
+        onClick: () => navigate({ to: "/inspections" }),
+        variant: "default" as const,
         icon: Calendar,
       },
     ],
@@ -228,9 +203,9 @@ export default function MainDashboard({}: MainDashboardProps) {
                   {aggregateMetrics.totalRequiringAttention}
                 </p>
                 <p className="text-sm text-orange-700 dark:text-orange-400 mt-2">
-                  {aggregateMetrics.pendingAffiliations} affiliations •{' '}
-                  {aggregateMetrics.pendingApplications} applications •{' '}
-                  {aggregateMetrics.expiringSoonLicenses} expiring •{' '}
+                  {aggregateMetrics.pendingAffiliations} affiliations •{" "}
+                  {aggregateMetrics.pendingApplications} applications •{" "}
+                  {aggregateMetrics.expiringSoonLicenses} expiring •{" "}
                   {aggregateMetrics.overdueInspections} overdue
                 </p>
               </div>
@@ -251,7 +226,8 @@ export default function MainDashboard({}: MainDashboardProps) {
                   {aggregateMetrics.totalLicenses + aggregateMetrics.totalAffiliations}
                 </p>
                 <p className="text-sm text-blue-700 dark:text-blue-400 mt-2">
-                  {aggregateMetrics.totalLicenses} licenses • {aggregateMetrics.totalAffiliations} affiliations
+                  {aggregateMetrics.totalLicenses} licenses • {aggregateMetrics.totalAffiliations}{" "}
+                  affiliations
                 </p>
               </div>
               <ShieldCheck className="h-10 w-10 text-blue-600 dark:text-blue-400" />
@@ -271,7 +247,8 @@ export default function MainDashboard({}: MainDashboardProps) {
                   {aggregateMetrics.totalInspections}
                 </p>
                 <p className="text-sm text-green-700 dark:text-green-400 mt-2">
-                  {aggregateMetrics.completedInspections} completed • {aggregateMetrics.dueSoonInspections} due soon
+                  {aggregateMetrics.completedInspections} completed •{" "}
+                  {aggregateMetrics.dueSoonInspections} due soon
                 </p>
               </div>
               <TrendingUp className="h-10 w-10 text-green-600 dark:text-green-400" />
@@ -287,16 +264,14 @@ export default function MainDashboard({}: MainDashboardProps) {
           value={aggregateMetrics.pendingAffiliations}
           variant="warning"
           icon={Users}
-          onClick={() => navigate({ to: '/affiliations/list', search: { status: 'Pending' } })}
+          onClick={() => navigate({ to: "/affiliations/list", search: { status: "Pending" } })}
         />
         <MetricCard
           title="Expiring Licenses"
           value={aggregateMetrics.expiringSoonLicenses}
           variant="danger"
           icon={AlertTriangle}
-          onClick={() =>
-            navigate({ to: '/license-management/licenses' })
-          }
+          onClick={() => navigate({ to: "/license-management/licenses" })}
         />
         <MetricCard
           title="Pending Applications"
@@ -304,7 +279,10 @@ export default function MainDashboard({}: MainDashboardProps) {
           variant="info"
           icon={FileText}
           onClick={() =>
-            navigate({ to: '/license-management/applications', search: { applicationStatus: 'Pending' } })
+            navigate({
+              to: "/license-management/applications",
+              search: { applicationStatus: "Pending" },
+            })
           }
         />
         <MetricCard
@@ -312,7 +290,7 @@ export default function MainDashboard({}: MainDashboardProps) {
           value={aggregateMetrics.overdueInspections}
           variant="danger"
           icon={Clock}
-          onClick={() => navigate({ to: '/inspections/list', search: { status: 'Pending' } })}
+          onClick={() => navigate({ to: "/inspections/list", search: { status: "Pending" } })}
         />
       </div>
 
@@ -323,7 +301,9 @@ export default function MainDashboard({}: MainDashboardProps) {
           value={aggregateMetrics.activeLicenses}
           variant="success"
           icon={ShieldCheck}
-          onClick={() => navigate({ to: '/license-management/licenses', search: { status: 'Active' } })}
+          onClick={() =>
+            navigate({ to: "/license-management/licenses", search: { status: "Active" } })
+          }
         />
         <MetricCard
           title="Suspended Licenses"
@@ -369,7 +349,9 @@ export default function MainDashboard({}: MainDashboardProps) {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Active</span>
-                <span className="font-medium text-green-600 dark:text-green-400">{aggregateMetrics.activeAffiliations}</span>
+                <span className="font-medium text-green-600 dark:text-green-400">
+                  {aggregateMetrics.activeAffiliations}
+                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Total Professionals</span>
@@ -377,7 +359,7 @@ export default function MainDashboard({}: MainDashboardProps) {
               </div>
             </div>
             <button
-              onClick={() => navigate({ to: '/affiliations' })}
+              onClick={() => navigate({ to: "/affiliations" })}
               className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
             >
               View Dashboard
@@ -408,7 +390,9 @@ export default function MainDashboard({}: MainDashboardProps) {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Active Licenses</span>
-                <span className="font-medium text-green-600 dark:text-green-400">{aggregateMetrics.activeLicenses}</span>
+                <span className="font-medium text-green-600 dark:text-green-400">
+                  {aggregateMetrics.activeLicenses}
+                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Pending Applications</span>
@@ -418,7 +402,7 @@ export default function MainDashboard({}: MainDashboardProps) {
               </div>
             </div>
             <button
-              onClick={() => navigate({ to: '/license-management' })}
+              onClick={() => navigate({ to: "/license-management" })}
               className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
             >
               View Dashboard
@@ -461,7 +445,7 @@ export default function MainDashboard({}: MainDashboardProps) {
               </div>
             </div>
             <button
-              onClick={() => navigate({ to: '/inspections' })}
+              onClick={() => navigate({ to: "/inspections" })}
               className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
             >
               View Dashboard

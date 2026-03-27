@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
 import {
   AlertDialog,
   AlertDialogContent,
@@ -11,26 +11,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import {
-  FileText,
-  Download,
-  Trash2,
-  Loader2,
-  Calendar,
-  Eye,
-  ChevronLeft,
-} from 'lucide-react'
+} from "@/components/ui/alert-dialog"
+import { FileText, Download, Trash2, Loader2, Calendar, Eye, ChevronLeft } from "lucide-react"
 import {
   createActivityReport,
   listActivityReports,
   viewActivityReportDetails,
   downloadActivityReport,
   deleteActivityReport,
-} from '@/api/userManagementApi'
-import { showSuccess, showError } from '@/utils/toast'
-import { useUserStore } from '@/stores/userStore'
-import type { UserActivityReport, ActivityReportDetail, PaginationInfo } from '@/types/user'
+} from "@/api/userManagementApi"
+import { showSuccess, showError } from "@/utils/toast"
+import { useUserStore } from "@/stores/userStore"
+import type { UserActivityReport, ActivityReportDetail, PaginationInfo } from "@/types/user"
 
 export default function ActivityReportSection() {
   const {
@@ -41,9 +33,9 @@ export default function ActivityReportSection() {
     setLoadingReports,
   } = useUserStore()
 
-  const [fromDate, setFromDate] = useState('')
-  const [toDate, setToDate] = useState('')
-  const [targetUser, setTargetUser] = useState('')
+  const [fromDate, setFromDate] = useState("")
+  const [toDate, setToDate] = useState("")
+  const [targetUser, setTargetUser] = useState("")
   const [generating, setGenerating] = useState(false)
 
   // Detail view state
@@ -61,7 +53,7 @@ export default function ActivityReportSection() {
       const result = await listActivityReports({ page, page_size: 10 })
       setActivityReports(result.reports, result.pagination)
     } catch {
-      showError('Failed to load activity reports')
+      showError("Failed to load activity reports")
       setLoadingReports(false)
     }
   }
@@ -72,7 +64,7 @@ export default function ActivityReportSection() {
 
   const handleGenerate = async () => {
     if (!fromDate || !toDate) {
-      showError('Please select both start and end dates')
+      showError("Please select both start and end dates")
       return
     }
 
@@ -83,10 +75,10 @@ export default function ActivityReportSection() {
         to_date: toDate,
         target_user: targetUser.trim() || undefined,
       })
-      showSuccess('Activity report generated successfully')
+      showSuccess("Activity report generated successfully")
       loadReports()
     } catch (err: any) {
-      showError(err?.message || 'Failed to generate report')
+      showError(err?.message || "Failed to generate report")
     } finally {
       setGenerating(false)
     }
@@ -99,7 +91,7 @@ export default function ActivityReportSection() {
       setDetailView(result.report)
       setDetailPagination(result.pagination)
     } catch {
-      showError('Failed to load report details')
+      showError("Failed to load report details")
     } finally {
       setLoadingDetail(false)
     }
@@ -108,9 +100,9 @@ export default function ActivityReportSection() {
   const handleDownload = async (report: UserActivityReport) => {
     try {
       await downloadActivityReport(report.name)
-      showSuccess('Report downloaded')
+      showSuccess("Report downloaded")
     } catch {
-      showError('Failed to download report')
+      showError("Failed to download report")
     }
   }
 
@@ -119,11 +111,11 @@ export default function ActivityReportSection() {
     setDeleting(true)
     try {
       await deleteActivityReport(deleteTarget.name)
-      showSuccess('Report deleted')
+      showSuccess("Report deleted")
       setDeleteTarget(null)
       loadReports()
     } catch {
-      showError('Failed to delete report')
+      showError("Failed to delete report")
     } finally {
       setDeleting(false)
     }
@@ -149,7 +141,8 @@ export default function ActivityReportSection() {
           <Card key={userGroup.user_id}>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">
-                {userGroup.user_name} <span className="text-muted-foreground font-normal">({userGroup.user_id})</span>
+                {userGroup.user_name}{" "}
+                <span className="text-muted-foreground font-normal">({userGroup.user_id})</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -157,10 +150,18 @@ export default function ActivityReportSection() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border">
-                      <th className="text-left py-2 pr-4 font-medium text-muted-foreground">Date</th>
-                      <th className="text-left py-2 pr-4 font-medium text-muted-foreground">Time</th>
-                      <th className="text-left py-2 pr-4 font-medium text-muted-foreground">Action</th>
-                      <th className="text-left py-2 font-medium text-muted-foreground">IP Address</th>
+                      <th className="text-left py-2 pr-4 font-medium text-muted-foreground">
+                        Date
+                      </th>
+                      <th className="text-left py-2 pr-4 font-medium text-muted-foreground">
+                        Time
+                      </th>
+                      <th className="text-left py-2 pr-4 font-medium text-muted-foreground">
+                        Action
+                      </th>
+                      <th className="text-left py-2 font-medium text-muted-foreground">
+                        IP Address
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -169,7 +170,7 @@ export default function ActivityReportSection() {
                         <td className="py-2 pr-4">{log.event_date}</td>
                         <td className="py-2 pr-4">{log.event_time}</td>
                         <td className="py-2 pr-4">{log.action}</td>
-                        <td className="py-2 font-mono text-xs">{log.ip_address || '—'}</td>
+                        <td className="py-2 font-mono text-xs">{log.ip_address || "—"}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -195,7 +196,9 @@ export default function ActivityReportSection() {
         <CardContent>
           <div className="flex flex-wrap items-end gap-4">
             <div className="space-y-1.5">
-              <Label htmlFor="fromDate" className="text-xs">From Date</Label>
+              <Label htmlFor="fromDate" className="text-xs">
+                From Date
+              </Label>
               <Input
                 id="fromDate"
                 type="date"
@@ -205,7 +208,9 @@ export default function ActivityReportSection() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="toDate" className="text-xs">To Date</Label>
+              <Label htmlFor="toDate" className="text-xs">
+                To Date
+              </Label>
               <Input
                 id="toDate"
                 type="date"
@@ -215,7 +220,9 @@ export default function ActivityReportSection() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="targetUser" className="text-xs">User (optional)</Label>
+              <Label htmlFor="targetUser" className="text-xs">
+                User (optional)
+              </Label>
               <Input
                 id="targetUser"
                 value={targetUser}
@@ -277,11 +284,11 @@ export default function ActivityReportSection() {
                           {report.from_date} → {report.to_date}
                         </span>
                         <Badge
-                          variant={report.status === 'Completed' ? 'outline' : 'secondary'}
+                          variant={report.status === "Completed" ? "outline" : "secondary"}
                           className={
-                            report.status === 'Completed'
-                              ? 'text-green-700 dark:text-green-400 border-green-500'
-                              : ''
+                            report.status === "Completed"
+                              ? "text-green-700 dark:text-green-400 border-green-500"
+                              : ""
                           }
                         >
                           {report.status}
@@ -306,7 +313,7 @@ export default function ActivityReportSection() {
                         size="icon"
                         className="h-8 w-8"
                         onClick={() => handleDownload(report)}
-                        disabled={report.status !== 'Completed'}
+                        disabled={report.status !== "Completed"}
                       >
                         <Download className="h-4 w-4" />
                       </Button>
@@ -324,30 +331,33 @@ export default function ActivityReportSection() {
               </Card>
             ))}
 
-            {activityReportsPagination && activityReportsPagination.count > activityReportsPagination.page_size && (
-              <div className="flex justify-center gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={activityReportsPagination.current_page <= 1}
-                  onClick={() => loadReports(activityReportsPagination.current_page - 1)}
-                >
-                  Previous
-                </Button>
-                <span className="text-sm text-muted-foreground self-center">
-                  Page {activityReportsPagination.current_page} of{' '}
-                  {Math.ceil(activityReportsPagination.count / activityReportsPagination.page_size)}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={activityReportsPagination.end >= activityReportsPagination.count}
-                  onClick={() => loadReports(activityReportsPagination.current_page + 1)}
-                >
-                  Next
-                </Button>
-              </div>
-            )}
+            {activityReportsPagination &&
+              activityReportsPagination.count > activityReportsPagination.page_size && (
+                <div className="flex justify-center gap-2 pt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={activityReportsPagination.current_page <= 1}
+                    onClick={() => loadReports(activityReportsPagination.current_page - 1)}
+                  >
+                    Previous
+                  </Button>
+                  <span className="text-sm text-muted-foreground self-center">
+                    Page {activityReportsPagination.current_page} of{" "}
+                    {Math.ceil(
+                      activityReportsPagination.count / activityReportsPagination.page_size
+                    )}
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={activityReportsPagination.end >= activityReportsPagination.count}
+                    onClick={() => loadReports(activityReportsPagination.current_page + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
+              )}
           </div>
         )}
       </div>
@@ -358,7 +368,8 @@ export default function ActivityReportSection() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Activity Report</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete &quot;{deleteTarget?.report_name}&quot;? This action cannot be undone.
+              Are you sure you want to delete &quot;{deleteTarget?.report_name}&quot;? This action
+              cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -372,7 +383,7 @@ export default function ActivityReportSection() {
                   Deleting...
                 </>
               ) : (
-                'Delete'
+                "Delete"
               )}
             </Button>
           </AlertDialogFooter>

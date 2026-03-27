@@ -20,7 +20,8 @@ bench install-app careverse_regulator
 
 ### Contributing
 
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
+This app uses `pre-commit` for code formatting and linting. Please
+[install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
 
 ```bash
 cd apps/careverse_regulator
@@ -33,13 +34,14 @@ Pre-commit is configured to use the following tools for checking and formatting 
 - eslint
 - prettier
 - pyupgrade
+
 ### CI
 
 This app can use GitHub Actions for CI. The following workflows are configured:
 
 - CI: Installs this app and runs unit tests on every push to `develop` branch.
-- Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
-
+- Linters: Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and
+  [pip-audit](https://pypi.org/project/pip-audit/) on every pull request.
 
 ### License
 

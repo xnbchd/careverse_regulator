@@ -1,4 +1,4 @@
-import { toast } from 'sonner'
+import { toast } from "sonner"
 
 export function showSuccess(content: string): void {
   toast.success(content, {
@@ -28,8 +28,8 @@ export function extractErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message
   }
-  if (typeof error === 'string') {
+  if (typeof error === "string") {
     return error
   }
-  return 'An unexpected error occurred'
+  return "An unexpected error occurred"
 }

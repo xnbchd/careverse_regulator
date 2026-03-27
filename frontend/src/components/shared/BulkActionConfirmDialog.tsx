@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -7,11 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { AlertTriangle, CheckCircle, XCircle, Loader2 } from 'lucide-react'
-import { Progress } from '@/components/ui/progress'
+} from "@/components/ui/dialog"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { AlertTriangle, CheckCircle, XCircle, Loader2 } from "lucide-react"
+import { Progress } from "@/components/ui/progress"
 
 interface BulkActionConfirmDialogProps {
   isOpen: boolean
@@ -21,8 +21,8 @@ interface BulkActionConfirmDialogProps {
   selectedCount: number
   actionLabel: string
   requiresReason?: boolean
-  onConfirm: (reason?: string) => Promise<{ succeeded: string[], failed: string[] }>
-  variant?: 'default' | 'destructive'
+  onConfirm: (reason?: string) => Promise<{ succeeded: string[]; failed: string[] }>
+  variant?: "default" | "destructive"
 }
 
 export default function BulkActionConfirmDialog({
@@ -34,11 +34,11 @@ export default function BulkActionConfirmDialog({
   actionLabel,
   requiresReason = false,
   onConfirm,
-  variant = 'default',
+  variant = "default",
 }: BulkActionConfirmDialogProps) {
-  const [reason, setReason] = useState('')
+  const [reason, setReason] = useState("")
   const [processing, setProcessing] = useState(false)
-  const [result, setResult] = useState<{ succeeded: string[], failed: string[] } | null>(null)
+  const [result, setResult] = useState<{ succeeded: string[]; failed: string[] } | null>(null)
 
   const handleConfirm = async () => {
     if (requiresReason && !reason.trim()) {
@@ -50,7 +50,7 @@ export default function BulkActionConfirmDialog({
       const res = await onConfirm(reason || undefined)
       setResult(res)
     } catch (error) {
-      console.error('Bulk action failed:', error)
+      console.error("Bulk action failed:", error)
       setResult({ succeeded: [], failed: [] })
     } finally {
       setProcessing(false)
@@ -58,7 +58,7 @@ export default function BulkActionConfirmDialog({
   }
 
   const handleClose = () => {
-    setReason('')
+    setReason("")
     setResult(null)
     onClose()
   }
@@ -73,18 +73,20 @@ export default function BulkActionConfirmDialog({
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <AlertTriangle className={`w-5 h-5 ${variant === 'destructive' ? 'text-destructive' : 'text-amber-500'}`} />
+                <AlertTriangle
+                  className={`w-5 h-5 ${
+                    variant === "destructive" ? "text-destructive" : "text-amber-500"
+                  }`}
+                />
                 {title}
               </DialogTitle>
-              <DialogDescription>
-                {description}
-              </DialogDescription>
+              <DialogDescription>{description}</DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4 py-4">
               <div className="bg-muted p-3 rounded-lg">
                 <p className="text-sm font-medium">
-                  {selectedCount} {selectedCount === 1 ? 'item' : 'items'} will be affected
+                  {selectedCount} {selectedCount === 1 ? "item" : "items"} will be affected
                 </p>
               </div>
 
@@ -99,9 +101,7 @@ export default function BulkActionConfirmDialog({
                     className="min-h-[100px]"
                     maxLength={500}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    {reason.length}/500 characters
-                  </p>
+                  <p className="text-xs text-muted-foreground">{reason.length}/500 characters</p>
                 </div>
               )}
 
@@ -177,7 +177,9 @@ export default function BulkActionConfirmDialog({
                   <p className="text-sm font-medium mb-2">Failed Items:</p>
                   <ul className="text-xs space-y-1 max-h-32 overflow-y-auto">
                     {result.failed.map((id, index) => (
-                      <li key={index} className="text-muted-foreground">• {id}</li>
+                      <li key={index} className="text-muted-foreground">
+                        • {id}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -185,9 +187,7 @@ export default function BulkActionConfirmDialog({
             </div>
 
             <DialogFooter>
-              <Button onClick={handleClose}>
-                Close
-              </Button>
+              <Button onClick={handleClose}>Close</Button>
             </DialogFooter>
           </>
         )}

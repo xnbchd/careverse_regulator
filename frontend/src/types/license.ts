@@ -16,24 +16,24 @@ export interface License {
 }
 
 export type LicenseStatus =
-  | 'Active'
-  | 'Expired'
-  | 'Suspended'
-  | 'Denied'
-  | 'Pending'
-  | 'In Review'
-  | 'Renewal Reviewed'
-  | 'Approved'
-  | 'Info Requested'
+  | "Active"
+  | "Expired"
+  | "Suspended"
+  | "Denied"
+  | "Pending"
+  | "In Review"
+  | "Renewal Reviewed"
+  | "Approved"
+  | "Info Requested"
 
 export type LicenseAction =
-  | 'APPROVE'
-  | 'DENY'
-  | 'SUSPEND'
-  | 'SET_EXPIRED'
-  | 'REVIEW'
-  | 'RENEWAL_REVIEW'
-  | 'REQUEST_INFO'
+  | "APPROVE"
+  | "DENY"
+  | "SUSPEND"
+  | "SET_EXPIRED"
+  | "REVIEW"
+  | "RENEWAL_REVIEW"
+  | "REQUEST_INFO"
 
 export interface BackendLicense {
   license_number: string
@@ -98,8 +98,8 @@ export interface LicenseApplication {
   openWeekends?: boolean
   openPublicHoliday?: boolean
   licenseTypeName: string
-  applicationStatus: 'Pending' | 'Issued' | 'Info Requested' | 'Denied'
-  applicationType: 'New' | 'Renewal'
+  applicationStatus: "Pending" | "Issued" | "Info Requested" | "Denied"
+  applicationType: "New" | "Renewal"
   applicationDate: string
   regulatoryBody: string
   licenseFee: number
@@ -111,9 +111,9 @@ export interface BackendLicenseApplication {
   license_application_id: string
   health_facility: string
   license_type_name: string
-  application_status: 'Pending' | 'Issued' | 'Info Requested' | 'Denied'
+  application_status: "Pending" | "Issued" | "Info Requested" | "Denied"
   application_date: string
-  application_type: 'New' | 'Renewal'
+  application_type: "New" | "Renewal"
   regulatory_body: string
   license_fee: number
   remarks?: string
@@ -177,8 +177,8 @@ export interface ProfessionalLicenseApplication {
   email?: string
   phone?: string
   licenseTypeName: string
-  applicationStatus: 'Pending' | 'Issued' | 'Info Requested' | 'Denied'
-  applicationType: 'New' | 'Renewal'
+  applicationStatus: "Pending" | "Issued" | "Info Requested" | "Denied"
+  applicationType: "New" | "Renewal"
   applicationDate: string
   regulatoryBody?: string
   licenseFee: number

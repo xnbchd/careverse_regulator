@@ -1,44 +1,36 @@
-import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Building2, UserRound, ArrowRight } from "lucide-react";
-import { useRegistryStore } from "@/stores/registryStore";
-import { MetricCard } from "@/components/dashboard";
+import { useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Building2, UserRound, ArrowRight } from "lucide-react"
+import { useRegistryStore } from "@/stores/registryStore"
+import { MetricCard } from "@/components/dashboard"
 
 export function AffiliationsDashboard() {
-  const [viewMode, setViewMode] = useState<"facilities" | "professionals">(
-    "facilities",
-  );
-  const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState<"facilities" | "professionals">("facilities")
+  const navigate = useNavigate()
 
-  const {
-    facilitiesPagination,
-    facilitiesLoading,
-    professionalsPagination,
-    professionalsLoading,
-  } = useRegistryStore();
+  const { facilitiesPagination, facilitiesLoading, professionalsPagination, professionalsLoading } =
+    useRegistryStore()
 
   // Calculate active counts from the data
   // Note: This is a simplified approach - ideally backend should provide these metrics
-  const facilitiesTotal = facilitiesPagination?.count || 0;
-  const professionalsTotal = professionalsPagination?.count || 0;
+  const facilitiesTotal = facilitiesPagination?.count || 0
+  const professionalsTotal = professionalsPagination?.count || 0
 
   const handleViewAllFacilities = () => {
-    navigate({ to: "/affiliations/facilities" });
-  };
+    navigate({ to: "/affiliations/facilities" })
+  }
 
   const handleViewAllProfessionals = () => {
-    navigate({ to: "/affiliations/professionals" });
-  };
+    navigate({ to: "/affiliations/professionals" })
+  }
 
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-foreground">
-          Affiliations Dashboard
-        </h1>
+        <h1 className="text-2xl font-semibold text-foreground">Affiliations Dashboard</h1>
         <p className="text-muted-foreground mt-1">
           Overview of health facility and professional registries
         </p>
@@ -143,5 +135,5 @@ export function AffiliationsDashboard() {
         </div>
       )}
     </div>
-  );
+  )
 }

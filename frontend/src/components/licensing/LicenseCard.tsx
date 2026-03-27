@@ -1,9 +1,9 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import type { License } from '@/types/license'
-import StatusBadge from './StatusBadge'
-import { EntityLink } from '@/components/entities'
-import { Building2, Calendar, CreditCard, FileText, User } from 'lucide-react'
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import type { License } from "@/types/license"
+import StatusBadge from "./StatusBadge"
+import { EntityLink } from "@/components/entities"
+import { Building2, Calendar, CreditCard, FileText, User } from "lucide-react"
 
 interface LicenseCardProps {
   license: License
@@ -48,7 +48,7 @@ export default function LicenseCard({ license, onClick }: LicenseCardProps) {
           <div className="flex items-center gap-2">
             <CreditCard className="w-4 h-4 shrink-0 text-muted-foreground" />
             <Badge
-              variant={license.paymentStatus === 'Paid' ? 'default' : 'secondary'}
+              variant={license.paymentStatus === "Paid" ? "default" : "secondary"}
               className="capitalize text-xs"
             >
               {license.paymentStatus}

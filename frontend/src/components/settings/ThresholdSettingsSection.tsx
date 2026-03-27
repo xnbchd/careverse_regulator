@@ -1,7 +1,7 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import type { ThresholdSettings } from '@/types/settings'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import type { ThresholdSettings } from "@/types/settings"
 
 interface ThresholdSettingsSectionProps {
   settings: ThresholdSettings
@@ -28,9 +28,7 @@ export default function ThresholdSettingsSection({
             id="criticalThreshold"
             type="number"
             value={settings.criticalFindingThreshold}
-            onChange={(e) =>
-              onUpdate({ criticalFindingThreshold: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ criticalFindingThreshold: parseInt(e.target.value) })}
             min={1}
             max={10}
           />
@@ -46,9 +44,7 @@ export default function ThresholdSettingsSection({
             id="warningDays"
             type="number"
             value={settings.overdueDaysWarning}
-            onChange={(e) =>
-              onUpdate({ overdueDaysWarning: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ overdueDaysWarning: parseInt(e.target.value) })}
             min={1}
             max={30}
           />
@@ -64,9 +60,7 @@ export default function ThresholdSettingsSection({
             id="criticalDays"
             type="number"
             value={settings.overdueDaysCritical}
-            onChange={(e) =>
-              onUpdate({ overdueDaysCritical: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ overdueDaysCritical: parseInt(e.target.value) })}
             min={1}
             max={60}
           />
@@ -82,9 +76,7 @@ export default function ThresholdSettingsSection({
             id="minStaff"
             type="number"
             value={settings.minStaffRequirement}
-            onChange={(e) =>
-              onUpdate({ minStaffRequirement: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ minStaffRequirement: parseInt(e.target.value) })}
             min={1}
             max={50}
           />
@@ -100,9 +92,7 @@ export default function ThresholdSettingsSection({
             id="capacityThreshold"
             type="number"
             value={settings.facilityCapacityThreshold}
-            onChange={(e) =>
-              onUpdate({ facilityCapacityThreshold: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ facilityCapacityThreshold: parseInt(e.target.value) })}
             min={0}
             max={100}
           />

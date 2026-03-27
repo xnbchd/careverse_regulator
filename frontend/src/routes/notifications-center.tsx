@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { lazy } from 'react'
-import AppLayout from '@/components/AppLayout'
-import { useAuthStore } from '@/stores/authStore'
+import { createFileRoute } from "@tanstack/react-router"
+import { lazy } from "react"
+import AppLayout from "@/components/AppLayout"
+import { useAuthStore } from "@/stores/authStore"
 
-const NotificationsView = lazy(() => import('@/components/notifications/NotificationsView'))
+const NotificationsView = lazy(() => import("@/components/notifications/NotificationsView"))
 
 function NotificationsCenterComponent() {
   const navigate = Route.useNavigate()
@@ -14,11 +14,11 @@ function NotificationsCenterComponent() {
   }
 
   const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
+    window.location.href = "/logout?redirect-to=/"
   }
 
   const handleSwitchToDesk = () => {
-    window.location.href = '/app'
+    window.location.href = "/app"
   }
 
   return (
@@ -27,7 +27,7 @@ function NotificationsCenterComponent() {
       pageTitle="Notifications Center"
       pageSubtitle="Track reminders, alerts, and follow-up actions."
       onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onOpenNotifications={() => handleNavigate("notifications-center")}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
@@ -39,6 +39,6 @@ function NotificationsCenterComponent() {
   )
 }
 
-export const Route = createFileRoute('/notifications-center')({
+export const Route = createFileRoute("/notifications-center")({
   component: NotificationsCenterComponent,
 })

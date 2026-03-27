@@ -1,5 +1,5 @@
-import { apiClient } from '@/api/client'
-import { getCsrfToken } from '@/utils/boot'
+import { apiClient } from "@/api/client"
+import { getCsrfToken } from "@/utils/boot"
 import type {
   FrappeUser,
   CreateUserPayload,
@@ -9,11 +9,11 @@ import type {
   UserActivityReport,
   ActivityReportDetail,
   ActivityLogEntry,
-} from '@/types/user'
+} from "@/types/user"
 
-const USER_API = '/api/method/compliance_360.api.user_management.user'
-const PASSWORD_API = '/api/method/compliance_360.api.user_management.password_reset'
-const ACTIVITY_API = '/api/method/compliance_360.api.metrics.user_activity'
+const USER_API = "/api/method/compliance_360.api.user_management.user"
+const PASSWORD_API = "/api/method/compliance_360.api.user_management.password_reset"
+const ACTIVITY_API = "/api/method/compliance_360.api.metrics.user_activity"
 
 // ---------------------------------------------------------------------------
 // Response envelope helpers
@@ -47,7 +47,7 @@ function extractData<T>(response: ApiEnvelope<T>): T {
     return response.data
   }
   // Fallback to nested message path
-  if (response.message && typeof response.message === 'object' && 'data' in response.message) {
+  if (response.message && typeof response.message === "object" && "data" in response.message) {
     return response.message.data as T
   }
   return [] as unknown as T
@@ -59,7 +59,7 @@ function extractPagination<T>(response: ApiEnvelope<T>): PaginationInfo | null {
     return response.pagination
   }
   // Fallback to nested message path
-  if (response.message && typeof response.message === 'object' && response.message.pagination) {
+  if (response.message && typeof response.message === "object" && response.message.pagination) {
     return response.message.pagination
   }
   return null
@@ -76,7 +76,7 @@ export interface FetchUsersParams {
   enabled?: 0 | 1
   include_roles?: 0 | 1
   sort_field?: string
-  sort_order?: 'asc' | 'desc'
+  sort_order?: "asc" | "desc"
 }
 
 export interface FetchUsersResult {
@@ -85,21 +85,18 @@ export interface FetchUsersResult {
 }
 
 export async function fetchUsers(params: FetchUsersParams = {}): Promise<FetchUsersResult> {
-  const response = await apiClient.get<ApiEnvelope<FrappeUser[]>>(
-    `${USER_API}.list_users`,
-    {
-      params: {
-        page: params.page ?? 1,
-        page_size: params.page_size ?? 20,
-        search: params.search || undefined,
-        enabled: params.enabled,
-        include_roles: params.include_roles ?? 1,
-        sort_field: params.sort_field ?? 'creation',
-        sort_order: params.sort_order ?? 'desc',
-      },
-      cache: false,
+  const response = await apiClient.get<ApiEnvelope<FrappeUser[]>>(`${USER_API}.list_users`, {
+    params: {
+      page: params.page ?? 1,
+      page_size: params.page_size ?? 20,
+      search: params.search || undefined,
+      enabled: params.enabled,
+      include_roles: params.include_roles ?? 1,
+      sort_field: params.sort_field ?? "creation",
+      sort_order: params.sort_order ?? "desc",
     },
-  )
+    cache: false,
+  })
 
   return {
     users: extractData(response) || [],
@@ -108,13 +105,10 @@ export async function fetchUsers(params: FetchUsersParams = {}): Promise<FetchUs
 }
 
 export async function createUser(payload: CreateUserPayload): Promise<FrappeUser> {
-  const response = await apiClient.post<ApiEnvelope<FrappeUser>>(
-    `${USER_API}.create_user`,
-    {
-      ...payload,
-      roles: JSON.stringify(payload.roles),
-    },
-  )
+  const response = await apiClient.post<ApiEnvelope<FrappeUser>>(`${USER_API}.create_user`, {
+    ...payload,
+    roles: JSON.stringify(payload.roles),
+  })
   return extractData(response)
 }
 
@@ -124,18 +118,16 @@ export async function updateUser(payload: UpdateUserPayload): Promise<FrappeUser
     body.roles = JSON.stringify(payload.roles)
   }
 
-  const response = await apiClient.post<ApiEnvelope<FrappeUser>>(
-    `${USER_API}.update_user`,
-    body,
-  )
+  const response = await apiClient.post<ApiEnvelope<FrappeUser>>(`${USER_API}.update_user`, body)
   return extractData(response)
 }
 
-export async function deleteUser(userId: string): Promise<{ user_id: string; action: string; message: string }> {
-  const response = await apiClient.post<ApiEnvelope<{ user_id: string; action: string; message: string }>>(
-    `${USER_API}.delete_user`,
-    { user_id: userId, force: 0 },
-  )
+export async function deleteUser(
+  userId: string
+): Promise<{ user_id: string; action: string; message: string }> {
+  const response = await apiClient.post<
+    ApiEnvelope<{ user_id: string; action: string; message: string }>
+  >(`${USER_API}.delete_user`, { user_id: userId, force: 0 })
   return extractData(response)
 }
 
@@ -145,14 +137,14 @@ export async function deleteUser(userId: string): Promise<{ user_id: string; act
 
 export async function bulkCreateUsers(file: File, dryRun = false): Promise<BulkCreateResult> {
   const formData = new FormData()
-  formData.append('file', file)
+  formData.append("file", file)
   if (dryRun) {
-    formData.append('dry_run', '1')
+    formData.append("dry_run", "1")
   }
 
   const response = await apiClient.post<ApiEnvelope<BulkCreateResult>>(
     `${USER_API}.bulk_create_users`,
-    formData,
+    formData
   )
   return extractData(response)
 }
@@ -161,11 +153,12 @@ export async function bulkCreateUsers(file: File, dryRun = false): Promise<BulkC
 // Password reset
 // ---------------------------------------------------------------------------
 
-export async function triggerPasswordReset(userId: string): Promise<{ user_id: string; reset_link_sent: boolean; message: string }> {
-  const response = await apiClient.post<ApiEnvelope<{ user_id: string; reset_link_sent: boolean; message: string }>>(
-    `${PASSWORD_API}.trigger_password_reset`,
-    { user_id: userId },
-  )
+export async function triggerPasswordReset(
+  userId: string
+): Promise<{ user_id: string; reset_link_sent: boolean; message: string }> {
+  const response = await apiClient.post<
+    ApiEnvelope<{ user_id: string; reset_link_sent: boolean; message: string }>
+  >(`${PASSWORD_API}.trigger_password_reset`, { user_id: userId })
   return extractData(response)
 }
 
@@ -179,10 +172,12 @@ export interface CreateActivityReportParams {
   target_user?: string
 }
 
-export async function createActivityReport(params: CreateActivityReportParams): Promise<UserActivityReport> {
+export async function createActivityReport(
+  params: CreateActivityReportParams
+): Promise<UserActivityReport> {
   const response = await apiClient.post<ApiEnvelope<UserActivityReport>>(
     `${ACTIVITY_API}.create_user_activity_report`,
-    params,
+    params
   )
   return extractData(response)
 }
@@ -192,7 +187,7 @@ export interface ListActivityReportsParams {
   page_size?: number
   status?: string
   target_user?: string
-  sort_order?: 'asc' | 'desc'
+  sort_order?: "asc" | "desc"
 }
 
 export interface ListActivityReportsResult {
@@ -200,7 +195,9 @@ export interface ListActivityReportsResult {
   pagination: PaginationInfo | null
 }
 
-export async function listActivityReports(params: ListActivityReportsParams = {}): Promise<ListActivityReportsResult> {
+export async function listActivityReports(
+  params: ListActivityReportsParams = {}
+): Promise<ListActivityReportsResult> {
   const response = await apiClient.get<ApiEnvelope<UserActivityReport[]>>(
     `${ACTIVITY_API}.list_activity_reports`,
     {
@@ -209,10 +206,10 @@ export async function listActivityReports(params: ListActivityReportsParams = {}
         page_size: params.page_size ?? 10,
         status: params.status || undefined,
         target_user: params.target_user || undefined,
-        sort_order: params.sort_order ?? 'desc',
+        sort_order: params.sort_order ?? "desc",
       },
       cache: false,
-    },
+    }
   )
 
   return {
@@ -224,14 +221,14 @@ export async function listActivityReports(params: ListActivityReportsParams = {}
 export async function viewActivityReportDetails(
   reportId: string,
   page = 1,
-  pageSize = 20,
+  pageSize = 20
 ): Promise<{ report: ActivityReportDetail; pagination: PaginationInfo | null }> {
   const response = await apiClient.get<ApiEnvelope<ActivityReportDetail>>(
     `${ACTIVITY_API}.view_activity_report_details`,
     {
       params: { report_id: reportId, page, page_size: pageSize },
       cache: false,
-    },
+    }
   )
 
   return {
@@ -242,20 +239,22 @@ export async function viewActivityReportDetails(
 
 export async function downloadActivityReport(reportId: string): Promise<void> {
   const csrfToken = getCsrfToken()
-  const url = `${ACTIVITY_API}.download_user_activity_report?report_id=${encodeURIComponent(reportId)}`
+  const url = `${ACTIVITY_API}.download_user_activity_report?report_id=${encodeURIComponent(
+    reportId
+  )}`
 
   const response = await fetch(url, {
-    credentials: 'include',
-    headers: csrfToken ? { 'X-Frappe-CSRF-Token': csrfToken } : {},
+    credentials: "include",
+    headers: csrfToken ? { "X-Frappe-CSRF-Token": csrfToken } : {},
   })
 
   if (!response.ok) {
-    throw new Error('Failed to download report')
+    throw new Error("Failed to download report")
   }
 
   const blob = await response.blob()
   const downloadUrl = URL.createObjectURL(blob)
-  const a = document.createElement('a')
+  const a = document.createElement("a")
   a.href = downloadUrl
   a.download = `user_activity_report_${reportId}.csv`
   document.body.appendChild(a)
@@ -265,8 +264,5 @@ export async function downloadActivityReport(reportId: string): Promise<void> {
 }
 
 export async function deleteActivityReport(reportId: string): Promise<void> {
-  await apiClient.post(
-    `${ACTIVITY_API}.delete_user_activity_report`,
-    { report_id: reportId },
-  )
+  await apiClient.post(`${ACTIVITY_API}.delete_user_activity_report`, { report_id: reportId })
 }

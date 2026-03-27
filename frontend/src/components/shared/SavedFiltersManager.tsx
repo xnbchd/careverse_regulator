@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -7,19 +7,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
-import { BookmarkPlus, Bookmark, Trash2, Save } from 'lucide-react'
-import { toast } from 'sonner'
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { BookmarkPlus, Bookmark, Trash2, Save } from "lucide-react"
+import { toast } from "sonner"
 
 export interface SavedFilter<T = any> {
   id: string
@@ -43,7 +43,7 @@ export default function SavedFiltersManager<T>({
 }: SavedFiltersManagerProps<T>) {
   const [savedFilters, setSavedFilters] = useState<SavedFilter<T>[]>([])
   const [showSaveDialog, setShowSaveDialog] = useState(false)
-  const [filterName, setFilterName] = useState('')
+  const [filterName, setFilterName] = useState("")
 
   // Load saved filters from localStorage
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function SavedFiltersManager<T>({
         setSavedFilters(JSON.parse(stored))
       }
     } catch (error) {
-      console.error('Failed to load saved filters:', error)
+      console.error("Failed to load saved filters:", error)
     }
   }, [storageKey])
 
@@ -63,14 +63,14 @@ export default function SavedFiltersManager<T>({
       localStorage.setItem(storageKey, JSON.stringify(filters))
       setSavedFilters(filters)
     } catch (error) {
-      console.error('Failed to save filters:', error)
-      toast.error('Could not save filter preset. Please try again.')
+      console.error("Failed to save filters:", error)
+      toast.error("Could not save filter preset. Please try again.")
     }
   }
 
   const handleSaveFilter = () => {
     if (!filterName.trim()) {
-      toast.error('Please enter a name for this filter preset.')
+      toast.error("Please enter a name for this filter preset.")
       return
     }
 
@@ -86,7 +86,7 @@ export default function SavedFiltersManager<T>({
 
     toast.success(`Filter preset "${filterName}" has been saved.`)
 
-    setFilterName('')
+    setFilterName("")
     setShowSaveDialog(false)
   }
 
@@ -98,7 +98,7 @@ export default function SavedFiltersManager<T>({
   const handleDeleteFilter = (filterId: string) => {
     const updated = savedFilters.filter((f) => f.id !== filterId)
     persistFilters(updated)
-    toast.success('Filter preset has been removed.')
+    toast.success("Filter preset has been removed.")
   }
 
   const hasActiveFilters = () => {
@@ -135,10 +135,7 @@ export default function SavedFiltersManager<T>({
                     e.preventDefault()
                   }}
                 >
-                  <div
-                    className="flex-1 min-w-0"
-                    onClick={() => handleApplyFilter(filter)}
-                  >
+                  <div className="flex-1 min-w-0" onClick={() => handleApplyFilter(filter)}>
                     <div className="font-medium text-sm mb-1">{filter.name}</div>
                     <div className="text-xs text-muted-foreground line-clamp-2">
                       {getFilterSummary(filter.filters)}
@@ -190,20 +187,16 @@ export default function SavedFiltersManager<T>({
                 placeholder="e.g., Pending Inspections Last 30 Days"
                 maxLength={50}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     handleSaveFilter()
                   }
                 }}
               />
-              <p className="text-xs text-muted-foreground">
-                {filterName.length}/50 characters
-              </p>
+              <p className="text-xs text-muted-foreground">{filterName.length}/50 characters</p>
             </div>
             <div className="p-3 bg-muted rounded-lg">
-              <p className="text-xs font-medium text-muted-foreground mb-1">
-                Current Filters:
-              </p>
-              <p className="text-sm">{getFilterSummary(currentFilters) || 'No filters applied'}</p>
+              <p className="text-xs font-medium text-muted-foreground mb-1">Current Filters:</p>
+              <p className="text-sm">{getFilterSummary(currentFilters) || "No filters applied"}</p>
             </div>
           </div>
           <DialogFooter>

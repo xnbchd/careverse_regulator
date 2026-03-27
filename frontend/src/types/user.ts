@@ -1,19 +1,19 @@
 // Portal roles — the 3 actual roles in the regulator portal
-export type PortalRole = 'Regulator Admin' | 'Inspection Manager' | 'Regulator User'
+export type PortalRole = "Regulator Admin" | "Inspection Manager" | "Regulator User"
 
 // Frappe User enabled = 1 → 'active', enabled = 0 → 'disabled'
-export type UserStatus = 'active' | 'disabled'
+export type UserStatus = "active" | "disabled"
 
 // Mirrors the compliance_360 UserSummary Pydantic schema
 export interface FrappeUser {
-  name: string              // email — document primary key
+  name: string // email — document primary key
   email: string
   full_name: string | null
   first_name?: string
   last_name?: string
-  username: string | null   // used for ID Number
+  username: string | null // used for ID Number
   user_type: string | null
-  enabled: number           // 1 or 0
+  enabled: number // 1 or 0
   mobile_no: string | null
   role_profile_name: string | null
   roles: string[]
@@ -25,9 +25,9 @@ export interface CreateUserPayload {
   email: string
   first_name: string
   last_name: string
-  username?: string              // ID Number
+  username?: string // ID Number
   mobile_no: string
-  roles: string[]                // e.g. ['Regulator Admin']
+  roles: string[] // e.g. ['Regulator Admin']
   send_welcome_email: 0 | 1
   user_type?: string
   role_profile_name?: string
@@ -48,7 +48,7 @@ export interface UpdateUserPayload {
 // Bulk upload result types
 export interface BulkUserRecord {
   index: number
-  status: 'created' | 'failed' | 'would_create' | 'would_fail'
+  status: "created" | "failed" | "would_create" | "would_fail"
   email: string
   name?: string
   error?: string
@@ -106,8 +106,8 @@ export interface ActivityReportDetail extends UserActivityReport {
 // Filter types for the users list
 export interface UserFilters {
   search?: string
-  role?: PortalRole | 'all'
-  status?: UserStatus | 'all'
+  role?: PortalRole | "all"
+  status?: UserStatus | "all"
   page: number
   page_size: number
 }

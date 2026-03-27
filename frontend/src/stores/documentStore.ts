@@ -1,11 +1,11 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 import type {
   Document,
   DocumentUploadRequest,
   DocumentUpdateRequest,
   DocumentSearchParams,
   UploadProgress,
-} from '@/types/document'
+} from "@/types/document"
 import {
   uploadDocument,
   listDocuments,
@@ -14,7 +14,7 @@ import {
   getDocumentWithVersions,
   updateDocument,
   deleteDocument,
-} from '@/api/documentApi'
+} from "@/api/documentApi"
 
 interface DocumentState {
   // Documents data
@@ -68,8 +68,8 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
   searchParams: {
     page: 1,
     pageSize: 20,
-    sortBy: 'uploadedAt',
-    sortOrder: 'desc',
+    sortBy: "uploadedAt",
+    sortOrder: "desc",
   },
 
   // Fetch documents with filters and pagination
@@ -94,7 +94,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch documents',
+        error: error instanceof Error ? error.message : "Failed to fetch documents",
         loading: false,
       })
     }
@@ -108,7 +108,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       set({ selectedDocument: document, loading: false })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch document',
+        error: error instanceof Error ? error.message : "Failed to fetch document",
         loading: false,
       })
     }
@@ -127,7 +127,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
         uploads.set(fileId, {
           file: req.file,
           progress: 0,
-          status: 'pending',
+          status: "pending",
         })
       })
       set({ uploads })
@@ -140,7 +140,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
           // Update status to uploading
           uploads.set(fileId, {
             ...uploads.get(fileId)!,
-            status: 'uploading',
+            status: "uploading",
             progress: 50,
           })
           set({ uploads: new Map(uploads) })
@@ -151,7 +151,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
           // Update status to completed
           uploads.set(fileId, {
             ...uploads.get(fileId)!,
-            status: 'completed',
+            status: "completed",
             progress: 100,
             documentId: document.id,
           })
@@ -160,8 +160,8 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
           // Update status to error
           uploads.set(fileId, {
             ...uploads.get(fileId)!,
-            status: 'error',
-            error: error instanceof Error ? error.message : 'Upload failed',
+            status: "error",
+            error: error instanceof Error ? error.message : "Upload failed",
           })
           set({ uploads: new Map(uploads) })
         }
@@ -173,7 +173,7 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       set({ uploading: false })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Upload failed',
+        error: error instanceof Error ? error.message : "Upload failed",
         uploading: false,
       })
     }
@@ -187,16 +187,14 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
 
       // Update in list
       set((state) => ({
-        documents: state.documents.map((doc) =>
-          doc.id === documentId ? updated : doc
-        ),
+        documents: state.documents.map((doc) => (doc.id === documentId ? updated : doc)),
         selectedDocument:
           state.selectedDocument?.id === documentId ? updated : state.selectedDocument,
         loading: false,
       }))
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to update document',
+        error: error instanceof Error ? error.message : "Failed to update document",
         loading: false,
       })
     }
@@ -211,14 +209,13 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
       // Remove from list
       set((state) => ({
         documents: state.documents.filter((doc) => doc.id !== documentId),
-        selectedDocument:
-          state.selectedDocument?.id === documentId ? null : state.selectedDocument,
+        selectedDocument: state.selectedDocument?.id === documentId ? null : state.selectedDocument,
         total: state.total - 1,
         loading: false,
       }))
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to delete document',
+        error: error instanceof Error ? error.message : "Failed to delete document",
         loading: false,
       })
     }

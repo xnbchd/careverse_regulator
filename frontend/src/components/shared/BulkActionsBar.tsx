@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button'
-import { X } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Button } from "@/components/ui/button"
+import { X } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface BulkActionsBarProps {
   selectedCount: number
@@ -8,7 +8,7 @@ interface BulkActionsBarProps {
   actions: {
     label: string
     onClick: () => void
-    variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost'
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost"
     icon?: React.ReactNode
     loading?: boolean
   }[]
@@ -26,23 +26,18 @@ export default function BulkActionsBar({
   return (
     <div
       className={cn(
-        'fixed bottom-6 left-1/2 -translate-x-1/2 z-50',
-        'bg-card border rounded-lg shadow-lg px-4 py-3',
-        'flex items-center gap-4',
-        'animate-in slide-in-from-bottom-4 duration-300',
+        "fixed bottom-6 left-1/2 -translate-x-1/2 z-50",
+        "bg-card border rounded-lg shadow-lg px-4 py-3",
+        "flex items-center gap-4",
+        "animate-in slide-in-from-bottom-4 duration-300",
         className
       )}
     >
       <div className="flex items-center gap-2">
         <span className="text-sm font-medium">
-          {selectedCount} {selectedCount === 1 ? 'item' : 'items'} selected
+          {selectedCount} {selectedCount === 1 ? "item" : "items"} selected
         </span>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onClear}
-          className="h-6 w-6 p-0"
-        >
+        <Button variant="ghost" size="sm" onClick={onClear} className="h-6 w-6 p-0">
           <X className="h-4 w-4" />
         </Button>
       </div>
@@ -53,7 +48,7 @@ export default function BulkActionsBar({
         {actions.map((action, index) => (
           <Button
             key={index}
-            variant={action.variant || 'default'}
+            variant={action.variant || "default"}
             size="sm"
             onClick={action.onClick}
             disabled={action.loading}

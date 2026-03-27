@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import ProfessionalApplicationPage from '@/components/licensing/ProfessionalApplicationPage'
-import { getProfessionalApplication } from '@/api/licensingApi'
-import type { ProfessionalLicenseApplication } from '@/types/license'
+import { createFileRoute } from "@tanstack/react-router"
+import ProfessionalApplicationPage from "@/components/licensing/ProfessionalApplicationPage"
+import { getProfessionalApplication } from "@/api/licensingApi"
+import type { ProfessionalLicenseApplication } from "@/types/license"
 
 function ProfessionalApplicationDetailRoute() {
   const application = Route.useLoaderData()
@@ -13,9 +13,11 @@ function ProfessionalApplicationDetailRoute() {
   )
 }
 
-export const Route = createFileRoute('/license-management/professional-application/$applicationId')({
-  loader: async ({ params }): Promise<ProfessionalLicenseApplication> => {
-    return getProfessionalApplication(params.applicationId)
-  },
-  component: ProfessionalApplicationDetailRoute,
-})
+export const Route = createFileRoute("/license-management/professional-application/$applicationId")(
+  {
+    loader: async ({ params }): Promise<ProfessionalLicenseApplication> => {
+      return getProfessionalApplication(params.applicationId)
+    },
+    component: ProfessionalApplicationDetailRoute,
+  }
+)

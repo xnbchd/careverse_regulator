@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useThemeStore } from '@/stores/themeStore'
+import { useEffect } from "react"
+import { useThemeStore } from "@/stores/themeStore"
 
 /**
  * Theme Bridge Hook
@@ -17,13 +17,13 @@ export function useThemeBridge() {
     const root = document.documentElement
 
     // Set data-theme attribute for CSS variable switching
-    root.setAttribute('data-theme', mode)
+    root.setAttribute("data-theme", mode)
 
     // Toggle dark class for shadcn components
-    if (mode === 'dark') {
-      root.classList.add('dark')
+    if (mode === "dark") {
+      root.classList.add("dark")
     } else {
-      root.classList.remove('dark')
+      root.classList.remove("dark")
     }
   }, [mode])
 }

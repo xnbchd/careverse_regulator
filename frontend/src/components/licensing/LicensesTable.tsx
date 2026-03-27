@@ -5,23 +5,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import type { License } from "@/types/license";
-import StatusBadge from "./StatusBadge";
-import { Badge } from "@/components/ui/badge";
-import { EntityLink } from "@/components/entities";
+} from "@/components/ui/table"
+import { Card } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import type { License } from "@/types/license"
+import StatusBadge from "./StatusBadge"
+import { Badge } from "@/components/ui/badge"
+import { EntityLink } from "@/components/entities"
 
 interface LicensesTableProps {
-  licenses: License[];
-  loading?: boolean;
-  onRowClick: (licenseNumber: string) => void;
-  selectedIds?: Set<string>;
-  onToggleSelection?: (licenseNumber: string) => void;
-  onSelectAll?: () => void;
-  onDeselectAll?: () => void;
-  emptyState?: React.ReactNode;
+  licenses: License[]
+  loading?: boolean
+  onRowClick: (licenseNumber: string) => void
+  selectedIds?: Set<string>
+  onToggleSelection?: (licenseNumber: string) => void
+  onSelectAll?: () => void
+  onDeselectAll?: () => void
+  emptyState?: React.ReactNode
 }
 
 export default function LicensesTable({
@@ -34,26 +34,23 @@ export default function LicensesTable({
   onDeselectAll,
   emptyState,
 }: LicensesTableProps) {
-  const selectionEnabled =
-    selectedIds !== undefined && onToggleSelection !== undefined;
+  const selectionEnabled = selectedIds !== undefined && onToggleSelection !== undefined
   const allSelected =
     selectionEnabled &&
     licenses.length > 0 &&
-    licenses.every((l) => selectedIds.has(l.licenseNumber));
+    licenses.every((l) => selectedIds.has(l.licenseNumber))
   const someSelected =
-    selectionEnabled &&
-    licenses.some((l) => selectedIds.has(l.licenseNumber)) &&
-    !allSelected;
+    selectionEnabled && licenses.some((l) => selectedIds.has(l.licenseNumber)) && !allSelected
 
   const handleSelectAll = () => {
     if (allSelected && onDeselectAll) {
-      onDeselectAll();
+      onDeselectAll()
     } else if (onSelectAll) {
-      onSelectAll();
+      onSelectAll()
     }
-  };
+  }
 
-  const totalColumns = selectionEnabled ? 8 : 7;
+  const totalColumns = selectionEnabled ? 8 : 7
 
   return (
     <Card className="overflow-hidden">
@@ -64,9 +61,7 @@ export default function LicensesTable({
               {selectionEnabled && (
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={
-                      allSelected || (someSelected ? "indeterminate" : false)
-                    }
+                    checked={allSelected || (someSelected ? "indeterminate" : false)}
                     onCheckedChange={handleSelectAll}
                   />
                 </TableHead>
@@ -100,8 +95,7 @@ export default function LicensesTable({
               </TableRow>
             ) : (
               licenses.map((license) => {
-                const isSelected =
-                  selectionEnabled && selectedIds.has(license.licenseNumber);
+                const isSelected = selectionEnabled && selectedIds.has(license.licenseNumber)
                 return (
                   <TableRow
                     key={license.id}
@@ -112,9 +106,7 @@ export default function LicensesTable({
                       <TableCell onClick={(e) => e.stopPropagation()}>
                         <Checkbox
                           checked={isSelected}
-                          onCheckedChange={() =>
-                            onToggleSelection(license.licenseNumber)
-                          }
+                          onCheckedChange={() => onToggleSelection(license.licenseNumber)}
                         />
                       </TableCell>
                     )}
@@ -127,9 +119,7 @@ export default function LicensesTable({
                       </EntityLink>
                     </TableCell>
                     <TableCell className="font-mono text-sm w-[140px]">
-                      <div className="truncate text-left">
-                        {license.registrationNumber}
-                      </div>
+                      <div className="truncate text-left">{license.registrationNumber}</div>
                     </TableCell>
                     <TableCell className="w-[300px]">
                       <EntityLink
@@ -150,11 +140,7 @@ export default function LicensesTable({
                     </TableCell>
                     <TableCell className="w-[100px]">
                       <Badge
-                        variant={
-                          license.paymentStatus === "Paid"
-                            ? "default"
-                            : "secondary"
-                        }
+                        variant={license.paymentStatus === "Paid" ? "default" : "secondary"}
                         className="capitalize"
                       >
                         {license.paymentStatus}
@@ -164,12 +150,12 @@ export default function LicensesTable({
                       <StatusBadge status={license.status} />
                     </TableCell>
                   </TableRow>
-                );
+                )
               })
             )}
           </TableBody>
         </Table>
       </div>
     </Card>
-  );
+  )
 }

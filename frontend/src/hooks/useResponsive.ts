@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react"
 
 interface ResponsiveState {
   isMobile: boolean
@@ -15,7 +15,7 @@ export function useResponsive(): ResponsiveState {
     isMobile: false,
     isTablet: false,
     isDesktop: true,
-    width: typeof window !== 'undefined' ? window.innerWidth : 1440,
+    width: typeof window !== "undefined" ? window.innerWidth : 1440,
   })
 
   useEffect(() => {
@@ -29,10 +29,10 @@ export function useResponsive(): ResponsiveState {
     }
 
     handleResize()
-    window.addEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize)
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener("resize", handleResize)
     }
   }, [])
 

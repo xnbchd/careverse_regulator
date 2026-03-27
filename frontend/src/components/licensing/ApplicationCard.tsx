@@ -1,8 +1,8 @@
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import type { LicenseApplication } from '@/types/license'
-import StatusBadge from './StatusBadge'
-import { Building2, Calendar, DollarSign, FileText } from 'lucide-react'
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import type { LicenseApplication } from "@/types/license"
+import StatusBadge from "./StatusBadge"
+import { Building2, Calendar, DollarSign, FileText } from "lucide-react"
 
 interface ApplicationCardProps {
   application: LicenseApplication
@@ -16,7 +16,9 @@ export default function ApplicationCard({ application, onClick }: ApplicationCar
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="font-semibold text-lg mb-1">{application.facilityName}</h3>
-            <p className="text-sm text-muted-foreground font-mono">{application.licenseApplicationId}</p>
+            <p className="text-sm text-muted-foreground font-mono">
+              {application.licenseApplicationId}
+            </p>
           </div>
           <StatusBadge status={application.applicationStatus} />
         </div>

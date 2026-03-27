@@ -9,14 +9,14 @@ export function exportToCSV<T extends Record<string, any>>(
   columns?: { key: keyof T; label: string }[]
 ) {
   if (data.length === 0) {
-    throw new Error('No data to export')
+    throw new Error("No data to export")
   }
 
   // Determine columns from data if not provided
   const cols = columns || Object.keys(data[0]).map((key) => ({ key, label: key }))
 
   // Build CSV header
-  const header = cols.map((col) => col.label).join(',')
+  const header = cols.map((col) => col.label).join(",")
 
   // Build CSV rows
   const rows = data.map((row) => {
@@ -24,28 +24,28 @@ export function exportToCSV<T extends Record<string, any>>(
       .map((col) => {
         const value = row[col.key]
         // Handle null/undefined
-        if (value === null || value === undefined) return ''
+        if (value === null || value === undefined) return ""
         // Escape quotes and wrap in quotes if contains comma or newline
         const stringValue = String(value)
-        if (stringValue.includes(',') || stringValue.includes('\n') || stringValue.includes('"')) {
+        if (stringValue.includes(",") || stringValue.includes("\n") || stringValue.includes('"')) {
           return `"${stringValue.replace(/"/g, '""')}"`
         }
         return stringValue
       })
-      .join(',')
+      .join(",")
   })
 
   // Combine header and rows
-  const csv = [header, ...rows].join('\n')
+  const csv = [header, ...rows].join("\n")
 
   // Create blob and download
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-  const link = document.createElement('a')
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+  const link = document.createElement("a")
   const url = URL.createObjectURL(blob)
 
-  link.setAttribute('href', url)
-  link.setAttribute('download', `${filename}.csv`)
-  link.style.visibility = 'hidden'
+  link.setAttribute("href", url)
+  link.setAttribute("download", `${filename}.csv`)
+  link.style.visibility = "hidden"
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -59,7 +59,7 @@ export function exportToPDF<T extends Record<string, any>>(
   columns?: { key: keyof T; label: string }[]
 ) {
   if (data.length === 0) {
-    throw new Error('No data to export')
+    throw new Error("No data to export")
   }
 
   // Determine columns from data if not provided
@@ -129,7 +129,7 @@ export function exportToPDF<T extends Record<string, any>>(
   <table>
     <thead>
       <tr>
-        ${cols.map((col) => `<th>${col.label}</th>`).join('')}
+        ${cols.map((col) => `<th>${col.label}</th>`).join("")}
       </tr>
     </thead>
     <tbody>
@@ -140,14 +140,14 @@ export function exportToPDF<T extends Record<string, any>>(
           ${cols
             .map((col) => {
               const value = row[col.key]
-              const displayValue = value === null || value === undefined ? '' : String(value)
+              const displayValue = value === null || value === undefined ? "" : String(value)
               return `<td>${displayValue}</td>`
             })
-            .join('')}
+            .join("")}
         </tr>
       `
         )
-        .join('')}
+        .join("")}
     </tbody>
   </table>
   <div class="footer">
@@ -158,9 +158,9 @@ export function exportToPDF<T extends Record<string, any>>(
   `
 
   // Create a new window and print
-  const printWindow = window.open('', '_blank')
+  const printWindow = window.open("", "_blank")
   if (!printWindow) {
-    throw new Error('Unable to open print window. Please check your popup blocker.')
+    throw new Error("Unable to open print window. Please check your popup blocker.")
   }
 
   printWindow.document.write(html)
@@ -202,12 +202,12 @@ export interface ExportConfig<T> {
 // Unified export function
 export function exportData<T extends Record<string, any>>(
   data: T[],
-  format: 'csv' | 'pdf',
+  format: "csv" | "pdf",
   config: ExportConfig<T>
 ) {
   const formattedData = formatForExport(data, config.transformations)
 
-  if (format === 'csv') {
+  if (format === "csv") {
     exportToCSV(formattedData, config.filename, config.columns)
   } else {
     exportToPDF(formattedData, config.filename, config.title, config.columns)

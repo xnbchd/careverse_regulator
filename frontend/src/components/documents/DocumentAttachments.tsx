@@ -1,21 +1,21 @@
-import { useState } from 'react'
-import { FileText, Upload, Download, Eye, Trash2, Plus } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { useState } from "react"
+import { FileText, Upload, Download, Eye, Trash2, Plus } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import DocumentUpload from './DocumentUpload'
-import DocumentPreview from './DocumentPreview'
-import { useDocumentStore } from '@/stores/documentStore'
-import type { Document, DocumentCategory } from '@/types/document'
-import { getCategoryLabel, getCategoryColor, formatFileSize, getFileIcon } from '@/types/document'
-import { format } from 'date-fns'
+} from "@/components/ui/dialog"
+import DocumentUpload from "./DocumentUpload"
+import DocumentPreview from "./DocumentPreview"
+import { useDocumentStore } from "@/stores/documentStore"
+import type { Document, DocumentCategory } from "@/types/document"
+import { getCategoryLabel, getCategoryColor, formatFileSize, getFileIcon } from "@/types/document"
+import { format } from "date-fns"
 
 interface DocumentAttachmentsProps {
   title?: string
@@ -31,7 +31,7 @@ interface DocumentAttachmentsProps {
 }
 
 export default function DocumentAttachments({
-  title = 'Attached Documents',
+  title = "Attached Documents",
   documents,
   licenseNumber,
   affiliationId,
@@ -53,12 +53,12 @@ export default function DocumentAttachments({
 
   const handleDownload = (document: Document) => {
     if (document.downloadUrl) {
-      window.open(document.downloadUrl, '_blank')
+      window.open(document.downloadUrl, "_blank")
     }
   }
 
   const handleDelete = async (documentId: string) => {
-    if (confirm('Are you sure you want to delete this document?')) {
+    if (confirm("Are you sure you want to delete this document?")) {
       await deleteDocument(documentId)
       if (onRefresh) onRefresh()
     }
@@ -82,7 +82,7 @@ export default function DocumentAttachments({
             <div>
               <CardTitle>{title}</CardTitle>
               <CardDescription>
-                {documents.length} {documents.length === 1 ? 'document' : 'documents'} attached
+                {documents.length} {documents.length === 1 ? "document" : "documents"} attached
               </CardDescription>
             </div>
             {allowUpload && (
@@ -131,7 +131,7 @@ export default function DocumentAttachments({
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{formatFileSize(doc.fileSize)}</span>
                       <span>•</span>
-                      <span>{format(new Date(doc.uploadedAt), 'MMM d, yyyy')}</span>
+                      <span>{format(new Date(doc.uploadedAt), "MMM d, yyyy")}</span>
                       <span>•</span>
                       <span className="truncate">{doc.uploadedByName || doc.uploadedBy}</span>
                     </div>
@@ -177,7 +177,14 @@ export default function DocumentAttachments({
           <DialogHeader>
             <DialogTitle>Upload Documents</DialogTitle>
             <DialogDescription>
-              Add documents to this {licenseNumber ? 'license' : affiliationId ? 'affiliation' : inspectionId ? 'inspection' : 'application'}
+              Add documents to this{" "}
+              {licenseNumber
+                ? "license"
+                : affiliationId
+                ? "affiliation"
+                : inspectionId
+                ? "inspection"
+                : "application"}
             </DialogDescription>
           </DialogHeader>
           <DocumentUpload

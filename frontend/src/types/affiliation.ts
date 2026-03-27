@@ -4,7 +4,7 @@ export interface Affiliation {
   role: string
   startDate: string
   endDate?: string
-  affiliationStatus: 'Active' | 'Inactive' | 'Pending' | 'Rejected'
+  affiliationStatus: "Active" | "Inactive" | "Pending" | "Rejected"
   employmentType: string
   healthProfessional: {
     id: string
@@ -31,7 +31,7 @@ export interface BackendAffiliation {
   role: string
   start_date: string
   end_date?: string
-  affiliation_status: 'Active' | 'Inactive' | 'Pending' | 'Rejected'
+  affiliation_status: "Active" | "Inactive" | "Pending" | "Rejected"
   employment_type: string
   health_professional: {
     id: string
@@ -82,7 +82,7 @@ export interface CreateAffiliationPayload {
     role: string
     start_date: string
     end_date?: string
-    affiliation_status?: 'Active' | 'Inactive' | 'Pending'
+    affiliation_status?: "Active" | "Inactive" | "Pending"
     employment_type: string
     professional: {
       registration_number: string
@@ -100,11 +100,11 @@ export interface UpdateAffiliationPayload {
   role?: string
   start_date?: string
   end_date?: string
-  affiliation_status?: 'Active' | 'Inactive' | 'Pending' | 'Rejected'
+  affiliation_status?: "Active" | "Inactive" | "Pending" | "Rejected"
   employment_type?: string
 }
 
 export interface AffiliationAction {
-  action: 'approve' | 'reject'
+  action: "approve" | "reject"
   reason?: string
 }

@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react'
-import { useNotificationStore } from '@/stores/notificationStore'
-import { useWebSocketNotifications } from '@/hooks/useWebSocketNotifications'
-import { toast } from 'sonner'
-import { CheckCircle, XCircle, AlertTriangle, Info } from 'lucide-react'
+import { useEffect, useRef } from "react"
+import { useNotificationStore } from "@/stores/notificationStore"
+import { useWebSocketNotifications } from "@/hooks/useWebSocketNotifications"
+import { toast } from "sonner"
+import { CheckCircle, XCircle, AlertTriangle, Info } from "lucide-react"
 
 const notificationIcons = {
   success: CheckCircle,
@@ -43,7 +43,7 @@ export default function NotificationListener() {
         icon: <Icon className="w-4 h-4" />,
         action: latestNotification.actionUrl
           ? {
-              label: latestNotification.actionLabel || 'View',
+              label: latestNotification.actionLabel || "View",
               onClick: () => {
                 window.location.href = latestNotification.actionUrl!
               },

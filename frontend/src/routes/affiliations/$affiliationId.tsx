@@ -1,10 +1,10 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useAffiliationStore } from '@/stores/affiliationStore'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import StatusBadge from '@/components/affiliations/StatusBadge'
-import { ArrowLeft, Building2, User, Briefcase, Calendar } from 'lucide-react'
-import type { Affiliation } from '@/types/affiliation'
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { useAffiliationStore } from "@/stores/affiliationStore"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import StatusBadge from "@/components/affiliations/StatusBadge"
+import { ArrowLeft, Building2, User, Briefcase, Calendar } from "lucide-react"
+import type { Affiliation } from "@/types/affiliation"
 
 function AffiliationDetailPage() {
   const navigate = useNavigate()
@@ -17,7 +17,12 @@ function AffiliationDetailPage() {
       <div className="max-w-6xl mx-auto">
         {/* Top bar */}
         <div className="mb-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate({ to: '/affiliations' })} className="-ml-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate({ to: "/affiliations" })}
+            className="-ml-2"
+          >
             <ArrowLeft className="h-4 w-4 mr-1" />
             Back to Affiliations
           </Button>
@@ -31,7 +36,9 @@ function AffiliationDetailPage() {
           </p>
           <div className="flex items-center gap-4 mt-2">
             <StatusBadge status={affiliation.affiliationStatus} />
-            <span className="text-xs text-muted-foreground capitalize">{affiliation.employmentType}</span>
+            <span className="text-xs text-muted-foreground capitalize">
+              {affiliation.employmentType}
+            </span>
             <span className="text-xs text-muted-foreground">Started: {affiliation.startDate}</span>
           </div>
         </div>
@@ -49,15 +56,28 @@ function AffiliationDetailPage() {
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <ReadOnlyField label="Full Name" value={affiliation.healthProfessional.fullName} />
-                <ReadOnlyField label="Registration Number" value={affiliation.healthProfessional.registrationNumber} mono />
+                <ReadOnlyField
+                  label="Registration Number"
+                  value={affiliation.healthProfessional.registrationNumber}
+                  mono
+                />
                 {affiliation.healthProfessional.professionalCadre && (
-                  <ReadOnlyField label="Professional Cadre" value={affiliation.healthProfessional.professionalCadre} />
+                  <ReadOnlyField
+                    label="Professional Cadre"
+                    value={affiliation.healthProfessional.professionalCadre}
+                  />
                 )}
                 {affiliation.healthProfessional.specialty && (
-                  <ReadOnlyField label="Specialty" value={affiliation.healthProfessional.specialty} />
+                  <ReadOnlyField
+                    label="Specialty"
+                    value={affiliation.healthProfessional.specialty}
+                  />
                 )}
                 {affiliation.healthProfessional.typeOfPractice && (
-                  <ReadOnlyField label="Type of Practice" value={affiliation.healthProfessional.typeOfPractice} />
+                  <ReadOnlyField
+                    label="Type of Practice"
+                    value={affiliation.healthProfessional.typeOfPractice}
+                  />
                 )}
               </div>
             </CardContent>
@@ -73,13 +93,26 @@ function AffiliationDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <ReadOnlyField label="Facility Name" value={affiliation.healthFacility.facilityName} />
-                <ReadOnlyField label="Registration Number" value={affiliation.healthFacility.registrationNumber} mono />
+                <ReadOnlyField
+                  label="Facility Name"
+                  value={affiliation.healthFacility.facilityName}
+                />
+                <ReadOnlyField
+                  label="Registration Number"
+                  value={affiliation.healthFacility.registrationNumber}
+                  mono
+                />
                 {affiliation.healthFacility.facilityCode && (
-                  <ReadOnlyField label="Facility Code" value={affiliation.healthFacility.facilityCode} />
+                  <ReadOnlyField
+                    label="Facility Code"
+                    value={affiliation.healthFacility.facilityCode}
+                  />
                 )}
                 {affiliation.healthFacility.facilityType && (
-                  <ReadOnlyField label="Facility Type" value={affiliation.healthFacility.facilityType} />
+                  <ReadOnlyField
+                    label="Facility Type"
+                    value={affiliation.healthFacility.facilityType}
+                  />
                 )}
                 {affiliation.healthFacility.kephLevel && (
                   <ReadOnlyField label="KEPH Level" value={affiliation.healthFacility.kephLevel} />
@@ -113,20 +146,33 @@ function AffiliationDetailPage() {
   )
 }
 
-function ReadOnlyField({ label, value, mono, icon: Icon }: { label: string; value?: string | null; mono?: boolean; icon?: React.ComponentType<{ className?: string }> }) {
+function ReadOnlyField({
+  label,
+  value,
+  mono,
+  icon: Icon,
+}: {
+  label: string
+  value?: string | null
+  mono?: boolean
+  icon?: React.ComponentType<{ className?: string }>
+}) {
   return (
     <div>
       <label className="text-xs font-medium text-muted-foreground">{label}</label>
-      <div className={`mt-1 px-3 py-2 bg-muted/50 rounded-md border border-border text-sm ${mono ? 'font-mono' : ''} text-foreground flex items-center gap-2`}>
+      <div
+        className={`mt-1 px-3 py-2 bg-muted/50 rounded-md border border-border text-sm ${
+          mono ? "font-mono" : ""
+        } text-foreground flex items-center gap-2`}
+      >
         {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />}
-        {value || '—'}
+        {value || "—"}
       </div>
     </div>
   )
 }
 
-export const Route = createFileRoute('/affiliations/$affiliationId')({
-  loader: async ({ params }) =>
-    useAffiliationStore.getState().getAffiliation(params.affiliationId),
+export const Route = createFileRoute("/affiliations/$affiliationId")({
+  loader: async ({ params }) => useAffiliationStore.getState().getAffiliation(params.affiliationId),
   component: AffiliationDetailPage,
 })

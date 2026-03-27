@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -6,24 +6,24 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { AlertCircle, Loader2 } from 'lucide-react'
-import { createUser } from '@/api/userManagementApi'
-import { showSuccess, showError } from '@/utils/toast'
-import { useNotificationStore } from '@/stores/notificationStore'
-import type { PortalRole } from '@/types/user'
+} from "@/components/ui/select"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle, Loader2 } from "lucide-react"
+import { createUser } from "@/api/userManagementApi"
+import { showSuccess, showError } from "@/utils/toast"
+import { useNotificationStore } from "@/stores/notificationStore"
+import type { PortalRole } from "@/types/user"
 
 interface CreateUserDialogProps {
   open: boolean
@@ -31,15 +31,15 @@ interface CreateUserDialogProps {
   onSuccess: () => void
 }
 
-const PORTAL_ROLES: PortalRole[] = ['Regulator Admin', 'Inspection Manager', 'Regulator User']
+const PORTAL_ROLES: PortalRole[] = ["Regulator Admin", "Inspection Manager", "Regulator User"]
 
 export default function CreateUserDialog({ open, onOpenChange, onSuccess }: CreateUserDialogProps) {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [idNumber, setIdNumber] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
-  const [role, setRole] = useState<PortalRole | ''>('')
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [idNumber, setIdNumber] = useState("")
+  const [phone, setPhone] = useState("")
+  const [email, setEmail] = useState("")
+  const [role, setRole] = useState<PortalRole | "">("")
   const [sendEmail, setSendEmail] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -47,12 +47,12 @@ export default function CreateUserDialog({ open, onOpenChange, onSuccess }: Crea
   const addNotification = useNotificationStore((s) => s.addNotification)
 
   const resetForm = () => {
-    setFirstName('')
-    setLastName('')
-    setIdNumber('')
-    setPhone('')
-    setEmail('')
-    setRole('')
+    setFirstName("")
+    setLastName("")
+    setIdNumber("")
+    setPhone("")
+    setEmail("")
+    setRole("")
     setSendEmail(true)
     setError(null)
   }
@@ -69,7 +69,7 @@ export default function CreateUserDialog({ open, onOpenChange, onSuccess }: Crea
     setError(null)
 
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim() || !role) {
-      setError('Please fill in all required fields.')
+      setError("Please fill in all required fields.")
       return
     }
 
@@ -87,19 +87,21 @@ export default function CreateUserDialog({ open, onOpenChange, onSuccess }: Crea
 
       showSuccess(`User account created for ${email.trim()}`)
       addNotification({
-        type: 'success',
-        category: 'system',
-        title: 'User Created',
-        message: `User account created for ${email.trim()}.${sendEmail ? ' Welcome email sent.' : ''}`,
-        actionUrl: '/users-roles',
-        actionLabel: 'View Users',
+        type: "success",
+        category: "system",
+        title: "User Created",
+        message: `User account created for ${email.trim()}.${
+          sendEmail ? " Welcome email sent." : ""
+        }`,
+        actionUrl: "/users-roles",
+        actionLabel: "View Users",
       })
 
       resetForm()
       onOpenChange(false)
       onSuccess()
     } catch (err: any) {
-      const msg = err?.message || 'Failed to create user. Please try again.'
+      const msg = err?.message || "Failed to create user. Please try again."
       setError(msg)
       showError(msg)
     } finally {
@@ -198,7 +200,11 @@ export default function CreateUserDialog({ open, onOpenChange, onSuccess }: Crea
             <Label htmlFor="role">
               Assigned Role <span className="text-destructive">*</span>
             </Label>
-            <Select value={role} onValueChange={(v) => setRole(v as PortalRole)} disabled={submitting}>
+            <Select
+              value={role}
+              onValueChange={(v) => setRole(v as PortalRole)}
+              disabled={submitting}
+            >
               <SelectTrigger id="role">
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
@@ -235,7 +241,7 @@ export default function CreateUserDialog({ open, onOpenChange, onSuccess }: Crea
                   Creating...
                 </>
               ) : (
-                'Create User'
+                "Create User"
               )}
             </Button>
           </DialogFooter>

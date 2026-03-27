@@ -1,7 +1,7 @@
-import { create } from 'zustand'
-import type { Finding } from '@/types/inspection'
-import * as inspectionApi from '@/api/inspectionApi'
-import type { InspectionFilters } from '@/api/inspectionApi'
+import { create } from "zustand"
+import type { Finding } from "@/types/inspection"
+import * as inspectionApi from "@/api/inspectionApi"
+import type { InspectionFilters } from "@/api/inspectionApi"
 
 export interface FindingsState {
   findings: Finding[]
@@ -21,9 +21,9 @@ export const useFindingsStore = create<FindingsState>((set) => ({
       set({ findings, loading: false })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch findings',
-        loading: false
+        error: error instanceof Error ? error.message : "Failed to fetch findings",
+        loading: false,
       })
     }
-  }
+  },
 }))

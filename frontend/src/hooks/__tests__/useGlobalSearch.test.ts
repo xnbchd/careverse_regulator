@@ -1,16 +1,16 @@
-import { renderHook, waitFor, act } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { useGlobalSearch } from '../useGlobalSearch'
-import { apiClient } from '@/api/client'
+import { renderHook, waitFor, act } from "@testing-library/react"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+import { useGlobalSearch } from "../useGlobalSearch"
+import { apiClient } from "@/api/client"
 
 // Mock apiClient
-vi.mock('@/api/client', () => ({
+vi.mock("@/api/client", () => ({
   apiClient: {
     post: vi.fn(),
   },
 }))
 
-describe('useGlobalSearch', () => {
+describe("useGlobalSearch", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.useFakeTimers()
@@ -21,20 +21,20 @@ describe('useGlobalSearch', () => {
     vi.useRealTimers()
   })
 
-  it('returns initial state', () => {
+  it("returns initial state", () => {
     const { result } = renderHook(() => useGlobalSearch())
 
-    expect(result.current.query).toBe('')
+    expect(result.current.query).toBe("")
     expect(result.current.results).toEqual([])
     expect(result.current.loading).toBe(false)
     expect(result.current.error).toBeNull()
   })
 
-  it('debounces query input and does not call API immediately', async () => {
+  it("debounces query input and does not call API immediately", async () => {
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('test')
+      result.current.setQuery("test")
     })
 
     // API should not be called immediately
@@ -48,14 +48,14 @@ describe('useGlobalSearch', () => {
     expect(apiClient.post).not.toHaveBeenCalled()
   })
 
-  it('calls API after 300ms debounce with correct parameters', async () => {
+  it("calls API after 300ms debounce with correct parameters", async () => {
     const mockResponse = {
       message: [
         {
-          doctype: 'Professional',
-          name: 'PROF-001',
-          title: 'Dr. John Doe',
-          content: 'Specialty : Cardiology ||| License : ACTIVE',
+          doctype: "Professional",
+          name: "PROF-001",
+          title: "Dr. John Doe",
+          content: "Specialty : Cardiology ||| License : ACTIVE",
           image: null,
         },
       ],
@@ -66,7 +66,7 @@ describe('useGlobalSearch', () => {
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('test')
+      result.current.setQuery("test")
     })
 
     // Fast-forward 300ms to complete debounce
@@ -77,12 +77,12 @@ describe('useGlobalSearch', () => {
 
     await waitFor(() => {
       expect(apiClient.post).toHaveBeenCalledWith(
-        '/api/method/frappe.utils.global_search.search',
+        "/api/method/frappe.utils.global_search.search",
         {
-          text: 'test',
+          text: "test",
           start: 0,
           limit: 50,
-          doctype: '',
+          doctype: "",
         },
         expect.objectContaining({
           signal: expect.any(AbortSignal),
@@ -91,28 +91,28 @@ describe('useGlobalSearch', () => {
     })
   })
 
-  it('transforms API response into grouped results', async () => {
+  it("transforms API response into grouped results", async () => {
     const mockResponse = {
       message: [
         {
-          doctype: 'Professional',
-          name: 'PROF-001',
-          title: 'Dr. John Doe',
-          content: 'Specialty : Cardiology ||| License : ACTIVE',
+          doctype: "Professional",
+          name: "PROF-001",
+          title: "Dr. John Doe",
+          content: "Specialty : Cardiology ||| License : ACTIVE",
           image: null,
         },
         {
-          doctype: 'Professional',
-          name: 'PROF-002',
-          title: 'Dr. Jane Smith',
-          content: 'Specialty : Neurology',
+          doctype: "Professional",
+          name: "PROF-002",
+          title: "Dr. Jane Smith",
+          content: "Specialty : Neurology",
           image: null,
         },
         {
-          doctype: 'Facility',
-          name: 'FAC-001',
-          title: 'General Hospital',
-          content: 'Type : Hospital ||| Beds : 100',
+          doctype: "Facility",
+          name: "FAC-001",
+          title: "General Hospital",
+          content: "Type : Hospital ||| Beds : 100",
           image: null,
         },
       ],
@@ -123,7 +123,7 @@ describe('useGlobalSearch', () => {
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('hospital')
+      result.current.setQuery("hospital")
     })
 
     await act(async () => {
@@ -133,14 +133,14 @@ describe('useGlobalSearch', () => {
 
     await waitFor(() => {
       expect(result.current.results).toHaveLength(2)
-      expect(result.current.results[0].title).toBe('Professional')
+      expect(result.current.results[0].title).toBe("Professional")
       expect(result.current.results[0].results).toHaveLength(2)
-      expect(result.current.results[1].title).toBe('Facility')
+      expect(result.current.results[1].title).toBe("Facility")
       expect(result.current.results[1].results).toHaveLength(1)
     })
   })
 
-  it('sets loading state during API call', async () => {
+  it("sets loading state during API call", async () => {
     const mockResponse = {
       message: [],
     }
@@ -154,7 +154,7 @@ describe('useGlobalSearch', () => {
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('test')
+      result.current.setQuery("test")
     })
 
     // After debounce, loading should be true
@@ -176,13 +176,13 @@ describe('useGlobalSearch', () => {
     })
   })
 
-  it('handles API errors gracefully', async () => {
-    vi.mocked(apiClient.post).mockRejectedValue(new Error('Network error'))
+  it("handles API errors gracefully", async () => {
+    vi.mocked(apiClient.post).mockRejectedValue(new Error("Network error"))
 
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('test')
+      result.current.setQuery("test")
     })
 
     await act(async () => {
@@ -191,20 +191,20 @@ describe('useGlobalSearch', () => {
     })
 
     await waitFor(() => {
-      expect(result.current.error).toBe('Search unavailable')
+      expect(result.current.error).toBe("Search unavailable")
       expect(result.current.results).toEqual([])
       expect(result.current.loading).toBe(false)
     })
   })
 
-  it('clearSearch resets all state', async () => {
+  it("clearSearch resets all state", async () => {
     const mockResponse = {
       message: [
         {
-          doctype: 'Professional',
-          name: 'PROF-001',
-          title: 'Dr. John Doe',
-          content: 'test',
+          doctype: "Professional",
+          name: "PROF-001",
+          title: "Dr. John Doe",
+          content: "test",
           image: null,
         },
       ],
@@ -215,7 +215,7 @@ describe('useGlobalSearch', () => {
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('test')
+      result.current.setQuery("test")
     })
 
     await act(async () => {
@@ -231,17 +231,17 @@ describe('useGlobalSearch', () => {
       result.current.clearSearch()
     })
 
-    expect(result.current.query).toBe('')
+    expect(result.current.query).toBe("")
     expect(result.current.results).toEqual([])
     expect(result.current.loading).toBe(false)
     expect(result.current.error).toBeNull()
   })
 
-  it('does not call API for queries less than 2 characters', async () => {
+  it("does not call API for queries less than 2 characters", async () => {
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('a')
+      result.current.setQuery("a")
     })
 
     await act(async () => {
@@ -253,28 +253,28 @@ describe('useGlobalSearch', () => {
     expect(result.current.results).toEqual([])
   })
 
-  it('filters out unsupported doctypes', async () => {
+  it("filters out unsupported doctypes", async () => {
     const mockResponse = {
       message: [
         {
-          doctype: 'Professional',
-          name: 'PROF-001',
-          title: 'Dr. John Doe',
-          content: 'test',
+          doctype: "Professional",
+          name: "PROF-001",
+          title: "Dr. John Doe",
+          content: "test",
           image: null,
         },
         {
-          doctype: 'UnsupportedType',
-          name: 'UNSUP-001',
-          title: 'Unsupported',
-          content: 'test',
+          doctype: "UnsupportedType",
+          name: "UNSUP-001",
+          title: "Unsupported",
+          content: "test",
           image: null,
         },
         {
-          doctype: 'Facility',
-          name: 'FAC-001',
-          title: 'Hospital',
-          content: 'test',
+          doctype: "Facility",
+          name: "FAC-001",
+          title: "Hospital",
+          content: "test",
           image: null,
         },
       ],
@@ -285,7 +285,7 @@ describe('useGlobalSearch', () => {
     const { result } = renderHook(() => useGlobalSearch())
 
     act(() => {
-      result.current.setQuery('test')
+      result.current.setQuery("test")
     })
 
     await act(async () => {
@@ -296,9 +296,9 @@ describe('useGlobalSearch', () => {
     await waitFor(() => {
       // Should only have Professional and Facility groups
       expect(result.current.results).toHaveLength(2)
-      expect(result.current.results.every((g) =>
-        ['Professional', 'Facility'].includes(g.title)
-      )).toBe(true)
+      expect(
+        result.current.results.every((g) => ["Professional", "Facility"].includes(g.title))
+      ).toBe(true)
     })
   })
 })

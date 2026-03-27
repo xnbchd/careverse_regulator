@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 import type {
   License,
   LicensePaginationMeta,
@@ -8,9 +8,9 @@ import type {
   ProfessionalLicenseApplication,
   FacilityOption,
   CreateLicenseAppealPayload,
-} from '@/types/license'
-import * as licensingApi from '@/api/licensingApi'
-import type { LicenseFilters } from '@/api/licensingApi'
+} from "@/types/license"
+import * as licensingApi from "@/api/licensingApi"
+import type { LicenseFilters } from "@/api/licensingApi"
 
 export interface LicensingState {
   // Licenses
@@ -95,7 +95,10 @@ export interface LicensingState {
   toggleLicenseSelection: (licenseNumber: string) => void
   selectAllLicenses: () => void
   deselectAllLicenses: () => void
-  bulkUpdateLicenseStatus: (licenseNumbers: string[], action: LicenseAction) => Promise<{ succeeded: string[], failed: string[] }>
+  bulkUpdateLicenseStatus: (
+    licenseNumbers: string[],
+    action: LicenseAction
+  ) => Promise<{ succeeded: string[]; failed: string[] }>
 }
 
 export const useLicensingStore = create<LicensingState>((set, get) => ({
@@ -175,7 +178,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       })
     } catch (error) {
       set({
-        licensesError: error instanceof Error ? error.message : 'Failed to fetch licenses',
+        licensesError: error instanceof Error ? error.message : "Failed to fetch licenses",
         licensesLoading: false,
       })
     }
@@ -189,7 +192,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       return license
     } catch (error) {
       set({
-        licensesError: error instanceof Error ? error.message : 'Failed to fetch license',
+        licensesError: error instanceof Error ? error.message : "Failed to fetch license",
         licensesLoading: false,
       })
       throw error
@@ -205,7 +208,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       await get().refreshLicenses()
     } catch (error) {
       set({
-        licensesError: error instanceof Error ? error.message : 'Failed to update license',
+        licensesError: error instanceof Error ? error.message : "Failed to update license",
         licensesLoading: false,
       })
       throw error
@@ -235,7 +238,11 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
 
     set({ professionalLicensesLoading: true, professionalLicensesError: null })
     try {
-      const response = await licensingApi.listProfessionalLicenses(currentPage, pageSize, currentFilters)
+      const response = await licensingApi.listProfessionalLicenses(
+        currentPage,
+        pageSize,
+        currentFilters
+      )
       set({
         professionalLicenses: response.data,
         professionalLicensesPagination: response.pagination,
@@ -244,7 +251,8 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       })
     } catch (error) {
       set({
-        professionalLicensesError: error instanceof Error ? error.message : 'Failed to fetch professional licenses',
+        professionalLicensesError:
+          error instanceof Error ? error.message : "Failed to fetch professional licenses",
         professionalLicensesLoading: false,
       })
     }
@@ -252,7 +260,10 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
 
   refreshProfessionalLicenses: async () => {
     const { professionalLicensesCurrentPage, professionalLicensesFilters } = get()
-    await get().fetchProfessionalLicenses(professionalLicensesCurrentPage, professionalLicensesFilters)
+    await get().fetchProfessionalLicenses(
+      professionalLicensesCurrentPage,
+      professionalLicensesFilters
+    )
   },
 
   // Applications actions
@@ -278,7 +289,11 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
 
     set({ applicationsLoading: true, applicationsError: null })
     try {
-      const response = await licensingApi.listLicenseApplications(currentPage, pageSize, currentFilters)
+      const response = await licensingApi.listLicenseApplications(
+        currentPage,
+        pageSize,
+        currentFilters
+      )
       set({
         applications: response.data,
         applicationsPagination: response.pagination,
@@ -287,7 +302,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       })
     } catch (error) {
       set({
-        applicationsError: error instanceof Error ? error.message : 'Failed to fetch applications',
+        applicationsError: error instanceof Error ? error.message : "Failed to fetch applications",
         applicationsLoading: false,
       })
     }
@@ -316,7 +331,11 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
 
     set({ professionalApplicationsLoading: true, professionalApplicationsError: null })
     try {
-      const response = await licensingApi.listProfessionalLicenseApplications(currentPage, pageSize, currentFilters)
+      const response = await licensingApi.listProfessionalLicenseApplications(
+        currentPage,
+        pageSize,
+        currentFilters
+      )
       set({
         professionalApplications: response.data,
         professionalApplicationsPagination: response.pagination,
@@ -325,7 +344,10 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       })
     } catch (error) {
       set({
-        professionalApplicationsError: error instanceof Error ? error.message : 'Failed to fetch professional license applications',
+        professionalApplicationsError:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch professional license applications",
         professionalApplicationsLoading: false,
       })
     }
@@ -333,7 +355,10 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
 
   refreshProfessionalApplications: async () => {
     const { professionalApplicationsCurrentPage, professionalApplicationsFilters } = get()
-    await get().fetchProfessionalApplications(professionalApplicationsCurrentPage, professionalApplicationsFilters)
+    await get().fetchProfessionalApplications(
+      professionalApplicationsCurrentPage,
+      professionalApplicationsFilters
+    )
   },
 
   // Facilities actions
@@ -355,7 +380,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       set({ licensesLoading: false })
     } catch (error) {
       set({
-        licensesError: error instanceof Error ? error.message : 'Failed to create appeal',
+        licensesError: error instanceof Error ? error.message : "Failed to create appeal",
         licensesLoading: false,
       })
       throw error
@@ -374,7 +399,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
   },
 
   selectAllLicenses: () => {
-    const selectedLicenseIds = new Set(get().licenses.map(l => l.licenseNumber))
+    const selectedLicenseIds = new Set(get().licenses.map((l) => l.licenseNumber))
     set({ selectedLicenseIds })
   },
 
@@ -401,7 +426,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
 
       // Remove succeeded IDs from selection
       const selectedLicenseIds = new Set(get().selectedLicenseIds)
-      succeeded.forEach(id => selectedLicenseIds.delete(id))
+      succeeded.forEach((id) => selectedLicenseIds.delete(id))
 
       set({ bulkLicenseActionLoading: false, selectedLicenseIds })
 
@@ -411,7 +436,7 @@ export const useLicensingStore = create<LicensingState>((set, get) => ({
       return { succeeded, failed }
     } catch (error) {
       set({
-        licensesError: error instanceof Error ? error.message : 'Bulk update operation failed',
+        licensesError: error instanceof Error ? error.message : "Bulk update operation failed",
         bulkLicenseActionLoading: false,
       })
       throw error

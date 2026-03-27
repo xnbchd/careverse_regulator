@@ -1,11 +1,11 @@
-import { useState, useRef } from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { useState, useRef } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "./StatusBadge"
 import {
   ArrowLeft,
   Stethoscope,
@@ -24,78 +24,81 @@ import {
   GraduationCap,
   Briefcase,
   Globe,
-} from "lucide-react";
-import { updateProfessionalApplicationStatus } from "@/api/licensingApi";
-import { useLicensingStore } from "@/stores/licensingStore";
-import { showSuccess, showError } from "@/utils/toast";
-import type { ProfessionalLicenseApplication } from "@/types/license";
+} from "lucide-react"
+import { updateProfessionalApplicationStatus } from "@/api/licensingApi"
+import { useLicensingStore } from "@/stores/licensingStore"
+import { showSuccess, showError } from "@/utils/toast"
+import type { ProfessionalLicenseApplication } from "@/types/license"
 
 interface ProfessionalApplicationPageProps {
-  application: ProfessionalLicenseApplication;
+  application: ProfessionalLicenseApplication
 }
 
 export default function ProfessionalApplicationPage({
   application: initialApp,
 }: ProfessionalApplicationPageProps) {
-  const navigate = useNavigate();
-  const [application, setApplication] = useState(initialApp);
-  const [remarks, setRemarks] = useState("");
-  const [submitting, setSubmitting] = useState<string | null>(null);
+  const navigate = useNavigate()
+  const [application, setApplication] = useState(initialApp)
+  const [remarks, setRemarks] = useState("")
+  const [submitting, setSubmitting] = useState<string | null>(null)
   const [selectedAction, setSelectedAction] = useState<
     "Issued" | "Denied" | "Info Requested" | null
-  >(null);
-  const decisionRef = useRef<HTMLDivElement>(null);
+  >(null)
+  const decisionRef = useRef<HTMLDivElement>(null)
 
   const isPending =
     application.applicationStatus === "Pending" ||
-    application.applicationStatus === "Info Requested";
+    application.applicationStatus === "Info Requested"
 
   const handleSelectAction = (action: "Issued" | "Denied" | "Info Requested") => {
-    setSelectedAction(action);
-    setRemarks("");
-    setTimeout(() => decisionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
-  };
+    setSelectedAction(action)
+    setRemarks("")
+    setTimeout(
+      () => decisionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }),
+      100
+    )
+  }
 
   const handleSubmitAction = async () => {
-    if (!selectedAction || !remarks.trim()) return;
+    if (!selectedAction || !remarks.trim()) return
 
-    const status =
-      selectedAction === "Info Requested" ? "Denied" : selectedAction;
-    setSubmitting(selectedAction);
+    const status = selectedAction === "Info Requested" ? "Denied" : selectedAction
+    setSubmitting(selectedAction)
     try {
       await updateProfessionalApplicationStatus(
         application.licenseApplicationId,
         status as "Issued" | "Denied",
-        remarks,
-      );
+        remarks
+      )
       showSuccess(
-        `Application ${selectedAction === "Issued" ? "issued" : selectedAction === "Denied" ? "denied" : "info requested"} successfully`,
-      );
-      useLicensingStore.getState().fetchProfessionalApplications();
+        `Application ${
+          selectedAction === "Issued"
+            ? "issued"
+            : selectedAction === "Denied"
+            ? "denied"
+            : "info requested"
+        } successfully`
+      )
+      useLicensingStore.getState().fetchProfessionalApplications()
       setApplication({
         ...application,
-        applicationStatus:
-          selectedAction === "Info Requested"
-            ? "Info Requested"
-            : (status as any),
-      });
-      setRemarks("");
-      setSelectedAction(null);
+        applicationStatus: selectedAction === "Info Requested" ? "Info Requested" : (status as any),
+      })
+      setRemarks("")
+      setSelectedAction(null)
     } catch (err) {
-      showError(
-        err instanceof Error ? err.message : "Failed to update application",
-      );
+      showError(err instanceof Error ? err.message : "Failed to update application")
     } finally {
-      setSubmitting(null);
+      setSubmitting(null)
     }
-  };
+  }
 
   const actionButtonLabel =
     selectedAction === "Issued"
       ? "Issue License"
       : selectedAction === "Denied"
-        ? "Deny Application"
-        : "Request Info";
+      ? "Deny Application"
+      : "Request Info"
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -115,7 +118,11 @@ export default function ProfessionalApplicationPage({
             <Button
               size="sm"
               variant={selectedAction === "Issued" ? "default" : "outline"}
-              className={selectedAction !== "Issued" ? "text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-950" : "bg-green-600 hover:bg-green-700 text-white"}
+              className={
+                selectedAction !== "Issued"
+                  ? "text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-950"
+                  : "bg-green-600 hover:bg-green-700 text-white"
+              }
               onClick={() => handleSelectAction("Issued")}
             >
               <CheckCircle className="h-4 w-4 mr-1.5" />
@@ -124,7 +131,11 @@ export default function ProfessionalApplicationPage({
             <Button
               size="sm"
               variant={selectedAction === "Denied" ? "destructive" : "outline"}
-              className={selectedAction !== "Denied" ? "text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-950" : ""}
+              className={
+                selectedAction !== "Denied"
+                  ? "text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-950"
+                  : ""
+              }
               onClick={() => handleSelectAction("Denied")}
             >
               <XCircle className="h-4 w-4 mr-1.5" />
@@ -133,7 +144,11 @@ export default function ProfessionalApplicationPage({
             <Button
               size="sm"
               variant={selectedAction === "Info Requested" ? "default" : "outline"}
-              className={selectedAction !== "Info Requested" ? "text-blue-600 border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950" : "bg-blue-600 hover:bg-blue-700 text-white"}
+              className={
+                selectedAction !== "Info Requested"
+                  ? "text-blue-600 border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
+              }
               onClick={() => handleSelectAction("Info Requested")}
             >
               <AlertCircle className="h-4 w-4 mr-1.5" />
@@ -150,9 +165,17 @@ export default function ProfessionalApplicationPage({
         <p className="text-sm text-muted-foreground font-mono">{application.registrationNumber}</p>
         <div className="flex items-center gap-4 mt-2 flex-wrap">
           <StatusBadge status={application.applicationStatus} />
-          <span className="text-xs text-muted-foreground">ID: <span className="font-mono">{application.licenseApplicationId}</span></span>
-          {application.regulatoryBody && <span className="text-xs text-muted-foreground">{application.regulatoryBody}</span>}
-          {application.applicationDate && <span className="text-xs text-muted-foreground">Applied: {application.applicationDate}</span>}
+          <span className="text-xs text-muted-foreground">
+            ID: <span className="font-mono">{application.licenseApplicationId}</span>
+          </span>
+          {application.regulatoryBody && (
+            <span className="text-xs text-muted-foreground">{application.regulatoryBody}</span>
+          )}
+          {application.applicationDate && (
+            <span className="text-xs text-muted-foreground">
+              Applied: {application.applicationDate}
+            </span>
+          )}
         </div>
       </div>
 
@@ -169,13 +192,32 @@ export default function ProfessionalApplicationPage({
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <ReadOnlyField label="Full Name" value={application.fullName} icon={User} />
-              <ReadOnlyField label="Registration Number" value={application.registrationNumber} mono />
+              <ReadOnlyField
+                label="Registration Number"
+                value={application.registrationNumber}
+                mono
+              />
               <ReadOnlyField label="Identification Type" value={application.identificationType} />
-              <ReadOnlyField label="Identification Number" value={application.identificationNumber} mono />
-              <ReadOnlyField label="Category of Practice" value={application.categoryOfPractice} icon={Briefcase} />
-              <ReadOnlyField label="Place of Practice" value={application.placeOfPractice} icon={GraduationCap} />
+              <ReadOnlyField
+                label="Identification Number"
+                value={application.identificationNumber}
+                mono
+              />
+              <ReadOnlyField
+                label="Category of Practice"
+                value={application.categoryOfPractice}
+                icon={Briefcase}
+              />
+              <ReadOnlyField
+                label="Place of Practice"
+                value={application.placeOfPractice}
+                icon={GraduationCap}
+              />
               <ReadOnlyField label="Degree" value={application.degree} icon={GraduationCap} />
-              <ReadOnlyField label="Institute of Graduation" value={application.instituteOfGraduation} />
+              <ReadOnlyField
+                label="Institute of Graduation"
+                value={application.instituteOfGraduation}
+              />
             </div>
           </CardContent>
         </Card>
@@ -212,10 +254,18 @@ export default function ProfessionalApplicationPage({
         <CardContent className="space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <ReadOnlyField label="License Type" value={application.licenseTypeName} />
-            <ReadOnlyField label="Application Date" value={application.applicationDate} icon={Calendar} />
+            <ReadOnlyField
+              label="Application Date"
+              value={application.applicationDate}
+              icon={Calendar}
+            />
             <ReadOnlyField
               label="Fee Paid"
-              value={application.licenseFee ? `KES ${application.licenseFee.toLocaleString()}` : undefined}
+              value={
+                application.licenseFee
+                  ? `KES ${application.licenseFee.toLocaleString()}`
+                  : undefined
+              }
               icon={DollarSign}
             />
             <ReadOnlyField label="Application Type" value={application.applicationType} />
@@ -227,7 +277,10 @@ export default function ProfessionalApplicationPage({
               <Label className="text-xs text-muted-foreground">Accompanying Documentation</Label>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mt-1.5">
                 {application.complianceDocuments.map((doc: any, idx: number) => (
-                  <div key={idx} className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-border">
+                  <div
+                    key={idx}
+                    className="flex items-center gap-3 p-2.5 bg-muted/50 rounded-lg border border-border"
+                  >
                     <div className="rounded-lg bg-red-100 dark:bg-red-900/30 p-1.5">
                       <FileText className="h-4 w-4 text-red-600 dark:text-red-400" />
                     </div>
@@ -257,9 +310,7 @@ export default function ProfessionalApplicationPage({
                 <User className="h-4 w-4 text-primary" />
               </div>
               <div className="min-w-0">
-                <p className="text-sm text-foreground whitespace-pre-line">
-                  {application.remarks}
-                </p>
+                <p className="text-sm text-foreground whitespace-pre-line">{application.remarks}</p>
               </div>
             </div>
           </CardContent>
@@ -270,24 +321,39 @@ export default function ProfessionalApplicationPage({
       {isPending && selectedAction && (
         <Card
           ref={decisionRef}
-          className={`mt-5 ${selectedAction === "Denied" ? "border-destructive/50" : selectedAction === "Info Requested" ? "border-blue-500/50" : "border-green-500/50"}`}
+          className={`mt-5 ${
+            selectedAction === "Denied"
+              ? "border-destructive/50"
+              : selectedAction === "Info Requested"
+              ? "border-blue-500/50"
+              : "border-green-500/50"
+          }`}
         >
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               {selectedAction === "Info Requested" ? (
-                <><AlertCircle className="h-4 w-4 text-blue-600" /><span>Request Additional Information</span></>
+                <>
+                  <AlertCircle className="h-4 w-4 text-blue-600" />
+                  <span>Request Additional Information</span>
+                </>
               ) : selectedAction === "Denied" ? (
-                <><XCircle className="h-4 w-4 text-red-600" /><span>Deny Application</span></>
+                <>
+                  <XCircle className="h-4 w-4 text-red-600" />
+                  <span>Deny Application</span>
+                </>
               ) : (
-                <><CheckCircle className="h-4 w-4 text-green-600" /><span>Issue License</span></>
+                <>
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <span>Issue License</span>
+                </>
               )}
             </CardTitle>
             <p className="text-xs text-muted-foreground">
               {selectedAction === "Info Requested"
                 ? "Describe the specific information needed before this application can proceed"
                 : selectedAction === "Denied"
-                  ? "Provide the reason for denying this application"
-                  : "Add any comments for this approval (required)"}
+                ? "Provide the reason for denying this application"
+                : "Add any comments for this approval (required)"}
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -302,13 +368,22 @@ export default function ProfessionalApplicationPage({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => { setSelectedAction(null); setRemarks(""); }}
+                onClick={() => {
+                  setSelectedAction(null)
+                  setRemarks("")
+                }}
               >
                 Cancel
               </Button>
               <Button
                 variant={selectedAction === "Denied" ? "destructive" : "default"}
-                className={selectedAction === "Issued" ? "bg-green-600 hover:bg-green-700 text-white" : selectedAction === "Info Requested" ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
+                className={
+                  selectedAction === "Issued"
+                    ? "bg-green-600 hover:bg-green-700 text-white"
+                    : selectedAction === "Info Requested"
+                    ? "bg-blue-600 hover:bg-blue-700 text-white"
+                    : ""
+                }
                 disabled={!remarks.trim() || !!submitting}
                 onClick={handleSubmitAction}
               >
@@ -320,7 +395,7 @@ export default function ProfessionalApplicationPage({
         </Card>
       )}
     </div>
-  );
+  )
 }
 
 function ReadOnlyField({
@@ -329,25 +404,22 @@ function ReadOnlyField({
   mono,
   icon: Icon,
 }: {
-  label: string;
-  value?: string | null;
-  mono?: boolean;
-  icon?: React.ComponentType<{ className?: string }>;
+  label: string
+  value?: string | null
+  mono?: boolean
+  icon?: React.ComponentType<{ className?: string }>
 }) {
   return (
     <div>
-      <label className="text-xs font-medium text-muted-foreground">
-        {label}
-      </label>
+      <label className="text-xs font-medium text-muted-foreground">{label}</label>
       <div
-        className={`mt-1 px-3 py-2 bg-muted/50 rounded-md border border-border text-sm ${mono ? "font-mono" : ""} text-foreground flex items-center gap-2`}
+        className={`mt-1 px-3 py-2 bg-muted/50 rounded-md border border-border text-sm ${
+          mono ? "font-mono" : ""
+        } text-foreground flex items-center gap-2`}
       >
-        {Icon && (
-          <Icon className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
-        )}
+        {Icon && <Icon className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />}
         {value || "Null"}
       </div>
     </div>
-  );
+  )
 }
-

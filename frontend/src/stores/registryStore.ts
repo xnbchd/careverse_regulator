@@ -1,6 +1,11 @@
-import { create } from 'zustand'
-import { listFacilityRecords, listProfessionalRecords } from '@/api/registryApi'
-import type { FacilityRecord, ProfessionalRecord, FacilityFilters, ProfessionalFilters } from '@/api/registryApi'
+import { create } from "zustand"
+import { listFacilityRecords, listProfessionalRecords } from "@/api/registryApi"
+import type {
+  FacilityRecord,
+  ProfessionalRecord,
+  FacilityFilters,
+  ProfessionalFilters,
+} from "@/api/registryApi"
 
 interface PaginationMeta {
   page: number
@@ -99,7 +104,12 @@ export const useRegistryStore = create<RegistryStore>((set, get) => ({
     set({ facilitiesLoading: true, facilitiesError: null })
 
     try {
-      const response = await listFacilityRecords(currentPage, pageSize, currentFilters, abortController.signal)
+      const response = await listFacilityRecords(
+        currentPage,
+        pageSize,
+        currentFilters,
+        abortController.signal
+      )
 
       // Only update if this request wasn't aborted
       if (!abortController.signal.aborted) {
@@ -112,12 +122,12 @@ export const useRegistryStore = create<RegistryStore>((set, get) => ({
       }
     } catch (error: unknown) {
       // Don't show error if request was aborted
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === "AbortError") {
         return
       }
 
       set({
-        facilitiesError: error instanceof Error ? error.message : 'Failed to fetch facilities',
+        facilitiesError: error instanceof Error ? error.message : "Failed to fetch facilities",
         facilitiesLoading: false,
         facilitiesAbortController: null,
       })
@@ -161,7 +171,12 @@ export const useRegistryStore = create<RegistryStore>((set, get) => ({
     set({ professionalsLoading: true, professionalsError: null })
 
     try {
-      const response = await listProfessionalRecords(currentPage, pageSize, currentFilters, abortController.signal)
+      const response = await listProfessionalRecords(
+        currentPage,
+        pageSize,
+        currentFilters,
+        abortController.signal
+      )
 
       // Only update if this request wasn't aborted
       if (!abortController.signal.aborted) {
@@ -174,12 +189,13 @@ export const useRegistryStore = create<RegistryStore>((set, get) => ({
       }
     } catch (error: unknown) {
       // Don't show error if request was aborted
-      if (error instanceof Error && error.name === 'AbortError') {
+      if (error instanceof Error && error.name === "AbortError") {
         return
       }
 
       set({
-        professionalsError: error instanceof Error ? error.message : 'Failed to fetch professionals',
+        professionalsError:
+          error instanceof Error ? error.message : "Failed to fetch professionals",
         professionalsLoading: false,
         professionalsAbortController: null,
       })

@@ -1,9 +1,9 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
-import type { EntityType, EntityDrawerState, Professional, Facility } from '@/types/entity'
-import type { Inspection } from '@/types/inspection'
-import type { License } from '@/types/license'
-import { apiRequest } from '@/utils/api'
-import { getLicense } from '@/api/licensingApi'
+import { createContext, useContext, useState, useCallback, ReactNode } from "react"
+import type { EntityType, EntityDrawerState, Professional, Facility } from "@/types/entity"
+import type { Inspection } from "@/types/inspection"
+import type { License } from "@/types/license"
+import { apiRequest } from "@/utils/api"
+import { getLicense } from "@/api/licensingApi"
 
 interface HistoryEntry {
   type: EntityType
@@ -24,7 +24,7 @@ const EntityDrawerContext = createContext<EntityDrawerContextValue | undefined>(
 export function useEntityDrawer() {
   const context = useContext(EntityDrawerContext)
   if (!context) {
-    throw new Error('useEntityDrawer must be used within EntityDrawerProvider')
+    throw new Error("useEntityDrawer must be used within EntityDrawerProvider")
   }
   return context
 }
@@ -43,64 +43,67 @@ export function EntityDrawerProvider({ children }: EntityDrawerProviderProps) {
   })
   const [history, setHistory] = useState<HistoryEntry[]>([])
 
-  const openDrawer = useCallback(async (type: EntityType, id: string | any) => {
-    // Save current state to history before opening new drawer
-    if (state.open && state.type && state.id && state.data) {
-      setHistory((prev) => [
-        ...prev,
-        {
-          type: state.type!,
-          id: state.id!,
-          data: state.data,
-        },
-      ])
-    }
-
-    setState({
-      open: true,
-      type,
-      id: typeof id === 'string' ? id : id.id || id.inspectionId,
-      data: null,
-      loading: true,
-    })
-
-    try {
-      let data = null
-
-      switch (type) {
-        case 'professional':
-          data = await fetchProfessional(id)
-          break
-        case 'facility':
-          data = await fetchFacility(id)
-          break
-        case 'inspection':
-          // Inspection data is passed directly as the whole object
-          data = typeof id === 'string' ? JSON.parse(id) : id
-          setState((prev) => ({
-            ...prev,
-            data,
-            loading: false,
-          }))
-          return
-        case 'license':
-          data = await fetchLicense(id)
-          break
+  const openDrawer = useCallback(
+    async (type: EntityType, id: string | any) => {
+      // Save current state to history before opening new drawer
+      if (state.open && state.type && state.id && state.data) {
+        setHistory((prev) => [
+          ...prev,
+          {
+            type: state.type!,
+            id: state.id!,
+            data: state.data,
+          },
+        ])
       }
 
-      setState((prev) => ({
-        ...prev,
-        data,
-        loading: false,
-      }))
-    } catch (error) {
-      console.error('Failed to fetch entity:', error)
-      setState((prev) => ({
-        ...prev,
-        loading: false,
-      }))
-    }
-  }, [state])
+      setState({
+        open: true,
+        type,
+        id: typeof id === "string" ? id : id.id || id.inspectionId,
+        data: null,
+        loading: true,
+      })
+
+      try {
+        let data = null
+
+        switch (type) {
+          case "professional":
+            data = await fetchProfessional(id)
+            break
+          case "facility":
+            data = await fetchFacility(id)
+            break
+          case "inspection":
+            // Inspection data is passed directly as the whole object
+            data = typeof id === "string" ? JSON.parse(id) : id
+            setState((prev) => ({
+              ...prev,
+              data,
+              loading: false,
+            }))
+            return
+          case "license":
+            data = await fetchLicense(id)
+            break
+        }
+
+        setState((prev) => ({
+          ...prev,
+          data,
+          loading: false,
+        }))
+      } catch (error) {
+        console.error("Failed to fetch entity:", error)
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+        }))
+      }
+    },
+    [state]
+  )
 
   const closeDrawer = useCallback(() => {
     setState({
@@ -143,7 +146,9 @@ export function EntityDrawerProvider({ children }: EntityDrawerProviderProps) {
 // Fetch functions
 async function fetchProfessional(id: string): Promise<Professional> {
   const response = await apiRequest<{ message: any }>(
-    `/api/method/compliance_360.api.entities.get_professional_details?registration_number=${encodeURIComponent(id)}`
+    `/api/method/compliance_360.api.entities.get_professional_details?registration_number=${encodeURIComponent(
+      id
+    )}`
   )
 
   const data = response.message
@@ -187,7 +192,9 @@ async function fetchProfessional(id: string): Promise<Professional> {
 
 async function fetchFacility(id: string): Promise<Facility> {
   const response = await apiRequest<{ message: any }>(
-    `/api/method/compliance_360.api.entities.get_facility_details?registration_number=${encodeURIComponent(id)}`
+    `/api/method/compliance_360.api.entities.get_facility_details?registration_number=${encodeURIComponent(
+      id
+    )}`
   )
 
   const data = response.message

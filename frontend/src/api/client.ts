@@ -1,10 +1,10 @@
-import { getCsrfToken } from '@/utils/boot'
+import { getCsrfToken } from "@/utils/boot"
 
 /**
  * API Client Configuration
  */
 const API_CONFIG = {
-  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+  baseURL: import.meta.env.VITE_API_BASE_URL || "",
   timeout: 30000, // 30 seconds
   retryAttempts: 3,
   retryDelay: 1000, // 1 second base delay
@@ -31,14 +31,9 @@ const inFlightRequests = new Map<string, Promise<any>>()
  * API Error class for better error handling
  */
 export class ApiError extends Error {
-  constructor(
-    message: string,
-    public status?: number,
-    public code?: string,
-    public details?: any
-  ) {
+  constructor(message: string, public status?: number, public code?: string, public details?: any) {
     super(message)
-    this.name = 'ApiError'
+    this.name = "ApiError"
   }
 }
 
@@ -122,10 +117,10 @@ async function makeRequest<T>(
   } = options
 
   const fullURL = buildURL(url, params)
-  const method = fetchOptions.method || 'GET'
+  const method = fetchOptions.method || "GET"
 
   // Check cache for GET requests
-  if (method === 'GET' && cache) {
+  if (method === "GET" && cache) {
     const cacheKey = fullURL
     const cached = getCachedResponse<T>(cacheKey)
     if (cached) {
@@ -143,16 +138,16 @@ async function makeRequest<T>(
   const csrfToken = getCsrfToken()
   const headers = new Headers(fetchOptions.headers || {})
 
-  if (!headers.has('Content-Type') && fetchOptions.body && typeof fetchOptions.body === 'string') {
-    headers.set('Content-Type', 'application/json')
+  if (!headers.has("Content-Type") && fetchOptions.body && typeof fetchOptions.body === "string") {
+    headers.set("Content-Type", "application/json")
   }
 
   if (csrfToken) {
-    headers.set('X-Frappe-CSRF-Token', csrfToken)
+    headers.set("X-Frappe-CSRF-Token", csrfToken)
   }
 
   // Explicitly set Expect to prevent HTTP 417 errors
-  headers.set('Expect', '')
+  headers.set("Expect", "")
 
   // Create abort controller for timeout
   const controller = new AbortController()
@@ -164,7 +159,7 @@ async function makeRequest<T>(
     if (externalSignal.aborted) {
       controller.abort()
     } else {
-      externalSignal.addEventListener('abort', () => controller.abort(), { once: true })
+      externalSignal.addEventListener("abort", () => controller.abort(), { once: true })
     }
     delete fetchOptions.signal
   }
@@ -172,13 +167,13 @@ async function makeRequest<T>(
   try {
     // Store in-flight request
     const requestPromise = fetch(fullURL, {
-      credentials: 'include',
+      credentials: "include",
       ...fetchOptions,
       headers,
       signal: controller.signal,
     })
 
-    if (method === 'GET' && cache) {
+    if (method === "GET" && cache) {
       inFlightRequests.set(fullURL, requestPromise)
     }
 
@@ -188,9 +183,9 @@ async function makeRequest<T>(
 
     // Parse response
     let payload: any
-    const contentType = response.headers.get('content-type')
+    const contentType = response.headers.get("content-type")
 
-    if (contentType?.includes('application/json')) {
+    if (contentType?.includes("application/json")) {
       payload = await response.json().catch(() => ({}))
     } else {
       payload = await response.text()
@@ -199,7 +194,7 @@ async function makeRequest<T>(
     // Handle errors
     if (!response.ok || payload?.exc) {
       const errorMessage =
-        typeof payload?.message === 'string'
+        typeof payload?.message === "string"
           ? payload.message
           : `Request failed (${response.status})`
 
@@ -209,7 +204,7 @@ async function makeRequest<T>(
     const data = payload as T
 
     // Cache successful GET requests
-    if (method === 'GET' && cache) {
+    if (method === "GET" && cache) {
       setCachedResponse(fullURL, data, cacheTime)
       inFlightRequests.delete(fullURL)
     }
@@ -219,21 +214,18 @@ async function makeRequest<T>(
     clearTimeout(timeoutId)
 
     // Remove from in-flight
-    if (method === 'GET' && cache) {
+    if (method === "GET" && cache) {
       inFlightRequests.delete(fullURL)
     }
 
     // Handle abort (timeout)
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new ApiError('Request timeout', 408, 'TIMEOUT')
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new ApiError("Request timeout", 408, "TIMEOUT")
     }
 
     // Retry logic for network errors and 5xx errors
     if (retry && attempt < API_CONFIG.retryAttempts) {
-      const isRetryable =
-        error instanceof ApiError
-          ? error.status && error.status >= 500
-          : true // Retry network errors
+      const isRetryable = error instanceof ApiError ? error.status && error.status >= 500 : true // Retry network errors
 
       if (isRetryable) {
         const delay = API_CONFIG.retryDelay * Math.pow(2, attempt - 1) // Exponential backoff
@@ -256,7 +248,7 @@ export const apiClient = {
   async get<T = any>(url: string, options: RequestOptions = {}): Promise<T> {
     return makeRequest<T>(url, {
       ...options,
-      method: 'GET',
+      method: "GET",
       cache: options.cache !== false, // Cache GET requests by default
     })
   },
@@ -267,7 +259,7 @@ export const apiClient = {
   async post<T = any>(url: string, data?: any, options: RequestOptions = {}): Promise<T> {
     return makeRequest<T>(url, {
       ...options,
-      method: 'POST',
+      method: "POST",
       body: data instanceof FormData ? data : JSON.stringify(data),
     })
   },
@@ -278,7 +270,7 @@ export const apiClient = {
   async put<T = any>(url: string, data?: any, options: RequestOptions = {}): Promise<T> {
     return makeRequest<T>(url, {
       ...options,
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(data),
     })
   },
@@ -289,7 +281,7 @@ export const apiClient = {
   async patch<T = any>(url: string, data?: any, options: RequestOptions = {}): Promise<T> {
     return makeRequest<T>(url, {
       ...options,
-      method: 'PATCH',
+      method: "PATCH",
       body: JSON.stringify(data),
     })
   },
@@ -300,7 +292,7 @@ export const apiClient = {
   async delete<T = any>(url: string, options: RequestOptions = {}): Promise<T> {
     return makeRequest<T>(url, {
       ...options,
-      method: 'DELETE',
+      method: "DELETE",
     })
   },
 

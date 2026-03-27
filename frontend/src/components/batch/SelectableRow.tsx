@@ -1,6 +1,6 @@
-import { Checkbox } from '@/components/ui/checkbox'
-import { TableRow, TableCell } from '@/components/ui/table'
-import { cn } from '@/lib/utils'
+import { Checkbox } from "@/components/ui/checkbox"
+import { TableRow, TableCell } from "@/components/ui/table"
+import { cn } from "@/lib/utils"
 
 interface SelectableRowProps {
   id: string
@@ -44,9 +44,9 @@ export function SelectableRow({
   return (
     <TableRow
       className={cn(
-        'cursor-pointer transition-colors',
-        isSelected && 'bg-muted/50',
-        disabled && 'opacity-50 cursor-not-allowed',
+        "cursor-pointer transition-colors",
+        isSelected && "bg-muted/50",
+        disabled && "opacity-50 cursor-not-allowed",
         className
       )}
       onClick={handleRowClick}

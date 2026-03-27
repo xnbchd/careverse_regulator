@@ -1,13 +1,13 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
-export type NotificationType = 'success' | 'error' | 'warning' | 'info'
+export type NotificationType = "success" | "error" | "warning" | "info"
 export type NotificationCategory =
-  | 'affiliation'
-  | 'license'
-  | 'inspection'
-  | 'system'
-  | 'bulk_action'
+  | "affiliation"
+  | "license"
+  | "inspection"
+  | "system"
+  | "bulk_action"
 
 export interface Notification {
   id: string
@@ -41,7 +41,7 @@ interface NotificationState {
   unreadCount: number
 
   // Actions
-  addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => void
+  addNotification: (notification: Omit<Notification, "id" | "timestamp" | "read">) => void
   markAsRead: (id: string) => void
   markAllAsRead: () => void
   deleteNotification: (id: string) => void
@@ -84,9 +84,13 @@ export const useNotificationStore = create<NotificationState>()(
         }))
 
         const { preferences } = get()
-        if (preferences.enabled && preferences.playSound && preferences.categories[notification.category]) {
+        if (
+          preferences.enabled &&
+          preferences.playSound &&
+          preferences.categories[notification.category]
+        ) {
           try {
-            const audio = new Audio('/notification.mp3')
+            const audio = new Audio("/notification.mp3")
             audio.volume = 0.5
             audio.play().catch(() => {})
           } catch (error) {}
@@ -95,9 +99,7 @@ export const useNotificationStore = create<NotificationState>()(
 
       markAsRead: (id) => {
         set((state) => ({
-          notifications: state.notifications.map((n) =>
-            n.id === id ? { ...n, read: true } : n
-          ),
+          notifications: state.notifications.map((n) => (n.id === id ? { ...n, read: true } : n)),
           unreadCount: Math.max(0, state.unreadCount - 1),
         }))
       },
@@ -146,7 +148,7 @@ export const useNotificationStore = create<NotificationState>()(
       },
     }),
     {
-      name: 'notification-storage',
+      name: "notification-storage",
       partialize: (state) => ({
         notifications: state.notifications,
         preferences: state.preferences,
@@ -159,87 +161,87 @@ export const useNotificationStore = create<NotificationState>()(
 // Helper function to create notifications with consistent formatting
 export const createNotification = {
   affiliationApproved: (professionalName: string, facilityName: string) => ({
-    type: 'success' as NotificationType,
-    category: 'affiliation' as NotificationCategory,
-    title: 'Affiliation Approved',
+    type: "success" as NotificationType,
+    category: "affiliation" as NotificationCategory,
+    title: "Affiliation Approved",
     message: `${professionalName}'s affiliation with ${facilityName} has been approved.`,
-    actionUrl: '/affiliations',
-    actionLabel: 'View Affiliations',
+    actionUrl: "/affiliations",
+    actionLabel: "View Affiliations",
   }),
 
   affiliationRejected: (professionalName: string, facilityName: string) => ({
-    type: 'error' as NotificationType,
-    category: 'affiliation' as NotificationCategory,
-    title: 'Affiliation Rejected',
+    type: "error" as NotificationType,
+    category: "affiliation" as NotificationCategory,
+    title: "Affiliation Rejected",
     message: `${professionalName}'s affiliation with ${facilityName} has been rejected.`,
-    actionUrl: '/affiliations',
-    actionLabel: 'View Affiliations',
+    actionUrl: "/affiliations",
+    actionLabel: "View Affiliations",
   }),
 
   licenseApproved: (licenseNumber: string) => ({
-    type: 'success' as NotificationType,
-    category: 'license' as NotificationCategory,
-    title: 'License Approved',
+    type: "success" as NotificationType,
+    category: "license" as NotificationCategory,
+    title: "License Approved",
     message: `License ${licenseNumber} has been approved.`,
     actionUrl: `/license-management/${licenseNumber}`,
-    actionLabel: 'View License',
+    actionLabel: "View License",
   }),
 
   licenseDenied: (licenseNumber: string) => ({
-    type: 'error' as NotificationType,
-    category: 'license' as NotificationCategory,
-    title: 'License Denied',
+    type: "error" as NotificationType,
+    category: "license" as NotificationCategory,
+    title: "License Denied",
     message: `License ${licenseNumber} has been denied.`,
     actionUrl: `/license-management/${licenseNumber}`,
-    actionLabel: 'View License',
+    actionLabel: "View License",
   }),
 
   licenseExpiring: (licenseNumber: string, daysUntilExpiry: number) => ({
-    type: 'warning' as NotificationType,
-    category: 'license' as NotificationCategory,
-    title: 'License Expiring Soon',
+    type: "warning" as NotificationType,
+    category: "license" as NotificationCategory,
+    title: "License Expiring Soon",
     message: `License ${licenseNumber} will expire in ${daysUntilExpiry} days.`,
     actionUrl: `/license-management/${licenseNumber}`,
-    actionLabel: 'Renew License',
+    actionLabel: "Renew License",
   }),
 
   inspectionScheduled: (facilityName: string, date: string) => ({
-    type: 'info' as NotificationType,
-    category: 'inspection' as NotificationCategory,
-    title: 'Inspection Scheduled',
+    type: "info" as NotificationType,
+    category: "inspection" as NotificationCategory,
+    title: "Inspection Scheduled",
     message: `Inspection scheduled for ${facilityName} on ${date}.`,
-    actionUrl: '/inspections',
-    actionLabel: 'View Inspections',
+    actionUrl: "/inspections",
+    actionLabel: "View Inspections",
   }),
 
   inspectionCompleted: (facilityName: string) => ({
-    type: 'success' as NotificationType,
-    category: 'inspection' as NotificationCategory,
-    title: 'Inspection Completed',
+    type: "success" as NotificationType,
+    category: "inspection" as NotificationCategory,
+    title: "Inspection Completed",
     message: `Inspection for ${facilityName} has been completed.`,
-    actionUrl: '/inspections',
-    actionLabel: 'View Report',
+    actionUrl: "/inspections",
+    actionLabel: "View Report",
   }),
 
   bulkActionCompleted: (action: string, succeeded: number, failed: number) => ({
-    type: failed > 0 ? ('warning' as NotificationType) : ('success' as NotificationType),
-    category: 'bulk_action' as NotificationCategory,
-    title: 'Bulk Action Completed',
+    type: failed > 0 ? ("warning" as NotificationType) : ("success" as NotificationType),
+    category: "bulk_action" as NotificationCategory,
+    title: "Bulk Action Completed",
     message: `${action}: ${succeeded} succeeded, ${failed} failed.`,
     metadata: { action, succeeded, failed },
   }),
 
   systemUpdate: (message: string) => ({
-    type: 'info' as NotificationType,
-    category: 'system' as NotificationCategory,
-    title: 'System Update',
+    type: "info" as NotificationType,
+    category: "system" as NotificationCategory,
+    title: "System Update",
     message,
   }),
 
   systemError: (message: string) => ({
-    type: 'error' as NotificationType,
-    category: 'system' as NotificationCategory,
-    title: 'System Error',
+    type: "error" as NotificationType,
+    category: "system" as NotificationCategory,
+    title: "System Error",
     message,
   }),
 }

@@ -1,21 +1,15 @@
-import { useState, useMemo } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
-import { CheckCheck, Trash2, Mail, Bell } from 'lucide-react'
-import { useNotificationStore } from '@/stores/notificationStore'
+import { useState, useMemo } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { CheckCheck, Trash2, Mail, Bell } from "lucide-react"
+import { useNotificationStore } from "@/stores/notificationStore"
 
 export default function NotificationsView() {
   const navigate = useNavigate()
-  const {
-    notifications,
-    unreadCount,
-    markAsRead,
-    markAllAsRead,
-    deleteNotification,
-    clearAll,
-  } = useNotificationStore()
+  const { notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification, clearAll } =
+    useNotificationStore()
 
   const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -40,16 +34,16 @@ export default function NotificationsView() {
 
   const handleMarkRead = (id: string) => {
     markAsRead(id)
-    setSelectedIds(selectedIds.filter(selectedId => selectedId !== id))
+    setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id))
   }
 
   const handleBulkMarkRead = () => {
-    selectedIds.forEach(id => markAsRead(id))
+    selectedIds.forEach((id) => markAsRead(id))
     setSelectedIds([])
   }
 
   const handleBulkDelete = () => {
-    selectedIds.forEach(id => deleteNotification(id))
+    selectedIds.forEach((id) => deleteNotification(id))
     setSelectedIds([])
   }
 
@@ -63,7 +57,9 @@ export default function NotificationsView() {
         <div>
           <h2 className="text-2xl font-bold">Notifications</h2>
           <p className="text-muted-foreground mt-1">
-            {unreadCount > 0 ? `${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}` : 'All caught up!'}
+            {unreadCount > 0
+              ? `${unreadCount} unread notification${unreadCount !== 1 ? "s" : ""}`
+              : "All caught up!"}
           </p>
         </div>
       </div>
@@ -87,18 +83,13 @@ export default function NotificationsView() {
               <span className="text-sm text-muted-foreground">
                 {selectedIds.length > 0
                   ? `${selectedIds.length} selected`
-                  : `${notifications.length} notification${notifications.length !== 1 ? 's' : ''}`}
+                  : `${notifications.length} notification${notifications.length !== 1 ? "s" : ""}`}
               </span>
 
               {selectedIds.length > 0 && (
                 <>
                   <div className="h-6 w-px bg-border" />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleBulkMarkRead}
-                    className="h-8"
-                  >
+                  <Button variant="ghost" size="sm" onClick={handleBulkMarkRead} className="h-8">
                     <CheckCheck className="w-4 h-4 mr-2" />
                     Mark Read
                   </Button>
@@ -117,12 +108,7 @@ export default function NotificationsView() {
               {selectedIds.length === 0 && unreadCount > 0 && (
                 <>
                   <div className="h-6 w-px bg-border ml-auto" />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={markAllAsRead}
-                    className="h-8"
-                  >
+                  <Button variant="ghost" size="sm" onClick={markAllAsRead} className="h-8">
                     <CheckCheck className="w-4 h-4 mr-2" />
                     Mark All Read
                   </Button>
@@ -156,7 +142,7 @@ export default function NotificationsView() {
             <Card
               key={notification.id}
               className={`cursor-pointer transition-colors hover:bg-muted/50 ${
-                !notification.read ? 'bg-blue-50/50 dark:bg-blue-950/20' : ''
+                !notification.read ? "bg-blue-50/50 dark:bg-blue-950/20" : ""
               }`}
               onClick={() => {
                 if (!notification.read) {
@@ -181,16 +167,14 @@ export default function NotificationsView() {
                         <div className="h-2 w-2 bg-blue-500 rounded-full flex-shrink-0 mt-1" />
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {notification.message}
-                    </p>
+                    <p className="text-sm text-muted-foreground mb-2">{notification.message}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-muted-foreground">
                         {new Date(notification.timestamp).toLocaleString()}
                       </span>
                       {notification.actionUrl && (
                         <span className="text-xs text-primary">
-                          {notification.actionLabel || 'View'}
+                          {notification.actionLabel || "View"}
                         </span>
                       )}
                     </div>

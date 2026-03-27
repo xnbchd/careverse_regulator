@@ -11,48 +11,45 @@ from datetime import datetime
 
 
 def main():
-    """Main build function."""
-    try:
-        app_root = os.path.dirname(os.path.abspath(__file__))
-        frontend_build_script = os.path.join(app_root, "frontend", "build.py")
+	"""Main build function."""
+	try:
+		app_root = os.path.dirname(os.path.abspath(__file__))
+		frontend_build_script = os.path.join(app_root, "frontend", "build.py")
 
-        if not os.path.exists(frontend_build_script):
-            print(
-                f"Error: Frontend build script not found at {frontend_build_script}")
-            return 1
+		if not os.path.exists(frontend_build_script):
+			print(f"Error: Frontend build script not found at {frontend_build_script}")
+			return 1
 
-        print("=" * 60)
-        print(f"Building careverse_regulator at {datetime.now().isoformat()}")
-        print("=" * 60)
-        sys.stdout.flush()
+		print("=" * 60)
+		print(f"Building careverse_regulator at {datetime.now().isoformat()}")
+		print("=" * 60)
+		sys.stdout.flush()
 
-        result = subprocess.run(
-            [sys.executable, frontend_build_script],
-            cwd=app_root,
-            capture_output=False,
-            text=True,
-            env={**os.environ, "PYTHONUNBUFFERED": "1"},
-        )
+		result = subprocess.run(
+			[sys.executable, frontend_build_script],
+			cwd=app_root,
+			capture_output=False,
+			text=True,
+			env={**os.environ, "PYTHONUNBUFFERED": "1"},
+		)
 
-        if result.returncode != 0:
-            print(
-                f"Error: Frontend build script failed with return code {
-                    result.returncode}")
-            return 1
+		if result.returncode != 0:
+			print(f"Error: Frontend build script failed with return code {result.returncode}")
+			return 1
 
-        print("=" * 60)
-        print(f"Build completed successfully at {datetime.now().isoformat()}")
-        print("=" * 60)
-        sys.stdout.flush()
-        return 0
+		print("=" * 60)
+		print(f"Build completed successfully at {datetime.now().isoformat()}")
+		print("=" * 60)
+		sys.stdout.flush()
+		return 0
 
-    except Exception as e:
-        print(f"Error: {e}")
-        import traceback
+	except Exception as e:
+		print(f"Error: {e}")
+		import traceback
 
-        traceback.print_exc()
-        return 1
+		traceback.print_exc()
+		return 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+	sys.exit(main())

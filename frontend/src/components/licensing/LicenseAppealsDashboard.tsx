@@ -1,19 +1,8 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import {
-  MetricCard,
-  StatusDistribution,
-  QuickActions,
-} from '@/components/dashboard'
-import {
-  FileText,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  List,
-} from 'lucide-react'
-import { fetchLicenseAppeals, type LicenseAppeal } from '@/api/licenseAppealsApi'
+import { useState, useEffect } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { MetricCard, StatusDistribution, QuickActions } from "@/components/dashboard"
+import { FileText, Clock, CheckCircle, XCircle, AlertCircle, List } from "lucide-react"
+import { fetchLicenseAppeals, type LicenseAppeal } from "@/api/licenseAppealsApi"
 
 export function LicenseAppealsDashboard() {
   const navigate = useNavigate()
@@ -32,41 +21,43 @@ export function LicenseAppealsDashboard() {
       setAppeals(response?.data || [])
       setTotalCount(response?.pagination?.total_count || 0)
     } catch (error) {
-      console.error('Failed to load appeals:', error)
+      console.error("Failed to load appeals:", error)
     } finally {
       setLoading(false)
     }
   }
 
-  const pendingCount = appeals.filter(a => !a.status || a.status === 'Pending').length
-  const approvedCount = appeals.filter(a => a.status === 'Approved').length
-  const rejectedCount = appeals.filter(a => a.status === 'Rejected').length
-  const infoRequestedCount = appeals.filter(a => a.status === 'Additional Information Requested').length
+  const pendingCount = appeals.filter((a) => !a.status || a.status === "Pending").length
+  const approvedCount = appeals.filter((a) => a.status === "Approved").length
+  const rejectedCount = appeals.filter((a) => a.status === "Rejected").length
+  const infoRequestedCount = appeals.filter(
+    (a) => a.status === "Additional Information Requested"
+  ).length
 
-  const facilityAppeals = appeals.filter(a => a.appeal_type === 'facility').length
-  const professionalAppeals = appeals.filter(a => a.appeal_type === 'professional').length
+  const facilityAppeals = appeals.filter((a) => a.appeal_type === "facility").length
+  const professionalAppeals = appeals.filter((a) => a.appeal_type === "professional").length
 
   const quickActions = [
     {
-      label: 'View All Appeals',
-      onClick: () => navigate({ to: '/license-management/applications' }),
-      variant: 'default' as const,
+      label: "View All Appeals",
+      onClick: () => navigate({ to: "/license-management/applications" }),
+      variant: "default" as const,
       icon: List,
     },
     {
-      label: 'Review Pending',
-      onClick: () => navigate({ to: '/license-management/applications' }),
-      variant: 'secondary' as const,
+      label: "Review Pending",
+      onClick: () => navigate({ to: "/license-management/applications" }),
+      variant: "secondary" as const,
       icon: Clock,
     },
   ]
 
   const statusDistribution = [
-    { status: 'Pending', count: pendingCount, color: '#f59e0b' },
-    { status: 'Approved', count: approvedCount, color: '#10b981' },
-    { status: 'Rejected', count: rejectedCount, color: '#ef4444' },
-    { status: 'Info Requested', count: infoRequestedCount, color: '#6366f1' },
-  ].filter(item => item.count > 0)
+    { status: "Pending", count: pendingCount, color: "#f59e0b" },
+    { status: "Approved", count: approvedCount, color: "#10b981" },
+    { status: "Rejected", count: rejectedCount, color: "#ef4444" },
+    { status: "Info Requested", count: infoRequestedCount, color: "#6366f1" },
+  ].filter((item) => item.count > 0)
 
   if (loading) {
     return (
@@ -86,30 +77,10 @@ export function LicenseAppealsDashboard() {
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Total Appeals"
-          value={totalCount}
-          variant="info"
-          icon={FileText}
-        />
-        <MetricCard
-          title="Pending Review"
-          value={pendingCount}
-          variant="warning"
-          icon={Clock}
-        />
-        <MetricCard
-          title="Approved"
-          value={approvedCount}
-          variant="success"
-          icon={CheckCircle}
-        />
-        <MetricCard
-          title="Rejected"
-          value={rejectedCount}
-          variant="danger"
-          icon={XCircle}
-        />
+        <MetricCard title="Total Appeals" value={totalCount} variant="info" icon={FileText} />
+        <MetricCard title="Pending Review" value={pendingCount} variant="warning" icon={Clock} />
+        <MetricCard title="Approved" value={approvedCount} variant="success" icon={CheckCircle} />
+        <MetricCard title="Rejected" value={rejectedCount} variant="danger" icon={XCircle} />
       </div>
 
       {/* Additional Metrics */}

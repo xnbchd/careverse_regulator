@@ -16,7 +16,7 @@ export interface ThresholdSettings {
 
 export interface SystemSettings {
   enableNotifications: boolean
-  notificationFrequency: 'realtime' | 'daily' | 'weekly'
+  notificationFrequency: "realtime" | "daily" | "weekly"
   defaultLanguage: string
   timezone: string
   dateFormat: string

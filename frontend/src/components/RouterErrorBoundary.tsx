@@ -1,7 +1,7 @@
-import { Component, type ReactNode } from 'react'
-import { RotateCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Result } from '@/components/ui/result'
+import { Component, type ReactNode } from "react"
+import { RotateCw } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Result } from "@/components/ui/result"
 
 interface Props {
   children: ReactNode
@@ -23,7 +23,7 @@ export class RouterErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Router error:', error, errorInfo)
+    console.error("Router error:", error, errorInfo)
   }
 
   handleReload = () => {

@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent } from '@/components/ui/card'
-import { MessageSquare, Send, Loader2 } from 'lucide-react'
-import { fetchLicenseComments, addLicenseComment, type LicenseComment } from '@/api/licenseCommentsApi'
-import { toast } from 'sonner'
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent } from "@/components/ui/card"
+import { MessageSquare, Send, Loader2 } from "lucide-react"
+import {
+  fetchLicenseComments,
+  addLicenseComment,
+  type LicenseComment,
+} from "@/api/licenseCommentsApi"
+import { toast } from "sonner"
 
 interface LicenseCommentsSectionProps {
   licenseNumber: string
@@ -14,7 +18,7 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
   const [comments, setComments] = useState<LicenseComment[]>([])
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
-  const [newComment, setNewComment] = useState('')
+  const [newComment, setNewComment] = useState("")
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(false)
 
@@ -29,8 +33,8 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
       setComments(response?.comments || [])
       setHasMore(response?.pagination?.has_next || false)
     } catch (error) {
-      console.error('Failed to load comments:', error)
-      toast.error('Failed to load comments')
+      console.error("Failed to load comments:", error)
+      toast.error("Failed to load comments")
     } finally {
       setLoading(false)
     }
@@ -38,21 +42,21 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
 
   const handleSubmitComment = async () => {
     if (!newComment.trim()) {
-      toast.error('Please enter a comment')
+      toast.error("Please enter a comment")
       return
     }
 
     try {
       setSubmitting(true)
       await addLicenseComment(licenseNumber, newComment)
-      toast.success('Comment added successfully')
-      setNewComment('')
+      toast.success("Comment added successfully")
+      setNewComment("")
       // Reload comments
       setPage(1)
       loadComments()
     } catch (error) {
-      console.error('Failed to add comment:', error)
-      toast.error('Failed to add comment')
+      console.error("Failed to add comment:", error)
+      toast.error("Failed to add comment")
     } finally {
       setSubmitting(false)
     }
@@ -117,9 +121,7 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
             <CardContent className="py-8 text-center">
               <MessageSquare className="w-12 h-12 mx-auto text-muted-foreground mb-3 opacity-50" />
               <p className="text-sm text-muted-foreground">No comments yet</p>
-              <p className="text-xs text-muted-foreground mt-1">
-                Be the first to add a comment
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">Be the first to add a comment</p>
             </CardContent>
           </Card>
         ) : (
@@ -129,12 +131,8 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
                 <CardContent className="pt-4">
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-sm font-medium text-foreground">
-                        {comment.created_by}
-                      </p>
-                      <span className="text-xs text-muted-foreground">
-                        {comment.created_at}
-                      </span>
+                      <p className="text-sm font-medium text-foreground">{comment.created_by}</p>
+                      <span className="text-xs text-muted-foreground">{comment.created_at}</span>
                     </div>
                     <p className="text-sm text-muted-foreground whitespace-pre-wrap text-start">
                       {comment.comment}
@@ -152,7 +150,7 @@ export function LicenseCommentsSection({ licenseNumber }: LicenseCommentsSection
                   onClick={() => setPage((p) => p + 1)}
                   disabled={loading}
                 >
-                  {loading ? 'Loading...' : 'Load More'}
+                  {loading ? "Loading..." : "Load More"}
                 </Button>
               </div>
             )}

@@ -1,4 +1,4 @@
-export type EntityType = 'professional' | 'facility' | 'license' | 'inspection'
+export type EntityType = "professional" | "facility" | "license" | "inspection"
 
 export interface Professional {
   id: string

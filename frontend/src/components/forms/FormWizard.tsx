@@ -1,9 +1,9 @@
-import { ReactNode } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { CheckCircle2, Circle, Save } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { ReactNode } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Progress } from "@/components/ui/progress"
+import { CheckCircle2, Circle, Save } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export interface WizardStep {
   id: string
@@ -37,7 +37,7 @@ export default function FormWizard({
   canGoNext = true,
   canGoPrevious = true,
   showDraftButton = true,
-  submitLabel = 'Submit Application',
+  submitLabel = "Submit Application",
 }: FormWizardProps) {
   const progress = ((currentStep + 1) / steps.length) * 100
   const isFirstStep = currentStep === 0
@@ -46,14 +46,14 @@ export default function FormWizard({
   const handleNext = () => {
     if (canGoNext && currentStep < steps.length - 1) {
       onStepChange(currentStep + 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: "smooth" })
     }
   }
 
   const handlePrevious = () => {
     if (canGoPrevious && currentStep > 0) {
       onStepChange(currentStep - 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: "smooth" })
     }
   }
 
@@ -61,7 +61,7 @@ export default function FormWizard({
     // Allow navigation to previous steps or current step
     if (index <= currentStep) {
       onStepChange(index)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: "smooth" })
     }
   }
 
@@ -97,10 +97,10 @@ export default function FormWizard({
                   onClick={() => handleStepClick(index)}
                   disabled={!isAccessible}
                   className={cn(
-                    'w-full flex items-start gap-3 p-3 rounded-lg text-left transition-colors',
-                    isCurrent && 'bg-primary/10 border-2 border-primary',
-                    isCompleted && !isCurrent && 'hover:bg-muted',
-                    !isAccessible && 'opacity-50 cursor-not-allowed'
+                    "w-full flex items-start gap-3 p-3 rounded-lg text-left transition-colors",
+                    isCurrent && "bg-primary/10 border-2 border-primary",
+                    isCompleted && !isCurrent && "hover:bg-muted",
+                    !isAccessible && "opacity-50 cursor-not-allowed"
                   )}
                 >
                   <div className="shrink-0 mt-0.5">
@@ -109,8 +109,8 @@ export default function FormWizard({
                     ) : (
                       <Circle
                         className={cn(
-                          'w-5 h-5',
-                          isCurrent ? 'text-primary fill-primary' : 'text-muted-foreground'
+                          "w-5 h-5",
+                          isCurrent ? "text-primary fill-primary" : "text-muted-foreground"
                         )}
                       />
                     )}
@@ -119,10 +119,10 @@ export default function FormWizard({
                     <div className="flex items-center gap-2">
                       <p
                         className={cn(
-                          'font-medium',
-                          isCurrent && 'text-primary',
-                          isCompleted && !isCurrent && 'text-foreground',
-                          !isAccessible && 'text-muted-foreground'
+                          "font-medium",
+                          isCurrent && "text-primary",
+                          isCompleted && !isCurrent && "text-foreground",
+                          !isAccessible && "text-muted-foreground"
                         )}
                       >
                         {step.title}

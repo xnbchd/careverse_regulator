@@ -1,4 +1,4 @@
-import { apiRequest } from '@/utils/api'
+import { apiRequest } from "@/utils/api"
 
 export interface LicenseComment {
   id: string
@@ -39,7 +39,7 @@ export async function fetchLicenseComments(
 
     return response.message || response
   } catch (error) {
-    console.error('Failed to fetch license comments:', error)
+    console.error("Failed to fetch license comments:", error)
     throw error
   }
 }
@@ -57,13 +57,13 @@ export async function addLicenseComment(
     const response = await apiRequest<any>(
       `/api/method/compliance_360.api.license_management.comments.save_comment?${params}`,
       {
-        method: 'POST',
+        method: "POST",
       }
     )
 
     return response.message || response
   } catch (error) {
-    console.error('Failed to add license comment:', error)
+    console.error("Failed to add license comment:", error)
     throw error
   }
 }

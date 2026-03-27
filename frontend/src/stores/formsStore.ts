@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand"
+import { persist } from "zustand/middleware"
 import type {
   FormDraft,
   FormType,
@@ -7,14 +7,14 @@ import type {
   LicenseRenewalData,
   LicenseAppealData,
   FormSubmission,
-} from '@/types/forms'
+} from "@/types/forms"
 import {
   submitLicenseApplication,
   submitLicenseRenewal,
   submitLicenseAppeal,
   getFormSubmission,
   listFormSubmissions,
-} from '@/api/formsApi'
+} from "@/api/formsApi"
 
 interface FormsState {
   // Drafts
@@ -138,9 +138,7 @@ export const useFormsStore = create<FormsState>()(
 
           // Remove draft if exists
           const draftToRemove = get().drafts.find(
-            (d) =>
-              d.formType === 'license_application' &&
-              d.data.facilityName === data.facilityName
+            (d) => d.formType === "license_application" && d.data.facilityName === data.facilityName
           )
           if (draftToRemove) {
             get().deleteDraft(draftToRemove.id)
@@ -156,7 +154,7 @@ export const useFormsStore = create<FormsState>()(
         } catch (error) {
           set({
             isSubmitting: false,
-            submitError: error instanceof Error ? error.message : 'Failed to submit application',
+            submitError: error instanceof Error ? error.message : "Failed to submit application",
           })
           throw error
         }
@@ -170,9 +168,7 @@ export const useFormsStore = create<FormsState>()(
 
           // Remove draft if exists
           const draftToRemove = get().drafts.find(
-            (d) =>
-              d.formType === 'license_renewal' &&
-              d.data.licenseNumber === data.licenseNumber
+            (d) => d.formType === "license_renewal" && d.data.licenseNumber === data.licenseNumber
           )
           if (draftToRemove) {
             get().deleteDraft(draftToRemove.id)
@@ -188,7 +184,7 @@ export const useFormsStore = create<FormsState>()(
         } catch (error) {
           set({
             isSubmitting: false,
-            submitError: error instanceof Error ? error.message : 'Failed to submit renewal',
+            submitError: error instanceof Error ? error.message : "Failed to submit renewal",
           })
           throw error
         }
@@ -202,8 +198,7 @@ export const useFormsStore = create<FormsState>()(
 
           // Remove draft if exists
           const draftToRemove = get().drafts.find(
-            (d) =>
-              d.formType === 'license_appeal' && d.data.licenseNumber === data.licenseNumber
+            (d) => d.formType === "license_appeal" && d.data.licenseNumber === data.licenseNumber
           )
           if (draftToRemove) {
             get().deleteDraft(draftToRemove.id)
@@ -219,7 +214,7 @@ export const useFormsStore = create<FormsState>()(
         } catch (error) {
           set({
             isSubmitting: false,
-            submitError: error instanceof Error ? error.message : 'Failed to submit appeal',
+            submitError: error instanceof Error ? error.message : "Failed to submit appeal",
           })
           throw error
         }
@@ -236,8 +231,7 @@ export const useFormsStore = create<FormsState>()(
           })
         } catch (error) {
           set({
-            submissionsError:
-              error instanceof Error ? error.message : 'Failed to fetch submission',
+            submissionsError: error instanceof Error ? error.message : "Failed to fetch submission",
             submissionsLoading: false,
           })
         }
@@ -255,7 +249,7 @@ export const useFormsStore = create<FormsState>()(
         } catch (error) {
           set({
             submissionsError:
-              error instanceof Error ? error.message : 'Failed to fetch submissions',
+              error instanceof Error ? error.message : "Failed to fetch submissions",
             submissionsLoading: false,
           })
         }
@@ -267,7 +261,7 @@ export const useFormsStore = create<FormsState>()(
       },
     }),
     {
-      name: 'forms-storage',
+      name: "forms-storage",
       partialize: (state) => ({
         drafts: state.drafts,
         // Don't persist submissions or loading states

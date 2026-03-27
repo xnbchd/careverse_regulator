@@ -1,8 +1,8 @@
-export { default } from './AffiliationsView'
-export { default as AffiliationsView } from './AffiliationsView'
-export { default as AffiliationsTable } from './AffiliationsTable'
-export { default as AffiliationCard } from './AffiliationCard'
-export { default as AffiliationsFilters } from './AffiliationsFilters'
-export { default as StatusBadge } from './StatusBadge'
-export { default as PaginationControls } from './PaginationControls'
-export { AffiliationsDashboard } from './AffiliationsDashboard'
+export { default } from "./AffiliationsView"
+export { default as AffiliationsView } from "./AffiliationsView"
+export { default as AffiliationsTable } from "./AffiliationsTable"
+export { default as AffiliationCard } from "./AffiliationCard"
+export { default as AffiliationsFilters } from "./AffiliationsFilters"
+export { default as StatusBadge } from "./StatusBadge"
+export { default as PaginationControls } from "./PaginationControls"
+export { AffiliationsDashboard } from "./AffiliationsDashboard"

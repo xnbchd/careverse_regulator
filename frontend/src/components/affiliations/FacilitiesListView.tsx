@@ -1,29 +1,29 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { useRegistryStore } from '@/stores/registryStore'
-import { useEntityDrawer } from '@/contexts/EntityDrawerContext'
-import { ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import FacilitiesFilters from './FacilitiesFilters'
-import FacilitiesTable from './FacilitiesTable'
-import PaginationControls from './PaginationControls'
-import ExportButton from '@/components/shared/ExportButton'
-import type { ExportConfig } from '@/utils/exportUtils'
-import type { FacilityRecord } from '@/api/registryApi'
-import dayjs from 'dayjs'
+import { useEffect, useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { useRegistryStore } from "@/stores/registryStore"
+import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
+import { ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import FacilitiesFilters from "./FacilitiesFilters"
+import FacilitiesTable from "./FacilitiesTable"
+import PaginationControls from "./PaginationControls"
+import ExportButton from "@/components/shared/ExportButton"
+import type { ExportConfig } from "@/utils/exportUtils"
+import type { FacilityRecord } from "@/api/registryApi"
+import dayjs from "dayjs"
 
 const facilityExportConfig: ExportConfig<FacilityRecord> = {
-  filename: `health-facilities-${dayjs().format('YYYY-MM-DD')}`,
-  title: 'Health Facilities Report',
+  filename: `health-facilities-${dayjs().format("YYYY-MM-DD")}`,
+  title: "Health Facilities Report",
   columns: [
-    { key: 'facility_name', label: 'Facility Name' },
-    { key: 'facility_code', label: 'Code' },
-    { key: 'registration_number', label: 'Registration #' },
-    { key: 'facility_category', label: 'Category' },
-    { key: 'facility_type', label: 'Type' },
-    { key: 'keph_level', label: 'KEPH Level' },
-    { key: 'county', label: 'County' },
-    { key: 'owner', label: 'Owner' },
+    { key: "facility_name", label: "Facility Name" },
+    { key: "facility_code", label: "Code" },
+    { key: "registration_number", label: "Registration #" },
+    { key: "facility_category", label: "Category" },
+    { key: "facility_type", label: "Type" },
+    { key: "keph_level", label: "KEPH Level" },
+    { key: "county", label: "County" },
+    { key: "owner", label: "Owner" },
   ],
 }
 
@@ -43,13 +43,13 @@ export function FacilitiesListView() {
   const { openDrawer } = useEntityDrawer()
 
   // Local state for filters
-  const [searchText, setSearchText] = useState(facilitiesFilters.search || '')
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | 'recent'>(
-    facilitiesFilters.sortOrder === 'asc'
-      ? 'asc'
-      : facilitiesFilters.sortOrder === 'desc'
-      ? 'desc'
-      : 'recent'
+  const [searchText, setSearchText] = useState(facilitiesFilters.search || "")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "recent">(
+    facilitiesFilters.sortOrder === "asc"
+      ? "asc"
+      : facilitiesFilters.sortOrder === "desc"
+      ? "desc"
+      : "recent"
   )
 
   // Debounce search
@@ -60,19 +60,19 @@ export function FacilitiesListView() {
     return () => clearTimeout(timer)
   }, [searchText])
 
-  const handleSortChange = (order: 'asc' | 'desc' | 'recent') => {
+  const handleSortChange = (order: "asc" | "desc" | "recent") => {
     setSortOrder(order)
-    if (order === 'asc') {
+    if (order === "asc") {
       setFacilitiesFilters({
         ...facilitiesFilters,
-        sortBy: 'facility_name',
-        sortOrder: 'asc',
+        sortBy: "facility_name",
+        sortOrder: "asc",
       })
-    } else if (order === 'desc') {
+    } else if (order === "desc") {
       setFacilitiesFilters({
         ...facilitiesFilters,
-        sortBy: 'facility_name',
-        sortOrder: 'desc',
+        sortBy: "facility_name",
+        sortOrder: "desc",
       })
     } else {
       setFacilitiesFilters({
@@ -84,17 +84,16 @@ export function FacilitiesListView() {
   }
 
   const handleClearFilters = () => {
-    setSearchText('')
-    setSortOrder('recent')
+    setSearchText("")
+    setSortOrder("recent")
     setFacilitiesFilters({})
   }
 
   const handleRowClick = (registrationNumber: string) => {
-    openDrawer('facility', registrationNumber)
+    openDrawer("facility", registrationNumber)
   }
 
-  const activeFiltersCount =
-    (searchText ? 1 : 0) + (sortOrder !== 'recent' ? 1 : 0)
+  const activeFiltersCount = (searchText ? 1 : 0) + (sortOrder !== "recent" ? 1 : 0)
 
   return (
     <div className="space-y-6 p-6">
@@ -104,7 +103,7 @@ export function FacilitiesListView() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate({ to: '/affiliations' })}
+            onClick={() => navigate({ to: "/affiliations" })}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -132,11 +131,7 @@ export function FacilitiesListView() {
           />
         </div>
         <div className="flex gap-2">
-          <ExportButton
-            data={facilities}
-            config={facilityExportConfig}
-            size="default"
-          />
+          <ExportButton data={facilities} config={facilityExportConfig} size="default" />
         </div>
       </div>
 
@@ -154,8 +149,8 @@ export function FacilitiesListView() {
         onRowClick={handleRowClick}
         emptyState={
           activeFiltersCount > 0
-            ? 'No facilities match your current filters.'
-            : 'No facilities found in the system.'
+            ? "No facilities match your current filters."
+            : "No facilities found in the system."
         }
       />
 

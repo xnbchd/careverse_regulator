@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useMemo } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export interface TrendDataPoint {
   label: string
@@ -38,7 +38,14 @@ export function TrendChart({
 
   const { pointsStr, gridLines, dataPoints, avgY, trendLineStart, trendLineEnd } = useMemo(() => {
     if (data.length === 0) {
-      return { pointsStr: '', gridLines: [], dataPoints: [], avgY: 0, trendLineStart: { x: 0, y: 0 }, trendLineEnd: { x: 0, y: 0 } }
+      return {
+        pointsStr: "",
+        gridLines: [],
+        dataPoints: [],
+        avgY: 0,
+        trendLineStart: { x: 0, y: 0 },
+        trendLineEnd: { x: 0, y: 0 },
+      }
     }
 
     const values = data.map((d) => d.value)
@@ -53,7 +60,7 @@ export function TrendChart({
       return { x, y, ...point }
     })
 
-    const polylinePoints = pts.map((p) => `${p.x},${p.y}`).join(' ')
+    const polylinePoints = pts.map((p) => `${p.x},${p.y}`).join(" ")
 
     // Average line Y position
     const averageY = PADDING_TOP + chartHeight - (avg / max) * chartHeight
@@ -85,7 +92,14 @@ export function TrendChart({
       return { y, value: Math.round(value) }
     })
 
-    return { pointsStr: polylinePoints, gridLines: lines, dataPoints: pts, avgY: averageY, trendLineStart: trendStart, trendLineEnd: trendEnd }
+    return {
+      pointsStr: polylinePoints,
+      gridLines: lines,
+      dataPoints: pts,
+      avgY: averageY,
+      trendLineStart: trendStart,
+      trendLineEnd: trendEnd,
+    }
   }, [data, chartWidth, chartHeight])
 
   if (data.length === 0) {
@@ -144,7 +158,9 @@ export function TrendChart({
           {/* Area fill */}
           {dataPoints.length > 1 && (
             <polygon
-              points={`${dataPoints[0].x},${PADDING_TOP + chartHeight} ${pointsStr} ${dataPoints[dataPoints.length - 1].x},${PADDING_TOP + chartHeight}`}
+              points={`${dataPoints[0].x},${PADDING_TOP + chartHeight} ${pointsStr} ${
+                dataPoints[dataPoints.length - 1].x
+              },${PADDING_TOP + chartHeight}`}
               fill="url(#trendAreaGradient)"
             />
           )}
@@ -224,7 +240,7 @@ export function TrendChart({
                 cy={point.y}
                 r="14"
                 fill="transparent"
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
               >
                 <title>{`${point.label}: ${point.value}`}</title>
               </circle>
@@ -258,13 +274,19 @@ export function TrendChart({
           </div>
           {showTrendLine && data.length > 1 && (
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-0.5 bg-emerald-500 rounded" style={{ borderTop: '1.5px dashed #10b981' }} />
+              <div
+                className="w-3 h-0.5 bg-emerald-500 rounded"
+                style={{ borderTop: "1.5px dashed #10b981" }}
+              />
               <span>Trend</span>
             </div>
           )}
           {showAverage && data.length > 1 && (
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-0.5 bg-amber-500 rounded" style={{ borderTop: '1.5px dashed #f59e0b' }} />
+              <div
+                className="w-3 h-0.5 bg-amber-500 rounded"
+                style={{ borderTop: "1.5px dashed #f59e0b" }}
+              />
               <span>Average</span>
             </div>
           )}

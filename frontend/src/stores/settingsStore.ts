@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import type { RegulatorSettings } from '@/types/settings'
+import { create } from "zustand"
+import type { RegulatorSettings } from "@/types/settings"
 
 // Mock default settings
 const defaultSettings: RegulatorSettings = {
@@ -19,10 +19,10 @@ const defaultSettings: RegulatorSettings = {
   },
   system: {
     enableNotifications: true,
-    notificationFrequency: 'realtime',
-    defaultLanguage: 'en',
-    timezone: 'Africa/Nairobi',
-    dateFormat: 'DD/MM/YYYY',
+    notificationFrequency: "realtime",
+    defaultLanguage: "en",
+    timezone: "Africa/Nairobi",
+    dateFormat: "DD/MM/YYYY",
     enableDarkMode: false,
   },
 }
@@ -36,9 +36,9 @@ interface SettingsState {
 
   // Actions
   initialize: () => void
-  updateGovernance: (updates: Partial<RegulatorSettings['governance']>) => void
-  updateThresholds: (updates: Partial<RegulatorSettings['thresholds']>) => void
-  updateSystem: (updates: Partial<RegulatorSettings['system']>) => void
+  updateGovernance: (updates: Partial<RegulatorSettings["governance"]>) => void
+  updateThresholds: (updates: Partial<RegulatorSettings["thresholds"]>) => void
+  updateSystem: (updates: Partial<RegulatorSettings["system"]>) => void
   saveSettings: () => Promise<void>
   resetSettings: () => void
   resetToDefaults: () => void

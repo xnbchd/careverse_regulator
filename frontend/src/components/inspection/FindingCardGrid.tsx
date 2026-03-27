@@ -1,18 +1,18 @@
-import { useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { ChevronDown, ChevronUp, AlertTriangle, AlertCircle, Info } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import type { Finding } from '@/types/inspection'
-import FindingsBadge from './FindingsBadge'
+import { useState } from "react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { ChevronDown, ChevronUp, AlertTriangle, AlertCircle, Info } from "lucide-react"
+import { cn } from "@/lib/utils"
+import type { Finding } from "@/types/inspection"
+import FindingsBadge from "./FindingsBadge"
 
 interface FindingCardGridProps {
   findings: Finding[]
   onViewFinding?: (finding: Finding) => void
 }
 
-const severityOrder = ['Critical', 'Major', 'Minor']
+const severityOrder = ["Critical", "Major", "Minor"]
 const severityIcons = {
   Critical: AlertTriangle,
   Major: AlertCircle,
@@ -20,9 +20,9 @@ const severityIcons = {
 }
 
 const severityColors = {
-  Critical: 'border-l-red-500 bg-red-50/50 dark:bg-red-950/10',
-  Major: 'border-l-orange-500 bg-orange-50/50 dark:bg-orange-950/10',
-  Minor: 'border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/10',
+  Critical: "border-l-red-500 bg-red-50/50 dark:bg-red-950/10",
+  Major: "border-l-orange-500 bg-orange-50/50 dark:bg-orange-950/10",
+  Minor: "border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/10",
 }
 
 export default function FindingCardGrid({ findings, onViewFinding }: FindingCardGridProps) {
@@ -93,7 +93,7 @@ export default function FindingCardGrid({ findings, onViewFinding }: FindingCard
                   <Card
                     key={finding.id}
                     className={cn(
-                      'border-l-4 transition-all hover:shadow-md',
+                      "border-l-4 transition-all hover:shadow-md",
                       severityColors[severity as keyof typeof severityColors]
                     )}
                   >
@@ -101,9 +101,7 @@ export default function FindingCardGrid({ findings, onViewFinding }: FindingCard
                       {/* Header */}
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs text-muted-foreground mb-1">
-                            {finding.findingId}
-                          </p>
+                          <p className="text-xs text-muted-foreground mb-1">{finding.findingId}</p>
                           <Badge variant="secondary" className="text-xs">
                             {finding.category}
                           </Badge>
@@ -122,13 +120,9 @@ export default function FindingCardGrid({ findings, onViewFinding }: FindingCard
                       {/* Footer */}
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                          {finding.dueDate && (
-                            <span>Due: {finding.dueDate}</span>
-                          )}
+                          {finding.dueDate && <span>Due: {finding.dueDate}</span>}
                           {finding.resolvedDate && (
-                            <span className="text-green-600 dark:text-green-400">
-                              ✓ Resolved
-                            </span>
+                            <span className="text-green-600 dark:text-green-400">✓ Resolved</span>
                           )}
                         </div>
                         {onViewFinding && (
@@ -149,9 +143,7 @@ export default function FindingCardGrid({ findings, onViewFinding }: FindingCard
                           <p className="text-xs font-medium text-muted-foreground mb-1">
                             Corrective Action:
                           </p>
-                          <p className="text-xs line-clamp-2">
-                            {finding.correctiveAction}
-                          </p>
+                          <p className="text-xs line-clamp-2">{finding.correctiveAction}</p>
                         </div>
                       )}
                     </CardContent>

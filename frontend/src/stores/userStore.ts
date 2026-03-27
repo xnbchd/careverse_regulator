@@ -1,11 +1,11 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 import type {
   FrappeUser,
   UserFilters,
   PaginationInfo,
   RoleDefinition,
   UserActivityReport,
-} from '@/types/user'
+} from "@/types/user"
 
 // ---------------------------------------------------------------------------
 // Static role definitions — the 3 portal roles
@@ -13,35 +13,31 @@ import type {
 
 const PORTAL_ROLES: RoleDefinition[] = [
   {
-    name: 'Regulator Admin',
-    description: 'Full administrative access to all portal modules.',
+    name: "Regulator Admin",
+    description: "Full administrative access to all portal modules.",
     capabilities: [
-      'User & Role Management',
-      'System Settings',
-      'Audit Logs',
-      'License Management',
-      'Inspection Management',
-      'Affiliations',
-      'Analytics & Reports',
+      "User & Role Management",
+      "System Settings",
+      "Audit Logs",
+      "License Management",
+      "Inspection Management",
+      "Affiliations",
+      "Analytics & Reports",
     ],
   },
   {
-    name: 'Inspection Manager',
-    description: 'Manages inspections and has access to license records.',
-    capabilities: [
-      'Inspection Management',
-      'License Management',
-      'Audit Logs',
-    ],
+    name: "Inspection Manager",
+    description: "Manages inspections and has access to license records.",
+    capabilities: ["Inspection Management", "License Management", "Audit Logs"],
   },
   {
-    name: 'Regulator User',
-    description: 'General access to operational modules. No admin capabilities.',
+    name: "Regulator User",
+    description: "General access to operational modules. No admin capabilities.",
     capabilities: [
-      'License Management',
-      'Inspection Management',
-      'Affiliations',
-      'Analytics & Reports',
+      "License Management",
+      "Inspection Management",
+      "Affiliations",
+      "Analytics & Reports",
     ],
   },
 ]
@@ -50,7 +46,7 @@ const PORTAL_ROLES: RoleDefinition[] = [
 // Store
 // ---------------------------------------------------------------------------
 
-export type UserTab = 'users' | 'roles' | 'activity'
+export type UserTab = "users" | "roles" | "activity"
 
 interface UserManagementState {
   // User list
@@ -90,8 +86,8 @@ export const useUserStore = create<UserManagementState>((set) => ({
   totalUsers: 0,
   pagination: null,
   filters: {
-    role: 'all',
-    status: 'all',
+    role: "all",
+    status: "all",
     page: 1,
     page_size: 20,
   },
@@ -105,7 +101,7 @@ export const useUserStore = create<UserManagementState>((set) => ({
   activityReportsPagination: null,
   isLoadingReports: false,
 
-  activeTab: 'users',
+  activeTab: "users",
 
   setUsers: (users, pagination) =>
     set({
@@ -122,7 +118,7 @@ export const useUserStore = create<UserManagementState>((set) => ({
 
   clearFilters: () =>
     set({
-      filters: { role: 'all', status: 'all', page: 1, page_size: 20 },
+      filters: { role: "all", status: "all", page: 1, page_size: 20 },
     }),
 
   setActiveTab: (tab) => set({ activeTab: tab }),

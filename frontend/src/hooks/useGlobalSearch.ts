@@ -1,19 +1,19 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { apiClient } from '@/api/client'
-import type { SearchResultGroup, FrappeGlobalSearchResponse } from '@/types/search'
+import { useState, useEffect, useRef, useCallback } from "react"
+import { apiClient } from "@/api/client"
+import type { SearchResultGroup, FrappeGlobalSearchResponse } from "@/types/search"
 
 const SUPPORTED_DOCTYPES = [
-  'Professional Record',
-  'Facility Record',
-  'License Records',
-  'Inspection Record',
-  'Facility License Application',
-  'Professional License Application',
+  "Professional Record",
+  "Facility Record",
+  "License Records",
+  "Inspection Record",
+  "Facility License Application",
+  "Professional License Application",
 ]
 const DEBOUNCE_MS = 300
 
 export function useGlobalSearch() {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState("")
   const [results, setResults] = useState<SearchResultGroup[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -53,20 +53,20 @@ export function useGlobalSearch() {
 
       try {
         const response = await apiClient.post<FrappeGlobalSearchResponse>(
-          '/api/method/frappe.utils.global_search.search',
+          "/api/method/frappe.utils.global_search.search",
           {
             text: query,
             start: 0,
             limit: 50,
-            doctype: ''
+            doctype: "",
           },
           { signal: controller.signal }
         )
 
         // Validate response structure
         if (!response.message || !Array.isArray(response.message)) {
-          console.error('Malformed search response:', response)
-          setError('Search unavailable')
+          console.error("Malformed search response:", response)
+          setError("Search unavailable")
           setResults([])
           setLoading(false)
           return
@@ -91,7 +91,7 @@ export function useGlobalSearch() {
           if (!groupedResults[item.doctype]) {
             groupedResults[item.doctype] = {
               title: item.doctype,
-              results: []
+              results: [],
             }
           }
 
@@ -100,7 +100,7 @@ export function useGlobalSearch() {
             name: item.name,
             title,
             description,
-            image: item.image || null
+            image: item.image || null,
           })
         }
 
@@ -110,12 +110,12 @@ export function useGlobalSearch() {
         setLoading(false)
       } catch (err: any) {
         // Ignore AbortError (request was canceled)
-        if (err.name === 'AbortError') {
+        if (err.name === "AbortError") {
           return
         }
 
-        console.error('Search error:', err)
-        setError('Search unavailable')
+        console.error("Search error:", err)
+        setError("Search unavailable")
         setResults([])
         setLoading(false)
       }
@@ -130,7 +130,7 @@ export function useGlobalSearch() {
   }, [query])
 
   const clearSearch = useCallback(() => {
-    setQuery('')
+    setQuery("")
     setResults([])
     setLoading(false)
     setError(null)
@@ -154,7 +154,7 @@ export function useGlobalSearch() {
     results,
     loading,
     error,
-    clearSearch
+    clearSearch,
   }
 }
 
@@ -164,19 +164,19 @@ export function useGlobalSearch() {
  */
 function parseContent(content: string | null | undefined): string {
   if (!content) {
-    return ''
+    return ""
   }
 
   try {
     // Split by " ||| "
-    const segments = content.split(' ||| ')
+    const segments = content.split(" ||| ")
 
     // Take first 3 segments
     const firstThree = segments.slice(0, 3)
 
     // Extract text after " : " for each segment
-    const extractedTexts = firstThree.map(segment => {
-      const colonIndex = segment.indexOf(' : ')
+    const extractedTexts = firstThree.map((segment) => {
+      const colonIndex = segment.indexOf(" : ")
       if (colonIndex !== -1) {
         return segment.substring(colonIndex + 3).trim()
       }
@@ -185,16 +185,16 @@ function parseContent(content: string | null | undefined): string {
     })
 
     // Join with ", "
-    const joined = extractedTexts.filter(Boolean).join(', ')
+    const joined = extractedTexts.filter(Boolean).join(", ")
 
     // Truncate to 150 chars
     if (joined.length > 150) {
-      return joined.substring(0, 147) + '...'
+      return joined.substring(0, 147) + "..."
     }
 
     return joined
   } catch (err) {
-    console.error('Error parsing content:', err)
-    return ''
+    console.error("Error parsing content:", err)
+    return ""
   }
 }

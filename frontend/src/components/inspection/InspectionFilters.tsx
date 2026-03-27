@@ -1,23 +1,23 @@
-import { useState } from 'react'
-import { Search, Filter, ArrowUpDown } from 'lucide-react'
-import { useResponsive } from '@/hooks/useResponsive'
-import DateRangeSelector, { type DateRange } from './DateRangeSelector'
-import FilterTags, { type FilterTag } from './FilterTags'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
+import { useState } from "react"
+import { Search, Filter, ArrowUpDown } from "lucide-react"
+import { useResponsive } from "@/hooks/useResponsive"
+import DateRangeSelector, { type DateRange } from "./DateRangeSelector"
+import FilterTags, { type FilterTag } from "./FilterTags"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 interface InspectionFiltersProps {
   searchText: string
   onSearchChange: (value: string) => void
   selectedStatuses: string[]
   onStatusChange: (statuses: string[]) => void
-  sortOrder: 'asc' | 'desc' | 'recent'
-  onSortChange: (order: 'asc' | 'desc' | 'recent') => void
+  sortOrder: "asc" | "desc" | "recent"
+  onSortChange: (order: "asc" | "desc" | "recent") => void
   dateRange: DateRange | null
   onDateRangeChange: (range: DateRange | null) => void
   activeFilterCount?: number
@@ -43,23 +43,24 @@ export default function InspectionFilters({
   const filterTags: FilterTag[] = []
 
   // Status filter tag
-  if (!selectedStatuses.includes('all')) {
-    const statusLabel = selectedStatuses[0] === 'completed'
-      ? 'Completed'
-      : selectedStatuses[0] === 'non compliant'
-      ? 'Non Compliant'
-      : 'Pending'
+  if (!selectedStatuses.includes("all")) {
+    const statusLabel =
+      selectedStatuses[0] === "completed"
+        ? "Completed"
+        : selectedStatuses[0] === "non compliant"
+        ? "Non Compliant"
+        : "Pending"
     filterTags.push({
-      key: 'status',
+      key: "status",
       label: `Status: ${statusLabel}`,
-      onRemove: () => onStatusChange(['all']),
+      onRemove: () => onStatusChange(["all"]),
     })
   }
 
   // Date range filter tag
   if (dateRange) {
     filterTags.push({
-      key: 'date',
+      key: "date",
       label: dateRange.label,
       onRemove: () => onDateRangeChange(null),
     })
@@ -68,16 +69,16 @@ export default function InspectionFilters({
   // Search filter tag
   if (searchText) {
     filterTags.push({
-      key: 'search',
+      key: "search",
       label: `Search: "${searchText}"`,
-      onRemove: () => onSearchChange(''),
+      onRemove: () => onSearchChange(""),
     })
   }
 
   const handleClearAllFilters = () => {
-    onStatusChange(['all'])
+    onStatusChange(["all"])
     onDateRangeChange(null)
-    onSearchChange('')
+    onSearchChange("")
   }
 
   const handleApplyFilter = () => {
@@ -95,14 +96,12 @@ export default function InspectionFilters({
   const filterContent = (
     <div className="w-[280px] p-2">
       <div className="mb-3">
-        <div className="text-sm font-semibold mb-3 text-start">
-          Filter by Status
-        </div>
+        <div className="text-sm font-semibold mb-3 text-start">Filter by Status</div>
         <RadioGroup
-          value={tempStatuses.includes('all') ? 'all' : tempStatuses[0]}
+          value={tempStatuses.includes("all") ? "all" : tempStatuses[0]}
           onValueChange={(value) => {
-            if (value === 'all') {
-              setTempStatuses(['all'])
+            if (value === "all") {
+              setTempStatuses(["all"])
             } else {
               setTempStatuses([value])
             }
@@ -140,17 +139,14 @@ export default function InspectionFilters({
           variant="outline"
           className="flex-1"
           onClick={() => {
-            setTempStatuses(['all'])
-            onStatusChange(['all'])
+            setTempStatuses(["all"])
+            onStatusChange(["all"])
             setFilterOpen(false)
           }}
         >
           Clear
         </Button>
-        <Button
-          className="flex-1"
-          onClick={handleApplyFilter}
-        >
+        <Button className="flex-1" onClick={handleApplyFilter}>
           Apply
         </Button>
       </div>
@@ -159,13 +155,11 @@ export default function InspectionFilters({
 
   const sortContent = (
     <div className="w-[220px] p-2">
-      <div className="text-sm font-semibold mb-3 text-start">
-        Sort by
-      </div>
+      <div className="text-sm font-semibold mb-3 text-start">Sort by</div>
       <RadioGroup
         value={sortOrder}
         onValueChange={(value) => {
-          onSortChange(value as 'asc' | 'desc' | 'recent')
+          onSortChange(value as "asc" | "desc" | "recent")
           setSortOpen(false)
         }}
         className="flex flex-col gap-3"
@@ -193,16 +187,16 @@ export default function InspectionFilters({
   )
 
   return (
-    <div className={cn('w-full', !isMobile && 'w-auto')}>
+    <div className={cn("w-full", !isMobile && "w-auto")}>
       {/* Filter Controls */}
       <div
         className={cn(
-          'flex gap-2 items-center',
-          isMobile ? 'flex-col items-stretch' : 'flex-row flex-wrap',
-          filterTags.length > 0 && 'mb-3'
+          "flex gap-2 items-center",
+          isMobile ? "flex-col items-stretch" : "flex-row flex-wrap",
+          filterTags.length > 0 && "mb-3"
         )}
       >
-        <div className={cn('relative', isMobile ? 'w-full' : 'w-full sm:w-[400px]')}>
+        <div className={cn("relative", isMobile ? "w-full" : "w-full sm:w-[400px]")}>
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground shrink-0" />
           <Input
             placeholder="Search by facility name"
@@ -211,12 +205,12 @@ export default function InspectionFilters({
             className="w-full pl-9"
           />
         </div>
-        <div className={cn('flex items-center', isMobile ? 'gap-2 w-full' : 'gap-2')}>
+        <div className={cn("flex items-center", isMobile ? "gap-2 w-full" : "gap-2")}>
           <Popover open={filterOpen} onOpenChange={handleFilterOpenChange}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn('gap-2 whitespace-nowrap', isMobile && 'flex-1')}
+                className={cn("gap-2 whitespace-nowrap", isMobile && "flex-1")}
               >
                 <Filter className="w-4 h-4 shrink-0" />
                 {!isMobile && <span>Filters</span>}
@@ -240,14 +234,14 @@ export default function InspectionFilters({
             value={dateRange}
             onChange={onDateRangeChange}
             showLabel={false}
-            className={isMobile ? 'flex-1' : ''}
+            className={isMobile ? "flex-1" : ""}
           />
 
           <Popover open={sortOpen} onOpenChange={setSortOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn('gap-2 whitespace-nowrap', isMobile && 'flex-1')}
+                className={cn("gap-2 whitespace-nowrap", isMobile && "flex-1")}
               >
                 <ArrowUpDown className="w-4 h-4 shrink-0" />
                 {!isMobile && <span>Sort</span>}
@@ -262,7 +256,10 @@ export default function InspectionFilters({
       </div>
 
       {/* Active Filter Tags */}
-      <FilterTags tags={filterTags} onClearAll={filterTags.length > 1 ? handleClearAllFilters : undefined} />
+      <FilterTags
+        tags={filterTags}
+        onClearAll={filterTags.length > 1 ? handleClearAllFilters : undefined}
+      />
     </div>
   )
 }

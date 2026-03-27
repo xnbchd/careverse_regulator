@@ -1,5 +1,9 @@
-export type AuthStatus = 'loading' | 'authenticated' | 'guest'
-export type AccessIssue = 'missing_company_permission' | 'multiple_company_permissions' | 'role_forbidden' | null
+export type AuthStatus = "loading" | "authenticated" | "guest"
+export type AccessIssue =
+  | "missing_company_permission"
+  | "multiple_company_permissions"
+  | "role_forbidden"
+  | null
 
 export interface PortalUser {
   name: string

@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useMemo } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface ComplianceRateGaugeProps {
   compliantCount: number
@@ -11,7 +11,7 @@ interface ComplianceRateGaugeProps {
 export function ComplianceRateGauge({
   compliantCount,
   totalCount,
-  title = 'Compliance Rate',
+  title = "Compliance Rate",
   subtitle,
 }: ComplianceRateGaugeProps) {
   const rate = useMemo(() => {
@@ -21,9 +21,9 @@ export function ComplianceRateGauge({
 
   // Color based on compliance rate
   const color = useMemo(() => {
-    if (rate >= 90) return '#10b981' // green
-    if (rate >= 75) return '#f59e0b' // yellow
-    return '#ef4444' // red
+    if (rate >= 90) return "#10b981" // green
+    if (rate >= 75) return "#f59e0b" // yellow
+    return "#ef4444" // red
   }, [rate])
 
   const strokeDasharray = useMemo(() => {
@@ -42,14 +42,7 @@ export function ComplianceRateGauge({
         <div className="relative w-48 h-48">
           {/* Background circle */}
           <svg className="transform -rotate-90 w-48 h-48">
-            <circle
-              cx="96"
-              cy="96"
-              r="80"
-              stroke="#e5e7eb"
-              strokeWidth="12"
-              fill="none"
-            />
+            <circle cx="96" cy="96" r="80" stroke="#e5e7eb" strokeWidth="12" fill="none" />
             {/* Progress circle */}
             <circle
               cx="96"
@@ -61,7 +54,7 @@ export function ComplianceRateGauge({
               strokeDasharray={strokeDasharray}
               strokeLinecap="round"
               style={{
-                transition: 'stroke-dasharray 0.6s ease',
+                transition: "stroke-dasharray 0.6s ease",
               }}
             />
           </svg>
@@ -79,12 +72,12 @@ export function ComplianceRateGauge({
         <div className="mt-4 text-center">
           <p className="text-sm text-muted-foreground">
             {rate >= 90
-              ? 'Excellent compliance'
+              ? "Excellent compliance"
               : rate >= 75
-                ? 'Good compliance'
-                : rate >= 50
-                  ? 'Needs improvement'
-                  : 'Critical attention required'}
+              ? "Good compliance"
+              : rate >= 50
+              ? "Needs improvement"
+              : "Critical attention required"}
           </p>
         </div>
       </CardContent>

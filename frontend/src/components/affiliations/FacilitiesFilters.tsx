@@ -1,7 +1,7 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,22 +9,22 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-} from '@/components/ui/dropdown-menu'
-import { Search, Filter, X, ArrowUpDown } from 'lucide-react'
+} from "@/components/ui/dropdown-menu"
+import { Search, Filter, X, ArrowUpDown } from "lucide-react"
 
 interface FacilitiesFiltersProps {
   searchText: string
   onSearchChange: (value: string) => void
-  sortOrder: 'asc' | 'desc' | 'recent'
-  onSortChange: (order: 'asc' | 'desc' | 'recent') => void
+  sortOrder: "asc" | "desc" | "recent"
+  onSortChange: (order: "asc" | "desc" | "recent") => void
   activeFiltersCount: number
   onClearFilters: () => void
 }
 
 const sortOptions = [
-  { value: 'recent', label: 'Recently Updated' },
-  { value: 'asc', label: 'Name A-Z' },
-  { value: 'desc', label: 'Name Z-A' },
+  { value: "recent", label: "Recently Updated" },
+  { value: "asc", label: "Name A-Z" },
+  { value: "desc", label: "Name Z-A" },
 ]
 
 export default function FacilitiesFilters({
@@ -63,9 +63,7 @@ export default function FacilitiesFilters({
                 <DropdownMenuCheckboxItem
                   key={option.value}
                   checked={sortOrder === option.value}
-                  onCheckedChange={() =>
-                    onSortChange(option.value as 'asc' | 'desc' | 'recent')
-                  }
+                  onCheckedChange={() => onSortChange(option.value as "asc" | "desc" | "recent")}
                 >
                   {option.label}
                 </DropdownMenuCheckboxItem>
@@ -74,11 +72,7 @@ export default function FacilitiesFilters({
           </DropdownMenu>
 
           {activeFiltersCount > 0 && (
-            <Button
-              variant="ghost"
-              onClick={onClearFilters}
-              className="gap-2"
-            >
+            <Button variant="ghost" onClick={onClearFilters} className="gap-2">
               <X className="h-4 w-4" />
               Clear ({activeFiltersCount})
             </Button>

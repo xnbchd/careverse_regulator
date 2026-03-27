@@ -1,7 +1,7 @@
-import { create } from 'zustand'
-import type { Inspection, Facility, Professional, PaginationMeta } from '@/types/inspection'
-import * as inspectionApi from '@/api/inspectionApi'
-import type { InspectionFilters } from '@/api/inspectionApi'
+import { create } from "zustand"
+import type { Inspection, Facility, Professional, PaginationMeta } from "@/types/inspection"
+import * as inspectionApi from "@/api/inspectionApi"
+import type { InspectionFilters } from "@/api/inspectionApi"
 
 export interface InspectionState {
   inspections: Inspection[]
@@ -11,11 +11,11 @@ export interface InspectionState {
   facilitiesLoading: boolean
   professionalsLoading: boolean
   error: string | null
-  activeTab: 'scheduled' | 'findings'
+  activeTab: "scheduled" | "findings"
   pagination: PaginationMeta | null
   currentPage: number
   pageSize: number
-  setActiveTab: (tab: 'scheduled' | 'findings') => void
+  setActiveTab: (tab: "scheduled" | "findings") => void
   fetchInspections: (page?: number, filters?: InspectionFilters) => Promise<void>
   setPage: (page: number) => void
   setPageSize: (pageSize: number) => void
@@ -38,7 +38,7 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
   facilitiesLoading: false,
   professionalsLoading: false,
   error: null,
-  activeTab: 'scheduled',
+  activeTab: "scheduled",
   pagination: null,
   currentPage: 1,
   pageSize: 20,
@@ -65,12 +65,12 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
         inspections: response.data,
         pagination: response.pagination,
         currentPage,
-        loading: false
+        loading: false,
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch inspections',
-        loading: false
+        error: error instanceof Error ? error.message : "Failed to fetch inspections",
+        loading: false,
       })
     }
   },
@@ -82,8 +82,8 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
       set({ facilities, facilitiesLoading: false })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch facilities',
-        facilitiesLoading: false
+        error: error instanceof Error ? error.message : "Failed to fetch facilities",
+        facilitiesLoading: false,
       })
     }
   },
@@ -95,8 +95,8 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
       set({ professionals, professionalsLoading: false })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch professionals',
-        professionalsLoading: false
+        error: error instanceof Error ? error.message : "Failed to fetch professionals",
+        professionalsLoading: false,
       })
     }
   },
@@ -108,12 +108,12 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
       const newInspection = await inspectionApi.createInspection(payload)
       set({
         inspections: [...get().inspections, newInspection],
-        loading: false
+        loading: false,
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to create inspection',
-        loading: false
+        error: error instanceof Error ? error.message : "Failed to create inspection",
+        loading: false,
       })
       throw error
     }
@@ -124,13 +124,13 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
     try {
       await inspectionApi.deleteInspection(id)
       set({
-        inspections: get().inspections.filter(inspection => inspection.id !== id),
-        loading: false
+        inspections: get().inspections.filter((inspection) => inspection.id !== id),
+        loading: false,
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to delete inspection',
-        loading: false
+        error: error instanceof Error ? error.message : "Failed to delete inspection",
+        loading: false,
       })
       throw error
     }

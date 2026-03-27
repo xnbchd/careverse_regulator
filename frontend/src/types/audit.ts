@@ -8,81 +8,81 @@
 
 export enum AuditAction {
   // CRUD Operations
-  CREATE = 'create',
-  READ = 'read',
-  UPDATE = 'update',
-  DELETE = 'delete',
+  CREATE = "create",
+  READ = "read",
+  UPDATE = "update",
+  DELETE = "delete",
 
   // License Actions
-  LICENSE_APPROVE = 'license_approve',
-  LICENSE_DENY = 'license_deny',
-  LICENSE_SUSPEND = 'license_suspend',
-  LICENSE_RENEW = 'license_renew',
-  LICENSE_REVOKE = 'license_revoke',
-  LICENSE_EXPIRE = 'license_expire',
+  LICENSE_APPROVE = "license_approve",
+  LICENSE_DENY = "license_deny",
+  LICENSE_SUSPEND = "license_suspend",
+  LICENSE_RENEW = "license_renew",
+  LICENSE_REVOKE = "license_revoke",
+  LICENSE_EXPIRE = "license_expire",
 
   // Affiliation Actions
-  AFFILIATION_APPROVE = 'affiliation_approve',
-  AFFILIATION_REJECT = 'affiliation_reject',
-  AFFILIATION_ACTIVATE = 'affiliation_activate',
-  AFFILIATION_DEACTIVATE = 'affiliation_deactivate',
+  AFFILIATION_APPROVE = "affiliation_approve",
+  AFFILIATION_REJECT = "affiliation_reject",
+  AFFILIATION_ACTIVATE = "affiliation_activate",
+  AFFILIATION_DEACTIVATE = "affiliation_deactivate",
 
   // Inspection Actions
-  INSPECTION_SCHEDULE = 'inspection_schedule',
-  INSPECTION_COMPLETE = 'inspection_complete',
-  INSPECTION_CANCEL = 'inspection_cancel',
-  INSPECTION_FAIL = 'inspection_fail',
+  INSPECTION_SCHEDULE = "inspection_schedule",
+  INSPECTION_COMPLETE = "inspection_complete",
+  INSPECTION_CANCEL = "inspection_cancel",
+  INSPECTION_FAIL = "inspection_fail",
 
   // Document Actions
-  DOCUMENT_UPLOAD = 'document_upload',
-  DOCUMENT_DOWNLOAD = 'document_download',
-  DOCUMENT_DELETE = 'document_delete',
-  DOCUMENT_SHARE = 'document_share',
+  DOCUMENT_UPLOAD = "document_upload",
+  DOCUMENT_DOWNLOAD = "document_download",
+  DOCUMENT_DELETE = "document_delete",
+  DOCUMENT_SHARE = "document_share",
 
   // Form Actions
-  FORM_SUBMIT = 'form_submit',
-  FORM_APPROVE = 'form_approve',
-  FORM_REJECT = 'form_reject',
+  FORM_SUBMIT = "form_submit",
+  FORM_APPROVE = "form_approve",
+  FORM_REJECT = "form_reject",
 
   // Bulk Actions
-  BULK_APPROVE = 'bulk_approve',
-  BULK_REJECT = 'bulk_reject',
-  BULK_UPDATE = 'bulk_update',
-  BULK_DELETE = 'bulk_delete',
+  BULK_APPROVE = "bulk_approve",
+  BULK_REJECT = "bulk_reject",
+  BULK_UPDATE = "bulk_update",
+  BULK_DELETE = "bulk_delete",
 
   // Authentication
-  LOGIN = 'login',
-  LOGOUT = 'logout',
-  SESSION_EXPIRE = 'session_expire',
-  PASSWORD_CHANGE = 'password_change',
+  LOGIN = "login",
+  LOGOUT = "logout",
+  SESSION_EXPIRE = "session_expire",
+  PASSWORD_CHANGE = "password_change",
 
   // Settings
-  SETTINGS_UPDATE = 'settings_update',
-  NOTIFICATION_SETTINGS_UPDATE = 'notification_settings_update',
+  SETTINGS_UPDATE = "settings_update",
+  NOTIFICATION_SETTINGS_UPDATE = "notification_settings_update",
 
   // Export
-  EXPORT_DATA = 'export_data',
-  REPORT_GENERATE = 'report_generate',
+  EXPORT_DATA = "export_data",
+  REPORT_GENERATE = "report_generate",
 }
 
 export enum AuditEntity {
-  LICENSE = 'license',
-  AFFILIATION = 'affiliation',
-  INSPECTION = 'inspection',
-  DOCUMENT = 'document',
-  FORM = 'form',
-  USER = 'user',
-  NOTIFICATION = 'notification',
-  SETTINGS = 'settings',
-  REPORT = 'report',
-  SYSTEM = 'system',
+  LICENSE = "license",
+  AFFILIATION = "affiliation",
+  INSPECTION = "inspection",
+  DOCUMENT = "document",
+  FORM = "form",
+  USER = "user",
+  NOTIFICATION = "notification",
+  SETTINGS = "settings",
+  REPORT = "report",
+  SYSTEM = "system",
 }
 
 export enum AuditSeverity {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  CRITICAL = 'critical',
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
+  CRITICAL = "critical",
 }
 
 // ============================================================================
@@ -125,8 +125,8 @@ export interface AuditLogSearchParams {
   success?: boolean
   page?: number
   pageSize?: number
-  sortBy?: 'timestamp' | 'action' | 'entity' | 'severity'
-  sortOrder?: 'asc' | 'desc'
+  sortBy?: "timestamp" | "action" | "entity" | "severity"
+  sortOrder?: "asc" | "desc"
 }
 
 export interface AuditLogListResponse {
@@ -173,9 +173,9 @@ export interface EntityHistory {
 // ============================================================================
 
 export enum AuditExportFormat {
-  CSV = 'csv',
-  JSON = 'json',
-  PDF = 'pdf',
+  CSV = "csv",
+  JSON = "json",
+  PDF = "pdf",
 }
 
 export interface AuditExportRequest {
@@ -191,79 +191,79 @@ export interface AuditExportRequest {
 
 export function getActionLabel(action: AuditAction): string {
   const labels: Record<AuditAction, string> = {
-    [AuditAction.CREATE]: 'Created',
-    [AuditAction.READ]: 'Viewed',
-    [AuditAction.UPDATE]: 'Updated',
-    [AuditAction.DELETE]: 'Deleted',
-    [AuditAction.LICENSE_APPROVE]: 'License Approved',
-    [AuditAction.LICENSE_DENY]: 'License Denied',
-    [AuditAction.LICENSE_SUSPEND]: 'License Suspended',
-    [AuditAction.LICENSE_RENEW]: 'License Renewed',
-    [AuditAction.LICENSE_REVOKE]: 'License Revoked',
-    [AuditAction.LICENSE_EXPIRE]: 'License Expired',
-    [AuditAction.AFFILIATION_APPROVE]: 'Affiliation Approved',
-    [AuditAction.AFFILIATION_REJECT]: 'Affiliation Rejected',
-    [AuditAction.AFFILIATION_ACTIVATE]: 'Affiliation Activated',
-    [AuditAction.AFFILIATION_DEACTIVATE]: 'Affiliation Deactivated',
-    [AuditAction.INSPECTION_SCHEDULE]: 'Inspection Scheduled',
-    [AuditAction.INSPECTION_COMPLETE]: 'Inspection Completed',
-    [AuditAction.INSPECTION_CANCEL]: 'Inspection Cancelled',
-    [AuditAction.INSPECTION_FAIL]: 'Inspection Failed',
-    [AuditAction.DOCUMENT_UPLOAD]: 'Document Uploaded',
-    [AuditAction.DOCUMENT_DOWNLOAD]: 'Document Downloaded',
-    [AuditAction.DOCUMENT_DELETE]: 'Document Deleted',
-    [AuditAction.DOCUMENT_SHARE]: 'Document Shared',
-    [AuditAction.FORM_SUBMIT]: 'Form Submitted',
-    [AuditAction.FORM_APPROVE]: 'Form Approved',
-    [AuditAction.FORM_REJECT]: 'Form Rejected',
-    [AuditAction.BULK_APPROVE]: 'Bulk Approved',
-    [AuditAction.BULK_REJECT]: 'Bulk Rejected',
-    [AuditAction.BULK_UPDATE]: 'Bulk Updated',
-    [AuditAction.BULK_DELETE]: 'Bulk Deleted',
-    [AuditAction.LOGIN]: 'Logged In',
-    [AuditAction.LOGOUT]: 'Logged Out',
-    [AuditAction.SESSION_EXPIRE]: 'Session Expired',
-    [AuditAction.PASSWORD_CHANGE]: 'Password Changed',
-    [AuditAction.SETTINGS_UPDATE]: 'Settings Updated',
-    [AuditAction.NOTIFICATION_SETTINGS_UPDATE]: 'Notification Settings Updated',
-    [AuditAction.EXPORT_DATA]: 'Data Exported',
-    [AuditAction.REPORT_GENERATE]: 'Report Generated',
+    [AuditAction.CREATE]: "Created",
+    [AuditAction.READ]: "Viewed",
+    [AuditAction.UPDATE]: "Updated",
+    [AuditAction.DELETE]: "Deleted",
+    [AuditAction.LICENSE_APPROVE]: "License Approved",
+    [AuditAction.LICENSE_DENY]: "License Denied",
+    [AuditAction.LICENSE_SUSPEND]: "License Suspended",
+    [AuditAction.LICENSE_RENEW]: "License Renewed",
+    [AuditAction.LICENSE_REVOKE]: "License Revoked",
+    [AuditAction.LICENSE_EXPIRE]: "License Expired",
+    [AuditAction.AFFILIATION_APPROVE]: "Affiliation Approved",
+    [AuditAction.AFFILIATION_REJECT]: "Affiliation Rejected",
+    [AuditAction.AFFILIATION_ACTIVATE]: "Affiliation Activated",
+    [AuditAction.AFFILIATION_DEACTIVATE]: "Affiliation Deactivated",
+    [AuditAction.INSPECTION_SCHEDULE]: "Inspection Scheduled",
+    [AuditAction.INSPECTION_COMPLETE]: "Inspection Completed",
+    [AuditAction.INSPECTION_CANCEL]: "Inspection Cancelled",
+    [AuditAction.INSPECTION_FAIL]: "Inspection Failed",
+    [AuditAction.DOCUMENT_UPLOAD]: "Document Uploaded",
+    [AuditAction.DOCUMENT_DOWNLOAD]: "Document Downloaded",
+    [AuditAction.DOCUMENT_DELETE]: "Document Deleted",
+    [AuditAction.DOCUMENT_SHARE]: "Document Shared",
+    [AuditAction.FORM_SUBMIT]: "Form Submitted",
+    [AuditAction.FORM_APPROVE]: "Form Approved",
+    [AuditAction.FORM_REJECT]: "Form Rejected",
+    [AuditAction.BULK_APPROVE]: "Bulk Approved",
+    [AuditAction.BULK_REJECT]: "Bulk Rejected",
+    [AuditAction.BULK_UPDATE]: "Bulk Updated",
+    [AuditAction.BULK_DELETE]: "Bulk Deleted",
+    [AuditAction.LOGIN]: "Logged In",
+    [AuditAction.LOGOUT]: "Logged Out",
+    [AuditAction.SESSION_EXPIRE]: "Session Expired",
+    [AuditAction.PASSWORD_CHANGE]: "Password Changed",
+    [AuditAction.SETTINGS_UPDATE]: "Settings Updated",
+    [AuditAction.NOTIFICATION_SETTINGS_UPDATE]: "Notification Settings Updated",
+    [AuditAction.EXPORT_DATA]: "Data Exported",
+    [AuditAction.REPORT_GENERATE]: "Report Generated",
   }
   return labels[action] || action
 }
 
 export function getEntityLabel(entity: AuditEntity): string {
   const labels: Record<AuditEntity, string> = {
-    [AuditEntity.LICENSE]: 'License',
-    [AuditEntity.AFFILIATION]: 'Affiliation',
-    [AuditEntity.INSPECTION]: 'Inspection',
-    [AuditEntity.DOCUMENT]: 'Document',
-    [AuditEntity.FORM]: 'Form',
-    [AuditEntity.USER]: 'User',
-    [AuditEntity.NOTIFICATION]: 'Notification',
-    [AuditEntity.SETTINGS]: 'Settings',
-    [AuditEntity.REPORT]: 'Report',
-    [AuditEntity.SYSTEM]: 'System',
+    [AuditEntity.LICENSE]: "License",
+    [AuditEntity.AFFILIATION]: "Affiliation",
+    [AuditEntity.INSPECTION]: "Inspection",
+    [AuditEntity.DOCUMENT]: "Document",
+    [AuditEntity.FORM]: "Form",
+    [AuditEntity.USER]: "User",
+    [AuditEntity.NOTIFICATION]: "Notification",
+    [AuditEntity.SETTINGS]: "Settings",
+    [AuditEntity.REPORT]: "Report",
+    [AuditEntity.SYSTEM]: "System",
   }
   return labels[entity] || entity
 }
 
 export function getSeverityColor(severity: AuditSeverity): string {
   const colors: Record<AuditSeverity, string> = {
-    [AuditSeverity.LOW]: 'text-muted-foreground bg-muted/50 border-border',
-    [AuditSeverity.MEDIUM]: 'text-blue-600 bg-blue-50 border-blue-200',
-    [AuditSeverity.HIGH]: 'text-orange-600 bg-orange-50 border-orange-200',
-    [AuditSeverity.CRITICAL]: 'text-red-600 bg-red-50 border-red-200',
+    [AuditSeverity.LOW]: "text-muted-foreground bg-muted/50 border-border",
+    [AuditSeverity.MEDIUM]: "text-blue-600 bg-blue-50 border-blue-200",
+    [AuditSeverity.HIGH]: "text-orange-600 bg-orange-50 border-orange-200",
+    [AuditSeverity.CRITICAL]: "text-red-600 bg-red-50 border-red-200",
   }
   return colors[severity]
 }
 
 export function getSeverityLabel(severity: AuditSeverity): string {
   const labels: Record<AuditSeverity, string> = {
-    [AuditSeverity.LOW]: 'Low',
-    [AuditSeverity.MEDIUM]: 'Medium',
-    [AuditSeverity.HIGH]: 'High',
-    [AuditSeverity.CRITICAL]: 'Critical',
+    [AuditSeverity.LOW]: "Low",
+    [AuditSeverity.MEDIUM]: "Medium",
+    [AuditSeverity.HIGH]: "High",
+    [AuditSeverity.CRITICAL]: "Critical",
   }
   return labels[severity]
 }
@@ -302,9 +302,9 @@ export function getActionSeverity(action: AuditAction): AuditSeverity {
 }
 
 export function formatChangeValue(value: any): string {
-  if (value === null || value === undefined) return 'None'
-  if (typeof value === 'boolean') return value ? 'Yes' : 'No'
-  if (typeof value === 'object') return JSON.stringify(value, null, 2)
-  if (Array.isArray(value)) return value.join(', ')
+  if (value === null || value === undefined) return "None"
+  if (typeof value === "boolean") return value ? "Yes" : "No"
+  if (typeof value === "object") return JSON.stringify(value, null, 2)
+  if (Array.isArray(value)) return value.join(", ")
   return String(value)
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,35 +10,57 @@ import {
   type SortingState,
   type ColumnFiltersState,
   type RowSelectionState,
-} from '@tanstack/react-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Checkbox } from '@/components/ui/checkbox'
+} from "@tanstack/react-table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { EntityLink } from '@/components/entities'
-import ExportButton from '@/components/shared/ExportButton'
-import StatusBadge from './StatusBadge'
-import { Search, Users, ArrowLeft, ArrowUpDown, ArrowUp, ArrowDown, Eye, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, X } from 'lucide-react'
-import { useNavigate } from '@tanstack/react-router'
-import type { Affiliation } from '@/types/affiliation'
-import type { ExportConfig } from '@/utils/exportUtils'
-import dayjs from 'dayjs'
+} from "@/components/ui/select"
+import { EntityLink } from "@/components/entities"
+import ExportButton from "@/components/shared/ExportButton"
+import StatusBadge from "./StatusBadge"
+import {
+  Search,
+  Users,
+  ArrowLeft,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  X,
+} from "lucide-react"
+import { useNavigate } from "@tanstack/react-router"
+import type { Affiliation } from "@/types/affiliation"
+import type { ExportConfig } from "@/utils/exportUtils"
+import dayjs from "dayjs"
 
 const columns: ColumnDef<Affiliation>[] = [
   {
-    id: 'select',
+    id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+        checked={
+          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
       />
     ),
@@ -52,7 +74,7 @@ const columns: ColumnDef<Affiliation>[] = [
     enableSorting: false,
   },
   {
-    id: 'professionalName',
+    id: "professionalName",
     accessorFn: (row) => row.healthProfessional.fullName,
     header: ({ column }) => <SortableHeader column={column} label="Professional" />,
     cell: ({ row }) => (
@@ -69,15 +91,17 @@ const columns: ColumnDef<Affiliation>[] = [
     ),
   },
   {
-    id: 'registrationNumber',
+    id: "registrationNumber",
     accessorFn: (row) => row.healthProfessional.registrationNumber,
     header: ({ column }) => <SortableHeader column={column} label="Registration #" />,
     cell: ({ row }) => (
-      <span className="font-mono text-sm">{row.original.healthProfessional.registrationNumber}</span>
+      <span className="font-mono text-sm">
+        {row.original.healthProfessional.registrationNumber}
+      </span>
     ),
   },
   {
-    id: 'facilityName',
+    id: "facilityName",
     accessorFn: (row) => row.healthFacility.facilityName,
     header: ({ column }) => <SortableHeader column={column} label="Facility" />,
     cell: ({ row }) => (
@@ -94,32 +118,30 @@ const columns: ColumnDef<Affiliation>[] = [
     ),
   },
   {
-    accessorKey: 'role',
+    accessorKey: "role",
     header: ({ column }) => <SortableHeader column={column} label="Role" />,
     cell: ({ row }) => row.original.role || <span className="text-muted-foreground">—</span>,
-    filterFn: 'equals',
+    filterFn: "equals",
   },
   {
-    accessorKey: 'employmentType',
+    accessorKey: "employmentType",
     header: ({ column }) => <SortableHeader column={column} label="Employment Type" />,
-    cell: ({ row }) => (
-      <span className="capitalize">{row.original.employmentType || '—'}</span>
-    ),
-    filterFn: 'equals',
+    cell: ({ row }) => <span className="capitalize">{row.original.employmentType || "—"}</span>,
+    filterFn: "equals",
   },
   {
-    accessorKey: 'startDate',
+    accessorKey: "startDate",
     header: ({ column }) => <SortableHeader column={column} label="Start Date" />,
     cell: ({ row }) => row.original.startDate || <span className="text-muted-foreground">—</span>,
   },
   {
-    accessorKey: 'affiliationStatus',
+    accessorKey: "affiliationStatus",
     header: ({ column }) => <SortableHeader column={column} label="Status" />,
     cell: ({ row }) => <StatusBadge status={row.original.affiliationStatus} />,
-    filterFn: 'equals',
+    filterFn: "equals",
   },
   {
-    id: 'actions',
+    id: "actions",
     header: () => <span className="sr-only">Actions</span>,
     cell: ({ row }) => (
       <EntityLink type="professional" id={row.original.healthProfessional.registrationNumber}>
@@ -140,12 +162,12 @@ function SortableHeader({ column, label }: { column: any; label: string }) {
       variant="ghost"
       size="sm"
       className="-ml-3 h-8 font-medium"
-      onClick={() => column.toggleSorting(sorted === 'asc')}
+      onClick={() => column.toggleSorting(sorted === "asc")}
     >
       {label}
-      {sorted === 'asc' ? (
+      {sorted === "asc" ? (
         <ArrowUp className="ml-1 h-3.5 w-3.5" />
-      ) : sorted === 'desc' ? (
+      ) : sorted === "desc" ? (
         <ArrowDown className="ml-1 h-3.5 w-3.5" />
       ) : (
         <ArrowUpDown className="ml-1 h-3.5 w-3.5 text-muted-foreground/50" />
@@ -154,7 +176,10 @@ function SortableHeader({ column, label }: { column: any; label: string }) {
   )
 }
 
-function getUniqueValues(data: Affiliation[], accessor: (row: Affiliation) => string | undefined): string[] {
+function getUniqueValues(
+  data: Affiliation[],
+  accessor: (row: Affiliation) => string | undefined
+): string[] {
   const values = new Set<string>()
   for (const row of data) {
     const val = accessor(row)
@@ -186,16 +211,16 @@ function flattenForExport(affiliations: Affiliation[]): FlatAffiliation[] {
 }
 
 const affiliationExportConfig: ExportConfig<FlatAffiliation> = {
-  filename: `affiliations-${dayjs().format('YYYY-MM-DD')}`,
-  title: 'Professional Affiliations Report',
+  filename: `affiliations-${dayjs().format("YYYY-MM-DD")}`,
+  title: "Professional Affiliations Report",
   columns: [
-    { key: 'professional', label: 'Professional' },
-    { key: 'registrationNumber', label: 'Registration #' },
-    { key: 'facility', label: 'Facility' },
-    { key: 'role', label: 'Role' },
-    { key: 'employmentType', label: 'Employment Type' },
-    { key: 'startDate', label: 'Start Date' },
-    { key: 'status', label: 'Status' },
+    { key: "professional", label: "Professional" },
+    { key: "registrationNumber", label: "Registration #" },
+    { key: "facility", label: "Facility" },
+    { key: "role", label: "Role" },
+    { key: "employmentType", label: "Employment Type" },
+    { key: "startDate", label: "Start Date" },
+    { key: "status", label: "Status" },
   ],
 }
 
@@ -207,7 +232,7 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
   const navigate = useNavigate()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [globalFilter, setGlobalFilter] = useState("")
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
   const table = useReactTable({
@@ -234,7 +259,7 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
 
   const clearAllFilters = () => {
     setColumnFilters([])
-    setGlobalFilter('')
+    setGlobalFilter("")
   }
 
   const exportData = flattenForExport(
@@ -248,7 +273,7 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
       <Button
         variant="ghost"
         size="sm"
-        onClick={() => navigate({ to: '/affiliations' })}
+        onClick={() => navigate({ to: "/affiliations" })}
         className="-ml-2"
       >
         <ArrowLeft className="h-4 w-4 mr-1" />
@@ -281,20 +306,20 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
         <FilterSelect
           placeholder="Role"
           options={roles}
-          value={(table.getColumn('role')?.getFilterValue() as string) ?? ''}
-          onChange={(val) => table.getColumn('role')?.setFilterValue(val || undefined)}
+          value={(table.getColumn("role")?.getFilterValue() as string) ?? ""}
+          onChange={(val) => table.getColumn("role")?.setFilterValue(val || undefined)}
         />
         <FilterSelect
           placeholder="Employment"
           options={employmentTypes}
-          value={(table.getColumn('employmentType')?.getFilterValue() as string) ?? ''}
-          onChange={(val) => table.getColumn('employmentType')?.setFilterValue(val || undefined)}
+          value={(table.getColumn("employmentType")?.getFilterValue() as string) ?? ""}
+          onChange={(val) => table.getColumn("employmentType")?.setFilterValue(val || undefined)}
         />
         <FilterSelect
           placeholder="Status"
           options={statuses}
-          value={(table.getColumn('affiliationStatus')?.getFilterValue() as string) ?? ''}
-          onChange={(val) => table.getColumn('affiliationStatus')?.setFilterValue(val || undefined)}
+          value={(table.getColumn("affiliationStatus")?.getFilterValue() as string) ?? ""}
+          onChange={(val) => table.getColumn("affiliationStatus")?.setFilterValue(val || undefined)}
         />
 
         {activeFilterCount > 0 && (
@@ -314,7 +339,13 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
                 {headerGroup.headers.map((header, idx) => (
                   <TableHead
                     key={header.id}
-                    className={idx === 0 ? 'sticky left-0 z-10 bg-card' : idx === 1 ? 'sticky left-0 z-10 bg-card border-r border-border/70' : undefined}
+                    className={
+                      idx === 0
+                        ? "sticky left-0 z-10 bg-card"
+                        : idx === 1
+                        ? "sticky left-0 z-10 bg-card border-r border-border/70"
+                        : undefined
+                    }
                   >
                     {header.isPlaceholder
                       ? null
@@ -331,7 +362,9 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
                   <div className="flex flex-col items-center gap-2">
                     <Users className="h-8 w-8 text-muted-foreground" />
                     <p className="text-muted-foreground">
-                      {activeFilterCount > 0 ? 'No affiliations match your filters' : 'No affiliations found'}
+                      {activeFilterCount > 0
+                        ? "No affiliations match your filters"
+                        : "No affiliations found"}
                     </p>
                     {activeFilterCount > 0 && (
                       <Button variant="outline" size="sm" onClick={clearAllFilters}>
@@ -343,11 +376,17 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
               </TableRow>
             ) : (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell, idx) => (
                     <TableCell
                       key={cell.id}
-                      className={idx === 0 ? 'sticky left-0 z-10 bg-card' : idx === 1 ? 'sticky left-0 z-10 bg-card border-r border-border/70' : undefined}
+                      className={
+                        idx === 0
+                          ? "sticky left-0 z-10 bg-card"
+                          : idx === 1
+                          ? "sticky left-0 z-10 bg-card border-r border-border/70"
+                          : undefined
+                      }
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
@@ -362,7 +401,8 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Showing {table.getRowModel().rows.length} of {table.getFilteredRowModel().rows.length} affiliations
+          Showing {table.getRowModel().rows.length} of {table.getFilteredRowModel().rows.length}{" "}
+          affiliations
           {table.getFilteredRowModel().rows.length !== affiliations.length &&
             ` (${affiliations.length} total)`}
         </p>
@@ -443,7 +483,10 @@ function FilterSelect({
   onChange: (val: string) => void
 }) {
   return (
-    <Select value={value || '__all__'} onValueChange={(val) => onChange(val === '__all__' ? '' : val)}>
+    <Select
+      value={value || "__all__"}
+      onValueChange={(val) => onChange(val === "__all__" ? "" : val)}
+    >
       <SelectTrigger className="h-9 w-[150px]">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

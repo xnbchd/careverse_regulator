@@ -1,16 +1,16 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from "framer-motion"
+import { X } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { cn } from "@/lib/utils"
 
 export interface BatchAction {
   id: string
   label: string
   icon?: React.ReactNode
   onClick: () => void
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary'
+  variant?: "default" | "destructive" | "outline" | "secondary"
   disabled?: boolean
 }
 
@@ -19,7 +19,7 @@ interface BatchActionBarProps {
   actions: BatchAction[]
   onClearSelection: () => void
   className?: string
-  position?: 'top' | 'bottom'
+  position?: "top" | "bottom"
 }
 
 export function BatchActionBar({
@@ -27,7 +27,7 @@ export function BatchActionBar({
   actions,
   onClearSelection,
   className,
-  position = 'bottom',
+  position = "bottom",
 }: BatchActionBarProps) {
   const isVisible = selectedCount > 0
 
@@ -35,15 +35,15 @@ export function BatchActionBar({
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ y: position === 'bottom' ? 100 : -100, opacity: 0 }}
+          initial={{ y: position === "bottom" ? 100 : -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: position === 'bottom' ? 100 : -100, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+          exit={{ y: position === "bottom" ? 100 : -100, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
           className={cn(
-            'fixed left-1/2 transform -translate-x-1/2 z-50',
-            position === 'bottom' ? 'bottom-6' : 'top-20',
-            'bg-background border border-border rounded-lg shadow-lg',
-            'flex items-center gap-3 px-4 py-3',
+            "fixed left-1/2 transform -translate-x-1/2 z-50",
+            position === "bottom" ? "bottom-6" : "top-20",
+            "bg-background border border-border rounded-lg shadow-lg",
+            "flex items-center gap-3 px-4 py-3",
             className
           )}
         >
@@ -61,7 +61,7 @@ export function BatchActionBar({
             {actions.map((action) => (
               <Button
                 key={action.id}
-                variant={action.variant || 'default'}
+                variant={action.variant || "default"}
                 size="sm"
                 onClick={action.onClick}
                 disabled={action.disabled}

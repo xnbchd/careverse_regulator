@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react"
 import {
   Dialog,
   DialogContent,
@@ -6,22 +6,22 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { AlertCircle, Loader2 } from 'lucide-react'
-import { updateUser } from '@/api/userManagementApi'
-import { showSuccess, showError } from '@/utils/toast'
-import type { FrappeUser, PortalRole } from '@/types/user'
+} from "@/components/ui/select"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle, Loader2 } from "lucide-react"
+import { updateUser } from "@/api/userManagementApi"
+import { showSuccess, showError } from "@/utils/toast"
+import type { FrappeUser, PortalRole } from "@/types/user"
 
 interface EditUserDialogProps {
   open: boolean
@@ -30,18 +30,23 @@ interface EditUserDialogProps {
   onSuccess: () => void
 }
 
-const PORTAL_ROLES: PortalRole[] = ['Regulator Admin', 'Inspection Manager', 'Regulator User']
+const PORTAL_ROLES: PortalRole[] = ["Regulator Admin", "Inspection Manager", "Regulator User"]
 
-function getPortalRole(roles: string[]): PortalRole | '' {
-  return PORTAL_ROLES.find((r) => roles.includes(r)) ?? ''
+function getPortalRole(roles: string[]): PortalRole | "" {
+  return PORTAL_ROLES.find((r) => roles.includes(r)) ?? ""
 }
 
-export default function EditUserDialog({ open, onOpenChange, user, onSuccess }: EditUserDialogProps) {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [idNumber, setIdNumber] = useState('')
-  const [phone, setPhone] = useState('')
-  const [role, setRole] = useState<PortalRole | ''>('')
+export default function EditUserDialog({
+  open,
+  onOpenChange,
+  user,
+  onSuccess,
+}: EditUserDialogProps) {
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [idNumber, setIdNumber] = useState("")
+  const [phone, setPhone] = useState("")
+  const [role, setRole] = useState<PortalRole | "">("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -49,15 +54,15 @@ export default function EditUserDialog({ open, onOpenChange, user, onSuccess }: 
     if (user) {
       // Backend returns full_name only (not first_name / last_name separately).
       // Split on the first space so multi-part last names stay intact.
-      const fullName = (user.full_name || '').trim()
-      const spaceIdx = fullName.indexOf(' ')
+      const fullName = (user.full_name || "").trim()
+      const spaceIdx = fullName.indexOf(" ")
       const parsedFirst = spaceIdx > 0 ? fullName.slice(0, spaceIdx) : fullName
-      const parsedLast = spaceIdx > 0 ? fullName.slice(spaceIdx + 1) : ''
+      const parsedLast = spaceIdx > 0 ? fullName.slice(spaceIdx + 1) : ""
 
       setFirstName(parsedFirst)
       setLastName(parsedLast)
-      setIdNumber(user.username || '')
-      setPhone(user.mobile_no || '')
+      setIdNumber(user.username || "")
+      setPhone(user.mobile_no || "")
       setRole(getPortalRole(user.roles))
       setError(null)
     }
@@ -76,7 +81,7 @@ export default function EditUserDialog({ open, onOpenChange, user, onSuccess }: 
     setError(null)
 
     if (!firstName.trim() || !lastName.trim() || !role) {
-      setError('Please fill in all required fields.')
+      setError("Please fill in all required fields.")
       return
     }
 
@@ -95,7 +100,7 @@ export default function EditUserDialog({ open, onOpenChange, user, onSuccess }: 
       onOpenChange(false)
       onSuccess()
     } catch (err: any) {
-      const msg = err?.message || 'Failed to update user.'
+      const msg = err?.message || "Failed to update user."
       setError(msg)
       showError(msg)
     } finally {
@@ -123,7 +128,7 @@ export default function EditUserDialog({ open, onOpenChange, user, onSuccess }: 
 
           <div className="space-y-2">
             <Label>Email Address</Label>
-            <Input value={user?.email || ''} disabled className="font-mono bg-muted" />
+            <Input value={user?.email || ""} disabled className="font-mono bg-muted" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -177,7 +182,11 @@ export default function EditUserDialog({ open, onOpenChange, user, onSuccess }: 
             <Label htmlFor="editRole">
               Assigned Role <span className="text-destructive">*</span>
             </Label>
-            <Select value={role} onValueChange={(v) => setRole(v as PortalRole)} disabled={submitting}>
+            <Select
+              value={role}
+              onValueChange={(v) => setRole(v as PortalRole)}
+              disabled={submitting}
+            >
               <SelectTrigger id="editRole">
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
@@ -202,7 +211,7 @@ export default function EditUserDialog({ open, onOpenChange, user, onSuccess }: 
                   Saving...
                 </>
               ) : (
-                'Save Changes'
+                "Save Changes"
               )}
             </Button>
           </DialogFooter>

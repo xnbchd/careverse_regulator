@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import { useAuditStore } from '@/stores/auditStore'
-import { format } from 'date-fns'
+import { useState } from "react"
+import { useAuditStore } from "@/stores/auditStore"
+import { format } from "date-fns"
 import {
   Table,
   TableBody,
@@ -8,25 +8,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+} from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   ChevronLeft,
   ChevronRight,
@@ -39,7 +33,7 @@ import {
   Eye,
   CheckCircle,
   XCircle,
-} from 'lucide-react'
+} from "lucide-react"
 import {
   AuditAction,
   AuditEntity,
@@ -49,8 +43,8 @@ import {
   getEntityLabel,
   getSeverityColor,
   getSeverityLabel,
-} from '@/types/audit'
-import { cn } from '@/lib/utils'
+} from "@/types/audit"
+import { cn } from "@/lib/utils"
 
 export function AuditLogViewer() {
   const {
@@ -70,7 +64,7 @@ export function AuditLogViewer() {
     exportLogs,
   } = useAuditStore()
 
-  const [searchQuery, setSearchQuery] = useState(filters.query || '')
+  const [searchQuery, setSearchQuery] = useState(filters.query || "")
   const [showFilters, setShowFilters] = useState(false)
 
   // Handle search
@@ -88,8 +82,8 @@ export function AuditLogViewer() {
     try {
       await exportLogs(format)
     } catch (error) {
-      console.error('Export failed:', error)
-      alert('Failed to export audit logs. Please try again.')
+      console.error("Export failed:", error)
+      alert("Failed to export audit logs. Please try again.")
     }
   }
 
@@ -122,13 +116,9 @@ export function AuditLogViewer() {
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowFilters(!showFilters)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
                 <Filter className="w-4 h-4 mr-2" />
-                {showFilters ? 'Hide' : 'Show'} Filters
+                {showFilters ? "Hide" : "Show"} Filters
               </Button>
               <Select
                 value=""
@@ -137,7 +127,7 @@ export function AuditLogViewer() {
               >
                 <SelectTrigger className="w-[140px]">
                   <Download className="w-4 h-4 mr-2" />
-                  <span>{isExporting ? 'Exporting...' : 'Export'}</span>
+                  <span>{isExporting ? "Exporting..." : "Export"}</span>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={AuditExportFormat.CSV}>CSV</SelectItem>
@@ -158,7 +148,7 @@ export function AuditLogViewer() {
                 placeholder="Search by description, user, or entity..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 className="pl-9"
               />
             </div>
@@ -167,7 +157,7 @@ export function AuditLogViewer() {
               <Button
                 variant="outline"
                 onClick={() => {
-                  setSearchQuery('')
+                  setSearchQuery("")
                   clearFilters()
                 }}
               >
@@ -183,8 +173,8 @@ export function AuditLogViewer() {
               <div>
                 <label className="text-xs font-medium mb-1 block">Action</label>
                 <Select
-                  value={filters.action || ''}
-                  onValueChange={(value) => handleFilterChange('action', value)}
+                  value={filters.action || ""}
+                  onValueChange={(value) => handleFilterChange("action", value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All actions" />
@@ -203,8 +193,8 @@ export function AuditLogViewer() {
               <div>
                 <label className="text-xs font-medium mb-1 block">Entity</label>
                 <Select
-                  value={filters.entity || ''}
-                  onValueChange={(value) => handleFilterChange('entity', value)}
+                  value={filters.entity || ""}
+                  onValueChange={(value) => handleFilterChange("entity", value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All entities" />
@@ -223,8 +213,8 @@ export function AuditLogViewer() {
               <div>
                 <label className="text-xs font-medium mb-1 block">Severity</label>
                 <Select
-                  value={filters.severity || ''}
-                  onValueChange={(value) => handleFilterChange('severity', value)}
+                  value={filters.severity || ""}
+                  onValueChange={(value) => handleFilterChange("severity", value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All severities" />
@@ -243,11 +233,9 @@ export function AuditLogViewer() {
               <div>
                 <label className="text-xs font-medium mb-1 block">Status</label>
                 <Select
-                  value={
-                    filters.success === undefined ? '' : filters.success ? 'true' : 'false'
-                  }
+                  value={filters.success === undefined ? "" : filters.success ? "true" : "false"}
                   onValueChange={(value) =>
-                    handleFilterChange('success', value === '' ? undefined : value === 'true')
+                    handleFilterChange("success", value === "" ? undefined : value === "true")
                   }
                 >
                   <SelectTrigger>
@@ -265,8 +253,8 @@ export function AuditLogViewer() {
                 <label className="text-xs font-medium mb-1 block">User ID</label>
                 <Input
                   placeholder="Filter by user"
-                  value={filters.userId || ''}
-                  onChange={(e) => handleFilterChange('userId', e.target.value)}
+                  value={filters.userId || ""}
+                  onChange={(e) => handleFilterChange("userId", e.target.value)}
                 />
               </div>
             </div>
@@ -280,8 +268,8 @@ export function AuditLogViewer() {
                   Search: {filters.query}
                   <button
                     onClick={() => {
-                      setSearchQuery('')
-                      handleFilterChange('query', '')
+                      setSearchQuery("")
+                      handleFilterChange("query", "")
                     }}
                     className="ml-1"
                   >
@@ -292,7 +280,7 @@ export function AuditLogViewer() {
               {filters.action && (
                 <Badge variant="secondary">
                   Action: {getActionLabel(filters.action)}
-                  <button onClick={() => handleFilterChange('action', '')} className="ml-1">
+                  <button onClick={() => handleFilterChange("action", "")} className="ml-1">
                     <X className="w-3 h-3" />
                   </button>
                 </Badge>
@@ -300,7 +288,7 @@ export function AuditLogViewer() {
               {filters.entity && (
                 <Badge variant="secondary">
                   Entity: {getEntityLabel(filters.entity)}
-                  <button onClick={() => handleFilterChange('entity', '')} className="ml-1">
+                  <button onClick={() => handleFilterChange("entity", "")} className="ml-1">
                     <X className="w-3 h-3" />
                   </button>
                 </Badge>
@@ -308,15 +296,15 @@ export function AuditLogViewer() {
               {filters.severity && (
                 <Badge variant="secondary">
                   Severity: {getSeverityLabel(filters.severity)}
-                  <button onClick={() => handleFilterChange('severity', '')} className="ml-1">
+                  <button onClick={() => handleFilterChange("severity", "")} className="ml-1">
                     <X className="w-3 h-3" />
                   </button>
                 </Badge>
               )}
               {filters.success !== undefined && (
                 <Badge variant="secondary">
-                  Status: {filters.success ? 'Success' : 'Failed'}
-                  <button onClick={() => handleFilterChange('success', undefined)} className="ml-1">
+                  Status: {filters.success ? "Success" : "Failed"}
+                  <button onClick={() => handleFilterChange("success", undefined)} className="ml-1">
                     <X className="w-3 h-3" />
                   </button>
                 </Badge>
@@ -361,7 +349,7 @@ export function AuditLogViewer() {
                     {logs.map((log) => (
                       <TableRow key={log.id} className="cursor-pointer hover:bg-muted/50">
                         <TableCell className="font-mono text-xs">
-                          {format(new Date(log.timestamp), 'MMM dd, yyyy HH:mm:ss')}
+                          {format(new Date(log.timestamp), "MMM dd, yyyy HH:mm:ss")}
                         </TableCell>
                         <TableCell>
                           <span className="text-xs">{getActionLabel(log.action)}</span>
@@ -388,7 +376,7 @@ export function AuditLogViewer() {
                         <TableCell>
                           <Badge
                             variant="outline"
-                            className={cn('text-xs', getSeverityColor(log.severity))}
+                            className={cn("text-xs", getSeverityColor(log.severity))}
                           >
                             {getSeverityLabel(log.severity)}
                           </Badge>
@@ -401,11 +389,7 @@ export function AuditLogViewer() {
                           )}
                         </TableCell>
                         <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => selectLog(log)}
-                          >
+                          <Button variant="ghost" size="sm" onClick={() => selectLog(log)}>
                             <Eye className="w-4 h-4" />
                           </Button>
                         </TableCell>

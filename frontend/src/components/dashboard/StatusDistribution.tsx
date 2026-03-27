@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useMemo } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useMemo } from "react"
 
 export interface StatusData {
   status: string
@@ -10,20 +10,17 @@ export interface StatusData {
 export interface StatusDistributionProps {
   data: StatusData[]
   title?: string
-  type?: 'pie' | 'bar'
+  type?: "pie" | "bar"
   onSegmentClick?: (status: string) => void
 }
 
 export function StatusDistribution({
   data,
-  title = 'Status Distribution',
-  type = 'pie',
+  title = "Status Distribution",
+  type = "pie",
   onSegmentClick,
 }: StatusDistributionProps) {
-  const total = useMemo(
-    () => data.reduce((sum, item) => sum + item.count, 0),
-    [data]
-  )
+  const total = useMemo(() => data.reduce((sum, item) => sum + item.count, 0), [data])
 
   const maxCount = useMemo(
     () => (data.length > 0 ? Math.max(...data.map((item) => item.count)) : 0),
@@ -41,8 +38,8 @@ export function StatusDistribution({
       return [
         {
           ...nonZero[0],
-          percentage: '100.0',
-          path: '',
+          percentage: "100.0",
+          path: "",
           isFullCircle: true,
         },
       ]
@@ -75,7 +72,7 @@ export function StatusDistribution({
     })
   }, [data, total])
 
-  if (type === 'bar') {
+  if (type === "bar") {
     return (
       <Card>
         <CardHeader>
@@ -87,14 +84,13 @@ export function StatusDistribution({
           ) : (
             <div className="space-y-3">
               {data.map((item) => {
-                const percentage =
-                  total > 0 ? ((item.count / total) * 100).toFixed(1) : '0'
+                const percentage = total > 0 ? ((item.count / total) * 100).toFixed(1) : "0"
                 const width = maxCount > 0 ? (item.count / maxCount) * 100 : 0
 
                 return (
                   <div
                     key={item.status}
-                    className={onSegmentClick ? 'cursor-pointer' : ''}
+                    className={onSegmentClick ? "cursor-pointer" : ""}
                     onClick={() => onSegmentClick?.(item.status)}
                   >
                     <div className="flex items-center justify-between mb-1">
@@ -143,9 +139,7 @@ export function StatusDistribution({
                     r="80"
                     fill={segment.color}
                     className={
-                      onSegmentClick
-                        ? 'cursor-pointer hover:opacity-80 transition-opacity'
-                        : ''
+                      onSegmentClick ? "cursor-pointer hover:opacity-80 transition-opacity" : ""
                     }
                     onClick={() => onSegmentClick?.(segment.status)}
                   />
@@ -155,9 +149,7 @@ export function StatusDistribution({
                     d={segment.path}
                     fill={segment.color}
                     className={
-                      onSegmentClick
-                        ? 'cursor-pointer hover:opacity-80 transition-opacity'
-                        : ''
+                      onSegmentClick ? "cursor-pointer hover:opacity-80 transition-opacity" : ""
                     }
                     onClick={() => onSegmentClick?.(segment.status)}
                   />
@@ -191,9 +183,7 @@ export function StatusDistribution({
                 <div
                   key={index}
                   className={`flex items-center justify-between p-2 rounded ${
-                    onSegmentClick
-                      ? 'cursor-pointer hover:bg-muted/50'
-                      : ''
+                    onSegmentClick ? "cursor-pointer hover:bg-muted/50" : ""
                   }`}
                   onClick={() => onSegmentClick?.(segment.status)}
                 >

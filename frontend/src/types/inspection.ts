@@ -7,7 +7,7 @@ export interface Inspection {
   professionalId: string
   inspector: string
   noteToInspector: string
-  status: 'Non Compliant' | 'Completed' | 'Pending'
+  status: "Non Compliant" | "Completed" | "Pending"
   company?: string
   findings?: Finding[]
   inspectedDate?: string
@@ -22,7 +22,7 @@ export interface BackendInspection {
   professional: string
   professional_name?: string
   note_to_inspector: string
-  status: 'Non Compliant' | 'Completed' | 'Pending'
+  status: "Non Compliant" | "Completed" | "Pending"
   company?: string
   findings?: BackendFinding[]
   inspected_date?: string
@@ -56,7 +56,7 @@ export interface CreateInspectionPayload {
   scheduled_date: string
   professional: string
   note_to_inspector: string
-  status?: 'Non Compliant' | 'Completed' | 'Pending'
+  status?: "Non Compliant" | "Completed" | "Pending"
   company?: string
 }
 
@@ -65,7 +65,7 @@ export interface UpdateInspectionPayload {
   scheduled_date?: string
   professional?: string
   note_to_inspector?: string
-  status?: 'Non Compliant' | 'Completed' | 'Pending'
+  status?: "Non Compliant" | "Completed" | "Pending"
 }
 
 export interface Facility {
@@ -89,11 +89,11 @@ export interface Attachment {
 export interface Finding {
   id: string
   findingId: string
-  idx: number  // Child table row index
+  idx: number // Child table row index
   category: string
-  severity: 'Critical' | 'Major' | 'Minor'
+  severity: "Critical" | "Major" | "Minor"
   description: string
-  status: 'Open' | 'In Progress' | 'Resolved'
+  status: "Open" | "In Progress" | "Resolved"
   correctiveAction?: string
   dueDate?: string
   resolvedDate?: string
@@ -111,9 +111,9 @@ export interface BackendFinding {
   name: string
   idx: number
   category: string
-  severity: 'Critical' | 'Major' | 'Minor'
+  severity: "Critical" | "Major" | "Minor"
   description: string
-  status: 'Open' | 'In Progress' | 'Resolved'
+  status: "Open" | "In Progress" | "Resolved"
   corrective_action?: string | null
   due_date?: string | null
   resolved_date?: string | null

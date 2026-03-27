@@ -5,16 +5,16 @@
  * See NAVIGATION_PATTERNS.md for full documentation.
  */
 
-import type { NavigateOptions } from '@tanstack/react-router'
+import type { NavigateOptions } from "@tanstack/react-router"
 
 /**
  * Valid status values for each entity type
  */
 export const VALID_STATUSES = {
-  affiliation: ['Pending', 'Active', 'Rejected', 'Inactive'] as const,
-  license: ['Active', 'Expired', 'Suspended', 'Denied', 'In Review', 'Renewal Reviewed'] as const,
-  application: ['Pending', 'Approved', 'Denied', 'Info Requested'] as const,
-  inspection: ['Pending', 'Completed', 'Non Compliant'] as const,
+  affiliation: ["Pending", "Active", "Rejected", "Inactive"] as const,
+  license: ["Active", "Expired", "Suspended", "Denied", "In Review", "Renewal Reviewed"] as const,
+  application: ["Pending", "Approved", "Denied", "Info Requested"] as const,
+  inspection: ["Pending", "Completed", "Non Compliant"] as const,
 } as const
 
 export type AffiliationStatus = typeof VALID_STATUSES.affiliation[number]
@@ -27,16 +27,16 @@ export type InspectionStatus = typeof VALID_STATUSES.inspection[number]
  */
 export const ROUTES = {
   // Dashboards
-  main: '/',
-  affiliationsDashboard: '/affiliations',
-  licensesDashboard: '/license-management',
-  inspectionsDashboard: '/inspections',
+  main: "/",
+  affiliationsDashboard: "/affiliations",
+  licensesDashboard: "/license-management",
+  inspectionsDashboard: "/inspections",
 
   // List Views
-  affiliationsList: '/affiliations/list',
-  licensesList: '/license-management/licenses',
-  applicationsList: '/license-management/applications',
-  inspectionsList: '/inspections/list',
+  affiliationsList: "/affiliations/list",
+  licensesList: "/license-management/licenses",
+  applicationsList: "/license-management/applications",
+  inspectionsList: "/inspections/list",
 
   // Detail Views
   affiliationDetail: (id: string) => `/affiliations/${id}`,
@@ -60,14 +60,14 @@ export interface AffiliationsListParams {
   status?: AffiliationStatus
   search?: string
   sortBy?: string
-  sortOrder?: 'asc' | 'desc'
+  sortOrder?: "asc" | "desc"
 }
 
 export interface LicensesListParams {
   status?: LicenseStatus
   search?: string
   sortBy?: string
-  sortOrder?: 'asc' | 'desc'
+  sortOrder?: "asc" | "desc"
 }
 
 export interface ApplicationsListParams {
@@ -75,7 +75,7 @@ export interface ApplicationsListParams {
   applicationType?: string
   search?: string
   sortBy?: string
-  sortOrder?: 'asc' | 'desc'
+  sortOrder?: "asc" | "desc"
 }
 
 export interface InspectionsListParams {
@@ -83,10 +83,10 @@ export interface InspectionsListParams {
   search?: string
   startDate?: string
   endDate?: string
-  sortBy?: 'facility_name' | 'modified'
-  sortOrder?: 'asc' | 'desc'
-  activeTab?: 'scheduled' | 'findings'
-  modal?: 'schedule'
+  sortBy?: "facility_name" | "modified"
+  sortOrder?: "asc" | "desc"
+  activeTab?: "scheduled" | "findings"
+  modal?: "schedule"
 }
 
 /**
@@ -95,7 +95,7 @@ export interface InspectionsListParams {
 
 export function navigateToAffiliationsList(params?: AffiliationsListParams): NavigateOptions {
   // Validate status if provided
-  if (params?.status && !isValidStatus('affiliation', params.status)) {
+  if (params?.status && !isValidStatus("affiliation", params.status)) {
     console.warn(`Invalid affiliation status: ${params.status}`)
   }
 
@@ -107,7 +107,7 @@ export function navigateToAffiliationsList(params?: AffiliationsListParams): Nav
 
 export function navigateToLicensesList(params?: LicensesListParams): NavigateOptions {
   // Validate status if provided
-  if (params?.status && !isValidStatus('license', params.status)) {
+  if (params?.status && !isValidStatus("license", params.status)) {
     console.warn(`Invalid license status: ${params.status}`)
   }
 
@@ -119,7 +119,7 @@ export function navigateToLicensesList(params?: LicensesListParams): NavigateOpt
 
 export function navigateToApplicationsList(params?: ApplicationsListParams): NavigateOptions {
   // Validate status if provided
-  if (params?.applicationStatus && !isValidStatus('application', params.applicationStatus)) {
+  if (params?.applicationStatus && !isValidStatus("application", params.applicationStatus)) {
     console.warn(`Invalid application status: ${params.applicationStatus}`)
   }
 
@@ -131,8 +131,10 @@ export function navigateToApplicationsList(params?: ApplicationsListParams): Nav
 
 export function navigateToInspectionsList(params?: InspectionsListParams): NavigateOptions {
   // Validate status if provided
-  if (params?.status && !isValidStatus('inspection', params.status)) {
-    console.warn(`Invalid inspection status: ${params.status}. Use 'Pending' for computed states like 'Overdue'.`)
+  if (params?.status && !isValidStatus("inspection", params.status)) {
+    console.warn(
+      `Invalid inspection status: ${params.status}. Use 'Pending' for computed states like 'Overdue'.`
+    )
   }
 
   return {
@@ -145,13 +147,13 @@ export function navigateToInspectionsList(params?: InspectionsListParams): Navig
  * Helper to navigate back to dashboard from list view
  */
 export function getBackToDashboardRoute(currentPath: string): string {
-  if (currentPath.startsWith('/affiliations/')) {
+  if (currentPath.startsWith("/affiliations/")) {
     return ROUTES.affiliationsDashboard
   }
-  if (currentPath.startsWith('/license-management/')) {
+  if (currentPath.startsWith("/license-management/")) {
     return ROUTES.licensesDashboard
   }
-  if (currentPath.startsWith('/inspections/')) {
+  if (currentPath.startsWith("/inspections/")) {
     return ROUTES.inspectionsDashboard
   }
   return ROUTES.main
@@ -165,29 +167,27 @@ export function getBackToDashboardRoute(currentPath: string): string {
  * Navigate to list view with pending items filter
  */
 export function navigateToPendingItems(
-  entity: 'affiliations' | 'applications' | 'inspections'
+  entity: "affiliations" | "applications" | "inspections"
 ): NavigateOptions {
   switch (entity) {
-    case 'affiliations':
-      return navigateToAffiliationsList({ status: 'Pending' })
-    case 'applications':
-      return navigateToApplicationsList({ applicationStatus: 'Pending' })
-    case 'inspections':
-      return navigateToInspectionsList({ status: 'Pending' })
+    case "affiliations":
+      return navigateToAffiliationsList({ status: "Pending" })
+    case "applications":
+      return navigateToApplicationsList({ applicationStatus: "Pending" })
+    case "inspections":
+      return navigateToInspectionsList({ status: "Pending" })
   }
 }
 
 /**
  * Navigate to list view with active items filter
  */
-export function navigateToActiveItems(
-  entity: 'affiliations' | 'licenses'
-): NavigateOptions {
+export function navigateToActiveItems(entity: "affiliations" | "licenses"): NavigateOptions {
   switch (entity) {
-    case 'affiliations':
-      return navigateToAffiliationsList({ status: 'Active' })
-    case 'licenses':
-      return navigateToLicensesList({ status: 'Active' })
+    case "affiliations":
+      return navigateToAffiliationsList({ status: "Active" })
+    case "licenses":
+      return navigateToLicensesList({ status: "Active" })
   }
 }
 
@@ -196,7 +196,7 @@ export function navigateToActiveItems(
  * (Uses Pending status since Overdue is a computed state)
  */
 export function navigateToOverdueInspections(): NavigateOptions {
-  return navigateToInspectionsList({ status: 'Pending' })
+  return navigateToInspectionsList({ status: "Pending" })
 }
 
 /**
@@ -204,39 +204,51 @@ export function navigateToOverdueInspections(): NavigateOptions {
  * (Doesn't use status filter since "Expiring Soon" is computed)
  */
 export function navigateToExpiringSoonLicenses(): NavigateOptions {
-  return navigateToLicensesList()  // No status filter, user can see all active
+  return navigateToLicensesList() // No status filter, user can see all active
 }
 
 /**
  * Open schedule inspection modal
  */
 export function openScheduleInspectionModal(): NavigateOptions {
-  return navigateToInspectionsList({ modal: 'schedule' })
+  return navigateToInspectionsList({ modal: "schedule" })
 }
 
 /**
  * Type guards for development
  */
 export function assertValidAffiliationStatus(status: string): asserts status is AffiliationStatus {
-  if (!isValidStatus('affiliation', status)) {
-    throw new Error(`Invalid affiliation status: ${status}. Valid values: ${VALID_STATUSES.affiliation.join(', ')}`)
+  if (!isValidStatus("affiliation", status)) {
+    throw new Error(
+      `Invalid affiliation status: ${status}. Valid values: ${VALID_STATUSES.affiliation.join(
+        ", "
+      )}`
+    )
   }
 }
 
 export function assertValidLicenseStatus(status: string): asserts status is LicenseStatus {
-  if (!isValidStatus('license', status)) {
-    throw new Error(`Invalid license status: ${status}. Valid values: ${VALID_STATUSES.license.join(', ')}`)
+  if (!isValidStatus("license", status)) {
+    throw new Error(
+      `Invalid license status: ${status}. Valid values: ${VALID_STATUSES.license.join(", ")}`
+    )
   }
 }
 
 export function assertValidApplicationStatus(status: string): asserts status is ApplicationStatus {
-  if (!isValidStatus('application', status)) {
-    throw new Error(`Invalid application status: ${status}. Valid values: ${VALID_STATUSES.application.join(', ')}`)
+  if (!isValidStatus("application", status)) {
+    throw new Error(
+      `Invalid application status: ${status}. Valid values: ${VALID_STATUSES.application.join(
+        ", "
+      )}`
+    )
   }
 }
 
 export function assertValidInspectionStatus(status: string): asserts status is InspectionStatus {
-  if (!isValidStatus('inspection', status)) {
-    throw new Error(`Invalid inspection status: ${status}. Valid values: ${VALID_STATUSES.inspection.join(', ')}`)
+  if (!isValidStatus("inspection", status)) {
+    throw new Error(
+      `Invalid inspection status: ${status}. Valid values: ${VALID_STATUSES.inspection.join(", ")}`
+    )
   }
 }

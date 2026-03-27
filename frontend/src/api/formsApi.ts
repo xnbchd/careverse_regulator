@@ -1,13 +1,13 @@
-import apiClient from './client'
+import apiClient from "./client"
 import type {
   LicenseApplicationData,
   LicenseRenewalData,
   LicenseAppealData,
   FormSubmission,
   FormType,
-} from '@/types/forms'
+} from "@/types/forms"
 
-const API_BASE = '/api/method/compliance_360.api.forms'
+const API_BASE = "/api/method/compliance_360.api.forms"
 
 /**
  * Submit new license application
@@ -19,7 +19,7 @@ export async function submitLicenseApplication(
 
   // Add form fields
   Object.entries(data).forEach(([key, value]) => {
-    if (key !== 'documents' && value !== undefined && value !== null) {
+    if (key !== "documents" && value !== undefined && value !== null) {
       if (Array.isArray(value)) {
         formData.append(key, JSON.stringify(value))
       } else {
@@ -52,15 +52,13 @@ export async function submitLicenseApplication(
 /**
  * Submit license renewal
  */
-export async function submitLicenseRenewal(
-  data: LicenseRenewalData
-): Promise<FormSubmission> {
+export async function submitLicenseRenewal(data: LicenseRenewalData): Promise<FormSubmission> {
   const formData = new FormData()
 
   // Add form fields
   Object.entries(data).forEach(([key, value]) => {
-    if (key !== 'documents' && value !== undefined && value !== null) {
-      if (typeof value === 'object') {
+    if (key !== "documents" && value !== undefined && value !== null) {
+      if (typeof value === "object") {
         formData.append(key, JSON.stringify(value))
       } else {
         formData.append(key, String(value))
@@ -97,7 +95,7 @@ export async function submitLicenseAppeal(data: LicenseAppealData): Promise<Form
 
   // Add form fields
   Object.entries(data).forEach(([key, value]) => {
-    if (key !== 'documents' && value !== undefined && value !== null) {
+    if (key !== "documents" && value !== undefined && value !== null) {
       if (Array.isArray(value)) {
         formData.append(key, JSON.stringify(value))
       } else {

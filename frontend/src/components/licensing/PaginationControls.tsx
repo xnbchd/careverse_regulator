@@ -1,12 +1,12 @@
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select"
 
 interface PaginationControlsProps {
   currentPage: number
@@ -40,10 +40,7 @@ export default function PaginationControls({
       </p>
       <div className="flex items-center gap-2">
         {onPageSizeChange && (
-          <Select
-            value={String(pageSize)}
-            onValueChange={(val) => onPageSizeChange(Number(val))}
-          >
+          <Select value={String(pageSize)} onValueChange={(val) => onPageSizeChange(Number(val))}>
             <SelectTrigger className="h-9 w-[100px]">
               <SelectValue />
             </SelectTrigger>

@@ -1,5 +1,5 @@
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface RoadmapShellProps {
   title: string
@@ -7,15 +7,15 @@ interface RoadmapShellProps {
 }
 
 const currentTracks = [
-  'Module route, access guardrails, and shell layout are ready.',
-  'Form and queue components are wired for role-aware workflows.',
-  'Design tokens and dark-mode surfaces are aligned to portal standards.',
+  "Module route, access guardrails, and shell layout are ready.",
+  "Form and queue components are wired for role-aware workflows.",
+  "Design tokens and dark-mode surfaces are aligned to portal standards.",
 ]
 
 const nextTracks = [
-  'Connect live domain APIs for real queue and status data.',
-  'Add filters, exports, and full audit-trail visibility.',
-  'Complete reviewer actions and approval decision forms.',
+  "Connect live domain APIs for real queue and status data.",
+  "Add filters, exports, and full audit-trail visibility.",
+  "Complete reviewer actions and approval decision forms.",
 ]
 
 export default function RoadmapShell({ title, description }: RoadmapShellProps) {
@@ -41,7 +41,10 @@ export default function RoadmapShell({ title, description }: RoadmapShellProps) 
           <CardContent>
             <ul className="space-y-2">
               {currentTracks.map((item, index) => (
-                <li key={index} className="text-sm border-b border-border last:border-0 pb-2 last:pb-0">
+                <li
+                  key={index}
+                  className="text-sm border-b border-border last:border-0 pb-2 last:pb-0"
+                >
                   {item}
                 </li>
               ))}
@@ -56,7 +59,10 @@ export default function RoadmapShell({ title, description }: RoadmapShellProps) 
           <CardContent>
             <ul className="space-y-2">
               {nextTracks.map((item, index) => (
-                <li key={index} className="text-sm border-b border-border last:border-0 pb-2 last:pb-0">
+                <li
+                  key={index}
+                  className="text-sm border-b border-border last:border-0 pb-2 last:pb-0"
+                >
                   {item}
                 </li>
               ))}

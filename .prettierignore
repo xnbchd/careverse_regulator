@@ -1,0 +1,34 @@
+# Build outputs
+**/dist/
+**/build/
+**/.vite/
+careverse_regulator/public/compliance-360/
+
+# Dependencies
+**/node_modules/
+
+# Generated files
+**/routeTree.gen.ts
+**/coverage/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Python
+*.py
+*.pyc
+__pycache__/
+
+# Environment files
+.env*
+
+# Misc
+.DS_Store
+*.log
+*.svg
+
+# Data files
+*.txt
+*.csv

@@ -1,19 +1,30 @@
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Search, FileText } from 'lucide-react'
-import { fetchLicenseAppeals, type LicenseAppeal, type LicenseAppealsFilters } from '@/api/licenseAppealsApi'
-import { format } from 'date-fns'
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Search, FileText } from "lucide-react"
+import {
+  fetchLicenseAppeals,
+  type LicenseAppeal,
+  type LicenseAppealsFilters,
+} from "@/api/licenseAppealsApi"
+import { format } from "date-fns"
 
 export default function LicenseAppealsView() {
   const [appeals, setAppeals] = useState<LicenseAppeal[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState("")
   const [filters, setFilters] = useState<LicenseAppealsFilters>({})
 
   useEffect(() => {
@@ -27,7 +38,7 @@ export default function LicenseAppealsView() {
       setAppeals(response.data)
       setTotalPages(response.pagination.total_pages)
     } catch (error) {
-      console.error('Failed to load appeals:', error)
+      console.error("Failed to load appeals:", error)
     } finally {
       setLoading(false)
     }
@@ -40,14 +51,14 @@ export default function LicenseAppealsView() {
 
   const getStatusBadgeVariant = (status?: string) => {
     switch (status) {
-      case 'Approved':
-        return 'default'
-      case 'Rejected':
-        return 'destructive'
-      case 'Additional Information Requested':
-        return 'secondary'
+      case "Approved":
+        return "default"
+      case "Rejected":
+        return "destructive"
+      case "Additional Information Requested":
+        return "secondary"
       default:
-        return 'outline'
+        return "outline"
     }
   }
 
@@ -65,7 +76,7 @@ export default function LicenseAppealsView() {
                 placeholder="Search by license number, facility name, or appeal reason..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               />
               <Button onClick={handleSearch} variant="secondary">
                 <Search className="w-4 h-4" />
@@ -116,26 +127,30 @@ export default function LicenseAppealsView() {
                       {appeal.appeal_type}
                     </Badge>
                   </TableCell>
-                  <TableCell className="font-mono text-sm">
-                    {appeal.license_number}
-                  </TableCell>
+                  <TableCell className="font-mono text-sm">{appeal.license_number}</TableCell>
                   <TableCell>
-                    <span className="max-w-[200px] truncate inline-block" title={appeal.facility_name || appeal.professional_name || 'N/A'}>
-                      {appeal.facility_name || appeal.professional_name || 'N/A'}
+                    <span
+                      className="max-w-[200px] truncate inline-block"
+                      title={appeal.facility_name || appeal.professional_name || "N/A"}
+                    >
+                      {appeal.facility_name || appeal.professional_name || "N/A"}
                     </span>
                   </TableCell>
                   <TableCell>
-                    <span className="max-w-[300px] truncate inline-block" title={appeal.appeal_reason || appeal.comments || 'N/A'}>
-                      {appeal.appeal_reason || appeal.comments || 'N/A'}
+                    <span
+                      className="max-w-[300px] truncate inline-block"
+                      title={appeal.appeal_reason || appeal.comments || "N/A"}
+                    >
+                      {appeal.appeal_reason || appeal.comments || "N/A"}
                     </span>
                   </TableCell>
                   <TableCell>
                     <Badge variant={getStatusBadgeVariant(appeal.status)}>
-                      {appeal.status || 'Pending'}
+                      {appeal.status || "Pending"}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {appeal.created_at ? format(new Date(appeal.created_at), 'PP') : 'N/A'}
+                    {appeal.created_at ? format(new Date(appeal.created_at), "PP") : "N/A"}
                   </TableCell>
                   <TableCell>
                     <Button variant="ghost" size="sm">

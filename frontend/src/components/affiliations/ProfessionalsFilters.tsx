@@ -1,7 +1,7 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,23 +9,23 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-} from '@/components/ui/dropdown-menu'
-import { Search, Filter, X, ArrowUpDown } from 'lucide-react'
+} from "@/components/ui/dropdown-menu"
+import { Search, Filter, X, ArrowUpDown } from "lucide-react"
 
 interface ProfessionalsFiltersProps {
   searchText: string
   onSearchChange: (value: string) => void
-  selectedStatus: 'all' | 'active' | 'inactive'
-  onStatusChange: (status: 'all' | 'active' | 'inactive') => void
-  sortOrder: 'asc' | 'desc'
-  onSortChange: (order: 'asc' | 'desc') => void
+  selectedStatus: "all" | "active" | "inactive"
+  onStatusChange: (status: "all" | "active" | "inactive") => void
+  sortOrder: "asc" | "desc"
+  onSortChange: (order: "asc" | "desc") => void
   activeFiltersCount: number
   onClearFilters: () => void
 }
 
 const sortOptions = [
-  { value: 'asc', label: 'Name A-Z' },
-  { value: 'desc', label: 'Name Z-A' },
+  { value: "asc", label: "Name A-Z" },
+  { value: "desc", label: "Name Z-A" },
 ]
 
 export default function ProfessionalsFilters({
@@ -57,7 +57,7 @@ export default function ProfessionalsFilters({
               <Button variant="outline" className="gap-2">
                 <Filter className="h-4 w-4" />
                 Status
-                {selectedStatus !== 'all' && (
+                {selectedStatus !== "all" && (
                   <Badge variant="secondary" className="ml-1 h-5 px-1.5">
                     1
                   </Badge>
@@ -68,20 +68,20 @@ export default function ProfessionalsFilters({
               <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem
-                checked={selectedStatus === 'all'}
-                onCheckedChange={() => onStatusChange('all')}
+                checked={selectedStatus === "all"}
+                onCheckedChange={() => onStatusChange("all")}
               >
                 All
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={selectedStatus === 'active'}
-                onCheckedChange={() => onStatusChange('active')}
+                checked={selectedStatus === "active"}
+                onCheckedChange={() => onStatusChange("active")}
               >
                 Active
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
-                checked={selectedStatus === 'inactive'}
-                onCheckedChange={() => onStatusChange('inactive')}
+                checked={selectedStatus === "inactive"}
+                onCheckedChange={() => onStatusChange("inactive")}
               >
                 Inactive
               </DropdownMenuCheckboxItem>
@@ -102,9 +102,7 @@ export default function ProfessionalsFilters({
                 <DropdownMenuCheckboxItem
                   key={option.value}
                   checked={sortOrder === option.value}
-                  onCheckedChange={() =>
-                    onSortChange(option.value as 'asc' | 'desc')
-                  }
+                  onCheckedChange={() => onSortChange(option.value as "asc" | "desc")}
                 >
                   {option.label}
                 </DropdownMenuCheckboxItem>
@@ -113,11 +111,7 @@ export default function ProfessionalsFilters({
           </DropdownMenu>
 
           {activeFiltersCount > 0 && (
-            <Button
-              variant="ghost"
-              onClick={onClearFilters}
-              className="gap-2"
-            >
+            <Button variant="ghost" onClick={onClearFilters} className="gap-2">
               <X className="h-4 w-4" />
               Clear ({activeFiltersCount})
             </Button>

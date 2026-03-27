@@ -1,10 +1,10 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
+import L from "leaflet"
 
 // Fix for default marker icons in react-leaflet
-import icon from 'leaflet/dist/images/marker-icon.png'
-import iconShadow from 'leaflet/dist/images/marker-shadow.png'
+import icon from "leaflet/dist/images/marker-icon.png"
+import iconShadow from "leaflet/dist/images/marker-shadow.png"
 
 const DefaultIcon = L.icon({
   iconUrl: icon,
@@ -23,10 +23,7 @@ interface FacilityMapProps {
 
 export function FacilityMap({ facilityName, latitude, longitude }: FacilityMapProps) {
   // Default to Nairobi coordinates if not provided
-  const center: [number, number] = [
-    latitude ?? -1.286389,
-    longitude ?? 36.817223
-  ]
+  const center: [number, number] = [latitude ?? -1.286389, longitude ?? 36.817223]
 
   const isDefaultLocation = !latitude || !longitude
 
@@ -35,7 +32,7 @@ export function FacilityMap({ facilityName, latitude, longitude }: FacilityMapPr
       <MapContainer
         center={center}
         zoom={isDefaultLocation ? 12 : 15}
-        style={{ height: '400px', width: '100%', borderRadius: '0.5rem' }}
+        style={{ height: "400px", width: "100%", borderRadius: "0.5rem" }}
         className="z-0"
       >
         <TileLayer
@@ -47,9 +44,7 @@ export function FacilityMap({ facilityName, latitude, longitude }: FacilityMapPr
             <div className="text-sm">
               <p className="font-semibold">{facilityName}</p>
               {isDefaultLocation && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  Default location (Nairobi)
-                </p>
+                <p className="text-xs text-muted-foreground mt-1">Default location (Nairobi)</p>
               )}
             </div>
           </Popup>

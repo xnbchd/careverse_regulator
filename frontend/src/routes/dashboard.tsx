@@ -1,12 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { lazy } from 'react'
-import AppLayout from '@/components/AppLayout'
-import { useAuthStore } from '@/stores/authStore'
-import { useAffiliationStore } from '@/stores/affiliationStore'
-import { useLicensingStore } from '@/stores/licensingStore'
-import { useInspectionStore } from '@/stores/inspectionStore'
+import { createFileRoute } from "@tanstack/react-router"
+import { lazy } from "react"
+import AppLayout from "@/components/AppLayout"
+import { useAuthStore } from "@/stores/authStore"
+import { useAffiliationStore } from "@/stores/affiliationStore"
+import { useLicensingStore } from "@/stores/licensingStore"
+import { useInspectionStore } from "@/stores/inspectionStore"
 
-const MainDashboard = lazy(() => import('@/components/MainDashboard'))
+const MainDashboard = lazy(() => import("@/components/MainDashboard"))
 
 function DashboardComponent() {
   const navigate = Route.useNavigate()
@@ -17,11 +17,11 @@ function DashboardComponent() {
   }
 
   const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
+    window.location.href = "/logout?redirect-to=/"
   }
 
   const handleSwitchToDesk = () => {
-    window.location.href = '/app'
+    window.location.href = "/app"
   }
 
   return (
@@ -30,7 +30,7 @@ function DashboardComponent() {
       pageTitle="Dashboard"
       pageSubtitle="Compliance signals and priority actions."
       onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onOpenNotifications={() => handleNavigate("notifications-center")}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
@@ -40,7 +40,7 @@ function DashboardComponent() {
   )
 }
 
-export const Route = createFileRoute('/dashboard')({
+export const Route = createFileRoute("/dashboard")({
   loader: () =>
     Promise.all([
       useAffiliationStore.getState().fetchAffiliations(1, { page_size: 100 }),

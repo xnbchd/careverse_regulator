@@ -1,19 +1,19 @@
-import { useCallback, useMemo } from 'react'
-import { useBatchStore } from '@/stores/batchStore'
-import { logBatchOperation } from '@/lib/auditMiddleware'
+import { useCallback, useMemo } from "react"
+import { useBatchStore } from "@/stores/batchStore"
+import { logBatchOperation } from "@/lib/auditMiddleware"
 import type {
   BatchActionType,
   BatchOperationConfig,
   BatchOperationResult,
   SelectionState,
-} from '@/types/batch'
-import { AuditAction, AuditEntity } from '@/types/audit'
-import * as batchApi from '@/api/batchApi'
+} from "@/types/batch"
+import { AuditAction, AuditEntity } from "@/types/audit"
+import * as batchApi from "@/api/batchApi"
 
 /**
  * Hook for batch operations with selection management and audit logging
  */
-export function useBatchOperations(context: string = 'default') {
+export function useBatchOperations(context: string = "default") {
   const store = useBatchStore()
 
   // Selection state for this context
@@ -73,7 +73,7 @@ export function useBatchOperations(context: string = 'default') {
       }
     ): Promise<BatchOperationResult> => {
       if (selectedCount === 0) {
-        throw new Error('No items selected')
+        throw new Error("No items selected")
       }
 
       const config: BatchOperationConfig = {
@@ -114,7 +114,7 @@ export function useBatchOperations(context: string = 'default') {
 
         return result
       } catch (error) {
-        console.error('Batch operation failed:', error)
+        console.error("Batch operation failed:", error)
         throw error
       }
     },
@@ -124,14 +124,14 @@ export function useBatchOperations(context: string = 'default') {
   // Convenience methods for specific batch operations
   const bulkApprove = useCallback(
     async (metadata?: Record<string, any>) => {
-      return executeBatch('license_approve' as BatchActionType, { metadata })
+      return executeBatch("license_approve" as BatchActionType, { metadata })
     },
     [executeBatch]
   )
 
   const bulkReject = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      return executeBatch('license_reject' as BatchActionType, {
+      return executeBatch("license_reject" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
     },
@@ -140,7 +140,7 @@ export function useBatchOperations(context: string = 'default') {
 
   const bulkDelete = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      return executeBatch('bulk_delete' as BatchActionType, {
+      return executeBatch("bulk_delete" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
     },
@@ -187,9 +187,7 @@ export function useBatchOperations(context: string = 'default') {
     showProgressDialog: store.showProgressDialog,
     showResultDialog: store.showResultDialog,
     lastResult: store.lastResult,
-    activeOperation: store.activeOperationId
-      ? store.getOperation(store.activeOperationId)
-      : null,
+    activeOperation: store.activeOperationId ? store.getOperation(store.activeOperationId) : null,
 
     // UI actions
     setShowProgressDialog: store.setShowProgressDialog,
@@ -225,10 +223,10 @@ function mapBatchActionToAuditAction(batchAction: BatchActionType): AuditAction 
  * Get audit entity from context
  */
 function getEntityFromContext(context: string): AuditEntity {
-  if (context.includes('license')) return AuditEntity.LICENSE
-  if (context.includes('affiliation')) return AuditEntity.AFFILIATION
-  if (context.includes('document')) return AuditEntity.DOCUMENT
-  if (context.includes('inspection')) return AuditEntity.INSPECTION
+  if (context.includes("license")) return AuditEntity.LICENSE
+  if (context.includes("affiliation")) return AuditEntity.AFFILIATION
+  if (context.includes("document")) return AuditEntity.DOCUMENT
+  if (context.includes("inspection")) return AuditEntity.INSPECTION
   return AuditEntity.SYSTEM
 }
 
@@ -240,11 +238,11 @@ function getEntityFromContext(context: string): AuditEntity {
  * Hook for license batch operations
  */
 export function useLicenseBatchOperations() {
-  const batch = useBatchOperations('licenses')
+  const batch = useBatchOperations("licenses")
 
   const bulkApprove = useCallback(
     async (metadata?: Record<string, any>) => {
-      const result = await batch.executeBatch('license_approve' as BatchActionType, { metadata })
+      const result = await batch.executeBatch("license_approve" as BatchActionType, { metadata })
       return result
     },
     [batch]
@@ -252,7 +250,7 @@ export function useLicenseBatchOperations() {
 
   const bulkReject = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      const result = await batch.executeBatch('license_reject' as BatchActionType, {
+      const result = await batch.executeBatch("license_reject" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
       return result
@@ -262,7 +260,7 @@ export function useLicenseBatchOperations() {
 
   const bulkSuspend = useCallback(
     async (reason: string, suspendUntil?: string, metadata?: Record<string, any>) => {
-      const result = await batch.executeBatch('license_suspend' as BatchActionType, {
+      const result = await batch.executeBatch("license_suspend" as BatchActionType, {
         metadata: { reason, suspendUntil, ...metadata },
       })
       return result
@@ -272,7 +270,7 @@ export function useLicenseBatchOperations() {
 
   const bulkRenew = useCallback(
     async (validityYears: number, metadata?: Record<string, any>) => {
-      const result = await batch.executeBatch('license_renew' as BatchActionType, {
+      const result = await batch.executeBatch("license_renew" as BatchActionType, {
         metadata: { validityYears, ...metadata },
       })
       return result
@@ -282,7 +280,7 @@ export function useLicenseBatchOperations() {
 
   const bulkDelete = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      const result = await batch.executeBatch('license_delete' as BatchActionType, {
+      const result = await batch.executeBatch("license_delete" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
       return result
@@ -304,18 +302,18 @@ export function useLicenseBatchOperations() {
  * Hook for affiliation batch operations
  */
 export function useAffiliationBatchOperations() {
-  const batch = useBatchOperations('affiliations')
+  const batch = useBatchOperations("affiliations")
 
   const bulkApprove = useCallback(
     async (metadata?: Record<string, any>) => {
-      return batch.executeBatch('affiliation_approve' as BatchActionType, { metadata })
+      return batch.executeBatch("affiliation_approve" as BatchActionType, { metadata })
     },
     [batch]
   )
 
   const bulkReject = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      return batch.executeBatch('affiliation_reject' as BatchActionType, {
+      return batch.executeBatch("affiliation_reject" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
     },
@@ -324,14 +322,14 @@ export function useAffiliationBatchOperations() {
 
   const bulkActivate = useCallback(
     async (metadata?: Record<string, any>) => {
-      return batch.executeBatch('affiliation_activate' as BatchActionType, { metadata })
+      return batch.executeBatch("affiliation_activate" as BatchActionType, { metadata })
     },
     [batch]
   )
 
   const bulkDeactivate = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      return batch.executeBatch('affiliation_deactivate' as BatchActionType, {
+      return batch.executeBatch("affiliation_deactivate" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
     },
@@ -340,7 +338,7 @@ export function useAffiliationBatchOperations() {
 
   const bulkDelete = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      return batch.executeBatch('affiliation_delete' as BatchActionType, {
+      return batch.executeBatch("affiliation_delete" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
     },
@@ -361,11 +359,11 @@ export function useAffiliationBatchOperations() {
  * Hook for document batch operations
  */
 export function useDocumentBatchOperations() {
-  const batch = useBatchOperations('documents')
+  const batch = useBatchOperations("documents")
 
   const bulkDelete = useCallback(
     async (reason: string, metadata?: Record<string, any>) => {
-      return batch.executeBatch('document_delete' as BatchActionType, {
+      return batch.executeBatch("document_delete" as BatchActionType, {
         metadata: { reason, ...metadata },
       })
     },
@@ -374,16 +372,16 @@ export function useDocumentBatchOperations() {
 
   const bulkDownload = useCallback(async () => {
     if (batch.selectedIds.length === 0) {
-      throw new Error('No documents selected')
+      throw new Error("No documents selected")
     }
 
     const blob = await batchApi.bulkDownloadDocuments(batch.selectedIds)
 
     // Create download link
     const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
+    const link = document.createElement("a")
     link.href = url
-    link.download = `documents-${new Date().toISOString().split('T')[0]}.zip`
+    link.download = `documents-${new Date().toISOString().split("T")[0]}.zip`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -395,7 +393,7 @@ export function useDocumentBatchOperations() {
 
   const bulkUpdateCategory = useCallback(
     async (category: string, metadata?: Record<string, any>) => {
-      return batch.executeBatch('document_update_category' as BatchActionType, {
+      return batch.executeBatch("document_update_category" as BatchActionType, {
         metadata: { category, ...metadata },
       })
     },
@@ -405,10 +403,10 @@ export function useDocumentBatchOperations() {
   const bulkUpdateTags = useCallback(
     async (
       tags: string[],
-      operation: 'add' | 'remove' | 'replace',
+      operation: "add" | "remove" | "replace",
       metadata?: Record<string, any>
     ) => {
-      return batch.executeBatch('document_update_tags' as BatchActionType, {
+      return batch.executeBatch("document_update_tags" as BatchActionType, {
         metadata: { tags, operation, ...metadata },
       })
     },

@@ -1,10 +1,8 @@
-import type { Inspection } from '@/types/inspection'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { EntityLink } from './EntityLink'
-import {
-  Calendar, User, IdCard, FileText, CheckCircle, Building2
-} from 'lucide-react'
+import type { Inspection } from "@/types/inspection"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { EntityLink } from "./EntityLink"
+import { Calendar, User, IdCard, FileText, CheckCircle, Building2 } from "lucide-react"
 
 interface InspectionDrawerProps {
   inspection: Inspection
@@ -56,11 +54,17 @@ export function InspectionDrawer({ inspection, loading }: InspectionDrawerProps)
             </p>
           </div>
         </div>
-        <Badge variant={
-          inspection.status === 'Scheduled' ? 'secondary' :
-          inspection.status === 'In Progress' ? 'default' :
-          inspection.status === 'Completed' ? 'outline' : 'secondary'
-        }>
+        <Badge
+          variant={
+            inspection.status === "Scheduled"
+              ? "secondary"
+              : inspection.status === "In Progress"
+              ? "default"
+              : inspection.status === "Completed"
+              ? "outline"
+              : "secondary"
+          }
+        >
           {inspection.status}
         </Badge>
       </div>
@@ -101,7 +105,9 @@ export function InspectionDrawer({ inspection, loading }: InspectionDrawerProps)
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm text-muted-foreground mb-1 text-start">Inspection ID</div>
-            <div className="font-medium text-base font-mono text-start">{inspection.inspectionId}</div>
+            <div className="font-medium text-base font-mono text-start">
+              {inspection.inspectionId}
+            </div>
           </div>
         </div>
       </div>
@@ -115,7 +121,7 @@ export function InspectionDrawer({ inspection, loading }: InspectionDrawerProps)
           <div className="font-semibold text-base text-start">Note to Inspector</div>
         </div>
         <div className="rounded-lg border border-yellow-200 bg-yellow-50 text-yellow-900 leading-relaxed break-words dark:bg-yellow-950/20 dark:text-yellow-200 dark:border-yellow-900 text-sm p-4 text-start">
-          {inspection.noteToInspector || 'No additional notes provided'}
+          {inspection.noteToInspector || "No additional notes provided"}
         </div>
       </div>
 

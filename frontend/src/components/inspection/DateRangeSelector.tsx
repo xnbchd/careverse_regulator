@@ -1,11 +1,11 @@
-import { useState } from 'react'
-import { Calendar as CalendarIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
-import dayjs, { Dayjs } from 'dayjs'
-import type { DateRange as CalendarDateRange } from 'react-day-picker'
+import { useState } from "react"
+import { Calendar as CalendarIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import dayjs, { Dayjs } from "dayjs"
+import type { DateRange as CalendarDateRange } from "react-day-picker"
 
 export interface DateRange {
   start: string // YYYY-MM-DD
@@ -30,53 +30,53 @@ export default function DateRangeSelector({
 
   const presets = [
     {
-      key: 'today',
-      label: 'Today',
+      key: "today",
+      label: "Today",
       getValue: () => {
         const today = dayjs()
         return {
-          start: today.format('YYYY-MM-DD'),
-          end: today.format('YYYY-MM-DD'),
-          label: `Today (${today.format('MMM D')})`,
+          start: today.format("YYYY-MM-DD"),
+          end: today.format("YYYY-MM-DD"),
+          label: `Today (${today.format("MMM D")})`,
         }
       },
     },
     {
-      key: '7d',
-      label: 'Last 7 days',
+      key: "7d",
+      label: "Last 7 days",
       getValue: () => {
         const end = dayjs()
-        const start = end.subtract(6, 'day')
+        const start = end.subtract(6, "day")
         return {
-          start: start.format('YYYY-MM-DD'),
-          end: end.format('YYYY-MM-DD'),
-          label: `Last 7 days (${start.format('MMM D')} - ${end.format('MMM D')})`,
+          start: start.format("YYYY-MM-DD"),
+          end: end.format("YYYY-MM-DD"),
+          label: `Last 7 days (${start.format("MMM D")} - ${end.format("MMM D")})`,
         }
       },
     },
     {
-      key: '30d',
-      label: 'Last 30 days',
+      key: "30d",
+      label: "Last 30 days",
       getValue: () => {
         const end = dayjs()
-        const start = end.subtract(29, 'day')
+        const start = end.subtract(29, "day")
         return {
-          start: start.format('YYYY-MM-DD'),
-          end: end.format('YYYY-MM-DD'),
-          label: `Last 30 days (${start.format('MMM D')} - ${end.format('MMM D')})`,
+          start: start.format("YYYY-MM-DD"),
+          end: end.format("YYYY-MM-DD"),
+          label: `Last 30 days (${start.format("MMM D")} - ${end.format("MMM D")})`,
         }
       },
     },
     {
-      key: 'thisMonth',
-      label: 'This Month',
+      key: "thisMonth",
+      label: "This Month",
       getValue: () => {
-        const start = dayjs().startOf('month')
-        const end = dayjs().endOf('month')
+        const start = dayjs().startOf("month")
+        const end = dayjs().endOf("month")
         return {
-          start: start.format('YYYY-MM-DD'),
-          end: end.format('YYYY-MM-DD'),
-          label: `This Month (${start.format('MMM D')} - ${end.format('MMM D')})`,
+          start: start.format("YYYY-MM-DD"),
+          end: end.format("YYYY-MM-DD"),
+          label: `This Month (${start.format("MMM D")} - ${end.format("MMM D")})`,
         }
       },
     },
@@ -98,11 +98,11 @@ export default function DateRangeSelector({
       const start = dayjs(tempRange.from)
       const end = dayjs(tempRange.to)
       onChange({
-        start: start.format('YYYY-MM-DD'),
-        end: end.format('YYYY-MM-DD'),
-        label: `${start.format('MMM D')} - ${end.format('MMM D, YYYY')}`,
+        start: start.format("YYYY-MM-DD"),
+        end: end.format("YYYY-MM-DD"),
+        label: `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`,
       })
-      setSelectedPreset('custom')
+      setSelectedPreset("custom")
       setOpen(false)
     }
   }
@@ -132,9 +132,7 @@ export default function DateRangeSelector({
   const content = (
     <div className="p-3">
       <div className="mb-4">
-        <div className="text-sm font-semibold mb-3 text-start">
-          Select Date Range
-        </div>
+        <div className="text-sm font-semibold mb-3 text-start">Select Date Range</div>
 
         {/* Preset Buttons */}
         <div className="flex flex-wrap gap-2 mb-4">
@@ -142,7 +140,7 @@ export default function DateRangeSelector({
             <Button
               key={preset.key}
               size="sm"
-              variant={selectedPreset === preset.key ? 'default' : 'outline'}
+              variant={selectedPreset === preset.key ? "default" : "outline"}
               onClick={() => handlePresetClick(preset.key)}
             >
               {preset.label}
@@ -160,7 +158,7 @@ export default function DateRangeSelector({
             selected={tempRange}
             onSelect={(range) => {
               setTempRange(range)
-              setSelectedPreset('custom')
+              setSelectedPreset("custom")
             }}
             numberOfMonths={1}
             className="rounded-md border"
@@ -190,12 +188,12 @@ export default function DateRangeSelector({
         <Button
           variant="outline"
           className={cn(
-            'flex items-center gap-2',
-            value && 'bg-blue-50 border-primary text-primary dark:bg-blue-950'
+            "flex items-center gap-2",
+            value && "bg-blue-50 border-primary text-primary dark:bg-blue-950"
           )}
         >
           <CalendarIcon className="w-4 h-4 shrink-0" />
-          {showLabel && <span className="truncate">{value ? value.label : 'Date Range'}</span>}
+          {showLabel && <span className="truncate">{value ? value.label : "Date Range"}</span>}
           {!showLabel && value && <span className="text-xs">●</span>}
         </Button>
       </PopoverTrigger>

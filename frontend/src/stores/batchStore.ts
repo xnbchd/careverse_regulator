@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 import type {
   BatchActionType,
   BatchOperation,
@@ -11,13 +11,13 @@ import type {
   BatchProgress,
   UndoableAction,
   SelectionState,
-} from '@/types/batch'
+} from "@/types/batch"
 import {
   calculateBatchProgress,
   canUndoBatchAction,
   getUndoActionType,
   estimateRemainingTime,
-} from '@/types/batch'
+} from "@/types/batch"
 
 interface BatchStoreState {
   // Selection state (per module/context)
@@ -194,7 +194,7 @@ export const useBatchStore = create<BatchStoreState>((set, get) => ({
       items,
       progress: calculateBatchProgress(items),
       createdAt: new Date().toISOString(),
-      createdBy: 'current-user', // TODO: Get from auth store
+      createdBy: "current-user", // TODO: Get from auth store
       metadata: config.metadata,
       canUndo: canUndoBatchAction(config.actionType),
     }
@@ -236,7 +236,11 @@ export const useBatchStore = create<BatchStoreState>((set, get) => ({
             // Call progress callback
             const progress = {
               ...calculateBatchProgress(items),
-              estimatedTimeRemaining: estimateRemainingTime(startTime, results.length, items.length),
+              estimatedTimeRemaining: estimateRemainingTime(
+                startTime,
+                results.length,
+                items.length
+              ),
             }
             config.onProgress?.(progress)
 
@@ -276,7 +280,7 @@ export const useBatchStore = create<BatchStoreState>((set, get) => ({
 
         // Collect results
         batchResults.forEach((result) => {
-          if (result.status === 'fulfilled') {
+          if (result.status === "fulfilled") {
             results.push(result.value)
           }
         })
@@ -427,7 +431,7 @@ export const useBatchStore = create<BatchStoreState>((set, get) => ({
     const undoActionType = getUndoActionType(action.type)
 
     if (!undoActionType) {
-      console.warn('Cannot undo action:', action.type)
+      console.warn("Cannot undo action:", action.type)
       return
     }
 

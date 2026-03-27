@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 import type {
   AuditLog,
   AuditLogSearchParams,
@@ -8,7 +8,7 @@ import type {
   AuditEntity,
   AuditSeverity,
   AuditExportFormat,
-} from '@/types/audit'
+} from "@/types/audit"
 import {
   listAuditLogs,
   getAuditLog,
@@ -16,7 +16,7 @@ import {
   getEntityHistory,
   exportAuditLogs,
   logAuditEvent,
-} from '@/api/auditApi'
+} from "@/api/auditApi"
 
 interface AuditState {
   // Data
@@ -56,7 +56,7 @@ interface AuditState {
   exportLogs: (format: AuditExportFormat) => Promise<void>
 
   // Actions - Logging
-  logEvent: (log: Omit<AuditLog, 'id' | 'timestamp'>) => Promise<void>
+  logEvent: (log: Omit<AuditLog, "id" | "timestamp">) => Promise<void>
 
   // Actions - UI
   selectLog: (log: AuditLog | null) => void
@@ -67,8 +67,8 @@ interface AuditState {
 const initialFilters: AuditLogSearchParams = {
   page: 1,
   pageSize: 20,
-  sortBy: 'timestamp',
-  sortOrder: 'desc',
+  sortBy: "timestamp",
+  sortOrder: "desc",
 }
 
 export const useAuditStore = create<AuditState>((set, get) => ({
@@ -105,7 +105,7 @@ export const useAuditStore = create<AuditState>((set, get) => ({
         filters: searchParams,
       })
     } catch (error) {
-      console.error('Failed to fetch audit logs:', error)
+      console.error("Failed to fetch audit logs:", error)
       // Keep existing data on error
     } finally {
       set({ isLoading: false })
@@ -119,7 +119,7 @@ export const useAuditStore = create<AuditState>((set, get) => ({
       const log = await getAuditLog(logId)
       set({ selectedLog: log })
     } catch (error) {
-      console.error('Failed to fetch audit log:', error)
+      console.error("Failed to fetch audit log:", error)
       set({ selectedLog: null })
     } finally {
       set({ isLoading: false })
@@ -133,7 +133,7 @@ export const useAuditStore = create<AuditState>((set, get) => ({
       const stats = await getAuditStats(dateRange)
       set({ stats })
     } catch (error) {
-      console.error('Failed to fetch audit stats:', error)
+      console.error("Failed to fetch audit stats:", error)
       set({ stats: null })
     } finally {
       set({ isLoadingStats: false })
@@ -147,7 +147,7 @@ export const useAuditStore = create<AuditState>((set, get) => ({
       const history = await getEntityHistory(entityType, entityId)
       set({ entityHistory: history })
     } catch (error) {
-      console.error('Failed to fetch entity history:', error)
+      console.error("Failed to fetch entity history:", error)
       set({ entityHistory: null })
     } finally {
       set({ isLoadingHistory: false })
@@ -196,15 +196,15 @@ export const useAuditStore = create<AuditState>((set, get) => ({
 
       // Create download link
       const url = window.URL.createObjectURL(blob)
-      const link = document.createElement('a')
+      const link = document.createElement("a")
       link.href = url
-      link.download = `audit-logs-${new Date().toISOString().split('T')[0]}.${format}`
+      link.download = `audit-logs-${new Date().toISOString().split("T")[0]}.${format}`
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
     } catch (error) {
-      console.error('Failed to export audit logs:', error)
+      console.error("Failed to export audit logs:", error)
       throw error
     } finally {
       set({ isExporting: false })
@@ -212,7 +212,7 @@ export const useAuditStore = create<AuditState>((set, get) => ({
   },
 
   // Log new audit event
-  logEvent: async (log: Omit<AuditLog, 'id' | 'timestamp'>) => {
+  logEvent: async (log: Omit<AuditLog, "id" | "timestamp">) => {
     try {
       const newLog = await logAuditEvent(log)
 
@@ -228,7 +228,7 @@ export const useAuditStore = create<AuditState>((set, get) => ({
 
       return newLog
     } catch (error) {
-      console.error('Failed to log audit event:', error)
+      console.error("Failed to log audit event:", error)
       throw error
     }
   },

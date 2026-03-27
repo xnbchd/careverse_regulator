@@ -1,20 +1,15 @@
-import { useState, useEffect } from 'react'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { X, Calendar, User, FileText, MapPin, ChevronLeft, ChevronRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import type { Inspection } from '@/types/inspection'
-import StatusBadge from './StatusBadge'
-import FindingCardGrid from './FindingCardGrid'
-import { EntityLink } from '@/components/entities'
+import { useState, useEffect } from "react"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { X, Calendar, User, FileText, MapPin, ChevronLeft, ChevronRight } from "lucide-react"
+import { cn } from "@/lib/utils"
+import type { Inspection } from "@/types/inspection"
+import StatusBadge from "./StatusBadge"
+import FindingCardGrid from "./FindingCardGrid"
+import { EntityLink } from "@/components/entities"
 
 interface EnhancedInspectionDrawerProps {
   inspection: Inspection | null
@@ -43,11 +38,11 @@ export default function EnhancedInspectionDrawer({
       }
     }
 
-    const sheetContent = document.querySelector('[data-drawer-content]')
-    sheetContent?.addEventListener('scroll', handleScroll)
+    const sheetContent = document.querySelector("[data-drawer-content]")
+    sheetContent?.addEventListener("scroll", handleScroll)
 
     return () => {
-      sheetContent?.removeEventListener('scroll', handleScroll)
+      sheetContent?.removeEventListener("scroll", handleScroll)
     }
   }, [])
 
@@ -63,8 +58,8 @@ export default function EnhancedInspectionDrawer({
         {/* Floating Collapsed Header */}
         <div
           className={cn(
-            'sticky top-0 z-10 bg-card border-b px-6 py-3 transition-all duration-200',
-            isHeaderCollapsed ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            "sticky top-0 z-10 bg-card border-b px-6 py-3 transition-all duration-200",
+            isHeaderCollapsed ? "opacity-100" : "opacity-0 pointer-events-none"
           )}
         >
           <div className="flex items-center justify-between">
@@ -80,31 +75,16 @@ export default function EnhancedInspectionDrawer({
             </div>
             <div className="flex items-center gap-2">
               {onPrevious && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={onPrevious}
-                  className="h-8 w-8"
-                >
+                <Button variant="ghost" size="icon" onClick={onPrevious} className="h-8 w-8">
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
               )}
               {onNext && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={onNext}
-                  className="h-8 w-8"
-                >
+                <Button variant="ghost" size="icon" onClick={onNext} className="h-8 w-8">
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               )}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={onClose}
-                className="h-8 w-8"
-              >
+              <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8">
                 <X className="w-4 h-4" />
               </Button>
             </div>
@@ -117,9 +97,7 @@ export default function EnhancedInspectionDrawer({
             <CardContent className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {inspection.inspectionId}
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-2">{inspection.inspectionId}</p>
                   <h2 className="text-2xl font-bold mb-2">
                     <EntityLink
                       type="facility"
@@ -133,22 +111,12 @@ export default function EnhancedInspectionDrawer({
                 </div>
                 <div className="flex gap-2">
                   {onPrevious && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={onPrevious}
-                      className="h-9 w-9"
-                    >
+                    <Button variant="outline" size="icon" onClick={onPrevious} className="h-9 w-9">
                       <ChevronLeft className="w-4 h-4" />
                     </Button>
                   )}
                   {onNext && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={onNext}
-                      className="h-9 w-9"
-                    >
+                    <Button variant="outline" size="icon" onClick={onNext} className="h-9 w-9">
                       <ChevronRight className="w-4 h-4" />
                     </Button>
                   )}
@@ -196,7 +164,7 @@ export default function EnhancedInspectionDrawer({
                     <div>
                       <p className="text-xs text-muted-foreground">Findings</p>
                       <p className="text-sm font-medium">
-                        {inspection.findingCount} finding{inspection.findingCount !== 1 ? 's' : ''}
+                        {inspection.findingCount} finding{inspection.findingCount !== 1 ? "s" : ""}
                       </p>
                     </div>
                   </div>
@@ -210,9 +178,7 @@ export default function EnhancedInspectionDrawer({
                     <p className="text-xs font-medium text-muted-foreground mb-2">
                       Note to Inspector:
                     </p>
-                    <p className="text-sm leading-relaxed">
-                      {inspection.noteToInspector}
-                    </p>
+                    <p className="text-sm leading-relaxed">{inspection.noteToInspector}</p>
                   </div>
                 </>
               )}
@@ -225,9 +191,7 @@ export default function EnhancedInspectionDrawer({
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">Inspection Findings</h3>
             {inspection.findings && inspection.findings.length > 0 && (
-              <Badge variant="secondary">
-                {inspection.findings.length} total
-              </Badge>
+              <Badge variant="secondary">{inspection.findings.length} total</Badge>
             )}
           </div>
 

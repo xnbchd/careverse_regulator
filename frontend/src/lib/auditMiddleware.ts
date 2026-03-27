@@ -1,8 +1,4 @@
-import type {
-  AuditAction,
-  AuditEntity,
-  AuditSeverity,
-} from '@/types/audit'
+import type { AuditAction, AuditEntity, AuditSeverity } from "@/types/audit"
 
 /**
  * Audit logging middleware and utilities for automatic tracking
@@ -60,10 +56,7 @@ export function getAuditConfig(): AuditConfig {
 /**
  * Check if an action should be logged based on configuration
  */
-export function shouldLogAction(
-  action: AuditAction,
-  entity: AuditEntity
-): boolean {
+export function shouldLogAction(action: AuditAction, entity: AuditEntity): boolean {
   if (!currentConfig.enabled) return false
 
   // Check if action is excluded
@@ -73,7 +66,7 @@ export function shouldLogAction(
   if (currentConfig.excludeEntities?.includes(entity)) return false
 
   // Check if read logging is disabled
-  if (!currentConfig.logReads && action === ('read' as AuditAction)) return false
+  if (!currentConfig.logReads && action === ("read" as AuditAction)) return false
 
   return true
 }
@@ -127,32 +120,35 @@ export function withAuditLog<TArgs extends any[], TReturn>(
         const duration = Date.now() - startTime
 
         // Import dynamically to avoid circular dependencies
-        import('@/stores/auditStore').then(({ useAuditStore }) => {
+        import("@/stores/auditStore").then(({ useAuditStore }) => {
           const store = useAuditStore.getState()
 
-          store.logEvent({
-            action: config.action,
-            entity: config.entity,
-            entityId: config.getEntityId?.(...args),
-            entityName: config.getEntityName?.(...args),
-            userId: auditContext?.userId || 'unknown',
-            userName: auditContext?.userName || 'Unknown User',
-            userEmail: auditContext?.userEmail || 'unknown@localhost',
-            userRole: auditContext?.userRole,
-            severity: config.severity || ('medium' as AuditSeverity),
-            description: config.getDescription(...args),
-            details: {
-              ...config.getDetails?.(...args),
-              duration,
-            },
-            changesBefore: config.getChangesBefore?.(...args),
-            changesAfter: success && result ? config.getChangesAfter?.(result, ...args) : undefined,
-            success,
-            errorMessage: error?.message,
-            userAgent: navigator.userAgent,
-          }).catch(err => {
-            console.error('Failed to log audit event:', err)
-          })
+          store
+            .logEvent({
+              action: config.action,
+              entity: config.entity,
+              entityId: config.getEntityId?.(...args),
+              entityName: config.getEntityName?.(...args),
+              userId: auditContext?.userId || "unknown",
+              userName: auditContext?.userName || "Unknown User",
+              userEmail: auditContext?.userEmail || "unknown@localhost",
+              userRole: auditContext?.userRole,
+              severity: config.severity || ("medium" as AuditSeverity),
+              description: config.getDescription(...args),
+              details: {
+                ...config.getDetails?.(...args),
+                duration,
+              },
+              changesBefore: config.getChangesBefore?.(...args),
+              changesAfter:
+                success && result ? config.getChangesAfter?.(result, ...args) : undefined,
+              success,
+              errorMessage: error?.message,
+              userAgent: navigator.userAgent,
+            })
+            .catch((err) => {
+              console.error("Failed to log audit event:", err)
+            })
         })
       }
     }
@@ -197,59 +193,63 @@ export function setupErrorLogging() {
   if (!currentConfig.logErrors) return
 
   // Capture unhandled promise rejections
-  window.addEventListener('unhandledrejection', (event) => {
-    import('@/stores/auditStore').then(({ useAuditStore }) => {
+  window.addEventListener("unhandledrejection", (event) => {
+    import("@/stores/auditStore").then(({ useAuditStore }) => {
       const store = useAuditStore.getState()
 
-      store.logEvent({
-        action: 'delete' as AuditAction, // Using delete as it's critical severity
-        entity: 'system' as AuditEntity,
-        userId: auditContext?.userId || 'system',
-        userName: auditContext?.userName || 'System',
-        userEmail: auditContext?.userEmail || 'system@localhost',
-        userRole: auditContext?.userRole,
-        severity: 'critical' as AuditSeverity,
-        description: 'Unhandled promise rejection',
-        details: {
-          error: event.reason?.message || String(event.reason),
-          stack: event.reason?.stack,
-        },
-        success: false,
-        errorMessage: event.reason?.message || String(event.reason),
-        userAgent: navigator.userAgent,
-      }).catch(err => {
-        console.error('Failed to log error event:', err)
-      })
+      store
+        .logEvent({
+          action: "delete" as AuditAction, // Using delete as it's critical severity
+          entity: "system" as AuditEntity,
+          userId: auditContext?.userId || "system",
+          userName: auditContext?.userName || "System",
+          userEmail: auditContext?.userEmail || "system@localhost",
+          userRole: auditContext?.userRole,
+          severity: "critical" as AuditSeverity,
+          description: "Unhandled promise rejection",
+          details: {
+            error: event.reason?.message || String(event.reason),
+            stack: event.reason?.stack,
+          },
+          success: false,
+          errorMessage: event.reason?.message || String(event.reason),
+          userAgent: navigator.userAgent,
+        })
+        .catch((err) => {
+          console.error("Failed to log error event:", err)
+        })
     })
   })
 
   // Capture global errors
-  window.addEventListener('error', (event) => {
-    import('@/stores/auditStore').then(({ useAuditStore }) => {
+  window.addEventListener("error", (event) => {
+    import("@/stores/auditStore").then(({ useAuditStore }) => {
       const store = useAuditStore.getState()
 
-      store.logEvent({
-        action: 'delete' as AuditAction,
-        entity: 'system' as AuditEntity,
-        userId: auditContext?.userId || 'system',
-        userName: auditContext?.userName || 'System',
-        userEmail: auditContext?.userEmail || 'system@localhost',
-        userRole: auditContext?.userRole,
-        severity: 'critical' as AuditSeverity,
-        description: 'Global error',
-        details: {
-          message: event.message,
-          filename: event.filename,
-          lineno: event.lineno,
-          colno: event.colno,
-          stack: event.error?.stack,
-        },
-        success: false,
-        errorMessage: event.message,
-        userAgent: navigator.userAgent,
-      }).catch(err => {
-        console.error('Failed to log error event:', err)
-      })
+      store
+        .logEvent({
+          action: "delete" as AuditAction,
+          entity: "system" as AuditEntity,
+          userId: auditContext?.userId || "system",
+          userName: auditContext?.userName || "System",
+          userEmail: auditContext?.userEmail || "system@localhost",
+          userRole: auditContext?.userRole,
+          severity: "critical" as AuditSeverity,
+          description: "Global error",
+          details: {
+            message: event.message,
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno,
+            stack: event.error?.stack,
+          },
+          success: false,
+          errorMessage: event.message,
+          userAgent: navigator.userAgent,
+        })
+        .catch((err) => {
+          console.error("Failed to log error event:", err)
+        })
     })
   })
 }
@@ -261,27 +261,29 @@ export function setupErrorLogging() {
 export function logNavigation(route: string, params?: Record<string, string>) {
   if (!currentConfig.logNavigation) return
 
-  import('@/stores/auditStore').then(({ useAuditStore }) => {
+  import("@/stores/auditStore").then(({ useAuditStore }) => {
     const store = useAuditStore.getState()
 
-    store.logEvent({
-      action: 'read' as AuditAction,
-      entity: 'system' as AuditEntity,
-      userId: auditContext?.userId || 'unknown',
-      userName: auditContext?.userName || 'Unknown User',
-      userEmail: auditContext?.userEmail || 'unknown@localhost',
-      userRole: auditContext?.userRole,
-      severity: 'low' as AuditSeverity,
-      description: `Navigated to ${route}`,
-      details: {
-        route,
-        params,
-      },
-      success: true,
-      userAgent: navigator.userAgent,
-    }).catch(err => {
-      console.error('Failed to log navigation:', err)
-    })
+    store
+      .logEvent({
+        action: "read" as AuditAction,
+        entity: "system" as AuditEntity,
+        userId: auditContext?.userId || "unknown",
+        userName: auditContext?.userName || "Unknown User",
+        userEmail: auditContext?.userEmail || "unknown@localhost",
+        userRole: auditContext?.userRole,
+        severity: "low" as AuditSeverity,
+        description: `Navigated to ${route}`,
+        details: {
+          route,
+          params,
+        },
+        success: true,
+        userAgent: navigator.userAgent,
+      })
+      .catch((err) => {
+        console.error("Failed to log navigation:", err)
+      })
   })
 }
 
@@ -289,44 +291,42 @@ export function logNavigation(route: string, params?: Record<string, string>) {
  * Batch log multiple events
  * Useful for bulk operations
  */
-export async function logBatchOperation(
-  operation: {
-    action: AuditAction
-    entity: AuditEntity
-    description: string
-    items: Array<{
-      entityId: string
-      entityName?: string
-      success: boolean
-      errorMessage?: string
-    }>
-    details?: Record<string, any>
-  }
-) {
+export async function logBatchOperation(operation: {
+  action: AuditAction
+  entity: AuditEntity
+  description: string
+  items: Array<{
+    entityId: string
+    entityName?: string
+    success: boolean
+    errorMessage?: string
+  }>
+  details?: Record<string, any>
+}) {
   if (!shouldLogAction(operation.action, operation.entity)) return
 
-  const { useAuditStore } = await import('@/stores/auditStore')
+  const { useAuditStore } = await import("@/stores/auditStore")
   const store = useAuditStore.getState()
 
   const totalProcessed = operation.items.length
-  const succeeded = operation.items.filter(item => item.success).length
+  const succeeded = operation.items.filter((item) => item.success).length
   const failed = totalProcessed - succeeded
 
   // Log summary event
   await store.logEvent({
     action: operation.action,
     entity: operation.entity,
-    userId: auditContext?.userId || 'unknown',
-    userName: auditContext?.userName || 'Unknown User',
-    userEmail: auditContext?.userEmail || 'unknown@localhost',
+    userId: auditContext?.userId || "unknown",
+    userName: auditContext?.userName || "Unknown User",
+    userEmail: auditContext?.userEmail || "unknown@localhost",
     userRole: auditContext?.userRole,
-    severity: failed > 0 ? ('high' as AuditSeverity) : ('medium' as AuditSeverity),
+    severity: failed > 0 ? ("high" as AuditSeverity) : ("medium" as AuditSeverity),
     description: operation.description,
     details: {
       totalProcessed,
       succeeded,
       failed,
-      items: operation.items.map(item => ({
+      items: operation.items.map((item) => ({
         id: item.entityId,
         name: item.entityName,
         success: item.success,

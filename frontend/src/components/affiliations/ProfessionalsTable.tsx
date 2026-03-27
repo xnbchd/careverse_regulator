@@ -5,12 +5,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Card } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Badge } from '@/components/ui/badge'
-import type { ProfessionalRecord } from '@/api/registryApi'
-import { EntityLink } from '@/components/entities'
+} from "@/components/ui/table"
+import { Card } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge"
+import type { ProfessionalRecord } from "@/api/registryApi"
+import { EntityLink } from "@/components/entities"
 
 interface ProfessionalsTableProps {
   professionals: ProfessionalRecord[]
@@ -33,8 +33,7 @@ export default function ProfessionalsTable({
   onDeselectAll,
   emptyState,
 }: ProfessionalsTableProps) {
-  const selectionEnabled =
-    selectedIds !== undefined && onToggleSelection !== undefined
+  const selectionEnabled = selectedIds !== undefined && onToggleSelection !== undefined
   const allSelected =
     selectionEnabled &&
     professionals.length > 0 &&
@@ -63,9 +62,7 @@ export default function ProfessionalsTable({
               {selectionEnabled && (
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={
-                      allSelected || (someSelected ? 'indeterminate' : false)
-                    }
+                    checked={allSelected || (someSelected ? "indeterminate" : false)}
                     onCheckedChange={handleSelectAll}
                   />
                 </TableHead>
@@ -94,12 +91,12 @@ export default function ProfessionalsTable({
                   colSpan={totalColumns}
                   className="text-center py-8 text-muted-foreground"
                 >
-                  {emptyState || 'No professionals found'}
+                  {emptyState || "No professionals found"}
                 </TableCell>
               </TableRow>
             ) : (
               professionals.map((professional) => {
-                const regNum = professional.registration_number || ''
+                const regNum = professional.registration_number || ""
                 const isSelected = selectionEnabled && selectedIds.has(regNum)
                 return (
                   <TableRow
@@ -111,42 +108,29 @@ export default function ProfessionalsTable({
                       <TableCell onClick={(e) => e.stopPropagation()}>
                         <Checkbox
                           checked={isSelected}
-                          onCheckedChange={() =>
-                            regNum && onToggleSelection(regNum)
-                          }
+                          onCheckedChange={() => regNum && onToggleSelection(regNum)}
                         />
                       </TableCell>
                     )}
-                    <TableCell
-                      className="w-[200px]"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <EntityLink
-                        type="professional"
-                        id={regNum}
-                        className="w-full"
-                      >
-                        <div className="truncate text-left">
-                          {professional.full_name || '—'}
-                        </div>
+                    <TableCell className="w-[200px]" onClick={(e) => e.stopPropagation()}>
+                      <EntityLink type="professional" id={regNum} className="w-full">
+                        <div className="truncate text-left">{professional.full_name || "—"}</div>
                       </EntityLink>
                     </TableCell>
                     <TableCell className="font-mono text-sm w-[140px]">
-                      <div className="truncate text-left">{regNum || '—'}</div>
+                      <div className="truncate text-left">{regNum || "—"}</div>
                     </TableCell>
                     <TableCell className="font-mono text-sm w-[140px]">
-                      <div className="truncate text-left">
-                        {professional.license_number || '—'}
-                      </div>
+                      <div className="truncate text-left">{professional.license_number || "—"}</div>
                     </TableCell>
                     <TableCell className="w-[150px]">
                       <div className="truncate text-left">
-                        {professional.category_of_practice || '—'}
+                        {professional.category_of_practice || "—"}
                       </div>
                     </TableCell>
                     <TableCell className="w-[200px]">
                       <div className="truncate text-left">
-                        {professional.place_of_practice || '—'}
+                        {professional.place_of_practice || "—"}
                       </div>
                     </TableCell>
                     <TableCell className="w-[100px]">
@@ -156,12 +140,10 @@ export default function ProfessionalsTable({
                     </TableCell>
                     <TableCell className="w-[120px]">
                       <Badge
-                        variant={
-                          professional.active ? 'default' : 'secondary'
-                        }
+                        variant={professional.active ? "default" : "secondary"}
                         className="capitalize"
                       >
-                        {professional.active ? 'Active' : 'Inactive'}
+                        {professional.active ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
                   </TableRow>

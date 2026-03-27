@@ -5,15 +5,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Badge } from '@/components/ui/badge'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CheckCircle, XCircle, AlertTriangle, Undo2, Download } from 'lucide-react'
-import { BatchOperationResult, getBatchActionLabel, formatDuration } from '@/types/batch'
-import { cn } from '@/lib/utils'
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { CheckCircle, XCircle, AlertTriangle, Undo2, Download } from "lucide-react"
+import { BatchOperationResult, getBatchActionLabel, formatDuration } from "@/types/batch"
+import { cn } from "@/lib/utils"
 
 interface BatchResultDialogProps {
   open: boolean
@@ -49,7 +49,8 @@ export function BatchResultDialog({
             {result.success && <CheckCircle className="w-5 h-5 text-green-600" />}
             {isPartialSuccess && <AlertTriangle className="w-5 h-5 text-orange-600" />}
             {!hasSuccesses && <XCircle className="w-5 h-5 text-red-600" />}
-            Batch Operation {result.success ? 'Completed' : isPartialSuccess ? 'Partially Completed' : 'Failed'}
+            Batch Operation{" "}
+            {result.success ? "Completed" : isPartialSuccess ? "Partially Completed" : "Failed"}
           </DialogTitle>
           <DialogDescription>
             Operation completed in {formatDuration(result.duration)}
@@ -62,7 +63,7 @@ export function BatchResultDialog({
             <Alert variant="default" className="border-orange-200 bg-orange-50">
               <AlertTriangle className="h-4 w-4 text-orange-600" />
               <AlertDescription className="text-orange-900">
-                The operation completed with some failures. {result.succeeded} items succeeded, but{' '}
+                The operation completed with some failures. {result.succeeded} items succeeded, but{" "}
                 {result.failed} items failed.
               </AlertDescription>
             </Alert>
@@ -107,7 +108,7 @@ export function BatchResultDialog({
           </div>
 
           {/* Items tabs */}
-          <Tabs defaultValue={hasFailures ? 'failed' : 'success'} className="w-full">
+          <Tabs defaultValue={hasFailures ? "failed" : "success"} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="success" disabled={successItems.length === 0}>
                 Successful ({result.succeeded})

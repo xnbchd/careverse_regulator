@@ -1,10 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { lazy } from 'react'
-import AppLayout from '@/components/AppLayout'
-import { useAuthStore } from '@/stores/authStore'
-import { useDashboardStore } from '@/stores/dashboardStore'
+import { createFileRoute } from "@tanstack/react-router"
+import { lazy } from "react"
+import AppLayout from "@/components/AppLayout"
+import { useAuthStore } from "@/stores/authStore"
+import { useDashboardStore } from "@/stores/dashboardStore"
 
-const DashboardView = lazy(() => import('@/components/DashboardView'))
+const DashboardView = lazy(() => import("@/components/DashboardView"))
 
 function DashboardEmptyComponent() {
   const navigate = Route.useNavigate()
@@ -15,11 +15,11 @@ function DashboardEmptyComponent() {
   }
 
   const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
+    window.location.href = "/logout?redirect-to=/"
   }
 
   const handleSwitchToDesk = () => {
-    window.location.href = '/app'
+    window.location.href = "/app"
   }
 
   return (
@@ -28,7 +28,7 @@ function DashboardEmptyComponent() {
       pageTitle="Dashboard"
       pageSubtitle="No live data connected yet."
       onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onOpenNotifications={() => handleNavigate("notifications-center")}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
@@ -40,7 +40,7 @@ function DashboardEmptyComponent() {
   )
 }
 
-export const Route = createFileRoute('/dashboard/empty')({
+export const Route = createFileRoute("/dashboard/empty")({
   loader: () => {
     const company = useAuthStore.getState().user?.company
     useDashboardStore.getState().applyMockForCompany(company)

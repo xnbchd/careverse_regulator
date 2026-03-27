@@ -1,9 +1,9 @@
-import type { Facility } from '@/types/entity'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { EntityLink } from './EntityLink'
-import { FacilityMap } from './FacilityMap'
+import type { Facility } from "@/types/entity"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { EntityLink } from "./EntityLink"
+import { FacilityMap } from "./FacilityMap"
 import {
   Table,
   TableBody,
@@ -11,12 +11,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from "@/components/ui/table"
 import {
-  Building2, MapPin, Award, Users, Mail, Phone,
-  Clock, Calendar, Bed, ShieldCheck, Map
-} from 'lucide-react'
-import dayjs from 'dayjs'
+  Building2,
+  MapPin,
+  Award,
+  Users,
+  Mail,
+  Phone,
+  Clock,
+  Calendar,
+  Bed,
+  ShieldCheck,
+  Map,
+} from "lucide-react"
+import dayjs from "dayjs"
 
 interface FacilityDrawerProps {
   facility: Facility
@@ -60,7 +69,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
           <Building2 className="w-12 h-12 text-blue-600/70" />
         </div>
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-foreground mb-1 text-start">{facility.facilityName}</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-1 text-start">
+            {facility.facilityName}
+          </h2>
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
               <ShieldCheck className="w-4 h-4" />
@@ -94,7 +105,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
       <Tabs defaultValue="overview" className="w-full">
         <div className="overflow-x-auto -mx-6 px-6 mb-4">
           <TabsList className="inline-flex w-auto min-w-full">
-            <TabsTrigger value="overview" className="flex-1 min-w-fit">Overview</TabsTrigger>
+            <TabsTrigger value="overview" className="flex-1 min-w-fit">
+              Overview
+            </TabsTrigger>
             <TabsTrigger value="professionals" className="flex-1 min-w-fit whitespace-nowrap">
               <span className="truncate">Professionals</span>
               {facility.affiliations && facility.affiliations.length > 0 && (
@@ -107,8 +120,12 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
                 <span className="ml-1.5 text-xs">({facility.licenses.length})</span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="contact" className="flex-1 min-w-fit">Contact</TabsTrigger>
-            <TabsTrigger value="map" className="flex-1 min-w-fit">Map</TabsTrigger>
+            <TabsTrigger value="contact" className="flex-1 min-w-fit">
+              Contact
+            </TabsTrigger>
+            <TabsTrigger value="map" className="flex-1 min-w-fit">
+              Map
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -140,7 +157,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
                 <Bed className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground text-start">Number of Beds</p>
-                  <p className="text-sm text-muted-foreground text-start">{facility.numberOfBeds}</p>
+                  <p className="text-sm text-muted-foreground text-start">
+                    {facility.numberOfBeds}
+                  </p>
                 </div>
               </div>
             )}
@@ -152,7 +171,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
                   <p className="text-sm font-medium text-foreground text-start">Location</p>
                   <div className="text-sm text-muted-foreground space-y-0.5">
                     {facility.county && <p className="text-start">{facility.county} County</p>}
-                    {facility.subCounty && <p className="text-xs text-start">{facility.subCounty} Sub-County</p>}
+                    {facility.subCounty && (
+                      <p className="text-xs text-start">{facility.subCounty} Sub-County</p>
+                    )}
                     {facility.ward && <p className="text-xs text-start">{facility.ward} Ward</p>}
                   </div>
                 </div>
@@ -161,28 +182,44 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
           </div>
 
           {/* Operating Hours */}
-          {(facility.openWholeDay !== undefined || facility.openWeekends !== undefined || facility.openPublicHoliday !== undefined) && (
+          {(facility.openWholeDay !== undefined ||
+            facility.openWeekends !== undefined ||
+            facility.openPublicHoliday !== undefined) && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
               <div className="flex items-center gap-2 mb-3">
                 <Clock className="w-5 h-5 text-blue-600" />
-                <h3 className="text-sm font-semibold text-foreground text-start">Operating Hours</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">
+                  Operating Hours
+                </h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
                 {facility.openWholeDay !== undefined && (
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${facility.openWholeDay ? 'bg-green-500' : 'bg-muted-foreground/30'}`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        facility.openWholeDay ? "bg-green-500" : "bg-muted-foreground/30"
+                      }`}
+                    />
                     <span className="text-muted-foreground">24/7 Service</span>
                   </div>
                 )}
                 {facility.openWeekends !== undefined && (
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${facility.openWeekends ? 'bg-green-500' : 'bg-muted-foreground/30'}`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        facility.openWeekends ? "bg-green-500" : "bg-muted-foreground/30"
+                      }`}
+                    />
                     <span className="text-muted-foreground">Open Weekends</span>
                   </div>
                 )}
                 {facility.openPublicHoliday !== undefined && (
                   <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${facility.openPublicHoliday ? 'bg-green-500' : 'bg-muted-foreground/30'}`} />
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        facility.openPublicHoliday ? "bg-green-500" : "bg-muted-foreground/30"
+                      }`}
+                    />
                     <span className="text-muted-foreground">Open Holidays</span>
                   </div>
                 )}
@@ -196,7 +233,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Users className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-foreground text-start">Affiliated Professionals</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">
+                  Affiliated Professionals
+                </h3>
               </div>
               <div className="border rounded-lg overflow-hidden overflow-x-auto">
                 <Table>
@@ -216,23 +255,23 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
                               type="professional"
                               id={affiliation.professionalRegistrationNumber}
                             >
-                              {affiliation.professionalName || 'Unknown Professional'}
+                              {affiliation.professionalName || "Unknown Professional"}
                             </EntityLink>
                           ) : (
-                            affiliation.professionalName || 'Unknown Professional'
+                            affiliation.professionalName || "Unknown Professional"
                           )}
                         </TableCell>
                         <TableCell className="text-muted-foreground text-start">
-                          {affiliation.role || 'Not specified'}
+                          {affiliation.role || "Not specified"}
                         </TableCell>
                         <TableCell className="text-right">
                           <Badge
                             variant={
-                              affiliation.status === 'Active'
-                                ? 'default'
-                                : affiliation.status === 'Pending'
-                                  ? 'secondary'
-                                  : 'outline'
+                              affiliation.status === "Active"
+                                ? "default"
+                                : affiliation.status === "Pending"
+                                ? "secondary"
+                                : "outline"
                             }
                           >
                             {affiliation.status}
@@ -257,7 +296,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Award className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-foreground text-start">Active Licenses</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">
+                  Active Licenses
+                </h3>
               </div>
               <div className="space-y-2">
                 {facility.licenses.map((license, index) => (
@@ -275,12 +316,12 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
                         {license.expiryDate && (
                           <p className="text-sm text-muted-foreground flex items-center gap-1 text-start">
                             <Calendar className="w-4 h-4" />
-                            Expires: {dayjs(license.expiryDate, 'YYYY-MM-DD').format('DD MMM YYYY')}
+                            Expires: {dayjs(license.expiryDate, "YYYY-MM-DD").format("DD MMM YYYY")}
                           </p>
                         )}
                       </div>
                       <Badge
-                        variant={license.status === 'Active' ? 'default' : 'outline'}
+                        variant={license.status === "Active" ? "default" : "outline"}
                         className="flex-shrink-0"
                       >
                         {license.status}
@@ -304,7 +345,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
               <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Phone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground mb-1 text-start">Phone Number</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">
+                    Phone Number
+                  </p>
                   <a
                     href={`tel:${facility.telephoneNumber}`}
                     className="text-sm text-primary hover:underline text-start block"
@@ -319,7 +362,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
               <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground mb-1 text-start">Email Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">
+                    Email Address
+                  </p>
                   <a
                     href={`mailto:${facility.officialEmail}`}
                     className="text-sm text-primary hover:underline break-all text-start block"
@@ -334,7 +379,9 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
               <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground mb-1 text-start">Physical Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">
+                    Physical Address
+                  </p>
                   <p className="text-sm text-muted-foreground whitespace-pre-line text-start">
                     {facility.physicalAddress}
                   </p>

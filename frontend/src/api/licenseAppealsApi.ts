@@ -1,9 +1,9 @@
-import { apiRequest } from '@/utils/api'
+import { apiRequest } from "@/utils/api"
 
 export interface LicenseAppeal {
   id: string
   license_number: string
-  appeal_type: 'facility' | 'professional'
+  appeal_type: "facility" | "professional"
   // Facility appeal fields
   facility_name?: string
   facility_code?: string
@@ -44,7 +44,7 @@ export interface LicenseAppealsResponse {
 export interface LicenseAppealsFilters {
   status?: string
   search?: string
-  appeal_type?: 'facility' | 'professional' | null
+  appeal_type?: "facility" | "professional" | null
 }
 
 export async function fetchLicenseAppeals(
@@ -59,13 +59,13 @@ export async function fetchLicenseAppeals(
     })
 
     if (filters?.status) {
-      params.append('status', filters.status)
+      params.append("status", filters.status)
     }
     if (filters?.search) {
-      params.append('search', filters.search)
+      params.append("search", filters.search)
     }
     if (filters?.appeal_type) {
-      params.append('appeal_type', filters.appeal_type)
+      params.append("appeal_type", filters.appeal_type)
     }
 
     const response = await apiRequest<any>(
@@ -74,7 +74,7 @@ export async function fetchLicenseAppeals(
 
     return response.message || response
   } catch (error) {
-    console.error('Failed to fetch license appeals:', error)
+    console.error("Failed to fetch license appeals:", error)
     throw error
   }
 }

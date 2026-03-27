@@ -1,11 +1,7 @@
-import apiClient from './client'
-import type {
-  BatchActionType,
-  BatchItemResult,
-  BatchProgress,
-} from '@/types/batch'
+import apiClient from "./client"
+import type { BatchActionType, BatchItemResult, BatchProgress } from "@/types/batch"
 
-const API_BASE = '/api/method/compliance_360.api.batch'
+const API_BASE = "/api/method/compliance_360.api.batch"
 
 // ============================================================================
 // Batch Operation Types
@@ -65,13 +61,10 @@ export async function bulkApproveLicenses(
   licenseIds: string[],
   metadata?: { reason?: string }
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.licenses.bulk_approve`,
-    {
-      license_ids: licenseIds,
-      reason: metadata?.reason,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.licenses.bulk_approve`, {
+    license_ids: licenseIds,
+    reason: metadata?.reason,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -84,14 +77,11 @@ export async function bulkRejectLicenses(
   reason: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.licenses.bulk_reject`,
-    {
-      license_ids: licenseIds,
-      reason,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.licenses.bulk_reject`, {
+    license_ids: licenseIds,
+    reason,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -105,15 +95,12 @@ export async function bulkSuspendLicenses(
   suspendUntil?: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.licenses.bulk_suspend`,
-    {
-      license_ids: licenseIds,
-      reason,
-      suspend_until: suspendUntil,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.licenses.bulk_suspend`, {
+    license_ids: licenseIds,
+    reason,
+    suspend_until: suspendUntil,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -126,14 +113,11 @@ export async function bulkRenewLicenses(
   validityYears: number,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.licenses.bulk_renew`,
-    {
-      license_ids: licenseIds,
-      validity_years: validityYears,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.licenses.bulk_renew`, {
+    license_ids: licenseIds,
+    validity_years: validityYears,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -146,14 +130,11 @@ export async function bulkDeleteLicenses(
   reason: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.licenses.bulk_delete`,
-    {
-      license_ids: licenseIds,
-      reason,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.licenses.bulk_delete`, {
+    license_ids: licenseIds,
+    reason,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -169,13 +150,10 @@ export async function bulkApproveAffiliations(
   affiliationIds: string[],
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.affiliations.bulk_approve`,
-    {
-      affiliation_ids: affiliationIds,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.affiliations.bulk_approve`, {
+    affiliation_ids: affiliationIds,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -188,14 +166,11 @@ export async function bulkRejectAffiliations(
   reason: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.affiliations.bulk_reject`,
-    {
-      affiliation_ids: affiliationIds,
-      reason,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.affiliations.bulk_reject`, {
+    affiliation_ids: affiliationIds,
+    reason,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -246,14 +221,11 @@ export async function bulkDeleteAffiliations(
   reason: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.affiliations.bulk_delete`,
-    {
-      affiliation_ids: affiliationIds,
-      reason,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.affiliations.bulk_delete`, {
+    affiliation_ids: affiliationIds,
+    reason,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -270,14 +242,11 @@ export async function bulkDeleteDocuments(
   reason: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.documents.bulk_delete`,
-    {
-      document_ids: documentIds,
-      reason,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.documents.bulk_delete`, {
+    document_ids: documentIds,
+    reason,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -297,7 +266,7 @@ export async function bulkDownloadDocuments(
     },
     {
       headers: {
-        Accept: 'application/zip',
+        Accept: "application/zip",
       },
     }
   )
@@ -331,7 +300,7 @@ export async function bulkUpdateDocumentCategory(
 export async function bulkUpdateDocumentTags(
   documentIds: string[],
   tags: string[],
-  operation: 'add' | 'remove' | 'replace',
+  operation: "add" | "remove" | "replace",
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
   const response = await apiClient.post<{ message: any }>(
@@ -360,15 +329,12 @@ export async function bulkScheduleInspections(
   inspectionType: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.inspections.bulk_schedule`,
-    {
-      facility_ids: facilityIds,
-      scheduled_date: scheduledDate,
-      inspection_type: inspectionType,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.inspections.bulk_schedule`, {
+    facility_ids: facilityIds,
+    scheduled_date: scheduledDate,
+    inspection_type: inspectionType,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -381,14 +347,11 @@ export async function bulkCancelInspections(
   reason: string,
   metadata?: Record<string, any>
 ): Promise<BatchItemResult[]> {
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.inspections.bulk_cancel`,
-    {
-      inspection_ids: inspectionIds,
-      reason,
-      metadata,
-    }
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.inspections.bulk_cancel`, {
+    inspection_ids: inspectionIds,
+    reason,
+    metadata,
+  })
 
   return response.message.results.map(transformBatchItemResult)
 }
@@ -405,12 +368,9 @@ export async function getBatchOperationStatus(operationId: string): Promise<{
   progress: BatchProgress
   items: BatchItemResult[]
 }> {
-  const response = await apiClient.get<{ message: any }>(
-    `${API_BASE}.get_status`,
-    {
-      params: { operation_id: operationId },
-    }
-  )
+  const response = await apiClient.get<{ message: any }>(`${API_BASE}.get_status`, {
+    params: { operation_id: operationId },
+  })
 
   return {
     status: response.message.status,
@@ -470,7 +430,7 @@ export async function executeBatchWithProgress(
 
     return results
   } catch (error) {
-    console.error('Batch operation failed:', error)
+    console.error("Batch operation failed:", error)
     throw error
   }
 }
@@ -500,7 +460,7 @@ export async function executeBatchOperationMock(
     results.push({
       itemId: items[i].id,
       success,
-      error: success ? undefined : 'Mock error: Processing failed',
+      error: success ? undefined : "Mock error: Processing failed",
     })
 
     // Report progress

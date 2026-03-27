@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect } from "react"
 import {
   CommandDialog,
   CommandInput,
@@ -6,10 +6,10 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandItem,
-} from '@/components/ui/command'
-import { useGlobalSearch } from '@/hooks/useGlobalSearch'
-import { useEntityDrawer } from '@/contexts/EntityDrawerContext'
-import type { EntityType } from '@/types/entity'
+} from "@/components/ui/command"
+import { useGlobalSearch } from "@/hooks/useGlobalSearch"
+import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
+import type { EntityType } from "@/types/entity"
 
 interface GlobalSearchProps {
   open: boolean
@@ -28,10 +28,10 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
   }, [open, clearSearch])
 
   const DOCTYPE_TO_ENTITY: Record<string, EntityType> = {
-    'Professional Record': 'professional',
-    'Facility Record': 'facility',
-    'License Records': 'license',
-    'Inspection Record': 'inspection',
+    "Professional Record": "professional",
+    "Facility Record": "facility",
+    "License Records": "license",
+    "Inspection Record": "inspection",
   }
 
   const handleResultClick = (doctype: string, name: string) => {
@@ -55,14 +55,14 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
           {error !== null
             ? error
             : loading
-            ? 'Searching...'
+            ? "Searching..."
             : query.length === 0
-            ? 'Type to search...'
+            ? "Type to search..."
             : query.length < 2
-            ? 'Type at least 2 characters...'
+            ? "Type at least 2 characters..."
             : results.length === 0
-            ? 'No results found'
-            : 'No results found'}
+            ? "No results found"
+            : "No results found"}
         </CommandEmpty>
 
         {results.map((group) => (
@@ -75,9 +75,7 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
                 <div className="flex flex-col gap-1">
                   <span className="font-semibold">{result.title}</span>
                   {result.description && (
-                    <span className="text-sm text-muted-foreground">
-                      {result.description}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{result.description}</span>
                   )}
                 </div>
               </CommandItem>

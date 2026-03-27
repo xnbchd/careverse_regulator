@@ -1,12 +1,12 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 import type {
   Affiliation,
   AffiliationPaginationMeta,
   CreateAffiliationPayload,
   AffiliationAction,
-} from '@/types/affiliation'
-import * as affiliationApi from '@/api/affiliationApi'
-import type { AffiliationFilters } from '@/api/affiliationApi'
+} from "@/types/affiliation"
+import * as affiliationApi from "@/api/affiliationApi"
+import type { AffiliationFilters } from "@/api/affiliationApi"
 
 export interface AffiliationState {
   affiliations: Affiliation[]
@@ -36,8 +36,11 @@ export interface AffiliationState {
   toggleSelection: (id: string) => void
   selectAll: () => void
   deselectAll: () => void
-  bulkApprove: (ids: string[], reason?: string) => Promise<{ succeeded: string[], failed: string[] }>
-  bulkReject: (ids: string[], reason?: string) => Promise<{ succeeded: string[], failed: string[] }>
+  bulkApprove: (
+    ids: string[],
+    reason?: string
+  ) => Promise<{ succeeded: string[]; failed: string[] }>
+  bulkReject: (ids: string[], reason?: string) => Promise<{ succeeded: string[]; failed: string[] }>
 }
 
 export const useAffiliationStore = create<AffiliationState>((set, get) => ({
@@ -82,7 +85,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch affiliations',
+        error: error instanceof Error ? error.message : "Failed to fetch affiliations",
         loading: false,
       })
     }
@@ -96,7 +99,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
       return affiliation
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to fetch affiliation',
+        error: error instanceof Error ? error.message : "Failed to fetch affiliation",
         loading: false,
       })
       throw error
@@ -112,7 +115,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
       await get().refreshAffiliations()
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to approve affiliation',
+        error: error instanceof Error ? error.message : "Failed to approve affiliation",
         loading: false,
       })
       throw error
@@ -128,7 +131,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
       await get().refreshAffiliations()
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to reject affiliation',
+        error: error instanceof Error ? error.message : "Failed to reject affiliation",
         loading: false,
       })
       throw error
@@ -145,7 +148,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Failed to create affiliation',
+        error: error instanceof Error ? error.message : "Failed to create affiliation",
         loading: false,
       })
       throw error
@@ -169,7 +172,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
   },
 
   selectAll: () => {
-    const selectedIds = new Set(get().affiliations.map(a => a.affiliationId))
+    const selectedIds = new Set(get().affiliations.map((a) => a.affiliationId))
     set({ selectedIds })
   },
 
@@ -196,7 +199,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
 
       // Remove succeeded IDs from selection
       const selectedIds = new Set(get().selectedIds)
-      succeeded.forEach(id => selectedIds.delete(id))
+      succeeded.forEach((id) => selectedIds.delete(id))
 
       set({ bulkActionLoading: false, selectedIds })
 
@@ -206,7 +209,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
       return { succeeded, failed }
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Bulk approve operation failed',
+        error: error instanceof Error ? error.message : "Bulk approve operation failed",
         bulkActionLoading: false,
       })
       throw error
@@ -232,7 +235,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
 
       // Remove succeeded IDs from selection
       const selectedIds = new Set(get().selectedIds)
-      succeeded.forEach(id => selectedIds.delete(id))
+      succeeded.forEach((id) => selectedIds.delete(id))
 
       set({ bulkActionLoading: false, selectedIds })
 
@@ -242,7 +245,7 @@ export const useAffiliationStore = create<AffiliationState>((set, get) => ({
       return { succeeded, failed }
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Bulk reject operation failed',
+        error: error instanceof Error ? error.message : "Bulk reject operation failed",
         bulkActionLoading: false,
       })
       throw error

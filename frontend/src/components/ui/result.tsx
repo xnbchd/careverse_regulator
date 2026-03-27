@@ -1,9 +1,9 @@
-import { AlertCircle, CheckCircle2, Info, XCircle } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { AlertCircle, CheckCircle2, Info, XCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 
 interface ResultProps {
-  status?: 'success' | 'error' | 'info' | 'warning' | '403' | '404' | '500'
+  status?: "success" | "error" | "info" | "warning" | "403" | "404" | "500"
   title: string
   subTitle?: string
   extra?: React.ReactNode
@@ -13,48 +13,42 @@ interface ResultProps {
 const statusConfig = {
   success: {
     icon: CheckCircle2,
-    color: 'text-green-500',
-    bgColor: 'bg-green-50 dark:bg-green-950',
+    color: "text-green-500",
+    bgColor: "bg-green-50 dark:bg-green-950",
   },
   error: {
     icon: XCircle,
-    color: 'text-red-500',
-    bgColor: 'bg-red-50 dark:bg-red-950',
+    color: "text-red-500",
+    bgColor: "bg-red-50 dark:bg-red-950",
   },
   info: {
     icon: Info,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50 dark:bg-blue-950',
+    color: "text-blue-500",
+    bgColor: "bg-blue-50 dark:bg-blue-950",
   },
   warning: {
     icon: AlertCircle,
-    color: 'text-yellow-500',
-    bgColor: 'bg-yellow-50 dark:bg-yellow-950',
+    color: "text-yellow-500",
+    bgColor: "bg-yellow-50 dark:bg-yellow-950",
   },
-  '403': {
+  "403": {
     icon: XCircle,
-    color: 'text-red-500',
-    bgColor: 'bg-red-50 dark:bg-red-950',
+    color: "text-red-500",
+    bgColor: "bg-red-50 dark:bg-red-950",
   },
-  '404': {
+  "404": {
     icon: AlertCircle,
-    color: 'text-muted-foreground',
-    bgColor: 'bg-muted/50 dark:bg-muted/50',
+    color: "text-muted-foreground",
+    bgColor: "bg-muted/50 dark:bg-muted/50",
   },
-  '500': {
+  "500": {
     icon: XCircle,
-    color: 'text-red-500',
-    bgColor: 'bg-red-50 dark:bg-red-950',
+    color: "text-red-500",
+    bgColor: "bg-red-50 dark:bg-red-950",
   },
 }
 
-export function Result({
-  status = 'info',
-  title,
-  subTitle,
-  extra,
-  children,
-}: ResultProps) {
+export function Result({ status = "info", title, subTitle, extra, children }: ResultProps) {
   const config = statusConfig[status]
   const Icon = config.icon
 
@@ -65,9 +59,7 @@ export function Result({
           <Icon className={`w-12 h-12 ${config.color}`} />
         </div>
         <h2 className="text-xl font-semibold">{title}</h2>
-        {subTitle && (
-          <p className="text-sm text-muted-foreground">{subTitle}</p>
-        )}
+        {subTitle && <p className="text-sm text-muted-foreground">{subTitle}</p>}
         {children}
         {extra && <div className="pt-2">{extra}</div>}
       </div>

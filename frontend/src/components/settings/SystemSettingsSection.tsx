@@ -1,24 +1,21 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import type { SystemSettings } from '@/types/settings'
+} from "@/components/ui/select"
+import type { SystemSettings } from "@/types/settings"
 
 interface SystemSettingsSectionProps {
   settings: SystemSettings
   onUpdate: (updates: Partial<SystemSettings>) => void
 }
 
-export default function SystemSettingsSection({
-  settings,
-  onUpdate,
-}: SystemSettingsSectionProps) {
+export default function SystemSettingsSection({ settings, onUpdate }: SystemSettingsSectionProps) {
   return (
     <Card>
       <CardHeader>
@@ -79,9 +76,7 @@ export default function SystemSettingsSection({
               <SelectItem value="fr">French</SelectItem>
             </SelectContent>
           </Select>
-          <p className="text-sm text-muted-foreground">
-            Preferred language for the interface
-          </p>
+          <p className="text-sm text-muted-foreground">Preferred language for the interface</p>
         </div>
 
         {/* Timezone */}
@@ -122,18 +117,14 @@ export default function SystemSettingsSection({
               <SelectItem value="YYYY-MM-DD">YYYY-MM-DD (2026-03-25)</SelectItem>
             </SelectContent>
           </Select>
-          <p className="text-sm text-muted-foreground">
-            Preferred format for displaying dates
-          </p>
+          <p className="text-sm text-muted-foreground">Preferred format for displaying dates</p>
         </div>
 
         {/* Dark Mode */}
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <Label>Enable Dark Mode</Label>
-            <p className="text-sm text-muted-foreground">
-              Use dark theme for reduced eye strain
-            </p>
+            <p className="text-sm text-muted-foreground">Use dark theme for reduced eye strain</p>
           </div>
           <Switch
             checked={settings.enableDarkMode}

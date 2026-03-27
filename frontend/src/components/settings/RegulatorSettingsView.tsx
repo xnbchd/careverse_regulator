@@ -1,12 +1,12 @@
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Save, RotateCcw, AlertCircle } from 'lucide-react'
-import { useSettingsStore } from '@/stores/settingsStore'
-import { toast } from 'sonner'
-import GovernanceSettingsSection from './GovernanceSettingsSection'
-import ThresholdSettingsSection from './ThresholdSettingsSection'
-import SystemSettingsSection from './SystemSettingsSection'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Save, RotateCcw, AlertCircle } from "lucide-react"
+import { useSettingsStore } from "@/stores/settingsStore"
+import { toast } from "sonner"
+import GovernanceSettingsSection from "./GovernanceSettingsSection"
+import ThresholdSettingsSection from "./ThresholdSettingsSection"
+import SystemSettingsSection from "./SystemSettingsSection"
 
 export default function RegulatorSettingsView() {
   const {
@@ -24,21 +24,21 @@ export default function RegulatorSettingsView() {
   const handleSave = async () => {
     try {
       await saveSettings()
-      toast.success('Settings saved successfully')
+      toast.success("Settings saved successfully")
     } catch (error) {
-      toast.error('Failed to save settings')
+      toast.error("Failed to save settings")
     }
   }
 
   const handleReset = () => {
     resetSettings()
-    toast.info('Changes discarded')
+    toast.info("Changes discarded")
   }
 
   const handleResetDefaults = () => {
-    if (confirm('Are you sure you want to reset all settings to defaults?')) {
+    if (confirm("Are you sure you want to reset all settings to defaults?")) {
       resetToDefaults()
-      toast.info('Settings reset to defaults')
+      toast.info("Settings reset to defaults")
     }
   }
 
@@ -59,22 +59,13 @@ export default function RegulatorSettingsView() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleReset}
-                  disabled={isSaving}
-                >
+                <Button variant="outline" size="sm" onClick={handleReset} disabled={isSaving}>
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Discard
                 </Button>
-                <Button
-                  size="sm"
-                  onClick={handleSave}
-                  disabled={isSaving}
-                >
+                <Button size="sm" onClick={handleSave} disabled={isSaving}>
                   <Save className="w-4 h-4 mr-2" />
-                  {isSaving ? 'Saving...' : 'Save Changes'}
+                  {isSaving ? "Saving..." : "Save Changes"}
                 </Button>
               </div>
             </div>
@@ -91,24 +82,15 @@ export default function RegulatorSettingsView() {
         </TabsList>
 
         <TabsContent value="governance" className="space-y-4">
-          <GovernanceSettingsSection
-            settings={settings.governance}
-            onUpdate={updateGovernance}
-          />
+          <GovernanceSettingsSection settings={settings.governance} onUpdate={updateGovernance} />
         </TabsContent>
 
         <TabsContent value="thresholds" className="space-y-4">
-          <ThresholdSettingsSection
-            settings={settings.thresholds}
-            onUpdate={updateThresholds}
-          />
+          <ThresholdSettingsSection settings={settings.thresholds} onUpdate={updateThresholds} />
         </TabsContent>
 
         <TabsContent value="system" className="space-y-4">
-          <SystemSettingsSection
-            settings={settings.system}
-            onUpdate={updateSystem}
-          />
+          <SystemSettingsSection settings={settings.system} onUpdate={updateSystem} />
         </TabsContent>
       </Tabs>
 
@@ -116,29 +98,18 @@ export default function RegulatorSettingsView() {
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
-            <Button
-              variant="outline"
-              onClick={handleResetDefaults}
-              disabled={isSaving}
-            >
+            <Button variant="outline" onClick={handleResetDefaults} disabled={isSaving}>
               Reset to Defaults
             </Button>
 
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={handleReset}
-                disabled={!hasChanges || isSaving}
-              >
+              <Button variant="outline" onClick={handleReset} disabled={!hasChanges || isSaving}>
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Discard Changes
               </Button>
-              <Button
-                onClick={handleSave}
-                disabled={!hasChanges || isSaving}
-              >
+              <Button onClick={handleSave} disabled={!hasChanges || isSaving}>
                 <Save className="w-4 h-4 mr-2" />
-                {isSaving ? 'Saving...' : 'Save Settings'}
+                {isSaving ? "Saving..." : "Save Settings"}
               </Button>
             </div>
           </div>

@@ -1,29 +1,11 @@
-import { useAuditStore } from '@/stores/auditStore'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Badge } from '@/components/ui/badge'
-import {
-  BarChart3,
-  Activity,
-  AlertTriangle,
-  TrendingUp,
-  Users,
-  Shield,
-} from 'lucide-react'
-import {
-  getActionLabel,
-  getEntityLabel,
-  getSeverityColor,
-  getSeverityLabel,
-} from '@/types/audit'
-import { format } from 'date-fns'
-import { cn } from '@/lib/utils'
+import { useAuditStore } from "@/stores/auditStore"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Badge } from "@/components/ui/badge"
+import { BarChart3, Activity, AlertTriangle, TrendingUp, Users, Shield } from "lucide-react"
+import { getActionLabel, getEntityLabel, getSeverityColor, getSeverityLabel } from "@/types/audit"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 export function AuditStats() {
   const { stats, isLoadingStats } = useAuditStore()
@@ -70,11 +52,9 @@ export function AuditStats() {
   const severityData = Object.entries(stats.logsBySeverity)
 
   // Calculate high-risk percentage
-  const highRiskCount =
-    (stats.logsBySeverity.high || 0) + (stats.logsBySeverity.critical || 0)
-  const highRiskPercentage = stats.totalLogs > 0
-    ? ((highRiskCount / stats.totalLogs) * 100).toFixed(1)
-    : '0'
+  const highRiskCount = (stats.logsBySeverity.high || 0) + (stats.logsBySeverity.critical || 0)
+  const highRiskPercentage =
+    stats.totalLogs > 0 ? ((highRiskCount / stats.totalLogs) * 100).toFixed(1) : "0"
 
   return (
     <div className="space-y-6">
@@ -154,9 +134,7 @@ export function AuditStats() {
                   <div key={action} className="flex items-center gap-3">
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm font-medium">
-                          {getActionLabel(action as any)}
-                        </span>
+                        <span className="text-sm font-medium">{getActionLabel(action as any)}</span>
                         <span className="text-sm text-muted-foreground">
                           {count.toLocaleString()} ({percentage}%)
                         </span>
@@ -192,9 +170,7 @@ export function AuditStats() {
                   <div key={entity} className="flex items-center gap-3">
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm font-medium">
-                          {getEntityLabel(entity as any)}
-                        </span>
+                        <span className="text-sm font-medium">{getEntityLabel(entity as any)}</span>
                         <span className="text-sm text-muted-foreground">
                           {count.toLocaleString()} ({percentage}%)
                         </span>
@@ -227,7 +203,7 @@ export function AuditStats() {
                   <div key={severity} className="flex items-center justify-between">
                     <Badge
                       variant="outline"
-                      className={cn('w-24 justify-center', getSeverityColor(severity as any))}
+                      className={cn("w-24 justify-center", getSeverityColor(severity as any))}
                     >
                       {getSeverityLabel(severity as any)}
                     </Badge>
@@ -235,11 +211,11 @@ export function AuditStats() {
                       <div className="h-2 bg-muted rounded-full overflow-hidden">
                         <div
                           className={cn(
-                            'h-full transition-all',
-                            severity === 'critical' && 'bg-red-500',
-                            severity === 'high' && 'bg-orange-500',
-                            severity === 'medium' && 'bg-blue-500',
-                            severity === 'low' && 'bg-muted-foreground/60'
+                            "h-full transition-all",
+                            severity === "critical" && "bg-red-500",
+                            severity === "high" && "bg-orange-500",
+                            severity === "medium" && "bg-blue-500",
+                            severity === "low" && "bg-muted-foreground/60"
                           )}
                           style={{ width: `${percentage}%` }}
                         />
@@ -305,7 +281,7 @@ export function AuditStats() {
                 <div className="mt-1">
                   <Badge
                     variant="outline"
-                    className={cn('text-xs', getSeverityColor(log.severity))}
+                    className={cn("text-xs", getSeverityColor(log.severity))}
                   >
                     {getSeverityLabel(log.severity)}
                   </Badge>
@@ -314,18 +290,16 @@ export function AuditStats() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium">{getActionLabel(log.action)}</p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        {log.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground truncate">{log.description}</p>
                       <div className="flex items-center gap-3 mt-1">
                         <span className="text-xs text-muted-foreground">{log.userName}</span>
                         <span className="text-xs text-muted-foreground">
-                          {format(new Date(log.timestamp), 'MMM dd, HH:mm')}
+                          {format(new Date(log.timestamp), "MMM dd, HH:mm")}
                         </span>
                       </div>
                     </div>
-                    <Badge variant={log.success ? 'default' : 'destructive'} className="text-xs">
-                      {log.success ? 'Success' : 'Failed'}
+                    <Badge variant={log.success ? "default" : "destructive"} className="text-xs">
+                      {log.success ? "Success" : "Failed"}
                     </Badge>
                   </div>
                 </div>

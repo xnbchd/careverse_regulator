@@ -1,10 +1,10 @@
-import { Info } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import type { Finding } from '@/types/inspection'
-import FindingsBadge from './FindingsBadge'
-import { EntityLink } from '@/components/entities/EntityLink'
+import { Info } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import type { Finding } from "@/types/inspection"
+import FindingsBadge from "./FindingsBadge"
+import { EntityLink } from "@/components/entities/EntityLink"
 
 interface FindingCardProps {
   finding: Finding
@@ -18,9 +18,7 @@ export default function FindingCard({ finding, onView }: FindingCardProps) {
         <div className="mb-3">
           <div className="flex justify-between items-start mb-2">
             <div className="flex-1 min-w-0">
-              <div className="text-xs text-muted-foreground mb-1 truncate">
-                {finding.findingId}
-              </div>
+              <div className="text-xs text-muted-foreground mb-1 truncate">{finding.findingId}</div>
               <div className="text-base font-semibold mb-2 truncate">
                 {finding.facilityId ? (
                   <EntityLink
@@ -44,7 +42,10 @@ export default function FindingCard({ finding, onView }: FindingCardProps) {
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2 text-sm">
-            <Badge variant="secondary" className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400 truncate">
+            <Badge
+              variant="secondary"
+              className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-400 truncate"
+            >
               {finding.category}
             </Badge>
           </div>
@@ -59,10 +60,7 @@ export default function FindingCard({ finding, onView }: FindingCardProps) {
           </div>
         </div>
 
-        <Button
-          className="w-full mt-4"
-          onClick={() => onView(finding)}
-        >
+        <Button className="w-full mt-4" onClick={() => onView(finding)}>
           View Details
         </Button>
       </CardContent>

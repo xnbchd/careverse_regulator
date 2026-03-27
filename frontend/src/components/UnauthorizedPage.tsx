@@ -10,14 +10,14 @@ import {
   Moon,
   Monitor,
   LogOut,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { useResponsive } from '@/hooks/useResponsive'
-import { useThemeStore } from '@/stores/themeStore'
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { useResponsive } from "@/hooks/useResponsive"
+import { useThemeStore } from "@/stores/themeStore"
 
 interface UnauthorizedPageProps {
-  mode: 'guest' | 'forbidden' | 'tenant-misconfigured'
+  mode: "guest" | "forbidden" | "tenant-misconfigured"
   userEmail?: string
   accessMessage?: string
   onLogin: () => void
@@ -38,38 +38,44 @@ export default function UnauthorizedPage({
   const { isMobile } = useResponsive()
   const colorMode = useThemeStore((state) => state.mode)
   const toggleMode = useThemeStore((state) => state.toggleMode)
-  const isDarkMode = colorMode === 'dark'
+  const isDarkMode = colorMode === "dark"
 
-  const isGuest = mode === 'guest'
-  const isTenantMisconfigured = mode === 'tenant-misconfigured'
+  const isGuest = mode === "guest"
+  const isTenantMisconfigured = mode === "tenant-misconfigured"
 
-  const pageTitle = isGuest ? 'Sign In Required' : isTenantMisconfigured ? 'Company Setup Required' : 'Access Restricted'
-  const pageDescription = isGuest
-    ? 'Welcome to Compliance 360. Sign in with your authorized credentials to continue.'
+  const pageTitle = isGuest
+    ? "Sign In Required"
     : isTenantMisconfigured
-      ? 'Your account needs exactly one assigned company before this portal can open.'
-      : 'Your current role does not include this workspace.'
+    ? "Company Setup Required"
+    : "Access Restricted"
+  const pageDescription = isGuest
+    ? "Welcome to Compliance 360. Sign in with your authorized credentials to continue."
+    : isTenantMisconfigured
+    ? "Your account needs exactly one assigned company before this portal can open."
+    : "Your current role does not include this workspace."
   const guidance = isTenantMisconfigured
-    ? accessMessage || 'Ask your administrator to assign one Company User Permission to this account.'
+    ? accessMessage ||
+      "Ask your administrator to assign one Company User Permission to this account."
     : isGuest
-      ? 'Use your work credentials to continue.'
-      : accessMessage || 'Ask your administrator to assign the correct portal role.'
+    ? "Use your work credentials to continue."
+    : accessMessage || "Ask your administrator to assign the correct portal role."
 
   const features = [
     {
       icon: BarChart3,
-      title: 'Executive Monitoring',
-      description: 'Real-time oversight of regulator operations, queues, and compliance workload.',
+      title: "Executive Monitoring",
+      description: "Real-time oversight of regulator operations, queues, and compliance workload.",
     },
     {
       icon: FileSearch,
-      title: 'Centralized Approvals',
-      description: 'Streamlined workflow for processing licensing decisions, renewals, and sanctions.',
+      title: "Centralized Approvals",
+      description:
+        "Streamlined workflow for processing licensing decisions, renewals, and sanctions.",
     },
     {
       icon: ShieldCheck,
-      title: 'Unified Registry',
-      description: 'Single source of truth for health workers, facilities, and lifecycle records.',
+      title: "Unified Registry",
+      description: "Single source of truth for health workers, facilities, and lifecycle records.",
     },
   ]
 
@@ -83,12 +89,12 @@ export default function UnauthorizedPage({
   }
 
   const primaryLabel = isGuest
-    ? 'Sign In to Dashboard'
+    ? "Sign In to Dashboard"
     : isTenantMisconfigured
-      ? 'Re-open Sign In'
-      : onContinueLimited
-        ? 'Continue (Limited Access)'
-        : 'Sign In to Dashboard'
+    ? "Re-open Sign In"
+    : onContinueLimited
+    ? "Continue (Limited Access)"
+    : "Sign In to Dashboard"
 
   return (
     <div className="min-h-screen bg-linear-to-br from-background via-background to-secondary/20 relative overflow-hidden">
@@ -108,7 +114,7 @@ export default function UnauthorizedPage({
 
           <Button variant="ghost" size="sm" onClick={toggleMode} className="rounded-lg">
             {isDarkMode ? <Sun className="w-4 h-4 mr-2" /> : <Moon className="w-4 h-4 mr-2" />}
-            {isDarkMode ? 'Light' : 'Dark'} Mode
+            {isDarkMode ? "Light" : "Dark"} Mode
           </Button>
         </div>
       </header>
@@ -118,7 +124,7 @@ export default function UnauthorizedPage({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <div>
               <Card className="bg-card/90 dark:bg-card/90 backdrop-blur-sm shadow-lg">
-                <CardContent className={isMobile ? 'p-6' : 'p-10'}>
+                <CardContent className={isMobile ? "p-6" : "p-10"}>
                   <div className="flex flex-col gap-6">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary">
                       <Lock className="w-6 h-6" />
@@ -128,7 +134,11 @@ export default function UnauthorizedPage({
                       <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground block mb-2.5">
                         Organization Portal
                       </span>
-                      <h1 className={`font-medium tracking-tight leading-tight ${isMobile ? 'text-2xl' : 'text-3xl'}`}>
+                      <h1
+                        className={`font-medium tracking-tight leading-tight ${
+                          isMobile ? "text-2xl" : "text-3xl"
+                        }`}
+                      >
                         {pageTitle}
                       </h1>
                       <p className="text-sm leading-relaxed text-muted-foreground mt-3">
@@ -173,20 +183,16 @@ export default function UnauthorizedPage({
 
                     <div className="p-4 rounded-xl bg-muted/50 dark:bg-muted/50 border border-border">
                       <h5 className="text-sm font-medium text-primary mb-3">
-                        {isGuest ? 'After You Sign In' : 'Current Account'}
+                        {isGuest ? "After You Sign In" : "Current Account"}
                       </h5>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        {isGuest ? guidance : (userEmail || 'Unknown user')}
+                        {isGuest ? guidance : userEmail || "Unknown user"}
                       </p>
                     </div>
 
                     <div className="p-4 rounded-xl bg-muted/50 dark:bg-muted/50 border border-border">
-                      <h5 className="text-sm font-medium mb-2">
-                        Need Help?
-                      </h5>
-                      <p className="text-xs text-muted-foreground">
-                        {guidance}
-                      </p>
+                      <h5 className="text-sm font-medium mb-2">Need Help?</h5>
+                      <p className="text-xs text-muted-foreground">{guidance}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -198,11 +204,10 @@ export default function UnauthorizedPage({
                 <span className="text-xs font-medium uppercase tracking-wider text-primary dark:text-green-400 block mb-3">
                   Executive Platform
                 </span>
-                <h2 className="text-3xl font-medium mb-2.5">
-                  Smarter Organization Management
-                </h2>
+                <h2 className="text-3xl font-medium mb-2.5">Smarter Organization Management</h2>
                 <p className="text-sm text-muted-foreground">
-                  Compliance 360 provides integrated oversight of health workers, facilities, licenses, and compliance actions.
+                  Compliance 360 provides integrated oversight of health workers, facilities,
+                  licenses, and compliance actions.
                 </p>
               </div>
 
@@ -210,19 +215,18 @@ export default function UnauthorizedPage({
                 {features.map((feature, index) => {
                   const Icon = feature.icon
                   return (
-                    <Card key={index} className="bg-card/90 dark:bg-card/90 backdrop-blur-sm shadow-md transition-all hover:shadow-lg">
+                    <Card
+                      key={index}
+                      className="bg-card/90 dark:bg-card/90 backdrop-blur-sm shadow-md transition-all hover:shadow-lg"
+                    >
                       <CardContent className="p-4.5">
                         <div className="flex gap-4 items-start">
                           <div className="w-10 h-10 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center shrink-0 text-primary">
                             <Icon className="w-5 h-5" />
                           </div>
                           <div className="flex-1">
-                            <h5 className="font-medium mb-1">
-                              {feature.title}
-                            </h5>
-                            <p className="text-sm text-muted-foreground">
-                              {feature.description}
-                            </p>
+                            <h5 className="font-medium mb-1">{feature.title}</h5>
+                            <p className="text-sm text-muted-foreground">{feature.description}</p>
                           </div>
                           <CheckCircle className="w-5 h-5 text-green-500 dark:text-green-400 ml-auto self-center shrink-0" />
                         </div>

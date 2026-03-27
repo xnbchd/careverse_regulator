@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import { fetchAnalyticsDashboard } from '@/api/analyticsApi'
+import { create } from "zustand"
+import { fetchAnalyticsDashboard } from "@/api/analyticsApi"
 
 export interface LicenseStatistics {
   total: number
@@ -80,39 +80,39 @@ const generateMockLicenseStats = (): LicenseStatistics => ({
 
 const generateMockExpiryWarnings = (): ExpiryWarning[] => [
   {
-    licenseNumber: 'LIC-2024-001',
-    facilityName: 'General Hospital',
-    expiryDate: '2026-04-15',
+    licenseNumber: "LIC-2024-001",
+    facilityName: "General Hospital",
+    expiryDate: "2026-04-15",
     daysUntilExpiry: 22,
-    status: 'Active',
+    status: "Active",
   },
   {
-    licenseNumber: 'LIC-2024-002',
-    facilityName: 'City Clinic',
-    expiryDate: '2026-04-10',
+    licenseNumber: "LIC-2024-002",
+    facilityName: "City Clinic",
+    expiryDate: "2026-04-10",
     daysUntilExpiry: 17,
-    status: 'Active',
+    status: "Active",
   },
   {
-    licenseNumber: 'LIC-2024-003',
-    facilityName: 'Community Health Center',
-    expiryDate: '2026-04-05',
+    licenseNumber: "LIC-2024-003",
+    facilityName: "Community Health Center",
+    expiryDate: "2026-04-05",
     daysUntilExpiry: 12,
-    status: 'Active',
+    status: "Active",
   },
   {
-    licenseNumber: 'LIC-2024-004',
-    facilityName: 'Regional Medical Center',
-    expiryDate: '2026-03-30',
+    licenseNumber: "LIC-2024-004",
+    facilityName: "Regional Medical Center",
+    expiryDate: "2026-03-30",
     daysUntilExpiry: 6,
-    status: 'Active',
+    status: "Active",
   },
   {
-    licenseNumber: 'LIC-2024-005',
-    facilityName: 'Pediatric Clinic',
-    expiryDate: '2026-03-28',
+    licenseNumber: "LIC-2024-005",
+    facilityName: "Pediatric Clinic",
+    expiryDate: "2026-03-28",
     daysUntilExpiry: 4,
-    status: 'Active',
+    status: "Active",
   },
 ]
 
@@ -140,12 +140,12 @@ const generateMockComplianceMetrics = (): ComplianceMetrics => ({
 })
 
 const generateMockTrendData = (): TrendData[] => [
-  { month: 'Oct', licenses: 420, affiliations: 1100, inspections: 320 },
-  { month: 'Nov', licenses: 435, affiliations: 1150, inspections: 345 },
-  { month: 'Dec', licenses: 442, affiliations: 1200, inspections: 355 },
-  { month: 'Jan', licenses: 445, affiliations: 1220, inspections: 365 },
-  { month: 'Feb', licenses: 448, affiliations: 1240, inspections: 372 },
-  { month: 'Mar', licenses: 450, affiliations: 1250, inspections: 380 },
+  { month: "Oct", licenses: 420, affiliations: 1100, inspections: 320 },
+  { month: "Nov", licenses: 435, affiliations: 1150, inspections: 345 },
+  { month: "Dec", licenses: 442, affiliations: 1200, inspections: 355 },
+  { month: "Jan", licenses: 445, affiliations: 1220, inspections: 365 },
+  { month: "Feb", licenses: 448, affiliations: 1240, inspections: 372 },
+  { month: "Mar", licenses: 450, affiliations: 1250, inspections: 380 },
 ]
 
 export const useAnalyticsStore = create<AnalyticsState>((set, get) => ({
@@ -158,8 +158,8 @@ export const useAnalyticsStore = create<AnalyticsState>((set, get) => ({
   loading: false,
   error: null,
   dateRange: {
-    start: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    end: new Date().toISOString().split('T')[0],
+    start: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+    end: new Date().toISOString().split("T")[0],
   },
 
   fetchDashboardData: async () => {
@@ -179,7 +179,7 @@ export const useAnalyticsStore = create<AnalyticsState>((set, get) => ({
       })
     } catch (error) {
       // Fallback to mock data if API fails (for development)
-      console.warn('Analytics API failed, using mock data:', error)
+      console.warn("Analytics API failed, using mock data:", error)
       set({
         licenseStats: generateMockLicenseStats(),
         expiryWarnings: generateMockExpiryWarnings(),
@@ -188,7 +188,7 @@ export const useAnalyticsStore = create<AnalyticsState>((set, get) => ({
         complianceMetrics: generateMockComplianceMetrics(),
         trendData: generateMockTrendData(),
         loading: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch dashboard data',
+        error: error instanceof Error ? error.message : "Failed to fetch dashboard data",
       })
     }
   },

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState } from "react"
 import {
   useReactTable,
   getCoreRowModel,
@@ -6,20 +6,20 @@ import {
   createColumnHelper,
   flexRender,
   type RowSelectionState,
-} from '@tanstack/react-table'
-import type { Finding } from '@/stores/findingsStore'
-import FindingsBadge from './FindingsBadge'
-import { EntityLink } from '@/components/entities/EntityLink'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+} from "@tanstack/react-table"
+import type { Finding } from "@/stores/findingsStore"
+import FindingsBadge from "./FindingsBadge"
+import { EntityLink } from "@/components/entities/EntityLink"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -27,9 +27,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
-
+} from "@/components/ui/table"
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
 
 interface FindingsTableProps {
   findings: Finding[]
@@ -66,7 +65,7 @@ export default function FindingsTable({
   const columns = useMemo(
     () => [
       columnHelper.display({
-        id: 'select',
+        id: "select",
         header: ({ table }) => (
           <Checkbox
             checked={table.getIsAllPageRowsSelected()}
@@ -83,15 +82,13 @@ export default function FindingsTable({
         ),
         size: 40,
       }),
-      columnHelper.accessor('findingId', {
-        header: 'Finding ID',
-        cell: (info) => (
-          <span className="font-medium text-sm">{info.getValue()}</span>
-        ),
+      columnHelper.accessor("findingId", {
+        header: "Finding ID",
+        cell: (info) => <span className="font-medium text-sm">{info.getValue()}</span>,
         size: 120,
       }),
-      columnHelper.accessor('facilityName', {
-        header: 'Facility Name',
+      columnHelper.accessor("facilityName", {
+        header: "Facility Name",
         cell: (info) => {
           const finding = info.row.original
           return finding.facilityId ? (
@@ -108,41 +105,39 @@ export default function FindingsTable({
         },
         size: 200,
       }),
-      columnHelper.accessor('category', {
-        header: 'Category',
+      columnHelper.accessor("category", {
+        header: "Category",
         cell: (info) => (
           <span className="text-sm truncate block max-w-[160px]">{info.getValue()}</span>
         ),
         size: 180,
       }),
-      columnHelper.accessor('severity', {
-        header: 'Severity',
+      columnHelper.accessor("severity", {
+        header: "Severity",
         cell: (info) => <FindingsBadge severity={info.getValue()} />,
         size: 120,
       }),
-      columnHelper.accessor('description', {
-        header: 'Description',
+      columnHelper.accessor("description", {
+        header: "Description",
         cell: (info) => (
           <span className="text-sm text-muted-foreground truncate block max-w-[250px]">
             {info.getValue()}
           </span>
         ),
       }),
-      columnHelper.accessor('status', {
-        header: 'Status',
+      columnHelper.accessor("status", {
+        header: "Status",
         cell: (info) => <FindingsBadge status={info.getValue()} />,
         size: 140,
       }),
-      columnHelper.accessor('dueDate', {
-        header: 'Due Date',
-        cell: (info) => (
-          <span className="text-sm">{info.getValue() || '-'}</span>
-        ),
+      columnHelper.accessor("dueDate", {
+        header: "Due Date",
+        cell: (info) => <span className="text-sm">{info.getValue() || "-"}</span>,
         size: 120,
       }),
       columnHelper.display({
-        id: 'action',
-        header: 'Action',
+        id: "action",
+        header: "Action",
         cell: (info) => (
           <Button
             size="sm"
@@ -165,8 +160,7 @@ export default function FindingsTable({
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
     onRowSelectionChange: (updater) => {
-      const newSelection =
-        typeof updater === 'function' ? updater(rowSelection) : updater
+      const newSelection = typeof updater === "function" ? updater(rowSelection) : updater
       const selectedIds = Object.keys(newSelection)
         .filter((key) => newSelection[key])
         .map((index) => findings[parseInt(index)]?.id)
@@ -200,10 +194,7 @@ export default function FindingsTable({
                     >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -212,29 +203,17 @@ export default function FindingsTable({
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="whitespace-nowrap"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                      <TableCell key={cell.id} className="whitespace-nowrap">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
                     <span className="text-muted-foreground">No results.</span>
                   </TableCell>
                 </TableRow>
@@ -251,7 +230,9 @@ export default function FindingsTable({
           <div className="flex items-center gap-2">
             <Select
               value={String(pagination.pageSize)}
-              onValueChange={(val) => setPagination((prev) => ({ ...prev, pageSize: Number(val), pageIndex: 0 }))}
+              onValueChange={(val) =>
+                setPagination((prev) => ({ ...prev, pageSize: Number(val), pageIndex: 0 }))
+              }
             >
               <SelectTrigger className="h-9 w-[100px]">
                 <SelectValue />

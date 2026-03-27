@@ -1,7 +1,7 @@
 /**
  * WebSocket client for real-time notifications using Socket.IO
  */
-import { io, type Socket } from 'socket.io-client'
+import { io, type Socket } from "socket.io-client"
 
 type MessageHandler = (data: any) => void
 type ConnectionHandler = () => void
@@ -37,14 +37,14 @@ export class WebSocketClient {
     if (envUrl) return envUrl
 
     const socketioPort = (window as any).frappe?.boot?.socketio_port || 9000
-    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:'
+    const protocol = window.location.protocol === "https:" ? "https:" : "http:"
     const hostname = window.location.hostname
     return `${protocol}//${hostname}:${socketioPort}`
   }
 
   connect(): void {
     if (this.socket?.connected) {
-      console.log('WebSocket already connected')
+      console.log("WebSocket already connected")
       return
     }
 
@@ -54,21 +54,21 @@ export class WebSocketClient {
         reconnection: true,
         reconnectionAttempts: this.config.maxReconnectAttempts,
         reconnectionDelay: this.config.reconnectInterval,
-        transports: ['websocket', 'polling'],
+        transports: ["websocket", "polling"],
       })
 
-      this.socket.on('connect', () => {
-        console.log('WebSocket connected')
+      this.socket.on("connect", () => {
+        console.log("WebSocket connected")
         this.connectHandlers.forEach((handler) => handler())
       })
 
-      this.socket.on('disconnect', () => {
-        console.log('WebSocket disconnected')
+      this.socket.on("disconnect", () => {
+        console.log("WebSocket disconnected")
         this.disconnectHandlers.forEach((handler) => handler())
       })
 
-      this.socket.on('connect_error', (error: any) => {
-        console.error('WebSocket connection error:', error)
+      this.socket.on("connect_error", (error: any) => {
+        console.error("WebSocket connection error:", error)
         this.errorHandlers.forEach((handler) => handler(error))
       })
 
@@ -77,7 +77,7 @@ export class WebSocketClient {
         this.handleMessage({ type: eventName, data })
       })
     } catch (error) {
-      console.error('Failed to create Socket.IO connection:', error)
+      console.error("Failed to create Socket.IO connection:", error)
     }
   }
 
@@ -90,7 +90,7 @@ export class WebSocketClient {
 
   send(type: string, data: any): void {
     if (!this.socket?.connected) {
-      console.warn('WebSocket not connected, cannot send message')
+      console.warn("WebSocket not connected, cannot send message")
       return
     }
 
@@ -142,13 +142,13 @@ export class WebSocketClient {
       })
     }
 
-    const wildcardHandlers = this.messageHandlers.get('*')
+    const wildcardHandlers = this.messageHandlers.get("*")
     if (wildcardHandlers) {
       wildcardHandlers.forEach((handler) => {
         try {
           handler(message)
         } catch (error) {
-          console.error('Error in wildcard message handler:', error)
+          console.error("Error in wildcard message handler:", error)
         }
       })
     }
@@ -159,8 +159,8 @@ export class WebSocketClient {
   }
 
   get state(): string {
-    if (!this.socket) return 'CLOSED'
-    return this.socket.connected ? 'OPEN' : 'CLOSED'
+    if (!this.socket) return "CLOSED"
+    return this.socket.connected ? "OPEN" : "CLOSED"
   }
 }
 

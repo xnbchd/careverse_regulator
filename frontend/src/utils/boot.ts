@@ -98,13 +98,16 @@ export function getCsrfToken(): string | undefined {
 export async function fetchAndCacheCsrfToken(): Promise<void> {
   try {
     // For dev mode, fetch boot data from Frappe using GET (no CSRF required)
-    const response = await fetch('/api/method/careverse_regulator.www.compliance_360.get_context_for_dev', {
-      method: 'GET',
-      credentials: 'include'
-    })
+    const response = await fetch(
+      "/api/method/careverse_regulator.www.compliance_360.get_context_for_dev",
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    )
 
     if (!response.ok) {
-      throw new Error('Failed to fetch boot data')
+      throw new Error("Failed to fetch boot data")
     }
 
     const data = await response.json()
@@ -131,7 +134,7 @@ export async function fetchAndCacheCsrfToken(): Promise<void> {
       window.csrf_token = csrfFromCookie
     }
   } catch (error) {
-    console.error('Failed to fetch CSRF token:', error)
+    console.error("Failed to fetch CSRF token:", error)
   }
 }
 
@@ -175,7 +178,8 @@ export function getCompanyBrandingFromBoot(): CompanyBranding {
   const branding = boot?.company_branding
 
   const name = branding?.name || boot?.active_company || boot?.user?.company || null
-  const displayName = branding?.display_name || boot?.company_display_name || boot?.user?.company_display_name || name
+  const displayName =
+    branding?.display_name || boot?.company_display_name || boot?.user?.company_display_name || name
   const abbr = branding?.abbr || boot?.company_abbr || boot?.user?.company_abbr || null
   const logo = branding?.logo || boot?.company_logo || boot?.user?.company_logo || null
   const faviconUrl = branding?.favicon_url || boot?.favicon_url || logo || null
@@ -190,5 +194,7 @@ export function getPortalAccessFromBoot(): BootPortalAccess | null {
 export function getAllowedCompaniesFromBoot(): string[] {
   const boot = getBootData()
   const candidates = boot?.allowed_companies || boot?.user?.allowed_companies || []
-  return Array.isArray(candidates) ? candidates.filter((item): item is string => !!item && typeof item === 'string') : []
+  return Array.isArray(candidates)
+    ? candidates.filter((item): item is string => !!item && typeof item === "string")
+    : []
 }

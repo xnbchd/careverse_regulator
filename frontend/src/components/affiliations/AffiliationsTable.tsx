@@ -1,10 +1,17 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Card } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
-import type { Affiliation } from '@/types/affiliation'
-import StatusBadge from './StatusBadge'
-import { cn } from '@/lib/utils'
-import { EntityLink } from '@/components/entities'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Card } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import type { Affiliation } from "@/types/affiliation"
+import StatusBadge from "./StatusBadge"
+import { cn } from "@/lib/utils"
+import { EntityLink } from "@/components/entities"
 
 interface AffiliationsTableProps {
   affiliations: Affiliation[]
@@ -26,8 +33,12 @@ export default function AffiliationsTable({
   onDeselectAll,
 }: AffiliationsTableProps) {
   const selectionEnabled = selectedIds !== undefined && onToggleSelection !== undefined
-  const allSelected = selectionEnabled && affiliations.length > 0 && affiliations.every(a => selectedIds.has(a.affiliationId))
-  const someSelected = selectionEnabled && affiliations.some(a => selectedIds.has(a.affiliationId)) && !allSelected
+  const allSelected =
+    selectionEnabled &&
+    affiliations.length > 0 &&
+    affiliations.every((a) => selectedIds.has(a.affiliationId))
+  const someSelected =
+    selectionEnabled && affiliations.some((a) => selectedIds.has(a.affiliationId)) && !allSelected
 
   const handleSelectAll = () => {
     if (allSelected && onDeselectAll) {
@@ -47,7 +58,7 @@ export default function AffiliationsTable({
             {selectionEnabled && (
               <TableHead className="w-12">
                 <Checkbox
-                  checked={allSelected || (someSelected ? 'indeterminate' : false)}
+                  checked={allSelected || (someSelected ? "indeterminate" : false)}
                   onCheckedChange={handleSelectAll}
                 />
               </TableHead>
@@ -94,41 +105,38 @@ export default function AffiliationsTable({
                     </TableCell>
                   )}
                   <TableCell className="font-medium">
-                  <EntityLink
-                    type="professional"
-                    id={affiliation.healthProfessional.registrationNumber}
-                  >
-                    {affiliation.healthProfessional.fullName}
-                  </EntityLink>
-                  {affiliation.healthProfessional.professionalCadre && (
-                    <div className="text-xs text-muted-foreground mt-0.5">
-                      {affiliation.healthProfessional.professionalCadre}
-                    </div>
-                  )}
-                </TableCell>
-                <TableCell className="font-mono text-sm">
-                  {affiliation.healthProfessional.registrationNumber}
-                </TableCell>
-                <TableCell>
-                  <EntityLink
-                    type="facility"
-                    id={affiliation.healthFacility.registrationNumber}
-                  >
-                    {affiliation.healthFacility.facilityName}
-                  </EntityLink>
-                  {affiliation.healthFacility.facilityCode && (
-                    <div className="text-xs text-muted-foreground mt-0.5">
-                      Code: {affiliation.healthFacility.facilityCode}
-                    </div>
-                  )}
-                </TableCell>
-                <TableCell>{affiliation.role}</TableCell>
-                <TableCell className="capitalize">{affiliation.employmentType}</TableCell>
-                <TableCell>{affiliation.startDate}</TableCell>
-                <TableCell>
-                  <StatusBadge status={affiliation.affiliationStatus} />
-                </TableCell>
-              </TableRow>
+                    <EntityLink
+                      type="professional"
+                      id={affiliation.healthProfessional.registrationNumber}
+                    >
+                      {affiliation.healthProfessional.fullName}
+                    </EntityLink>
+                    {affiliation.healthProfessional.professionalCadre && (
+                      <div className="text-xs text-muted-foreground mt-0.5">
+                        {affiliation.healthProfessional.professionalCadre}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell className="font-mono text-sm">
+                    {affiliation.healthProfessional.registrationNumber}
+                  </TableCell>
+                  <TableCell>
+                    <EntityLink type="facility" id={affiliation.healthFacility.registrationNumber}>
+                      {affiliation.healthFacility.facilityName}
+                    </EntityLink>
+                    {affiliation.healthFacility.facilityCode && (
+                      <div className="text-xs text-muted-foreground mt-0.5">
+                        Code: {affiliation.healthFacility.facilityCode}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell>{affiliation.role}</TableCell>
+                  <TableCell className="capitalize">{affiliation.employmentType}</TableCell>
+                  <TableCell>{affiliation.startDate}</TableCell>
+                  <TableCell>
+                    <StatusBadge status={affiliation.affiliationStatus} />
+                  </TableCell>
+                </TableRow>
               )
             })
           )}

@@ -3,7 +3,7 @@ export interface DashboardMetric {
   title: string
   value: string
   delta: string
-  trend: 'up' | 'down' | 'neutral'
+  trend: "up" | "down" | "neutral"
 }
 
 export interface DashboardQueue {
@@ -12,7 +12,7 @@ export interface DashboardQueue {
   value: string
   detail: string
   route: string
-  tone: 'critical' | 'attention' | 'steady'
+  tone: "critical" | "attention" | "steady"
 }
 
 export interface DashboardModuleCard {
@@ -27,7 +27,7 @@ export interface DashboardAffiliationItem {
   professionalName: string
   cadre: string
   facility: string
-  status: 'Pending' | 'Confirmed' | 'Escalated'
+  status: "Pending" | "Confirmed" | "Escalated"
   company: string
   requestedAt: string
 }
@@ -62,7 +62,7 @@ export interface DashboardCountyRiskItem {
   id: string
   company: string
   county: string
-  riskLevel: 'Critical' | 'High' | 'Moderate' | 'Stable'
+  riskLevel: "Critical" | "High" | "Moderate" | "Stable"
   openInvestigations: string
   complianceRate: number
   note: string
@@ -75,7 +75,7 @@ export interface DashboardDirectiveItem {
   title: string
   deadline: string
   owner: string
-  status: 'Due Today' | 'Due This Week' | 'On Track'
+  status: "Due Today" | "Due This Week" | "On Track"
   route: string
 }
 
@@ -94,15 +94,15 @@ export interface DashboardStateSnapshot {
 export interface DashboardState {
   activeInternalTab: string
   internalTabs: string[]
-  metrics: DashboardStateSnapshot['metrics']
-  priorityQueues: DashboardStateSnapshot['priorityQueues']
-  moduleCards: DashboardStateSnapshot['moduleCards']
-  affiliations: DashboardStateSnapshot['affiliations']
-  scopeItems: DashboardStateSnapshot['scopeItems']
-  recentActivity: DashboardStateSnapshot['recentActivity']
-  companyBoards: DashboardStateSnapshot['companyBoards']
-  countyRiskItems: DashboardStateSnapshot['countyRiskItems']
-  directives: DashboardStateSnapshot['directives']
+  metrics: DashboardStateSnapshot["metrics"]
+  priorityQueues: DashboardStateSnapshot["priorityQueues"]
+  moduleCards: DashboardStateSnapshot["moduleCards"]
+  affiliations: DashboardStateSnapshot["affiliations"]
+  scopeItems: DashboardStateSnapshot["scopeItems"]
+  recentActivity: DashboardStateSnapshot["recentActivity"]
+  companyBoards: DashboardStateSnapshot["companyBoards"]
+  countyRiskItems: DashboardStateSnapshot["countyRiskItems"]
+  directives: DashboardStateSnapshot["directives"]
   setActiveInternalTab: (tab: string) => void
   applyMockForCompany: (company?: string | null) => void
 }

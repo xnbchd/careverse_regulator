@@ -7,13 +7,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { AlertTriangle } from 'lucide-react'
-import { useState } from 'react'
-import { BatchActionType, getBatchActionLabel, isDestructiveBatchAction } from '@/types/batch'
+} from "@/components/ui/alert-dialog"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { AlertTriangle } from "lucide-react"
+import { useState } from "react"
+import { BatchActionType, getBatchActionLabel, isDestructiveBatchAction } from "@/types/batch"
 
 interface ConfirmBatchDialogProps {
   open: boolean
@@ -32,13 +32,13 @@ export function ConfirmBatchDialog({
   onConfirm,
   requiresReason = false,
 }: ConfirmBatchDialogProps) {
-  const [reason, setReason] = useState('')
+  const [reason, setReason] = useState("")
   const isDestructive = isDestructiveBatchAction(actionType)
   const actionLabel = getBatchActionLabel(actionType)
 
   const handleConfirm = () => {
     onConfirm(requiresReason ? reason : undefined)
-    setReason('')
+    setReason("")
     onOpenChange(false)
   }
 
@@ -53,8 +53,8 @@ export function ConfirmBatchDialog({
             Confirm Batch Operation
           </AlertDialogTitle>
           <AlertDialogDescription>
-            You are about to <strong>{actionLabel.toLowerCase()}</strong> for{' '}
-            <strong>{selectedCount}</strong> {selectedCount === 1 ? 'item' : 'items'}.
+            You are about to <strong>{actionLabel.toLowerCase()}</strong> for{" "}
+            <strong>{selectedCount}</strong> {selectedCount === 1 ? "item" : "items"}.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -97,7 +97,7 @@ export function ConfirmBatchDialog({
           <AlertDialogAction
             onClick={handleConfirm}
             disabled={!canConfirm}
-            className={isDestructive ? 'bg-destructive hover:bg-destructive/90' : ''}
+            className={isDestructive ? "bg-destructive hover:bg-destructive/90" : ""}
           >
             Confirm
           </AlertDialogAction>

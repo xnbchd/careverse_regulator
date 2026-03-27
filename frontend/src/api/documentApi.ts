@@ -1,4 +1,4 @@
-import apiClient from './client'
+import apiClient from "./client"
 import type {
   Document,
   DocumentUploadRequest,
@@ -6,44 +6,41 @@ import type {
   DocumentSearchParams,
   DocumentListResponse,
   DocumentWithVersions,
-} from '@/types/document'
+} from "@/types/document"
 
-const API_BASE = '/api/method/compliance_360.api.document_management'
+const API_BASE = "/api/method/compliance_360.api.document_management"
 
 /**
  * Upload a new document
  */
 export async function uploadDocument(request: DocumentUploadRequest): Promise<Document> {
   const formData = new FormData()
-  formData.append('file', request.file)
-  formData.append('category', request.category)
+  formData.append("file", request.file)
+  formData.append("category", request.category)
 
   if (request.description) {
-    formData.append('description', request.description)
+    formData.append("description", request.description)
   }
 
   if (request.tags && request.tags.length > 0) {
-    formData.append('tags', JSON.stringify(request.tags))
+    formData.append("tags", JSON.stringify(request.tags))
   }
 
   // Associations
   if (request.licenseNumber) {
-    formData.append('license_number', request.licenseNumber)
+    formData.append("license_number", request.licenseNumber)
   }
   if (request.affiliationId) {
-    formData.append('affiliation_id', request.affiliationId)
+    formData.append("affiliation_id", request.affiliationId)
   }
   if (request.inspectionId) {
-    formData.append('inspection_id', request.inspectionId)
+    formData.append("inspection_id", request.inspectionId)
   }
   if (request.applicationId) {
-    formData.append('application_id', request.applicationId)
+    formData.append("application_id", request.applicationId)
   }
 
-  const response = await apiClient.post<{ message: any }>(
-    `${API_BASE}.upload_document`,
-    formData
-  )
+  const response = await apiClient.post<{ message: any }>(`${API_BASE}.upload_document`, formData)
 
   return transformBackendDocument(response.message)
 }
@@ -51,13 +48,15 @@ export async function uploadDocument(request: DocumentUploadRequest): Promise<Do
 /**
  * List documents with filters and pagination
  */
-export async function listDocuments(params: DocumentSearchParams = {}): Promise<DocumentListResponse> {
+export async function listDocuments(
+  params: DocumentSearchParams = {}
+): Promise<DocumentListResponse> {
   const response = await apiClient.get<{ message: any }>(`${API_BASE}.list_documents`, {
     params: {
       query: params.query,
       category: params.category,
       status: params.status,
-      tags: params.tags?.join(','),
+      tags: params.tags?.join(","),
       license_number: params.licenseNumber,
       affiliation_id: params.affiliationId,
       inspection_id: params.inspectionId,
@@ -170,7 +169,7 @@ function transformBackendDocument(doc: any): Document {
     uploadedAt: doc.uploaded_at || doc.creation,
     updatedAt: doc.updated_at || doc.modified,
     description: doc.description,
-    tags: doc.tags ? (typeof doc.tags === 'string' ? JSON.parse(doc.tags) : doc.tags) : [],
+    tags: doc.tags ? (typeof doc.tags === "string" ? JSON.parse(doc.tags) : doc.tags) : [],
     version: doc.version || 1,
     licenseNumber: doc.license_number,
     affiliationId: doc.affiliation_id,
@@ -185,49 +184,51 @@ function transformBackendDocument(doc: any): Document {
 // Mock data for development (remove when backend is ready)
 const MOCK_DOCUMENTS: Document[] = [
   {
-    id: 'DOC-001',
-    name: 'Facility License Certificate',
-    fileName: 'license_cert_2024.pdf',
+    id: "DOC-001",
+    name: "Facility License Certificate",
+    fileName: "license_cert_2024.pdf",
     fileSize: 245678,
-    mimeType: 'application/pdf',
-    category: 'license' as any,
-    status: 'active' as any,
-    uploadedBy: 'user@example.com',
-    uploadedByName: 'John Doe',
-    uploadedAt: '2024-01-15T10:30:00Z',
-    updatedAt: '2024-01-15T10:30:00Z',
-    description: 'Official facility license certificate for 2024',
-    tags: ['license', 'official', '2024'],
+    mimeType: "application/pdf",
+    category: "license" as any,
+    status: "active" as any,
+    uploadedBy: "user@example.com",
+    uploadedByName: "John Doe",
+    uploadedAt: "2024-01-15T10:30:00Z",
+    updatedAt: "2024-01-15T10:30:00Z",
+    description: "Official facility license certificate for 2024",
+    tags: ["license", "official", "2024"],
     version: 1,
-    licenseNumber: 'LIC-2024-001',
-    downloadUrl: '/api/download/DOC-001',
-    previewUrl: '/api/preview/DOC-001',
+    licenseNumber: "LIC-2024-001",
+    downloadUrl: "/api/download/DOC-001",
+    previewUrl: "/api/preview/DOC-001",
   },
   {
-    id: 'DOC-002',
-    name: 'Inspection Report Q1',
-    fileName: 'inspection_report_q1_2024.pdf',
+    id: "DOC-002",
+    name: "Inspection Report Q1",
+    fileName: "inspection_report_q1_2024.pdf",
     fileSize: 1234567,
-    mimeType: 'application/pdf',
-    category: 'inspection_report' as any,
-    status: 'active' as any,
-    uploadedBy: 'inspector@example.com',
-    uploadedByName: 'Jane Smith',
-    uploadedAt: '2024-03-20T14:45:00Z',
-    updatedAt: '2024-03-20T14:45:00Z',
-    description: 'Q1 2024 facility inspection report',
-    tags: ['inspection', 'Q1', '2024', 'compliance'],
+    mimeType: "application/pdf",
+    category: "inspection_report" as any,
+    status: "active" as any,
+    uploadedBy: "inspector@example.com",
+    uploadedByName: "Jane Smith",
+    uploadedAt: "2024-03-20T14:45:00Z",
+    updatedAt: "2024-03-20T14:45:00Z",
+    description: "Q1 2024 facility inspection report",
+    tags: ["inspection", "Q1", "2024", "compliance"],
     version: 1,
-    inspectionId: 'INS-001',
-    downloadUrl: '/api/download/DOC-002',
-    previewUrl: '/api/preview/DOC-002',
+    inspectionId: "INS-001",
+    downloadUrl: "/api/download/DOC-002",
+    previewUrl: "/api/preview/DOC-002",
   },
 ]
 
 /**
  * Use mock data if backend is not available
  */
-export async function listDocumentsMock(params: DocumentSearchParams = {}): Promise<DocumentListResponse> {
+export async function listDocumentsMock(
+  params: DocumentSearchParams = {}
+): Promise<DocumentListResponse> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500))
 
@@ -270,12 +271,12 @@ export async function listDocumentsMock(params: DocumentSearchParams = {}): Prom
       let aVal: any = a[params.sortBy!]
       let bVal: any = b[params.sortBy!]
 
-      if (params.sortBy === 'uploadedAt') {
+      if (params.sortBy === "uploadedAt") {
         aVal = new Date(aVal).getTime()
         bVal = new Date(bVal).getTime()
       }
 
-      if (params.sortOrder === 'desc') {
+      if (params.sortOrder === "desc") {
         return bVal > aVal ? 1 : -1
       }
       return aVal > bVal ? 1 : -1

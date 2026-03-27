@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { FacilityLicensesDashboard } from './FacilityLicensesDashboard'
-import { ApplicationsDashboard } from './ApplicationsDashboard'
-import { LicenseAppealsDashboard } from './LicenseAppealsDashboard'
-import { Scale, ShieldCheck, FileText } from 'lucide-react'
+import { useState } from "react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FacilityLicensesDashboard } from "./FacilityLicensesDashboard"
+import { ApplicationsDashboard } from "./ApplicationsDashboard"
+import { LicenseAppealsDashboard } from "./LicenseAppealsDashboard"
+import { Scale, ShieldCheck, FileText } from "lucide-react"
 
 export function LicensesDashboard() {
-  const [activeTab, setActiveTab] = useState('licenses')
+  const [activeTab, setActiveTab] = useState("licenses")
 
   return (
     <div className="space-y-6 p-6">

@@ -1,31 +1,24 @@
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Card, CardContent } from '@/components/ui/card'
-import {
-  MoreHorizontal,
-  Pencil,
-  UserX,
-  KeyRound,
-  Users,
-  UserCheck,
-} from 'lucide-react'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import type { FrappeUser, PortalRole } from '@/types/user'
+} from "@/components/ui/dropdown-menu"
+import { Card, CardContent } from "@/components/ui/card"
+import { MoreHorizontal, Pencil, UserX, KeyRound, Users, UserCheck } from "lucide-react"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+import type { FrappeUser, PortalRole } from "@/types/user"
 
 dayjs.extend(relativeTime)
 
 const ROLE_COLORS: Record<string, string> = {
-  'Regulator Admin': 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
-  'Inspection Manager': 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
-  'Regulator User': 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
+  "Regulator Admin": "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300",
+  "Inspection Manager": "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300",
+  "Regulator User": "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300",
 }
 
 interface UsersTableProps {
@@ -38,7 +31,7 @@ interface UsersTableProps {
 }
 
 function getPortalRole(roles: string[]): PortalRole | null {
-  const portalRoles: PortalRole[] = ['Regulator Admin', 'Inspection Manager', 'Regulator User']
+  const portalRoles: PortalRole[] = ["Regulator Admin", "Inspection Manager", "Regulator User"]
   return portalRoles.find((r) => roles.includes(r)) ?? null
 }
 
@@ -80,9 +73,7 @@ export default function UsersTable({
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1">No users found</h3>
-              <p className="text-sm text-muted-foreground">
-                No users match your current filters.
-              </p>
+              <p className="text-sm text-muted-foreground">No users match your current filters.</p>
             </div>
           </div>
         </CardContent>
@@ -95,12 +86,12 @@ export default function UsersTable({
       {users.map((user) => {
         const portalRole = getPortalRole(user.roles)
         const isActive = user.enabled === 1
-        const initials = (user.full_name || user.email || 'U')
-          .split(' ')
+        const initials = (user.full_name || user.email || "U")
+          .split(" ")
           .filter(Boolean)
           .slice(0, 2)
           .map((p) => p.charAt(0).toUpperCase())
-          .join('')
+          .join("")
 
         return (
           <Card key={user.name}>
@@ -123,10 +114,12 @@ export default function UsersTable({
                     <div className="flex items-center gap-2 shrink-0">
                       <div className="flex items-center gap-1.5">
                         <div
-                          className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500 dark:bg-green-400' : 'bg-muted-foreground/50'}`}
+                          className={`w-2 h-2 rounded-full ${
+                            isActive ? "bg-green-500 dark:bg-green-400" : "bg-muted-foreground/50"
+                          }`}
                         />
                         <span className="text-xs text-muted-foreground">
-                          {isActive ? 'Active' : 'Disabled'}
+                          {isActive ? "Active" : "Disabled"}
                         </span>
                       </div>
                       <DropdownMenu>
@@ -168,7 +161,7 @@ export default function UsersTable({
 
                   <div className="flex flex-wrap gap-1.5 mt-2">
                     {portalRole && (
-                      <Badge className={ROLE_COLORS[portalRole] || 'bg-muted text-foreground'}>
+                      <Badge className={ROLE_COLORS[portalRole] || "bg-muted text-foreground"}>
                         {portalRole}
                       </Badge>
                     )}

@@ -1,5 +1,5 @@
-import dayjs from 'dayjs'
-import { apiRequest } from '@/utils/api'
+import dayjs from "dayjs"
+import { apiRequest } from "@/utils/api"
 import type {
   License,
   BackendLicense,
@@ -14,7 +14,7 @@ import type {
   ProfessionalLicenseApplication,
   CreateLicenseAppealPayload,
   FacilityOption,
-} from '@/types/license'
+} from "@/types/license"
 
 export function transformLicense(backendLicense: BackendLicense): License {
   return {
@@ -72,34 +72,36 @@ export function transformLicenseApplication(backendApp: any): LicenseApplication
   }
 }
 
-export function transformProfessionalLicense(backend: BackendProfessionalLicense): ProfessionalLicenseRecord {
+export function transformProfessionalLicense(
+  backend: BackendProfessionalLicense
+): ProfessionalLicenseRecord {
   return {
     id: backend.license_number,
     licenseNumber: backend.license_number,
-    name: backend.name || '',
-    registrationNumber: backend.registration_number || '',
-    identificationType: backend.identification_type || '',
-    identificationNumber: backend.identification_number || '',
-    category: backend.category || '',
-    licenseType: backend.license_type || '',
-    degree: backend.degree || '',
-    placeOfPractice: backend.place_of_practice || '',
-    county: backend.county || '',
+    name: backend.name || "",
+    registrationNumber: backend.registration_number || "",
+    identificationType: backend.identification_type || "",
+    identificationNumber: backend.identification_number || "",
+    category: backend.category || "",
+    licenseType: backend.license_type || "",
+    degree: backend.degree || "",
+    placeOfPractice: backend.place_of_practice || "",
+    county: backend.county || "",
     dateOfIssuance: formatDateForFrontend(backend.date_of_issuance),
     dateOfExpiry: formatDateForFrontend(backend.date_of_expiry),
-    paymentStatus: backend.payment_status || '',
+    paymentStatus: backend.payment_status || "",
     licenseStatus: backend.license_status,
     isArchived: backend.is_archived,
   }
 }
 
 export function formatDateForBackend(frontendDate: string): string {
-  return dayjs(frontendDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
+  return dayjs(frontendDate, "DD/MM/YYYY").format("YYYY-MM-DD")
 }
 
 export function formatDateForFrontend(backendDate: string): string {
-  if (!backendDate) return ''
-  return dayjs(backendDate, 'YYYY-MM-DD').format('DD/MM/YYYY')
+  if (!backendDate) return ""
+  return dayjs(backendDate, "YYYY-MM-DD").format("DD/MM/YYYY")
 }
 
 export interface LicenseFilters {
@@ -110,7 +112,7 @@ export interface LicenseFilters {
   status?: string // comma-separated list
   isArchived?: boolean
   sortBy?: string
-  sortOrder?: 'asc' | 'desc'
+  sortOrder?: "asc" | "desc"
   page_size?: number // Number of items per page
 }
 
@@ -122,18 +124,19 @@ export async function listLicenses(
   const params = new URLSearchParams({
     page: page.toString(),
     page_size: pageSize.toString(),
-    debug_mode: '1',
+    debug_mode: "1",
   })
 
-  if (filters?.facilityCode) params.append('facility_code', filters.facilityCode)
-  if (filters?.facilityName) params.append('facility_name', filters.facilityName)
-  if (filters?.registrationNumber) params.append('registration_number', filters.registrationNumber)
-  if (filters?.status) params.append('status', filters.status)
-  if (filters?.isArchived !== undefined) params.append('is_archived', filters.isArchived ? '1' : '0')
+  if (filters?.facilityCode) params.append("facility_code", filters.facilityCode)
+  if (filters?.facilityName) params.append("facility_name", filters.facilityName)
+  if (filters?.registrationNumber) params.append("registration_number", filters.registrationNumber)
+  if (filters?.status) params.append("status", filters.status)
+  if (filters?.isArchived !== undefined)
+    params.append("is_archived", filters.isArchived ? "1" : "0")
 
   // Send search to backend (searches across license_number, registration_number, owner, facility_name in backend)
   if (filters?.search) {
-    params.append('search', filters.search)
+    params.append("search", filters.search)
   }
 
   const response = await apiRequest<any>(
@@ -152,15 +155,15 @@ export async function listLicenses(
       let bVal: any
 
       switch (filters.sortBy) {
-        case 'license_number':
+        case "license_number":
           aVal = a.licenseNumber
           bVal = b.licenseNumber
           break
-        case 'expiry_date':
-          aVal = dayjs(a.dateOfExpiry, 'DD/MM/YYYY').valueOf()
-          bVal = dayjs(b.dateOfExpiry, 'DD/MM/YYYY').valueOf()
+        case "expiry_date":
+          aVal = dayjs(a.dateOfExpiry, "DD/MM/YYYY").valueOf()
+          bVal = dayjs(b.dateOfExpiry, "DD/MM/YYYY").valueOf()
           break
-        case 'status':
+        case "status":
           aVal = a.status
           bVal = b.status
           break
@@ -169,7 +172,7 @@ export async function listLicenses(
       }
 
       const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0
-      return filters.sortOrder === 'asc' ? comparison : -comparison
+      return filters.sortOrder === "asc" ? comparison : -comparison
     })
   }
 
@@ -215,13 +218,13 @@ export async function updateLicense(
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.facility_license.update_facility_license`,
     {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(payload),
     }
   )
 
   if (!response.data && !response.message) {
-    throw new Error('Failed to update license')
+    throw new Error("Failed to update license")
   }
 
   // Fetch updated license
@@ -234,7 +237,7 @@ export async function listLicenseApplications(
   filters?: {
     search?: string
     applicationId?: string
-    applicationType?: 'New' | 'Renewal'
+    applicationType?: "New" | "Renewal"
     applicationStatus?: string
     regulatoryBody?: string
   }
@@ -242,14 +245,14 @@ export async function listLicenseApplications(
   const params = new URLSearchParams({
     page: page.toString(),
     page_size: pageSize.toString(),
-    minimize: '0',
-    debug_mode: '1',
+    minimize: "0",
+    debug_mode: "1",
   })
 
-  if (filters?.applicationId) params.append('license_application_id', filters.applicationId)
-  if (filters?.applicationType) params.append('application_type', filters.applicationType)
-  if (filters?.applicationStatus) params.append('application_status', filters.applicationStatus)
-  if (filters?.regulatoryBody) params.append('regulatory_body', filters.regulatoryBody)
+  if (filters?.applicationId) params.append("license_application_id", filters.applicationId)
+  if (filters?.applicationType) params.append("application_type", filters.applicationType)
+  if (filters?.applicationStatus) params.append("application_status", filters.applicationStatus)
+  if (filters?.regulatoryBody) params.append("regulatory_body", filters.regulatoryBody)
 
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.applications.fetch_facility_license_applications?${params.toString()}`
@@ -297,12 +300,13 @@ export async function listProfessionalLicenses(
   const params = new URLSearchParams({
     page: page.toString(),
     page_size: pageSize.toString(),
-    minimize: '0',
+    minimize: "0",
   })
 
-  if (filters?.status) params.append('license_status', filters.status)
-  if (filters?.isArchived !== undefined) params.append('is_archived', filters.isArchived ? '1' : '0')
-  if (filters?.registrationNumber) params.append('registration_number', filters.registrationNumber)
+  if (filters?.status) params.append("license_status", filters.status)
+  if (filters?.isArchived !== undefined)
+    params.append("is_archived", filters.isArchived ? "1" : "0")
+  if (filters?.registrationNumber) params.append("registration_number", filters.registrationNumber)
 
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.professional_license.get_professional_licenses?${params.toString()}`
@@ -332,15 +336,15 @@ export async function listProfessionalLicenses(
       let bVal: any
 
       switch (filters.sortBy) {
-        case 'license_number':
+        case "license_number":
           aVal = a.licenseNumber
           bVal = b.licenseNumber
           break
-        case 'expiry_date':
-          aVal = dayjs(a.dateOfExpiry, 'DD/MM/YYYY').valueOf()
-          bVal = dayjs(b.dateOfExpiry, 'DD/MM/YYYY').valueOf()
+        case "expiry_date":
+          aVal = dayjs(a.dateOfExpiry, "DD/MM/YYYY").valueOf()
+          bVal = dayjs(b.dateOfExpiry, "DD/MM/YYYY").valueOf()
           break
-        case 'status':
+        case "status":
           aVal = a.licenseStatus
           bVal = b.licenseStatus
           break
@@ -349,7 +353,7 @@ export async function listProfessionalLicenses(
       }
 
       const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0
-      return filters.sortOrder === 'asc' ? comparison : -comparison
+      return filters.sortOrder === "asc" ? comparison : -comparison
     })
   }
 
@@ -371,27 +375,29 @@ export async function listProfessionalLicenses(
   }
 }
 
-export function transformProfessionalLicenseApplication(backend: any): ProfessionalLicenseApplication {
+export function transformProfessionalLicenseApplication(
+  backend: any
+): ProfessionalLicenseApplication {
   return {
     id: backend.license_application_id,
     licenseApplicationId: backend.license_application_id,
-    fullName: backend.full_name || '',
-    registrationNumber: backend.registration_number || '',
+    fullName: backend.full_name || "",
+    registrationNumber: backend.registration_number || "",
     identificationType: backend.identification_type,
     identificationNumber: backend.identification_number,
     country: backend.country,
     nationality: backend.nationality,
-    categoryOfPractice: backend.category_of_practice || '',
-    placeOfPractice: backend.place_of_practice || '',
-    county: backend.county || '',
+    categoryOfPractice: backend.category_of_practice || "",
+    placeOfPractice: backend.place_of_practice || "",
+    county: backend.county || "",
     instituteOfGraduation: backend.institute_of_graduation,
     degree: backend.degree,
     address: backend.address,
     email: backend.email,
     phone: backend.phone,
-    licenseTypeName: backend.license_type || backend.license_type_name || '',
-    applicationStatus: backend.status || backend.application_status || 'Pending',
-    applicationType: backend.application_type || 'New',
+    licenseTypeName: backend.license_type || backend.license_type_name || "",
+    applicationStatus: backend.status || backend.application_status || "Pending",
+    applicationType: backend.application_type || "New",
     applicationDate: formatDateForFrontend(backend.application_date),
     regulatoryBody: backend.regulatory_body,
     licenseFee: backend.license_fee || 0,
@@ -406,7 +412,7 @@ export async function listProfessionalLicenseApplications(
   filters?: {
     search?: string
     applicationId?: string
-    applicationType?: 'New' | 'Renewal'
+    applicationType?: "New" | "Renewal"
     applicationStatus?: string
     regulatoryBody?: string
   }
@@ -414,13 +420,13 @@ export async function listProfessionalLicenseApplications(
   const params = new URLSearchParams({
     page: page.toString(),
     page_size: pageSize.toString(),
-    minimize: '0',
+    minimize: "0",
   })
 
-  if (filters?.applicationId) params.append('license_application_id', filters.applicationId)
-  if (filters?.applicationType) params.append('application_type', filters.applicationType)
-  if (filters?.applicationStatus) params.append('application_status', filters.applicationStatus)
-  if (filters?.regulatoryBody) params.append('regulatory_body', filters.regulatoryBody)
+  if (filters?.applicationId) params.append("license_application_id", filters.applicationId)
+  if (filters?.applicationType) params.append("application_type", filters.applicationType)
+  if (filters?.applicationStatus) params.append("application_status", filters.applicationStatus)
+  if (filters?.regulatoryBody) params.append("regulatory_body", filters.regulatoryBody)
 
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.professional_applications.fetch_professional_license_applications?${params.toString()}`
@@ -467,7 +473,9 @@ export async function getFacilityApplication(applicationId: string): Promise<Lic
   return app
 }
 
-export async function getProfessionalApplication(applicationId: string): Promise<ProfessionalLicenseApplication> {
+export async function getProfessionalApplication(
+  applicationId: string
+): Promise<ProfessionalLicenseApplication> {
   const response = await listProfessionalLicenseApplications(1, 1, { applicationId })
   const app = response.data.find((a) => a.licenseApplicationId === applicationId)
   if (!app) throw new Error(`Professional application ${applicationId} not found`)
@@ -476,20 +484,20 @@ export async function getProfessionalApplication(applicationId: string): Promise
 
 export async function updateFacilityApplicationStatus(
   applicationId: string,
-  status: 'Issued' | 'Denied',
+  status: "Issued" | "Denied",
   remarks: string
 ): Promise<any> {
   const payload: Record<string, any> = {
     license_application_id: applicationId,
     application_status: status,
   }
-  if (status === 'Denied') payload.denial_comment = remarks
+  if (status === "Denied") payload.denial_comment = remarks
   else payload.remarks = remarks
 
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.applications.update_license_application_status`,
     {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(payload),
     }
   )
@@ -498,33 +506,31 @@ export async function updateFacilityApplicationStatus(
 
 export async function updateProfessionalApplicationStatus(
   applicationId: string,
-  status: 'Issued' | 'Denied',
+  status: "Issued" | "Denied",
   remarks: string
 ): Promise<any> {
   const payload: Record<string, any> = {
     license_application_id: applicationId,
     application_status: status,
   }
-  if (status === 'Denied') payload.denial_comment = remarks
+  if (status === "Denied") payload.denial_comment = remarks
   else payload.remarks = remarks
 
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.professional_applications.update_professional_license_application_status`,
     {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(payload),
     }
   )
   return response
 }
 
-export async function createLicenseAppeal(
-  payload: CreateLicenseAppealPayload
-): Promise<any> {
+export async function createLicenseAppeal(payload: CreateLicenseAppealPayload): Promise<any> {
   const response = await apiRequest<any>(
     `/api/method/compliance_360.api.license_management.facility_license_appeal_request.create_license_appeal_request`,
     {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(payload),
     }
   )

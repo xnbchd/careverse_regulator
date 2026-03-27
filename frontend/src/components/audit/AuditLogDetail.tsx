@@ -1,18 +1,18 @@
-import { useEffect } from 'react'
-import { useAuditStore } from '@/stores/auditStore'
-import { format } from 'date-fns'
+import { useEffect } from "react"
+import { useAuditStore } from "@/stores/auditStore"
+import { format } from "date-fns"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+} from "@/components/ui/dialog"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   CheckCircle,
   XCircle,
@@ -24,16 +24,16 @@ import {
   FileText,
   History,
   X,
-} from 'lucide-react'
+} from "lucide-react"
 import {
   getActionLabel,
   getEntityLabel,
   getSeverityColor,
   getSeverityLabel,
   formatChangeValue,
-} from '@/types/audit'
-import { cn } from '@/lib/utils'
-import type { AuditLog } from '@/types/audit'
+} from "@/types/audit"
+import { cn } from "@/lib/utils"
+import type { AuditLog } from "@/types/audit"
 
 interface AuditLogDetailProps {
   open: boolean
@@ -88,10 +88,10 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
             {/* Status Banner */}
             <div
               className={cn(
-                'flex items-center gap-3 p-4 rounded-lg border',
+                "flex items-center gap-3 p-4 rounded-lg border",
                 selectedLog.success
-                  ? 'bg-green-50 border-green-200 text-green-900'
-                  : 'bg-red-50 border-red-200 text-red-900'
+                  ? "bg-green-50 border-green-200 text-green-900"
+                  : "bg-red-50 border-red-200 text-red-900"
               )}
             >
               {selectedLog.success ? (
@@ -101,7 +101,7 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
               )}
               <div className="flex-1">
                 <p className="font-semibold">
-                  {selectedLog.success ? 'Action Successful' : 'Action Failed'}
+                  {selectedLog.success ? "Action Successful" : "Action Failed"}
                 </p>
                 <p className="text-sm opacity-80">{selectedLog.description}</p>
                 {selectedLog.errorMessage && (
@@ -112,7 +112,7 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
               </div>
               <Badge
                 variant="outline"
-                className={cn('text-sm', getSeverityColor(selectedLog.severity))}
+                className={cn("text-sm", getSeverityColor(selectedLog.severity))}
               >
                 {getSeverityLabel(selectedLog.severity)}
               </Badge>
@@ -189,7 +189,7 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
                     <p className="text-xs text-muted-foreground">Timestamp</p>
                   </div>
                   <p className="font-mono text-sm">
-                    {format(new Date(selectedLog.timestamp), 'PPpp')}
+                    {format(new Date(selectedLog.timestamp), "PPpp")}
                   </p>
                 </div>
                 {selectedLog.ipAddress && (
@@ -333,7 +333,7 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
               ) : entityHistory && entityHistory.logs.length > 0 ? (
                 <div className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Showing {entityHistory.logs.length} events for this{' '}
+                    Showing {entityHistory.logs.length} events for this{" "}
                     {getEntityLabel(entityHistory.entityType).toLowerCase()}
                   </p>
                   <div className="space-y-3">
@@ -341,20 +341,20 @@ export function AuditLogDetail({ open, onClose }: AuditLogDetailProps) {
                       <div
                         key={log.id}
                         className={cn(
-                          'border rounded-lg p-4',
-                          log.id === selectedLog.id && 'border-primary bg-primary/5'
+                          "border rounded-lg p-4",
+                          log.id === selectedLog.id && "border-primary bg-primary/5"
                         )}
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div>
                             <p className="font-medium">{getActionLabel(log.action)}</p>
                             <p className="text-xs text-muted-foreground">
-                              {format(new Date(log.timestamp), 'PPp')}
+                              {format(new Date(log.timestamp), "PPp")}
                             </p>
                           </div>
                           <Badge
                             variant="outline"
-                            className={cn('text-xs', getSeverityColor(log.severity))}
+                            className={cn("text-xs", getSeverityColor(log.severity))}
                           >
                             {getSeverityLabel(log.severity)}
                           </Badge>

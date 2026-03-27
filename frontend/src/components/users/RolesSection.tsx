@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import {
   Dialog,
   DialogContent,
@@ -10,37 +10,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import {
-  CheckCircle,
-  UserPlus,
-  X,
-  Loader2,
-  AlertCircle,
-  Shield,
-} from 'lucide-react'
-import { updateUser } from '@/api/userManagementApi'
-import { showSuccess, showError } from '@/utils/toast'
-import type { RoleDefinition, FrappeUser, PortalRole } from '@/types/user'
+} from "@/components/ui/select"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { CheckCircle, UserPlus, X, Loader2, AlertCircle, Shield } from "lucide-react"
+import { updateUser } from "@/api/userManagementApi"
+import { showSuccess, showError } from "@/utils/toast"
+import type { RoleDefinition, FrappeUser, PortalRole } from "@/types/user"
 
 const ROLE_COLORS: Record<string, string> = {
-  'Regulator Admin': 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
-  'Inspection Manager': 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
-  'Regulator User': 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
+  "Regulator Admin": "bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300",
+  "Inspection Manager": "bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300",
+  "Regulator User": "bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300",
 }
 
 const ROLE_BORDER_COLORS: Record<string, string> = {
-  'Regulator Admin': 'border-purple-200 dark:border-purple-800/50',
-  'Inspection Manager': 'border-blue-200 dark:border-blue-800/50',
-  'Regulator User': 'border-green-200 dark:border-green-800/50',
+  "Regulator Admin": "border-purple-200 dark:border-purple-800/50",
+  "Inspection Manager": "border-blue-200 dark:border-blue-800/50",
+  "Regulator User": "border-green-200 dark:border-green-800/50",
 }
 
 interface RolesSectionProps {
@@ -53,29 +46,28 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
   const [selectedRole, setSelectedRole] = useState<RoleDefinition | null>(null)
   const [assignDialogOpen, setAssignDialogOpen] = useState(false)
   const [assignTargetRole, setAssignTargetRole] = useState<PortalRole | null>(null)
-  const [assignUserId, setAssignUserId] = useState('')
+  const [assignUserId, setAssignUserId] = useState("")
   const [assigning, setAssigning] = useState(false)
   const [assignError, setAssignError] = useState<string | null>(null)
 
-  const getUsersForRole = (roleName: string) =>
-    users.filter((u) => u.roles.includes(roleName))
+  const getUsersForRole = (roleName: string) => users.filter((u) => u.roles.includes(roleName))
 
   const handleOpenAssignDialog = (roleName: PortalRole, userId?: string) => {
     setAssignTargetRole(roleName)
-    setAssignUserId(userId ?? '')
+    setAssignUserId(userId ?? "")
     setAssignError(null)
     setAssignDialogOpen(true)
   }
 
   const handleAssignRole = async () => {
     if (!assignTargetRole || !assignUserId.trim()) {
-      setAssignError('Please select a user.')
+      setAssignError("Please select a user.")
       return
     }
 
     const user = users.find((u) => u.name === assignUserId)
     if (!user) {
-      setAssignError('User not found.')
+      setAssignError("User not found.")
       return
     }
 
@@ -87,9 +79,12 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
     setAssigning(true)
     setAssignError(null)
     try {
-      const newRoles = [...user.roles.filter((r) =>
-        ['Regulator Admin', 'Inspection Manager', 'Regulator User'].includes(r) === false
-      ), assignTargetRole]
+      const newRoles = [
+        ...user.roles.filter(
+          (r) => ["Regulator Admin", "Inspection Manager", "Regulator User"].includes(r) === false
+        ),
+        assignTargetRole,
+      ]
 
       await updateUser({
         user_id: user.name,
@@ -100,8 +95,8 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
       setAssignDialogOpen(false)
       onRefreshUsers?.()
     } catch (err: any) {
-      setAssignError(err?.message || 'Failed to assign role.')
-      showError('Failed to assign role')
+      setAssignError(err?.message || "Failed to assign role.")
+      showError("Failed to assign role")
     } finally {
       setAssigning(false)
     }
@@ -117,16 +112,14 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
       showSuccess(`Removed ${roleName} role from ${user.full_name || user.email}`)
       onRefreshUsers?.()
     } catch {
-      showError('Failed to remove role')
+      showError("Failed to remove role")
     }
   }
 
   // Users without any portal role
   const unassignedUsers = users.filter(
     (u) =>
-      !u.roles.some((r) =>
-        ['Regulator Admin', 'Inspection Manager', 'Regulator User'].includes(r)
-      )
+      !u.roles.some((r) => ["Regulator Admin", "Inspection Manager", "Regulator User"].includes(r))
   )
 
   return (
@@ -145,11 +138,11 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
           return (
             <Card
               key={role.name}
-              className={`border-2 ${ROLE_BORDER_COLORS[role.name] || 'border-border'}`}
+              className={`border-2 ${ROLE_BORDER_COLORS[role.name] || "border-border"}`}
             >
               <CardContent className="p-5">
                 <div className="flex items-start justify-between mb-3">
-                  <Badge className={ROLE_COLORS[role.name] || 'bg-muted text-foreground'}>
+                  <Badge className={ROLE_COLORS[role.name] || "bg-muted text-foreground"}>
                     {role.name}
                   </Badge>
                   <Button
@@ -187,17 +180,16 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
                   ) : (
                     <div className="space-y-1.5 max-h-40 overflow-y-auto">
                       {roleUsers.map((u) => (
-                        <div
-                          key={u.name}
-                          className="flex items-center justify-between gap-2 group"
-                        >
+                        <div key={u.name} className="flex items-center justify-between gap-2 group">
                           <div className="flex items-center gap-2 min-w-0">
                             <div
-                              className={`w-2 h-2 rounded-full shrink-0 ${u.enabled === 1 ? 'bg-green-500 dark:bg-green-400' : 'bg-muted-foreground/50'}`}
+                              className={`w-2 h-2 rounded-full shrink-0 ${
+                                u.enabled === 1
+                                  ? "bg-green-500 dark:bg-green-400"
+                                  : "bg-muted-foreground/50"
+                              }`}
                             />
-                            <span className="text-sm truncate">
-                              {u.full_name || u.email}
-                            </span>
+                            <span className="text-sm truncate">{u.full_name || u.email}</span>
                           </div>
                           <Button
                             variant="ghost"
@@ -237,11 +229,13 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
                 <div key={u.name} className="flex items-center justify-between gap-3 py-1.5">
                   <div className="flex items-center gap-2 min-w-0">
                     <div
-                      className={`w-2 h-2 rounded-full shrink-0 ${u.enabled === 1 ? 'bg-green-500 dark:bg-green-400' : 'bg-muted-foreground/50'}`}
+                      className={`w-2 h-2 rounded-full shrink-0 ${
+                        u.enabled === 1
+                          ? "bg-green-500 dark:bg-green-400"
+                          : "bg-muted-foreground/50"
+                      }`}
                     />
-                    <span className="text-sm font-medium truncate">
-                      {u.full_name || u.email}
-                    </span>
+                    <span className="text-sm font-medium truncate">{u.full_name || u.email}</span>
                     <span className="text-xs text-muted-foreground truncate">{u.email}</span>
                   </div>
                   <Select
@@ -323,7 +317,7 @@ export default function RolesSection({ roles, users, onRefreshUsers }: RolesSect
                   Assigning...
                 </>
               ) : (
-                'Assign Role'
+                "Assign Role"
               )}
             </Button>
           </DialogFooter>

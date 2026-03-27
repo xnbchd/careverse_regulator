@@ -1,28 +1,28 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { useRegistryStore } from '@/stores/registryStore'
-import { useEntityDrawer } from '@/contexts/EntityDrawerContext'
-import { ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import ProfessionalsFilters from './ProfessionalsFilters'
-import ProfessionalsTable from './ProfessionalsTable'
-import PaginationControls from './PaginationControls'
-import ExportButton from '@/components/shared/ExportButton'
-import type { ExportConfig } from '@/utils/exportUtils'
-import type { ProfessionalRecord } from '@/api/registryApi'
-import dayjs from 'dayjs'
+import { useEffect, useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { useRegistryStore } from "@/stores/registryStore"
+import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
+import { ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import ProfessionalsFilters from "./ProfessionalsFilters"
+import ProfessionalsTable from "./ProfessionalsTable"
+import PaginationControls from "./PaginationControls"
+import ExportButton from "@/components/shared/ExportButton"
+import type { ExportConfig } from "@/utils/exportUtils"
+import type { ProfessionalRecord } from "@/api/registryApi"
+import dayjs from "dayjs"
 
 const professionalExportConfig: ExportConfig<ProfessionalRecord> = {
-  filename: `health-professionals-${dayjs().format('YYYY-MM-DD')}`,
-  title: 'Health Professionals Report',
+  filename: `health-professionals-${dayjs().format("YYYY-MM-DD")}`,
+  title: "Health Professionals Report",
   columns: [
-    { key: 'full_name', label: 'Full Name' },
-    { key: 'registration_number', label: 'Registration #' },
-    { key: 'license_number', label: 'License #' },
-    { key: 'category_of_practice', label: 'Category of Practice' },
-    { key: 'place_of_practice', label: 'Place of Practice' },
-    { key: 'county', label: 'County' },
-    { key: 'nationality', label: 'Nationality' },
+    { key: "full_name", label: "Full Name" },
+    { key: "registration_number", label: "Registration #" },
+    { key: "license_number", label: "License #" },
+    { key: "category_of_practice", label: "Category of Practice" },
+    { key: "place_of_practice", label: "Place of Practice" },
+    { key: "county", label: "County" },
+    { key: "nationality", label: "Nationality" },
   ],
 }
 
@@ -42,16 +42,16 @@ export function ProfessionalsListView() {
   const { openDrawer } = useEntityDrawer()
 
   // Local state for filters
-  const [searchText, setSearchText] = useState(professionalsFilters.search || '')
-  const [selectedStatus, setSelectedStatus] = useState<'all' | 'active' | 'inactive'>(
-    professionalsFilters.active === 'true'
-      ? 'active'
-      : professionalsFilters.active === 'false'
-      ? 'inactive'
-      : 'all'
+  const [searchText, setSearchText] = useState(professionalsFilters.search || "")
+  const [selectedStatus, setSelectedStatus] = useState<"all" | "active" | "inactive">(
+    professionalsFilters.active === "true"
+      ? "active"
+      : professionalsFilters.active === "false"
+      ? "inactive"
+      : "all"
   )
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(
-    professionalsFilters.sortOrder || 'asc'
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">(
+    professionalsFilters.sortOrder || "asc"
   )
 
   // Debounce search
@@ -62,41 +62,39 @@ export function ProfessionalsListView() {
     return () => clearTimeout(timer)
   }, [searchText])
 
-  const handleStatusChange = (status: 'all' | 'active' | 'inactive') => {
+  const handleStatusChange = (status: "all" | "active" | "inactive") => {
     setSelectedStatus(status)
-    if (status === 'all') {
+    if (status === "all") {
       setProfessionalsFilters({ ...professionalsFilters, active: undefined })
-    } else if (status === 'active') {
-      setProfessionalsFilters({ ...professionalsFilters, active: 'true' })
+    } else if (status === "active") {
+      setProfessionalsFilters({ ...professionalsFilters, active: "true" })
     } else {
-      setProfessionalsFilters({ ...professionalsFilters, active: 'false' })
+      setProfessionalsFilters({ ...professionalsFilters, active: "false" })
     }
   }
 
-  const handleSortChange = (order: 'asc' | 'desc') => {
+  const handleSortChange = (order: "asc" | "desc") => {
     setSortOrder(order)
     setProfessionalsFilters({
       ...professionalsFilters,
-      sortBy: 'full_name',
+      sortBy: "full_name",
       sortOrder: order,
     })
   }
 
   const handleClearFilters = () => {
-    setSearchText('')
-    setSelectedStatus('all')
-    setSortOrder('asc')
+    setSearchText("")
+    setSelectedStatus("all")
+    setSortOrder("asc")
     setProfessionalsFilters({})
   }
 
   const handleRowClick = (registrationNumber: string) => {
-    openDrawer('professional', registrationNumber)
+    openDrawer("professional", registrationNumber)
   }
 
   const activeFiltersCount =
-    (searchText ? 1 : 0) +
-    (selectedStatus !== 'all' ? 1 : 0) +
-    (sortOrder !== 'asc' ? 1 : 0)
+    (searchText ? 1 : 0) + (selectedStatus !== "all" ? 1 : 0) + (sortOrder !== "asc" ? 1 : 0)
 
   return (
     <div className="space-y-6 p-6">
@@ -106,7 +104,7 @@ export function ProfessionalsListView() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate({ to: '/affiliations' })}
+            onClick={() => navigate({ to: "/affiliations" })}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -136,11 +134,7 @@ export function ProfessionalsListView() {
           />
         </div>
         <div className="flex gap-2">
-          <ExportButton
-            data={professionals}
-            config={professionalExportConfig}
-            size="default"
-          />
+          <ExportButton data={professionals} config={professionalExportConfig} size="default" />
         </div>
       </div>
 
@@ -158,8 +152,8 @@ export function ProfessionalsListView() {
         onRowClick={handleRowClick}
         emptyState={
           activeFiltersCount > 0
-            ? 'No professionals match your current filters.'
-            : 'No professionals found in the system.'
+            ? "No professionals match your current filters."
+            : "No professionals found in the system."
         }
       />
 

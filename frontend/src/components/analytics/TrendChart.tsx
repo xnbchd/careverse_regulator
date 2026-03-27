@@ -1,6 +1,15 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import type { TrendData } from '@/stores/analyticsStore'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import type { TrendData } from "@/stores/analyticsStore"
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts"
 
 interface TrendChartProps {
   data: TrendData[]
@@ -11,9 +20,7 @@ export default function TrendChart({ data }: TrendChartProps) {
     <Card>
       <CardHeader>
         <CardTitle>6-Month Trend</CardTitle>
-        <CardDescription>
-          Growth trends for licenses, affiliations, and inspections
-        </CardDescription>
+        <CardDescription>Growth trends for licenses, affiliations, and inspections</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
@@ -22,19 +29,16 @@ export default function TrendChart({ data }: TrendChartProps) {
             <XAxis
               dataKey="month"
               className="text-xs"
-              tick={{ fill: 'hsl(var(--muted-foreground))' }}
+              tick={{ fill: "hsl(var(--muted-foreground))" }}
             />
-            <YAxis
-              className="text-xs"
-              tick={{ fill: 'hsl(var(--muted-foreground))' }}
-            />
+            <YAxis className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '8px',
+                backgroundColor: "hsl(var(--card))",
+                border: "1px solid hsl(var(--border))",
+                borderRadius: "8px",
               }}
-              labelStyle={{ color: 'hsl(var(--card-foreground))' }}
+              labelStyle={{ color: "hsl(var(--card-foreground))" }}
             />
             <Legend />
             <Line
@@ -42,7 +46,7 @@ export default function TrendChart({ data }: TrendChartProps) {
               dataKey="licenses"
               stroke="hsl(var(--chart-1))"
               strokeWidth={2}
-              dot={{ fill: 'hsl(var(--chart-1))' }}
+              dot={{ fill: "hsl(var(--chart-1))" }}
               name="Licenses"
             />
             <Line
@@ -50,7 +54,7 @@ export default function TrendChart({ data }: TrendChartProps) {
               dataKey="affiliations"
               stroke="hsl(var(--chart-2))"
               strokeWidth={2}
-              dot={{ fill: 'hsl(var(--chart-2))' }}
+              dot={{ fill: "hsl(var(--chart-2))" }}
               name="Affiliations"
             />
             <Line
@@ -58,7 +62,7 @@ export default function TrendChart({ data }: TrendChartProps) {
               dataKey="inspections"
               stroke="hsl(var(--chart-3))"
               strokeWidth={2}
-              dot={{ fill: 'hsl(var(--chart-3))' }}
+              dot={{ fill: "hsl(var(--chart-3))" }}
               name="Inspections"
             />
           </LineChart>

@@ -1,7 +1,7 @@
-export { default as DocumentManagementView } from './DocumentManagementView'
-export { default as DocumentUpload } from './DocumentUpload'
-export { default as DocumentList } from './DocumentList'
-export { default as DocumentGrid } from './DocumentGrid'
-export { default as DocumentFilters } from './DocumentFilters'
-export { default as DocumentPreview } from './DocumentPreview'
-export { default as DocumentAttachments } from './DocumentAttachments'
+export { default as DocumentManagementView } from "./DocumentManagementView"
+export { default as DocumentUpload } from "./DocumentUpload"
+export { default as DocumentList } from "./DocumentList"
+export { default as DocumentGrid } from "./DocumentGrid"
+export { default as DocumentFilters } from "./DocumentFilters"
+export { default as DocumentPreview } from "./DocumentPreview"
+export { default as DocumentAttachments } from "./DocumentAttachments"

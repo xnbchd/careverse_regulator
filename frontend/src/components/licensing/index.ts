@@ -1,15 +1,15 @@
-export { default } from './LicenseManagementView'
-export { default as LicenseManagementView } from './LicenseManagementView'
-export { default as SubmitAppealModal } from './SubmitAppealModal'
-export { default as ApplicationDetailModal } from './ApplicationDetailModal'
-export { default as LicensesTable } from './LicensesTable'
-export { default as LicenseCard } from './LicenseCard'
-export { default as LicensesFilters } from './LicensesFilters'
-export { default as ApplicationsTable } from './ApplicationsTable'
-export { default as ApplicationCard } from './ApplicationCard'
-export { default as ApplicationsFilters } from './ApplicationsFilters'
-export { default as StatusBadge } from './StatusBadge'
-export { default as PaginationControls } from './PaginationControls'
-export { LicensesDashboard } from './LicensesDashboard'
-export { FacilityLicensesDashboard } from './FacilityLicensesDashboard'
-export { ApplicationsDashboard } from './ApplicationsDashboard'
+export { default } from "./LicenseManagementView"
+export { default as LicenseManagementView } from "./LicenseManagementView"
+export { default as SubmitAppealModal } from "./SubmitAppealModal"
+export { default as ApplicationDetailModal } from "./ApplicationDetailModal"
+export { default as LicensesTable } from "./LicensesTable"
+export { default as LicenseCard } from "./LicenseCard"
+export { default as LicensesFilters } from "./LicensesFilters"
+export { default as ApplicationsTable } from "./ApplicationsTable"
+export { default as ApplicationCard } from "./ApplicationCard"
+export { default as ApplicationsFilters } from "./ApplicationsFilters"
+export { default as StatusBadge } from "./StatusBadge"
+export { default as PaginationControls } from "./PaginationControls"
+export { LicensesDashboard } from "./LicensesDashboard"
+export { FacilityLicensesDashboard } from "./FacilityLicensesDashboard"
+export { ApplicationsDashboard } from "./ApplicationsDashboard"

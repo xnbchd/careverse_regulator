@@ -5,12 +5,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { Card } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Badge } from '@/components/ui/badge'
-import type { FacilityRecord } from '@/api/registryApi'
-import { EntityLink } from '@/components/entities'
+} from "@/components/ui/table"
+import { Card } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge"
+import type { FacilityRecord } from "@/api/registryApi"
+import { EntityLink } from "@/components/entities"
 
 interface FacilitiesTableProps {
   facilities: FacilityRecord[]
@@ -33,8 +33,7 @@ export default function FacilitiesTable({
   onDeselectAll,
   emptyState,
 }: FacilitiesTableProps) {
-  const selectionEnabled =
-    selectedIds !== undefined && onToggleSelection !== undefined
+  const selectionEnabled = selectedIds !== undefined && onToggleSelection !== undefined
   const allSelected =
     selectionEnabled &&
     facilities.length > 0 &&
@@ -63,9 +62,7 @@ export default function FacilitiesTable({
               {selectionEnabled && (
                 <TableHead className="w-12">
                   <Checkbox
-                    checked={
-                      allSelected || (someSelected ? 'indeterminate' : false)
-                    }
+                    checked={allSelected || (someSelected ? "indeterminate" : false)}
                     onCheckedChange={handleSelectAll}
                   />
                 </TableHead>
@@ -95,13 +92,12 @@ export default function FacilitiesTable({
                   colSpan={totalColumns}
                   className="text-center py-8 text-muted-foreground"
                 >
-                  {emptyState || 'No facilities found'}
+                  {emptyState || "No facilities found"}
                 </TableCell>
               </TableRow>
             ) : (
               facilities.map((facility) => {
-                const isSelected =
-                  selectionEnabled && selectedIds.has(facility.registration_number)
+                const isSelected = selectionEnabled && selectedIds.has(facility.registration_number)
                 return (
                   <TableRow
                     key={facility.registration_number}
@@ -112,45 +108,30 @@ export default function FacilitiesTable({
                       <TableCell onClick={(e) => e.stopPropagation()}>
                         <Checkbox
                           checked={isSelected}
-                          onCheckedChange={() =>
-                            onToggleSelection(facility.registration_number)
-                          }
+                          onCheckedChange={() => onToggleSelection(facility.registration_number)}
                         />
                       </TableCell>
                     )}
-                    <TableCell
-                      className="w-[250px]"
-                      onClick={(e) => e.stopPropagation()}
-                    >
+                    <TableCell className="w-[250px]" onClick={(e) => e.stopPropagation()}>
                       <EntityLink
                         type="facility"
                         id={facility.registration_number}
                         className="w-full"
                       >
-                        <div className="truncate text-left">
-                          {facility.facility_name}
-                        </div>
+                        <div className="truncate text-left">{facility.facility_name}</div>
                       </EntityLink>
                     </TableCell>
                     <TableCell className="font-mono text-sm w-[100px]">
-                      <div className="truncate text-left">
-                        {facility.facility_code || '—'}
-                      </div>
+                      <div className="truncate text-left">{facility.facility_code || "—"}</div>
                     </TableCell>
                     <TableCell className="font-mono text-sm w-[140px]">
-                      <div className="truncate text-left">
-                        {facility.registration_number}
-                      </div>
+                      <div className="truncate text-left">{facility.registration_number}</div>
                     </TableCell>
                     <TableCell className="w-[140px]">
-                      <div className="truncate text-left">
-                        {facility.facility_category || '—'}
-                      </div>
+                      <div className="truncate text-left">{facility.facility_category || "—"}</div>
                     </TableCell>
                     <TableCell className="w-[120px]">
-                      <div className="truncate text-left">
-                        {facility.facility_type || '—'}
-                      </div>
+                      <div className="truncate text-left">{facility.facility_type || "—"}</div>
                     </TableCell>
                     <TableCell className="w-[100px]">
                       {facility.keph_level ? (
@@ -160,9 +141,7 @@ export default function FacilitiesTable({
                       )}
                     </TableCell>
                     <TableCell className="w-[120px]">
-                      <div className="truncate text-left">
-                        {facility.county || '—'}
-                      </div>
+                      <div className="truncate text-left">{facility.county || "—"}</div>
                     </TableCell>
                     <TableCell className="w-[80px]">
                       {facility.open_whole_day ? (

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { FileText, AlertCircle, CheckCircle, XCircle, Clock } from 'lucide-react'
-import { fetchLicenseAppeals } from '@/api/licenseAppealsApi'
+import { useState, useEffect } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { FileText, AlertCircle, CheckCircle, XCircle, Clock } from "lucide-react"
+import { fetchLicenseAppeals } from "@/api/licenseAppealsApi"
 
 export function LicenseAppealsOverview() {
   const [stats, setStats] = useState({
@@ -27,10 +27,12 @@ export function LicenseAppealsOverview() {
       const total = response.pagination.total_count
 
       // Calculate status counts
-      const pending = appeals.filter(a => a.status === 'Pending').length
-      const approved = appeals.filter(a => a.status === 'Approved').length
-      const rejected = appeals.filter(a => a.status === 'Rejected').length
-      const infoRequested = appeals.filter(a => a.status === 'Additional Information Requested').length
+      const pending = appeals.filter((a) => a.status === "Pending").length
+      const approved = appeals.filter((a) => a.status === "Approved").length
+      const rejected = appeals.filter((a) => a.status === "Rejected").length
+      const infoRequested = appeals.filter(
+        (a) => a.status === "Additional Information Requested"
+      ).length
 
       setStats({
         total,
@@ -40,7 +42,7 @@ export function LicenseAppealsOverview() {
         infoRequested,
       })
     } catch (error) {
-      console.error('Failed to load appeals stats:', error)
+      console.error("Failed to load appeals stats:", error)
     } finally {
       setLoading(false)
     }
@@ -48,44 +50,44 @@ export function LicenseAppealsOverview() {
 
   const statCards = [
     {
-      label: 'Total Appeals',
+      label: "Total Appeals",
       value: stats.total,
       icon: FileText,
-      color: 'text-blue-600 dark:text-blue-400',
-      bgColor: 'bg-blue-50 dark:bg-blue-950/30',
-      borderColor: 'border-blue-100 dark:border-blue-800',
+      color: "text-blue-600 dark:text-blue-400",
+      bgColor: "bg-blue-50 dark:bg-blue-950/30",
+      borderColor: "border-blue-100 dark:border-blue-800",
     },
     {
-      label: 'Pending',
+      label: "Pending",
       value: stats.pending,
       icon: Clock,
-      color: 'text-orange-600 dark:text-orange-400',
-      bgColor: 'bg-orange-50 dark:bg-orange-950/30',
-      borderColor: 'border-orange-100 dark:border-orange-800',
+      color: "text-orange-600 dark:text-orange-400",
+      bgColor: "bg-orange-50 dark:bg-orange-950/30",
+      borderColor: "border-orange-100 dark:border-orange-800",
     },
     {
-      label: 'Approved',
+      label: "Approved",
       value: stats.approved,
       icon: CheckCircle,
-      color: 'text-green-600 dark:text-green-400',
-      bgColor: 'bg-green-50 dark:bg-green-950/30',
-      borderColor: 'border-green-100 dark:border-green-800',
+      color: "text-green-600 dark:text-green-400",
+      bgColor: "bg-green-50 dark:bg-green-950/30",
+      borderColor: "border-green-100 dark:border-green-800",
     },
     {
-      label: 'Rejected',
+      label: "Rejected",
       value: stats.rejected,
       icon: XCircle,
-      color: 'text-red-600 dark:text-red-400',
-      bgColor: 'bg-red-50 dark:bg-red-950/30',
-      borderColor: 'border-red-100 dark:border-red-800',
+      color: "text-red-600 dark:text-red-400",
+      bgColor: "bg-red-50 dark:bg-red-950/30",
+      borderColor: "border-red-100 dark:border-red-800",
     },
     {
-      label: 'Info Requested',
+      label: "Info Requested",
       value: stats.infoRequested,
       icon: AlertCircle,
-      color: 'text-yellow-600 dark:text-yellow-400',
-      bgColor: 'bg-yellow-50 dark:bg-yellow-950/30',
-      borderColor: 'border-yellow-100 dark:border-yellow-800',
+      color: "text-yellow-600 dark:text-yellow-400",
+      bgColor: "bg-yellow-50 dark:bg-yellow-950/30",
+      borderColor: "border-yellow-100 dark:border-yellow-800",
     },
   ]
 
@@ -125,9 +127,7 @@ export function LicenseAppealsOverview() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
-                    <p className={`text-2xl font-bold ${stat.color}`}>
-                      {stat.value}
-                    </p>
+                    <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
                   </div>
                   <div className={`${stat.bgColor} p-2 rounded-lg`}>
                     <Icon className={`w-5 h-5 ${stat.color}`} />

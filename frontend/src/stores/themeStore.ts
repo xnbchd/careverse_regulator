@@ -1,6 +1,6 @@
-import { create } from 'zustand'
+import { create } from "zustand"
 
-export type ColorMode = 'light' | 'dark'
+export type ColorMode = "light" | "dark"
 
 interface ThemeState {
   mode: ColorMode
@@ -8,10 +8,10 @@ interface ThemeState {
   toggleMode: () => void
 }
 
-const STORAGE_KEY = 'careverse_regulator_color_mode'
+const STORAGE_KEY = "careverse_regulator_color_mode"
 
 function persistMode(mode: ColorMode): void {
-  if (typeof window === 'undefined') return
+  if (typeof window === "undefined") return
   try {
     window.localStorage.setItem(STORAGE_KEY, mode)
   } catch {
@@ -20,16 +20,16 @@ function persistMode(mode: ColorMode): void {
 }
 
 function readInitialMode(): ColorMode {
-  if (typeof window === 'undefined') return 'light'
+  if (typeof window === "undefined") return "light"
 
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY)
-    if (stored === 'light' || stored === 'dark') return stored
+    if (stored === "light" || stored === "dark") return stored
   } catch {
     // Ignore storage errors and fallback to media preference.
   }
 
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
 }
 
 export const useThemeStore = create<ThemeState>((set, get) => ({
@@ -39,9 +39,8 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     set({ mode })
   },
   toggleMode: () => {
-    const nextMode: ColorMode = get().mode === 'dark' ? 'light' : 'dark'
+    const nextMode: ColorMode = get().mode === "dark" ? "light" : "dark"
     persistMode(nextMode)
     set({ mode: nextMode })
   },
 }))
-

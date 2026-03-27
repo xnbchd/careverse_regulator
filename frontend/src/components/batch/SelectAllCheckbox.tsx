@@ -1,10 +1,6 @@
-import { Checkbox } from '@/components/ui/checkbox'
-import { TableHead } from '@/components/ui/table'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Checkbox } from "@/components/ui/checkbox"
+import { TableHead } from "@/components/ui/table"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 
 interface SelectAllCheckboxProps {
   isAllSelected: boolean
@@ -34,10 +30,10 @@ export function SelectAllCheckbox({
   }
 
   const tooltipContent = isAllSelected
-    ? 'Deselect all'
+    ? "Deselect all"
     : isIndeterminate
     ? `${selectedCount} of ${totalCount} selected. Click to select all.`
-    : 'Select all'
+    : "Select all"
 
   return (
     <TableHead className="w-12 pr-0">

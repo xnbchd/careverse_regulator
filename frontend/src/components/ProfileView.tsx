@@ -1,7 +1,7 @@
-import { Monitor, LogOut, User } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
+import { Monitor, LogOut, User } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 
 interface ProfileViewProps {
   userName: string
@@ -11,7 +11,13 @@ interface ProfileViewProps {
   onLogout: () => void
 }
 
-export default function ProfileView({ userName, userEmail, userRole, onOpenDesk, onLogout }: ProfileViewProps) {
+export default function ProfileView({
+  userName,
+  userEmail,
+  userRole,
+  onOpenDesk,
+  onLogout,
+}: ProfileViewProps) {
   return (
     <div className="max-w-2xl mx-auto">
       <Card className="bg-card/50 backdrop-blur-sm">

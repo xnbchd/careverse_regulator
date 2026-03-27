@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { CheckCircle, XCircle, Ban, RefreshCw, Trash2 } from 'lucide-react'
+import { useState } from "react"
+import { CheckCircle, XCircle, Ban, RefreshCw, Trash2 } from "lucide-react"
 import {
   BatchActionBar,
   BatchAction,
   ConfirmBatchDialog,
   BatchProgressDialog,
   BatchResultDialog,
-} from '@/components/batch'
-import { useLicenseBatchOperations } from '@/hooks/useBatchOperations'
-import { BatchActionType } from '@/types/batch'
+} from "@/components/batch"
+import { useLicenseBatchOperations } from "@/hooks/useBatchOperations"
+import { BatchActionType } from "@/types/batch"
 
 interface LicensesBatchOperationsProps {
   licenses: Array<{ id: string; licenseNumber: string; [key: string]: any }>
@@ -22,54 +22,54 @@ export function LicensesBatchOperations({ licenses }: LicensesBatchOperationsPro
   // Define available actions for licenses
   const actions: BatchAction[] = [
     {
-      id: 'approve',
-      label: 'Approve',
+      id: "approve",
+      label: "Approve",
       icon: <CheckCircle className="w-4 h-4" />,
       onClick: () => {
-        setCurrentAction('license_approve' as BatchActionType)
+        setCurrentAction("license_approve" as BatchActionType)
         setShowConfirmDialog(true)
       },
-      variant: 'default',
+      variant: "default",
     },
     {
-      id: 'reject',
-      label: 'Reject',
+      id: "reject",
+      label: "Reject",
       icon: <XCircle className="w-4 h-4" />,
       onClick: () => {
-        setCurrentAction('license_reject' as BatchActionType)
+        setCurrentAction("license_reject" as BatchActionType)
         setShowConfirmDialog(true)
       },
-      variant: 'destructive',
+      variant: "destructive",
     },
     {
-      id: 'suspend',
-      label: 'Suspend',
+      id: "suspend",
+      label: "Suspend",
       icon: <Ban className="w-4 h-4" />,
       onClick: () => {
-        setCurrentAction('license_suspend' as BatchActionType)
+        setCurrentAction("license_suspend" as BatchActionType)
         setShowConfirmDialog(true)
       },
-      variant: 'secondary',
+      variant: "secondary",
     },
     {
-      id: 'renew',
-      label: 'Renew',
+      id: "renew",
+      label: "Renew",
       icon: <RefreshCw className="w-4 h-4" />,
       onClick: () => {
-        setCurrentAction('license_renew' as BatchActionType)
+        setCurrentAction("license_renew" as BatchActionType)
         setShowConfirmDialog(true)
       },
-      variant: 'outline',
+      variant: "outline",
     },
     {
-      id: 'delete',
-      label: 'Delete',
+      id: "delete",
+      label: "Delete",
       icon: <Trash2 className="w-4 h-4" />,
       onClick: () => {
-        setCurrentAction('license_delete' as BatchActionType)
+        setCurrentAction("license_delete" as BatchActionType)
         setShowConfirmDialog(true)
       },
-      variant: 'destructive',
+      variant: "destructive",
     },
   ]
 
@@ -77,20 +77,20 @@ export function LicensesBatchOperations({ licenses }: LicensesBatchOperationsPro
     if (!currentAction) return
 
     switch (currentAction) {
-      case 'license_approve' as BatchActionType:
+      case "license_approve" as BatchActionType:
         await batch.bulkApprove({ reason })
         break
-      case 'license_reject' as BatchActionType:
-        await batch.bulkReject(reason || 'Rejected by regulator', { reason })
+      case "license_reject" as BatchActionType:
+        await batch.bulkReject(reason || "Rejected by regulator", { reason })
         break
-      case 'license_suspend' as BatchActionType:
-        await batch.bulkSuspend(reason || 'Suspended by regulator', undefined, { reason })
+      case "license_suspend" as BatchActionType:
+        await batch.bulkSuspend(reason || "Suspended by regulator", undefined, { reason })
         break
-      case 'license_renew' as BatchActionType:
+      case "license_renew" as BatchActionType:
         await batch.bulkRenew(5, { reason }) // Default 5 years
         break
-      case 'license_delete' as BatchActionType:
-        await batch.bulkDelete(reason || 'Deleted by regulator', { reason })
+      case "license_delete" as BatchActionType:
+        await batch.bulkDelete(reason || "Deleted by regulator", { reason })
         break
       default:
         await batch.executeBatch(currentAction, { metadata: { reason } })
@@ -108,7 +108,7 @@ export function LicensesBatchOperations({ licenses }: LicensesBatchOperationsPro
 
   const handleExportReport = () => {
     // Export report logic
-    console.log('Exporting batch operation report...')
+    console.log("Exporting batch operation report...")
   }
 
   return (
@@ -129,9 +129,9 @@ export function LicensesBatchOperations({ licenses }: LicensesBatchOperationsPro
           selectedCount={batch.selectedCount}
           onConfirm={handleConfirm}
           requiresReason={
-            currentAction === ('license_reject' as BatchActionType) ||
-            currentAction === ('license_suspend' as BatchActionType) ||
-            currentAction === ('license_delete' as BatchActionType)
+            currentAction === ("license_reject" as BatchActionType) ||
+            currentAction === ("license_suspend" as BatchActionType) ||
+            currentAction === ("license_delete" as BatchActionType)
           }
         />
       )}

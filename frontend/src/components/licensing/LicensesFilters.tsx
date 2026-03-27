@@ -1,7 +1,7 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,37 +9,37 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-} from '@/components/ui/dropdown-menu'
-import { Search, Filter, X, ArrowUpDown } from 'lucide-react'
+} from "@/components/ui/dropdown-menu"
+import { Search, Filter, X, ArrowUpDown } from "lucide-react"
 
 interface LicensesFiltersProps {
   searchText: string
   onSearchChange: (value: string) => void
   selectedStatuses: string[]
   onStatusChange: (statuses: string[]) => void
-  sortOrder: 'asc' | 'desc' | 'recent'
-  onSortChange: (order: 'asc' | 'desc' | 'recent') => void
+  sortOrder: "asc" | "desc" | "recent"
+  onSortChange: (order: "asc" | "desc" | "recent") => void
   activeFiltersCount: number
   onClearFilters: () => void
 }
 
 const statusOptions = [
-  { value: 'all', label: 'All Statuses' },
-  { value: 'Active', label: 'Active' },
-  { value: 'Expired', label: 'Expired' },
-  { value: 'Suspended', label: 'Suspended' },
-  { value: 'Denied', label: 'Denied' },
-  { value: 'Pending', label: 'Pending' },
-  { value: 'In Review', label: 'In Review' },
-  { value: 'Renewal Reviewed', label: 'Renewal Reviewed' },
-  { value: 'Approved', label: 'Approved' },
-  { value: 'Info Requested', label: 'Info Requested' },
+  { value: "all", label: "All Statuses" },
+  { value: "Active", label: "Active" },
+  { value: "Expired", label: "Expired" },
+  { value: "Suspended", label: "Suspended" },
+  { value: "Denied", label: "Denied" },
+  { value: "Pending", label: "Pending" },
+  { value: "In Review", label: "In Review" },
+  { value: "Renewal Reviewed", label: "Renewal Reviewed" },
+  { value: "Approved", label: "Approved" },
+  { value: "Info Requested", label: "Info Requested" },
 ]
 
 const sortOptions = [
-  { value: 'recent', label: 'Expiring Soon' },
-  { value: 'asc', label: 'License # A-Z' },
-  { value: 'desc', label: 'License # Z-A' },
+  { value: "recent", label: "Expiring Soon" },
+  { value: "asc", label: "License # A-Z" },
+  { value: "desc", label: "License # Z-A" },
 ]
 
 export default function LicensesFilters({
@@ -53,15 +53,15 @@ export default function LicensesFilters({
   onClearFilters,
 }: LicensesFiltersProps) {
   const handleStatusToggle = (value: string) => {
-    if (value === 'all') {
-      onStatusChange(['all'])
+    if (value === "all") {
+      onStatusChange(["all"])
     } else {
       const newStatuses = selectedStatuses.includes(value)
-        ? selectedStatuses.filter((s) => s !== value && s !== 'all')
-        : [...selectedStatuses.filter((s) => s !== 'all'), value]
+        ? selectedStatuses.filter((s) => s !== value && s !== "all")
+        : [...selectedStatuses.filter((s) => s !== "all"), value]
 
       if (newStatuses.length === 0) {
-        onStatusChange(['all'])
+        onStatusChange(["all"])
       } else {
         onStatusChange(newStatuses)
       }
@@ -87,7 +87,7 @@ export default function LicensesFilters({
               <Button variant="outline" className="gap-2">
                 <Filter className="h-4 w-4" />
                 Status
-                {!selectedStatuses.includes('all') && (
+                {!selectedStatuses.includes("all") && (
                   <Badge variant="secondary" className="ml-1 h-5 px-1.5">
                     {selectedStatuses.length}
                   </Badge>

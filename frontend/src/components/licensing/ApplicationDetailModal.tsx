@@ -4,21 +4,13 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { EntityLink } from '@/components/entities'
-import {
-  Building2,
-  Calendar,
-  FileText,
-  DollarSign,
-  User,
-  Award,
-  MessageSquare,
-} from 'lucide-react'
-import type { LicenseApplication } from '@/types/license'
+} from "@/components/ui/dialog"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { EntityLink } from "@/components/entities"
+import { Building2, Calendar, FileText, DollarSign, User, Award, MessageSquare } from "lucide-react"
+import type { LicenseApplication } from "@/types/license"
 
 interface ApplicationDetailModalProps {
   isOpen: boolean
@@ -53,9 +45,7 @@ export default function ApplicationDetailModal({
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-[600px]">
-          <p className="text-muted-foreground text-center py-8">
-            Application not found
-          </p>
+          <p className="text-muted-foreground text-center py-8">Application not found</p>
         </DialogContent>
       </Dialog>
     )
@@ -63,16 +53,16 @@ export default function ApplicationDetailModal({
 
   const getStatusVariant = (status: string) => {
     switch (status) {
-      case 'Issued':
-        return 'default'
-      case 'Pending':
-        return 'secondary'
-      case 'Denied':
-        return 'destructive'
-      case 'Info Requested':
-        return 'outline'
+      case "Issued":
+        return "default"
+      case "Pending":
+        return "secondary"
+      case "Denied":
+        return "destructive"
+      case "Info Requested":
+        return "outline"
       default:
-        return 'outline'
+        return "outline"
     }
   }
 
@@ -85,11 +75,12 @@ export default function ApplicationDetailModal({
               <DialogTitle className="text-xl font-mono">
                 {application.licenseApplicationId}
               </DialogTitle>
-              <DialogDescription className="mt-1">
-                License Application Details
-              </DialogDescription>
+              <DialogDescription className="mt-1">License Application Details</DialogDescription>
             </div>
-            <Badge variant={getStatusVariant(application.applicationStatus)} className="flex-shrink-0">
+            <Badge
+              variant={getStatusVariant(application.applicationStatus)}
+              className="flex-shrink-0"
+            >
               {application.applicationStatus}
             </Badge>
           </div>
@@ -141,9 +132,7 @@ export default function ApplicationDetailModal({
                 <Building2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Facility Type</p>
-                  <p className="text-sm text-muted-foreground">
-                    {application.facilityType}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{application.facilityType}</p>
                 </div>
               </div>
 
@@ -159,9 +148,7 @@ export default function ApplicationDetailModal({
                 <FileText className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">Category</p>
-                  <p className="text-sm text-muted-foreground">
-                    {application.facilityCategory}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{application.facilityCategory}</p>
                 </div>
               </div>
             </div>
@@ -177,16 +164,11 @@ export default function ApplicationDetailModal({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                <Badge
-                  variant="outline"
-                  className="mt-0.5 capitalize flex-shrink-0"
-                >
+                <Badge variant="outline" className="mt-0.5 capitalize flex-shrink-0">
                   {application.applicationType}
                 </Badge>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">
-                    Application Type
-                  </p>
+                  <p className="text-sm font-medium text-foreground">Application Type</p>
                 </div>
               </div>
 
@@ -194,21 +176,15 @@ export default function ApplicationDetailModal({
                 <Award className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground">License Type</p>
-                  <p className="text-sm text-muted-foreground">
-                    {application.licenseTypeName}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{application.licenseTypeName}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                 <Calendar className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">
-                    Application Date
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {application.applicationDate}
-                  </p>
+                  <p className="text-sm font-medium text-foreground">Application Date</p>
+                  <p className="text-sm text-muted-foreground">{application.applicationDate}</p>
                 </div>
               </div>
 
@@ -225,12 +201,8 @@ export default function ApplicationDetailModal({
               <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg col-span-full">
                 <FileText className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground">
-                    Regulatory Body
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {application.regulatoryBody}
-                  </p>
+                  <p className="text-sm font-medium text-foreground">Regulatory Body</p>
+                  <p className="text-sm text-muted-foreground">{application.regulatoryBody}</p>
                 </div>
               </div>
             </div>
@@ -255,36 +227,35 @@ export default function ApplicationDetailModal({
           )}
 
           {/* Compliance Documents */}
-          {application.complianceDocuments &&
-            application.complianceDocuments.length > 0 && (
-              <>
-                <Separator />
-                <div className="space-y-3">
-                  <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                    <FileText className="w-4 h-4" />
-                    Compliance Documents
-                  </h3>
-                  <div className="space-y-2">
-                    {application.complianceDocuments.map((doc: any, index: number) => (
-                      <div
-                        key={index}
-                        className="p-3 bg-muted/50 rounded-lg border border-border flex items-center justify-between"
-                      >
-                        <div className="flex items-center gap-2">
-                          <FileText className="w-4 h-4 text-muted-foreground" />
-                          <span className="text-sm font-medium">
-                            {doc.name || `Document ${index + 1}`}
-                          </span>
-                        </div>
-                        <Button variant="ghost" size="sm">
-                          View
-                        </Button>
+          {application.complianceDocuments && application.complianceDocuments.length > 0 && (
+            <>
+              <Separator />
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                  <FileText className="w-4 h-4" />
+                  Compliance Documents
+                </h3>
+                <div className="space-y-2">
+                  {application.complianceDocuments.map((doc: any, index: number) => (
+                    <div
+                      key={index}
+                      className="p-3 bg-muted/50 rounded-lg border border-border flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-sm font-medium">
+                          {doc.name || `Document ${index + 1}`}
+                        </span>
                       </div>
-                    ))}
-                  </div>
+                      <Button variant="ghost" size="sm">
+                        View
+                      </Button>
+                    </div>
+                  ))}
                 </div>
-              </>
-            )}
+              </div>
+            </>
+          )}
         </div>
 
         <Separator className="mt-6" />
@@ -293,7 +264,7 @@ export default function ApplicationDetailModal({
           <Button variant="outline" onClick={onClose}>
             Close
           </Button>
-          {application.applicationStatus === 'Pending' && (
+          {application.applicationStatus === "Pending" && (
             <>
               <Button variant="destructive">Request Info</Button>
               <Button variant="default">Approve</Button>

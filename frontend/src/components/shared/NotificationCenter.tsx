@@ -1,14 +1,10 @@
-import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   Bell,
   CheckCheck,
@@ -20,11 +16,15 @@ import {
   Info,
   ExternalLink,
   X,
-} from 'lucide-react'
-import { useNotificationStore, type Notification, type NotificationType } from '@/stores/notificationStore'
-import { cn } from '@/lib/utils'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
+} from "lucide-react"
+import {
+  useNotificationStore,
+  type Notification,
+  type NotificationType,
+} from "@/stores/notificationStore"
+import { cn } from "@/lib/utils"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
 
 dayjs.extend(relativeTime)
 
@@ -38,14 +38,8 @@ const notificationIcons: Record<NotificationType, React.ReactNode> = {
 export default function NotificationCenter() {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  const {
-    notifications,
-    unreadCount,
-    markAsRead,
-    markAllAsRead,
-    deleteNotification,
-    clearAll,
-  } = useNotificationStore()
+  const { notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification, clearAll } =
+    useNotificationStore()
 
   const handleNotificationClick = (notification: Notification) => {
     if (!notification.read) {
@@ -85,7 +79,7 @@ export default function NotificationCenter() {
               variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
             >
-              {unreadCount > 99 ? '99+' : unreadCount}
+              {unreadCount > 99 ? "99+" : unreadCount}
             </Badge>
           )}
         </Button>
@@ -94,9 +88,7 @@ export default function NotificationCenter() {
         <div className="flex items-center justify-between p-4 border-b">
           <div className="flex items-center gap-2">
             <h3 className="font-semibold">Notifications</h3>
-            {unreadCount > 0 && (
-              <Badge variant="secondary">{unreadCount} new</Badge>
-            )}
+            {unreadCount > 0 && <Badge variant="secondary">{unreadCount} new</Badge>}
           </div>
           <div className="flex items-center gap-1">
             {notifications.length > 0 && (
@@ -127,7 +119,7 @@ export default function NotificationCenter() {
               className="h-8 w-8"
               onClick={() => {
                 setOpen(false)
-                navigate({ to: '/settings/notifications' })
+                navigate({ to: "/settings/notifications" })
               }}
               title="Notification settings"
             >
@@ -140,9 +132,7 @@ export default function NotificationCenter() {
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
               <Bell className="h-12 w-12 text-muted-foreground mb-3" />
-              <p className="text-sm text-muted-foreground text-center">
-                No notifications yet
-              </p>
+              <p className="text-sm text-muted-foreground text-center">No notifications yet</p>
             </div>
           ) : (
             <div className="divide-y">
@@ -150,8 +140,8 @@ export default function NotificationCenter() {
                 <div
                   key={notification.id}
                   className={cn(
-                    'p-4 hover:bg-muted/50 transition-colors cursor-pointer relative group',
-                    !notification.read && 'bg-blue-50/50 dark:bg-blue-950/20'
+                    "p-4 hover:bg-muted/50 transition-colors cursor-pointer relative group",
+                    !notification.read && "bg-blue-50/50 dark:bg-blue-950/20"
                   )}
                   onClick={() => handleNotificationClick(notification)}
                 >
@@ -161,9 +151,7 @@ export default function NotificationCenter() {
                     </div>
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-start justify-between gap-2">
-                        <p className="font-medium text-sm leading-tight">
-                          {notification.title}
-                        </p>
+                        <p className="font-medium text-sm leading-tight">{notification.title}</p>
                         <Button
                           variant="ghost"
                           size="icon"

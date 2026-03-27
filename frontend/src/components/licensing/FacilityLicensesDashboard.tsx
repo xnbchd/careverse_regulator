@@ -1,10 +1,10 @@
-import { useNavigate, getRouteApi } from '@tanstack/react-router'
+import { useNavigate, getRouteApi } from "@tanstack/react-router"
 import {
   MetricCard,
   StatusDistribution,
   PrioritySection,
   QuickActions,
-} from '@/components/dashboard'
+} from "@/components/dashboard"
 import {
   CheckCircle,
   Clock,
@@ -13,18 +13,20 @@ import {
   FileText,
   List,
   ShieldCheck,
-} from 'lucide-react'
-import { differenceInDays } from 'date-fns'
-import dayjs from 'dayjs'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { LicenseDashboardStats } from '@/api/licensingApi'
+} from "lucide-react"
+import { differenceInDays } from "date-fns"
+import dayjs from "dayjs"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import type { LicenseDashboardStats } from "@/api/licensingApi"
 
-const routeApi = getRouteApi('/license-management/')
+const routeApi = getRouteApi("/license-management/")
 
 export function FacilityLicensesDashboard() {
   const navigate = useNavigate()
-  const { dashboardStats: dashboardData } = routeApi.useLoaderData() as { dashboardStats: LicenseDashboardStats }
+  const { dashboardStats: dashboardData } = routeApi.useLoaderData() as {
+    dashboardStats: LicenseDashboardStats
+  }
 
   const totalLicenses = dashboardData?.metrics.total || 0
   const activeLicenses = dashboardData?.metrics.active || 0
@@ -33,40 +35,40 @@ export function FacilityLicensesDashboard() {
   // Quick actions
   const quickActions = [
     {
-      label: 'View All Licenses',
-      onClick: () => navigate({ to: '/license-management/licenses' }),
-      variant: 'default' as const,
+      label: "View All Licenses",
+      onClick: () => navigate({ to: "/license-management/licenses" }),
+      variant: "default" as const,
       icon: List,
     },
     {
-      label: 'Review Expiring',
-      onClick: () =>
-        navigate({ to: '/license-management/licenses' }),
-      variant: 'secondary' as const,
+      label: "Review Expiring",
+      onClick: () => navigate({ to: "/license-management/licenses" }),
+      variant: "secondary" as const,
       icon: Clock,
     },
     {
-      label: 'View Applications',
-      onClick: () => navigate({ to: '/license-management/applications' }),
-      variant: 'outline' as const,
+      label: "View Applications",
+      onClick: () => navigate({ to: "/license-management/applications" }),
+      variant: "outline" as const,
       icon: FileText,
     },
   ]
 
-  const renderExpiringItem = (item: LicenseDashboardStats['expiring_licenses'][0]) => {
-    const daysUntilExpiry = differenceInDays(dayjs(item.date_of_expiry, 'YYYY-MM-DD').toDate(), new Date())
+  const renderExpiringItem = (item: LicenseDashboardStats["expiring_licenses"][0]) => {
+    const daysUntilExpiry = differenceInDays(
+      dayjs(item.date_of_expiry, "YYYY-MM-DD").toDate(),
+      new Date()
+    )
 
     return (
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-foreground truncate">
-            {item.owner}
-          </p>
+          <p className="font-medium text-foreground truncate">{item.owner}</p>
           <p className="text-sm text-muted-foreground truncate">
             License #{item.license_number} • {item.facility_type}
           </p>
           <p className="text-xs text-red-600 dark:text-red-400 font-medium mt-1">
-            Expires in {daysUntilExpiry} day{daysUntilExpiry !== 1 ? 's' : ''}
+            Expires in {daysUntilExpiry} day{daysUntilExpiry !== 1 ? "s" : ""}
           </p>
         </div>
         <div className="flex gap-2">
@@ -115,7 +117,7 @@ export function FacilityLicensesDashboard() {
           variant="warning"
           icon={AlertTriangle}
           onClick={() =>
-            navigate({ to: '/license-management/licenses', search: { status: 'Expiring' } })
+            navigate({ to: "/license-management/licenses", search: { status: "Expiring" } })
           }
         />
         <MetricCard
@@ -124,7 +126,7 @@ export function FacilityLicensesDashboard() {
           variant="success"
           icon={CheckCircle}
           onClick={() =>
-            navigate({ to: '/license-management/licenses', search: { status: 'Active' } })
+            navigate({ to: "/license-management/licenses", search: { status: "Active" } })
           }
         />
         <MetricCard
@@ -148,7 +150,7 @@ export function FacilityLicensesDashboard() {
           title="License Status Distribution"
           type="bar"
           onSegmentClick={(status) =>
-            navigate({ to: '/license-management/licenses', search: { status } })
+            navigate({ to: "/license-management/licenses", search: { status } })
           }
         />
         <PrioritySection
@@ -156,7 +158,7 @@ export function FacilityLicensesDashboard() {
           items={dashboardData?.expiring_licenses || []}
           renderItem={renderExpiringItem}
           onViewAll={() =>
-            navigate({ to: '/license-management/licenses', search: { status: 'Expiring' } })
+            navigate({ to: "/license-management/licenses", search: { status: "Expiring" } })
           }
           emptyMessage="No licenses expiring in the next 30 days"
         />

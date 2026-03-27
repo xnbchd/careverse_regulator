@@ -1,8 +1,8 @@
-import type { Professional } from '@/types/entity'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { EntityLink } from './EntityLink'
+import type { Professional } from "@/types/entity"
+import { Badge } from "@/components/ui/badge"
+import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { EntityLink } from "./EntityLink"
 import {
   Table,
   TableBody,
@@ -10,12 +10,20 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from "@/components/ui/table"
 import {
-  User, Briefcase, Award, Building2, Mail, Phone,
-  MapPin, Calendar, IdCard, GraduationCap
-} from 'lucide-react'
-import dayjs from 'dayjs'
+  User,
+  Briefcase,
+  Award,
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  IdCard,
+  GraduationCap,
+} from "lucide-react"
+import dayjs from "dayjs"
 
 interface ProfessionalDrawerProps {
   professional: Professional
@@ -59,7 +67,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
           <User className="w-12 h-12 text-primary/70" />
         </div>
         <div className="flex-1 min-w-0">
-          <h2 className="text-2xl font-bold text-foreground mb-1 text-start">{professional.fullName}</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-1 text-start">
+            {professional.fullName}
+          </h2>
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
               <IdCard className="w-4 h-4" />
@@ -76,7 +86,7 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                 <span>•</span>
                 <span className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
-                  {dayjs(professional.dateOfBirth).format('DD/MM/YYYY')}
+                  {dayjs(professional.dateOfBirth).format("DD/MM/YYYY")}
                 </span>
               </>
             )}
@@ -95,7 +105,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
       <Tabs defaultValue="overview" className="w-full">
         <div className="overflow-x-auto -mx-6 px-6 mb-4">
           <TabsList className="inline-flex w-auto min-w-full">
-            <TabsTrigger value="overview" className="flex-1 min-w-fit">Overview</TabsTrigger>
+            <TabsTrigger value="overview" className="flex-1 min-w-fit">
+              Overview
+            </TabsTrigger>
             <TabsTrigger value="affiliations" className="flex-1 min-w-fit">
               <span className="truncate">Affiliations</span>
               {professional.affiliations && professional.affiliations.length > 0 && (
@@ -108,7 +120,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                 <span className="ml-1.5 text-xs">({professional.licenses.length})</span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="contact" className="flex-1 min-w-fit">Contact</TabsTrigger>
+            <TabsTrigger value="contact" className="flex-1 min-w-fit">
+              Contact
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -120,7 +134,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                 <GraduationCap className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground text-start">Specialty</p>
-                  <p className="text-sm text-muted-foreground text-start">{professional.specialty}</p>
+                  <p className="text-sm text-muted-foreground text-start">
+                    {professional.specialty}
+                  </p>
                   {professional.subSpecialty && (
                     <p className="text-xs text-muted-foreground mt-1 text-start">
                       Sub-specialty: {professional.subSpecialty}
@@ -135,7 +151,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                 <Briefcase className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground text-start">Type of Practice</p>
-                  <p className="text-sm text-muted-foreground text-start">{professional.typeOfPractice}</p>
+                  <p className="text-sm text-muted-foreground text-start">
+                    {professional.typeOfPractice}
+                  </p>
                 </div>
               </div>
             )}
@@ -146,7 +164,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground text-start">License Number</p>
                   <EntityLink type="license" id={professional.licenseNumber}>
-                    <span className="text-sm text-muted-foreground font-mono text-start">{professional.licenseNumber}</span>
+                    <span className="text-sm text-muted-foreground font-mono text-start">
+                      {professional.licenseNumber}
+                    </span>
                   </EntityLink>
                 </div>
               </div>
@@ -157,9 +177,13 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground text-start">Nationality</p>
-                  <p className="text-sm text-muted-foreground text-start">{professional.nationality}</p>
+                  <p className="text-sm text-muted-foreground text-start">
+                    {professional.nationality}
+                  </p>
                   {professional.county && (
-                    <p className="text-xs text-muted-foreground mt-1 text-start">County: {professional.county}</p>
+                    <p className="text-xs text-muted-foreground mt-1 text-start">
+                      County: {professional.county}
+                    </p>
                   )}
                 </div>
               </div>
@@ -172,7 +196,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Building2 className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-foreground text-start">Current Affiliations</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">
+                  Current Affiliations
+                </h3>
               </div>
               <div className="border rounded-lg overflow-hidden overflow-x-auto">
                 <Table>
@@ -188,27 +214,24 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                       <TableRow key={index}>
                         <TableCell className="font-medium text-start">
                           {affiliation.facilityRegistrationNumber ? (
-                            <EntityLink
-                              type="facility"
-                              id={affiliation.facilityRegistrationNumber}
-                            >
-                              {affiliation.facilityName || 'Unknown Facility'}
+                            <EntityLink type="facility" id={affiliation.facilityRegistrationNumber}>
+                              {affiliation.facilityName || "Unknown Facility"}
                             </EntityLink>
                           ) : (
-                            affiliation.facilityName || 'Unknown Facility'
+                            affiliation.facilityName || "Unknown Facility"
                           )}
                         </TableCell>
                         <TableCell className="text-muted-foreground text-start">
-                          {affiliation.role || 'Not specified'}
+                          {affiliation.role || "Not specified"}
                         </TableCell>
                         <TableCell className="text-right">
                           <Badge
                             variant={
-                              affiliation.status === 'Active'
-                                ? 'default'
-                                : affiliation.status === 'Pending'
-                                  ? 'secondary'
-                                  : 'outline'
+                              affiliation.status === "Active"
+                                ? "default"
+                                : affiliation.status === "Pending"
+                                ? "secondary"
+                                : "outline"
                             }
                           >
                             {affiliation.status}
@@ -233,7 +256,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
             <>
               <div className="flex items-center gap-2 mb-3">
                 <Award className="w-5 h-5 text-muted-foreground" />
-                <h3 className="text-sm font-semibold text-foreground text-start">Active Licenses</h3>
+                <h3 className="text-sm font-semibold text-foreground text-start">
+                  Active Licenses
+                </h3>
               </div>
               <div className="space-y-2">
                 {professional.licenses.map((license, index) => (
@@ -250,12 +275,12 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                         </EntityLink>
                         {license.expiryDate && (
                           <p className="text-sm text-muted-foreground text-start">
-                            Expires: {dayjs(license.expiryDate, 'YYYY-MM-DD').format('DD MMM YYYY')}
+                            Expires: {dayjs(license.expiryDate, "YYYY-MM-DD").format("DD MMM YYYY")}
                           </p>
                         )}
                       </div>
                       <Badge
-                        variant={license.status === 'Active' ? 'default' : 'outline'}
+                        variant={license.status === "Active" ? "default" : "outline"}
                         className="flex-shrink-0"
                       >
                         {license.status}
@@ -279,7 +304,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
               <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Mail className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground mb-1 text-start">Email Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">
+                    Email Address
+                  </p>
                   <a
                     href={`mailto:${professional.emailAddress}`}
                     className="text-sm text-primary hover:underline break-all text-start block"
@@ -294,7 +321,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
               <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <Phone className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground mb-1 text-start">Phone Number</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">
+                    Phone Number
+                  </p>
                   <a
                     href={`tel:${professional.phoneNumber}`}
                     className="text-sm text-primary hover:underline text-start block"
@@ -309,7 +338,9 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
               <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg border border-border">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground mb-1 text-start">Postal Address</p>
+                  <p className="text-sm font-medium text-foreground mb-1 text-start">
+                    Postal Address
+                  </p>
                   <p className="text-sm text-muted-foreground whitespace-pre-line text-start">
                     {professional.postalAddress}
                   </p>
@@ -317,12 +348,14 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
               </div>
             )}
 
-            {!professional.emailAddress && !professional.phoneNumber && !professional.postalAddress && (
-              <div className="text-center py-8 text-muted-foreground">
-                <Mail className="w-12 h-12 mx-auto mb-3 opacity-20" />
-                <p className="text-sm">No contact information available</p>
-              </div>
-            )}
+            {!professional.emailAddress &&
+              !professional.phoneNumber &&
+              !professional.postalAddress && (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Mail className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                  <p className="text-sm">No contact information available</p>
+                </div>
+              )}
           </div>
         </TabsContent>
       </Tabs>

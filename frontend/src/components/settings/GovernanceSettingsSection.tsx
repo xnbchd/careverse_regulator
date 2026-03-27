@@ -1,8 +1,8 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import type { GovernanceSettings } from '@/types/settings'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
+import type { GovernanceSettings } from "@/types/settings"
 
 interface GovernanceSettingsSectionProps {
   settings: GovernanceSettings
@@ -29,9 +29,7 @@ export default function GovernanceSettingsSection({
             id="inspectionFrequency"
             type="number"
             value={settings.defaultInspectionFrequency}
-            onChange={(e) =>
-              onUpdate({ defaultInspectionFrequency: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ defaultInspectionFrequency: parseInt(e.target.value) })}
             min={1}
             max={365}
           />
@@ -47,9 +45,7 @@ export default function GovernanceSettingsSection({
             id="gracePeriod"
             type="number"
             value={settings.complianceGracePeriod}
-            onChange={(e) =>
-              onUpdate({ complianceGracePeriod: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ complianceGracePeriod: parseInt(e.target.value) })}
             min={0}
             max={90}
           />
@@ -65,9 +61,7 @@ export default function GovernanceSettingsSection({
             id="autoApproval"
             type="number"
             value={settings.autoApprovalThreshold}
-            onChange={(e) =>
-              onUpdate({ autoApprovalThreshold: parseInt(e.target.value) })
-            }
+            onChange={(e) => onUpdate({ autoApprovalThreshold: parseInt(e.target.value) })}
             min={0}
             max={100}
           />

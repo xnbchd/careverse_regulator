@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -6,15 +6,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { AlertCircle, FileText, Loader2 } from 'lucide-react'
-import { createLicenseAppeal } from '@/api/licensingApi'
-import type { CreateLicenseAppealPayload } from '@/types/license'
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle, FileText, Loader2 } from "lucide-react"
+import { createLicenseAppeal } from "@/api/licensingApi"
+import type { CreateLicenseAppealPayload } from "@/types/license"
 
 interface SubmitAppealModalProps {
   isOpen: boolean
@@ -33,8 +33,8 @@ export default function SubmitAppealModal({
   facilityCode,
   onSuccess,
 }: SubmitAppealModalProps) {
-  const [reason, setReason] = useState('')
-  const [description, setDescription] = useState('')
+  const [reason, setReason] = useState("")
+  const [description, setDescription] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -42,7 +42,7 @@ export default function SubmitAppealModal({
     e.preventDefault()
 
     if (!reason.trim()) {
-      setError('Appeal reason is required')
+      setError("Appeal reason is required")
       return
     }
 
@@ -63,13 +63,13 @@ export default function SubmitAppealModal({
       await createLicenseAppeal(payload)
 
       // Success - reset form and close
-      setReason('')
-      setDescription('')
+      setReason("")
+      setDescription("")
       onSuccess?.()
       onClose()
     } catch (err: any) {
-      console.error('Failed to submit appeal:', err)
-      setError(err.message || 'Failed to submit appeal. Please try again.')
+      console.error("Failed to submit appeal:", err)
+      setError(err.message || "Failed to submit appeal. Please try again.")
     } finally {
       setSubmitting(false)
     }
@@ -77,8 +77,8 @@ export default function SubmitAppealModal({
 
   const handleClose = () => {
     if (!submitting) {
-      setReason('')
-      setDescription('')
+      setReason("")
+      setDescription("")
       setError(null)
       onClose()
     }
@@ -90,7 +90,8 @@ export default function SubmitAppealModal({
         <DialogHeader>
           <DialogTitle>Submit License Appeal</DialogTitle>
           <DialogDescription>
-            Appeal the decision for license <span className="font-mono font-semibold">{licenseNumber}</span>
+            Appeal the decision for license{" "}
+            <span className="font-mono font-semibold">{licenseNumber}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -135,9 +136,7 @@ export default function SubmitAppealModal({
               disabled={submitting}
               required
             />
-            <p className="text-xs text-muted-foreground">
-              {reason.length}/200 characters
-            </p>
+            <p className="text-xs text-muted-foreground">{reason.length}/200 characters</p>
           </div>
 
           <div className="space-y-2">
@@ -151,9 +150,7 @@ export default function SubmitAppealModal({
               maxLength={1000}
               disabled={submitting}
             />
-            <p className="text-xs text-muted-foreground">
-              {description.length}/1000 characters
-            </p>
+            <p className="text-xs text-muted-foreground">{description.length}/1000 characters</p>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -171,12 +168,7 @@ export default function SubmitAppealModal({
           </div>
 
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleClose}
-              disabled={submitting}
-            >
+            <Button type="button" variant="outline" onClick={handleClose} disabled={submitting}>
               Cancel
             </Button>
             <Button type="submit" disabled={submitting || !reason.trim()}>
@@ -186,7 +178,7 @@ export default function SubmitAppealModal({
                   Submitting...
                 </>
               ) : (
-                'Submit Appeal'
+                "Submit Appeal"
               )}
             </Button>
           </DialogFooter>

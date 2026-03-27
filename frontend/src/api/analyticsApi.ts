@@ -1,4 +1,4 @@
-import apiClient from './client'
+import apiClient from "./client"
 import type {
   LicenseStatistics,
   ExpiryWarning,
@@ -6,9 +6,9 @@ import type {
   InspectionStatistics,
   ComplianceMetrics,
   TrendData,
-} from '@/stores/analyticsStore'
+} from "@/stores/analyticsStore"
 
-const API_BASE = '/api/method/compliance_360.api.analytics'
+const API_BASE = "/api/method/compliance_360.api.analytics"
 
 export interface AnalyticsDashboardResponse {
   license_stats: {

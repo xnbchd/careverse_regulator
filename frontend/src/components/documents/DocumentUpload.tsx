@@ -1,21 +1,21 @@
-import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { useCallback, useState } from "react"
+import { useDropzone } from "react-dropzone"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { X, Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react'
-import { useDocumentStore } from '@/stores/documentStore'
+} from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { X, Upload, FileText, CheckCircle, AlertCircle } from "lucide-react"
+import { useDocumentStore } from "@/stores/documentStore"
 import {
   DocumentCategory,
   getCategoryLabel,
@@ -23,9 +23,9 @@ import {
   getFileIcon,
   SUPPORTED_FILE_TYPES,
   MAX_FILE_SIZE,
-} from '@/types/document'
-import type { DocumentUploadRequest } from '@/types/document'
-import { cn } from '@/lib/utils'
+} from "@/types/document"
+import type { DocumentUploadRequest } from "@/types/document"
+import { cn } from "@/lib/utils"
 
 interface DocumentUploadProps {
   defaultCategory?: DocumentCategory
@@ -53,9 +53,9 @@ export default function DocumentUpload({
   const [category, setCategory] = useState<DocumentCategory>(
     defaultCategory || DocumentCategory.OTHER
   )
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState("")
   const [tags, setTags] = useState<string[]>([])
-  const [tagInput, setTagInput] = useState('')
+  const [tagInput, setTagInput] = useState("")
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Filter files by size
@@ -83,7 +83,7 @@ export default function DocumentUpload({
   const addTag = () => {
     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
       setTags([...tags, tagInput.trim()])
-      setTagInput('')
+      setTagInput("")
     }
   }
 
@@ -109,7 +109,7 @@ export default function DocumentUpload({
 
     // Clear form
     setSelectedFiles([])
-    setDescription('')
+    setDescription("")
     setTags([])
 
     if (onUploadComplete) {
@@ -132,10 +132,10 @@ export default function DocumentUpload({
         <div
           {...getRootProps()}
           className={cn(
-            'border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors',
+            "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
             isDragActive
-              ? 'border-primary bg-primary/5'
-              : 'border-border hover:border-primary/50 hover:bg-accent/50'
+              ? "border-primary bg-primary/5"
+              : "border-border hover:border-primary/50 hover:bg-accent/50"
           )}
         >
           <input {...getInputProps()} />
@@ -144,9 +144,7 @@ export default function DocumentUpload({
             <p className="text-sm font-medium">Drop files here...</p>
           ) : (
             <>
-              <p className="text-sm font-medium mb-1">
-                Drag & drop files here, or click to select
-              </p>
+              <p className="text-sm font-medium mb-1">Drag & drop files here, or click to select</p>
               <p className="text-xs text-muted-foreground">
                 Supported: PDF, Word, Excel, Images (max {formatFileSize(MAX_FILE_SIZE)})
               </p>
@@ -168,9 +166,7 @@ export default function DocumentUpload({
                     <span className="text-lg">{getFileIcon(file.type)}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{file.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatFileSize(file.size)}
-                      </p>
+                      <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
                     </div>
                   </div>
                   <Button
@@ -226,7 +222,7 @@ export default function DocumentUpload({
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === "Enter") {
                   e.preventDefault()
                   addTag()
                 }
@@ -241,10 +237,7 @@ export default function DocumentUpload({
               {tags.map((tag) => (
                 <Badge key={tag} variant="secondary" className="gap-1">
                   {tag}
-                  <X
-                    className="w-3 h-3 cursor-pointer"
-                    onClick={() => removeTag(tag)}
-                  />
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => removeTag(tag)} />
                 </Badge>
               ))}
             </div>
@@ -256,12 +249,7 @@ export default function DocumentUpload({
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label>Upload Progress</Label>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={clearAllUploads}
-                disabled={uploading}
-              >
+              <Button size="sm" variant="ghost" onClick={clearAllUploads} disabled={uploading}>
                 Clear
               </Button>
             </div>
@@ -272,28 +260,28 @@ export default function DocumentUpload({
                   <div key={fileId} className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        {upload.status === 'completed' && (
+                        {upload.status === "completed" && (
                           <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
                         )}
-                        {upload.status === 'error' && (
+                        {upload.status === "error" && (
                           <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
                         )}
-                        {upload.status === 'uploading' && (
+                        {upload.status === "uploading" && (
                           <FileText className="w-4 h-4 text-blue-600 shrink-0" />
                         )}
                         <span className="truncate">{upload.file.name}</span>
                       </div>
                       <span className="text-xs text-muted-foreground shrink-0">
-                        {upload.status === 'completed' && 'Done'}
-                        {upload.status === 'error' && 'Failed'}
-                        {upload.status === 'uploading' && `${upload.progress}%`}
-                        {upload.status === 'pending' && 'Waiting'}
+                        {upload.status === "completed" && "Done"}
+                        {upload.status === "error" && "Failed"}
+                        {upload.status === "uploading" && `${upload.progress}%`}
+                        {upload.status === "pending" && "Waiting"}
                       </span>
                     </div>
-                    {upload.status === 'uploading' && (
+                    {upload.status === "uploading" && (
                       <Progress value={upload.progress} className="h-1" />
                     )}
-                    {upload.status === 'error' && (
+                    {upload.status === "error" && (
                       <p className="text-xs text-red-600">{upload.error}</p>
                     )}
                   </div>
@@ -317,7 +305,7 @@ export default function DocumentUpload({
           ) : (
             <>
               <Upload className="w-4 h-4 mr-2" />
-              Upload {selectedFiles.length > 0 ? `${selectedFiles.length} file(s)` : 'Documents'}
+              Upload {selectedFiles.length > 0 ? `${selectedFiles.length} file(s)` : "Documents"}
             </>
           )}
         </Button>

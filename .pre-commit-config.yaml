@@ -1,7 +1,6 @@
-exclude: 'node_modules|.git'
+exclude: "node_modules|.git"
 default_stages: [pre-commit]
 fail_fast: false
-
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -34,36 +33,41 @@ repos:
     rev: v2.7.1
     hooks:
       - id: prettier
-        types_or: [javascript, vue, scss]
+        types_or: [javascript, jsx, ts, tsx, vue, scss, css, json, yaml, markdown]
         # Ignore any files that might contain jinja / bundles
         exclude: |
-            (?x)^(
-                careverse_regulator/public/dist/.*|
-                .*node_modules.*|
-                .*boilerplate.*|
-                careverse_regulator/templates/includes/.*|
-                careverse_regulator/public/js/lib/.*
-            )$
-
+          (?x)^(
+              careverse_regulator/public/dist/.*|
+              frontend/dist/.*|
+              frontend/node_modules/.*|
+              .*node_modules.*|
+              .*boilerplate.*|
+              careverse_regulator/templates/includes/.*|
+              careverse_regulator/public/js/lib/.*|
+              frontend/src/routeTree.gen.ts
+          )$
 
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v8.44.0
     hooks:
       - id: eslint
-        types_or: [javascript]
-        args: ['--quiet']
+        types_or: [javascript, jsx, ts, tsx]
+        args: ["--quiet"]
         # Ignore any files that might contain jinja / bundles
         exclude: |
-            (?x)^(
-                careverse_regulator/public/dist/.*|
-                cypress/.*|
-                .*node_modules.*|
-                .*boilerplate.*|
-                careverse_regulator/templates/includes/.*|
-                careverse_regulator/public/js/lib/.*
-            )$
+          (?x)^(
+              careverse_regulator/public/dist/.*|
+              frontend/dist/.*|
+              frontend/node_modules/.*|
+              cypress/.*|
+              .*node_modules.*|
+              .*boilerplate.*|
+              careverse_regulator/templates/includes/.*|
+              careverse_regulator/public/js/lib/.*|
+              frontend/src/routeTree.gen.ts
+          )$
 
 ci:
-    autoupdate_schedule: weekly
-    skip: []
-    submodules: false
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

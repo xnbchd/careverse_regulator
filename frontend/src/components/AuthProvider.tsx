@@ -1,9 +1,9 @@
-import { useEffect, useState, type ReactNode } from 'react'
-import { RotateCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Result } from '@/components/ui/result'
-import { Spinner } from '@/components/ui/spinner'
-import { useAuthStore } from '@/stores/authStore'
+import { useEffect, useState, type ReactNode } from "react"
+import { RotateCw } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Result } from "@/components/ui/result"
+import { Spinner } from "@/components/ui/spinner"
+import { useAuthStore } from "@/stores/authStore"
 
 interface AuthProviderProps {
   children: ReactNode
@@ -27,7 +27,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
         // Set timeout
         timeoutId = setTimeout(() => {
-          if (mounted && status === 'loading') {
+          if (mounted && status === "loading") {
             setTimedOut(true)
           }
         }, AUTH_TIMEOUT_MS)
@@ -35,7 +35,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         await initialize()
       } catch (err) {
         if (mounted) {
-          setError(err instanceof Error ? err : new Error('Authentication failed'))
+          setError(err instanceof Error ? err : new Error("Authentication failed"))
         }
       } finally {
         if (timeoutId) {
@@ -99,7 +99,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   }
 
   // Show loading state
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Spinner className="w-8 h-8" />

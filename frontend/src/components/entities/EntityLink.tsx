@@ -1,5 +1,5 @@
-import { useEntityDrawer } from '@/contexts/EntityDrawerContext'
-import type { EntityType } from '@/types/entity'
+import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
+import type { EntityType } from "@/types/entity"
 
 interface EntityLinkProps {
   type: EntityType
@@ -8,7 +8,7 @@ interface EntityLinkProps {
   className?: string
 }
 
-export function EntityLink({ type, id, children, className = '' }: EntityLinkProps) {
+export function EntityLink({ type, id, children, className = "" }: EntityLinkProps) {
   const { openDrawer } = useEntityDrawer()
 
   return (

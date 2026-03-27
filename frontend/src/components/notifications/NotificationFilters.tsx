@@ -1,15 +1,15 @@
-import { Search, Filter } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Search, Filter } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import type { NotificationFilters as Filters } from '@/types/notification'
+} from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import type { NotificationFilters as Filters } from "@/types/notification"
 
 interface NotificationFiltersProps {
   filters: Filters
@@ -25,9 +25,9 @@ export default function NotificationFilters({
   unreadCount,
 }: NotificationFiltersProps) {
   const hasActiveFilters =
-    filters.type !== 'all' ||
-    filters.status !== 'all' ||
-    filters.priority !== 'all' ||
+    filters.type !== "all" ||
+    filters.status !== "all" ||
+    filters.priority !== "all" ||
     !!filters.search
 
   return (
@@ -37,7 +37,7 @@ export default function NotificationFilters({
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder="Search notifications..."
-          value={filters.search || ''}
+          value={filters.search || ""}
           onChange={(e) => onFilterChange({ search: e.target.value })}
           className="pl-10"
         />
@@ -54,7 +54,7 @@ export default function NotificationFilters({
 
         {/* Type Filter */}
         <Select
-          value={filters.type || 'all'}
+          value={filters.type || "all"}
           onValueChange={(value) => onFilterChange({ type: value as any })}
         >
           <SelectTrigger className="w-[160px]">
@@ -72,7 +72,7 @@ export default function NotificationFilters({
 
         {/* Status Filter */}
         <Select
-          value={filters.status || 'all'}
+          value={filters.status || "all"}
           onValueChange={(value) => onFilterChange({ status: value as any })}
         >
           <SelectTrigger className="w-[140px]">
@@ -87,7 +87,7 @@ export default function NotificationFilters({
 
         {/* Priority Filter */}
         <Select
-          value={filters.priority || 'all'}
+          value={filters.priority || "all"}
           onValueChange={(value) => onFilterChange({ priority: value as any })}
         >
           <SelectTrigger className="w-[140px]">
@@ -103,12 +103,7 @@ export default function NotificationFilters({
 
         {/* Clear Filters */}
         {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClearFilters}
-            className="ml-auto"
-          >
+          <Button variant="ghost" size="sm" onClick={onClearFilters} className="ml-auto">
             Clear Filters
           </Button>
         )}

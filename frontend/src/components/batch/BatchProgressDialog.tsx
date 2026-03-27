@@ -4,15 +4,15 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Progress } from '@/components/ui/progress'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Badge } from '@/components/ui/badge'
-import { Loader2, CheckCircle, XCircle, Clock, X } from 'lucide-react'
-import { BatchOperation, BatchItemStatus, getBatchActionLabel } from '@/types/batch'
-import { formatDuration } from '@/types/batch'
-import { cn } from '@/lib/utils'
+} from "@/components/ui/dialog"
+import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Badge } from "@/components/ui/badge"
+import { Loader2, CheckCircle, XCircle, Clock, X } from "lucide-react"
+import { BatchOperation, BatchItemStatus, getBatchActionLabel } from "@/types/batch"
+import { formatDuration } from "@/types/batch"
+import { cn } from "@/lib/utils"
 
 interface BatchProgressDialogProps {
   open: boolean
@@ -30,7 +30,7 @@ export function BatchProgressDialog({
   if (!operation) return null
 
   const { progress } = operation
-  const isRunning = operation.status === 'running'
+  const isRunning = operation.status === "running"
   const actionLabel = getBatchActionLabel(operation.type)
 
   const getItemIcon = (status: BatchItemStatus) => {
@@ -51,15 +51,15 @@ export function BatchProgressDialog({
   const getItemStatusColor = (status: BatchItemStatus) => {
     switch (status) {
       case BatchItemStatus.SUCCESS:
-        return 'text-green-600'
+        return "text-green-600"
       case BatchItemStatus.FAILED:
-        return 'text-red-600'
+        return "text-red-600"
       case BatchItemStatus.PROCESSING:
-        return 'text-blue-600'
+        return "text-blue-600"
       case BatchItemStatus.SKIPPED:
-        return 'text-gray-600'
+        return "text-gray-600"
       default:
-        return 'text-muted-foreground'
+        return "text-muted-foreground"
     }
   }
 
@@ -71,9 +71,7 @@ export function BatchProgressDialog({
             {isRunning && <Loader2 className="w-5 h-5 animate-spin" />}
             {actionLabel} - In Progress
           </DialogTitle>
-          <DialogDescription>
-            Processing {progress.total} items. Please wait...
-          </DialogDescription>
+          <DialogDescription>Processing {progress.total} items. Please wait...</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
@@ -114,9 +112,7 @@ export function BatchProgressDialog({
             <div className="flex flex-col items-center p-3 border rounded-lg">
               <div className="flex items-center gap-1 text-muted-foreground mb-1">
                 <Clock className="w-4 h-4" />
-                <span className="text-lg font-semibold">
-                  {progress.total - progress.processed}
-                </span>
+                <span className="text-lg font-semibold">{progress.total - progress.processed}</span>
               </div>
               <span className="text-xs text-muted-foreground">Pending</span>
             </div>
@@ -151,7 +147,10 @@ export function BatchProgressDialog({
                       <span className="text-sm truncate">{item.id}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={cn('text-xs', getItemStatusColor(item.status))}>
+                      <Badge
+                        variant="outline"
+                        className={cn("text-xs", getItemStatusColor(item.status))}
+                      >
                         {item.status}
                       </Badge>
                     </div>

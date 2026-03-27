@@ -1,22 +1,22 @@
-import { useState } from 'react'
-import { X, Download, ExternalLink } from 'lucide-react'
+import { useState } from "react"
+import { X, Download, ExternalLink } from "lucide-react"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import type { Document } from '@/types/document'
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import type { Document } from "@/types/document"
 import {
   getCategoryLabel,
   getCategoryColor,
   formatFileSize,
   isPreviewSupported,
-} from '@/types/document'
-import { format } from 'date-fns'
+} from "@/types/document"
+import { format } from "date-fns"
 
 interface DocumentPreviewProps {
   document: Document | null
@@ -36,8 +36,8 @@ export default function DocumentPreview({
   if (!document) return null
 
   const canPreview = isPreviewSupported(document.mimeType) && !imageError
-  const isPDF = document.mimeType === 'application/pdf'
-  const isImage = document.mimeType.startsWith('image/')
+  const isPDF = document.mimeType === "application/pdf"
+  const isImage = document.mimeType.startsWith("image/")
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -54,7 +54,7 @@ export default function DocumentPreview({
                   <span>•</span>
                   <span>{formatFileSize(document.fileSize)}</span>
                   <span>•</span>
-                  <span>Uploaded {format(new Date(document.uploadedAt), 'MMM d, yyyy')}</span>
+                  <span>Uploaded {format(new Date(document.uploadedAt), "MMM d, yyyy")}</span>
                 </div>
               </DialogDescription>
             </div>
@@ -84,9 +84,7 @@ export default function DocumentPreview({
           ) : (
             <div className="bg-muted rounded-lg p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
               <p className="text-muted-foreground mb-4">
-                {imageError
-                  ? 'Failed to load preview'
-                  : 'Preview not available for this file type'}
+                {imageError ? "Failed to load preview" : "Preview not available for this file type"}
               </p>
               <Button onClick={onDownload} variant="outline">
                 <Download className="w-4 h-4 mr-2" />
@@ -135,7 +133,7 @@ export default function DocumentPreview({
               <div>
                 <h4 className="font-medium mb-1">Uploaded At</h4>
                 <p className="text-muted-foreground">
-                  {format(new Date(document.uploadedAt), 'PPP p')}
+                  {format(new Date(document.uploadedAt), "PPP p")}
                 </p>
               </div>
               <div>
@@ -145,7 +143,7 @@ export default function DocumentPreview({
               <div>
                 <h4 className="font-medium mb-1">Last Modified</h4>
                 <p className="text-muted-foreground">
-                  {format(new Date(document.updatedAt), 'PPP p')}
+                  {format(new Date(document.updatedAt), "PPP p")}
                 </p>
               </div>
             </div>

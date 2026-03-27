@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react'
-import { useResponsive } from '@/hooks/useResponsive'
-import dayjs from 'dayjs'
-import { Calendar as CalendarIcon, AlertCircle, X, ChevronsUpDown, Check } from 'lucide-react'
+import { useState, useMemo } from "react"
+import { useResponsive } from "@/hooks/useResponsive"
+import dayjs from "dayjs"
+import { Calendar as CalendarIcon, AlertCircle, X, ChevronsUpDown, Check } from "lucide-react"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog"
 import {
   Command,
   CommandEmpty,
@@ -16,14 +16,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Calendar } from '@/components/ui/calendar'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { cn } from '@/lib/utils'
+} from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { Calendar } from "@/components/ui/calendar"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { cn } from "@/lib/utils"
 
 interface ScheduleInspectionModalProps {
   open: boolean
@@ -35,7 +35,7 @@ interface ScheduleInspectionModalProps {
     date: string
     note: string
   }
-  setFormData: (data: ScheduleInspectionModalProps['formData']) => void
+  setFormData: (data: ScheduleInspectionModalProps["formData"]) => void
   facilities: Array<{ value: string; label: string }>
   inspectors: Array<{ value: string; label: string }>
   loading?: boolean
@@ -58,29 +58,31 @@ export default function ScheduleInspectionModal({
   const [inspectorOpen, setInspectorOpen] = useState(false)
   const [datePickerOpen, setDatePickerOpen] = useState(false)
 
-  const selectedDate = formData.date ? dayjs(formData.date, 'DD/MM/YYYY').toDate() : undefined
+  const selectedDate = formData.date ? dayjs(formData.date, "DD/MM/YYYY").toDate() : undefined
 
   const selectedFacilityLabel = useMemo(
-    () => facilities.find((f) => f.value === formData.facility)?.label || '',
+    () => facilities.find((f) => f.value === formData.facility)?.label || "",
     [facilities, formData.facility]
   )
 
   const selectedInspectorLabel = useMemo(
-    () => inspectors.find((i) => i.value === formData.inspector)?.label || '',
+    () => inspectors.find((i) => i.value === formData.inspector)?.label || "",
     [inspectors, formData.inspector]
   )
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className={cn(
-        'gap-0 max-h-[90vh] flex flex-col p-0',
-        isMobile ? 'w-full h-full max-w-full rounded-none' : 'max-w-[640px]'
-      )}>
+      <DialogContent
+        className={cn(
+          "gap-0 max-h-[90vh] flex flex-col p-0",
+          isMobile ? "w-full h-full max-w-full rounded-none" : "max-w-[640px]"
+        )}
+      >
         <DialogHeader className="px-6 pt-6 pb-4 shrink-0 border-b">
-          <DialogTitle className={cn('text-start', isMobile ? 'text-base' : 'text-lg')}>
+          <DialogTitle className={cn("text-start", isMobile ? "text-base" : "text-lg")}>
             Facility Inspection
           </DialogTitle>
-          <DialogDescription className={cn('text-start', isMobile ? 'text-xs' : 'text-sm')}>
+          <DialogDescription className={cn("text-start", isMobile ? "text-xs" : "text-sm")}>
             Fill in the details below to generate report
           </DialogDescription>
         </DialogHeader>
@@ -90,9 +92,7 @@ export default function ScheduleInspectionModal({
             {error && (
               <Alert variant="destructive" className="relative pr-10">
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription className="flex-1">
-                  {error}
-                </AlertDescription>
+                <AlertDescription className="flex-1">{error}</AlertDescription>
                 <button
                   onClick={() => {}}
                   className="absolute top-3 right-3 text-destructive hover:text-destructive/90"
@@ -114,11 +114,16 @@ export default function ScheduleInspectionModal({
                     aria-expanded={facilityOpen}
                     className="w-full justify-between h-10"
                   >
-                    <span className="truncate text-start">{selectedFacilityLabel || "Select Facility"}</span>
+                    <span className="truncate text-start">
+                      {selectedFacilityLabel || "Select Facility"}
+                    </span>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+                <PopoverContent
+                  className="w-[var(--radix-popover-trigger-width)] p-0"
+                  align="start"
+                >
                   <Command>
                     <CommandInput placeholder="Search facility..." />
                     <CommandList>
@@ -161,11 +166,16 @@ export default function ScheduleInspectionModal({
                     aria-expanded={inspectorOpen}
                     className="w-full justify-between h-10"
                   >
-                    <span className="truncate text-start">{selectedInspectorLabel || "Select Inspector"}</span>
+                    <span className="truncate text-start">
+                      {selectedInspectorLabel || "Select Inspector"}
+                    </span>
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+                <PopoverContent
+                  className="w-[var(--radix-popover-trigger-width)] p-0"
+                  align="start"
+                >
                   <Command>
                     <CommandInput placeholder="Search inspector..." />
                     <CommandList>
@@ -206,12 +216,12 @@ export default function ScheduleInspectionModal({
                     id="date"
                     variant="outline"
                     className={cn(
-                      'w-full h-10 justify-start text-left font-normal text-start',
-                      !formData.date && 'text-muted-foreground'
+                      "w-full h-10 justify-start text-left font-normal text-start",
+                      !formData.date && "text-muted-foreground"
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4 shrink-0" />
-                    <span className="truncate text-start">{formData.date || 'Pick a date'}</span>
+                    <span className="truncate text-start">{formData.date || "Pick a date"}</span>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -220,12 +230,12 @@ export default function ScheduleInspectionModal({
                     selected={selectedDate}
                     onSelect={(date) => {
                       if (date) {
-                        setFormData({ ...formData, date: dayjs(date).format('DD/MM/YYYY') })
+                        setFormData({ ...formData, date: dayjs(date).format("DD/MM/YYYY") })
                         setDatePickerOpen(false)
                       }
                     }}
                     disabled={(date) => {
-                      const today = dayjs().startOf('day')
+                      const today = dayjs().startOf("day")
                       return dayjs(date).isBefore(today)
                     }}
                     initialFocus
@@ -251,24 +261,21 @@ export default function ScheduleInspectionModal({
         </div>
 
         <div className="shrink-0 border-t px-6 py-4 bg-background">
-          <div className={cn(
-            'flex gap-3',
-            isMobile ? 'flex-col-reverse' : 'flex-row'
-          )}>
+          <div className={cn("flex gap-3", isMobile ? "flex-col-reverse" : "flex-row")}>
             <Button
               variant="outline"
               onClick={onClose}
               disabled={loading}
-              className={cn('flex-1', isMobile && 'w-full')}
+              className={cn("flex-1", isMobile && "w-full")}
             >
               Cancel
             </Button>
             <Button
               onClick={onSubmit}
               disabled={!formData.facility || !formData.inspector || !formData.date || loading}
-              className={cn('flex-1', isMobile && 'w-full')}
+              className={cn("flex-1", isMobile && "w-full")}
             >
-              {loading ? 'Scheduling...' : 'Schedule Inspection'}
+              {loading ? "Scheduling..." : "Schedule Inspection"}
             </Button>
           </div>
         </div>

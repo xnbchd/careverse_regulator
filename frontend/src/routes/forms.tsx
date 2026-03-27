@@ -1,13 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
-import AppLayout from '@/components/AppLayout'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { FileText, RefreshCw, AlertCircle, Save } from 'lucide-react'
-import { useFormsStore } from '@/stores/formsStore'
-import { useAuthStore } from '@/stores/authStore'
-import { format } from 'date-fns'
+import { createFileRoute } from "@tanstack/react-router"
+import AppLayout from "@/components/AppLayout"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { FileText, RefreshCw, AlertCircle, Save } from "lucide-react"
+import { useFormsStore } from "@/stores/formsStore"
+import { useAuthStore } from "@/stores/authStore"
+import { format } from "date-fns"
 
-export const Route = createFileRoute('/forms')({
+export const Route = createFileRoute("/forms")({
   component: FormsPage,
 })
 
@@ -21,18 +21,18 @@ function FormsPage() {
   }
 
   const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
+    window.location.href = "/logout?redirect-to=/"
   }
 
   const handleSwitchToDesk = () => {
-    window.location.href = '/app'
+    window.location.href = "/app"
   }
 
   const getFormTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
-      license_application: 'License Application',
-      license_renewal: 'License Renewal',
-      license_appeal: 'License Appeal',
+      license_application: "License Application",
+      license_renewal: "License Renewal",
+      license_appeal: "License Appeal",
     }
     return labels[type] || type
   }
@@ -43,7 +43,7 @@ function FormsPage() {
       pageTitle="Forms"
       pageSubtitle="Submit applications, renewals, and appeals"
       onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onOpenNotifications={() => handleNavigate("notifications-center")}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
@@ -64,7 +64,7 @@ function FormsPage() {
               <CardContent>
                 <Button
                   className="w-full"
-                  onClick={() => alert('License application form - implementation pending')}
+                  onClick={() => alert("License application form - implementation pending")}
                 >
                   Start Application
                 </Button>
@@ -82,7 +82,7 @@ function FormsPage() {
               <CardContent>
                 <Button
                   className="w-full"
-                  onClick={() => alert('License renewal form - implementation pending')}
+                  onClick={() => alert("License renewal form - implementation pending")}
                 >
                   Start Renewal
                 </Button>
@@ -100,7 +100,7 @@ function FormsPage() {
               <CardContent>
                 <Button
                   className="w-full"
-                  onClick={() => alert('Appeal submission form - implementation pending')}
+                  onClick={() => alert("Appeal submission form - implementation pending")}
                 >
                   Start Appeal
                 </Button>
@@ -131,17 +131,15 @@ function FormsPage() {
                       <div>
                         <CardTitle>{getFormTypeLabel(draft.formType)}</CardTitle>
                         <CardDescription>
-                          Last saved: {format(new Date(draft.lastSaved), 'PPp')}
-                          {' • '}
+                          Last saved: {format(new Date(draft.lastSaved), "PPp")}
+                          {" • "}
                           Step {draft.currentStep + 1}
                         </CardDescription>
                       </div>
                       <div className="flex gap-2">
                         <Button
                           onClick={() =>
-                            alert(
-                              `Continue draft ${draft.id} - Form implementation pending`
-                            )
+                            alert(`Continue draft ${draft.id} - Form implementation pending`)
                           }
                         >
                           Continue
@@ -151,7 +149,7 @@ function FormsPage() {
                           onClick={() => {
                             if (
                               confirm(
-                                'Are you sure you want to delete this draft? This action cannot be undone.'
+                                "Are you sure you want to delete this draft? This action cannot be undone."
                               )
                             ) {
                               deleteDraft(draft.id)

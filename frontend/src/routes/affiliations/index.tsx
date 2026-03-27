@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { AffiliationsDashboard } from '@/components/affiliations/AffiliationsDashboard'
-import { useRegistryStore } from '@/stores/registryStore'
+import { createFileRoute } from "@tanstack/react-router"
+import { AffiliationsDashboard } from "@/components/affiliations/AffiliationsDashboard"
+import { useRegistryStore } from "@/stores/registryStore"
 
-export const Route = createFileRoute('/affiliations/')({
+export const Route = createFileRoute("/affiliations/")({
   loader: () =>
     Promise.all([
       // Fetch minimal data just for counts

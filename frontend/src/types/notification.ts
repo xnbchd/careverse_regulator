@@ -1,5 +1,5 @@
-export type NotificationType = 'alert' | 'reminder' | 'followup' | 'system'
-export type NotificationPriority = 'high' | 'medium' | 'low'
+export type NotificationType = "alert" | "reminder" | "followup" | "system"
+export type NotificationPriority = "high" | "medium" | "low"
 
 export interface Notification {
   id: string
@@ -16,9 +16,9 @@ export interface Notification {
 
 export interface NotificationFilters {
   search?: string
-  type?: NotificationType | 'all'
-  status?: 'read' | 'unread' | 'all'
-  priority?: NotificationPriority | 'all'
+  type?: NotificationType | "all"
+  status?: "read" | "unread" | "all"
+  priority?: NotificationPriority | "all"
   dateRange?: {
     start: string
     end: string

@@ -1,20 +1,13 @@
-import { useAnalyticsStore } from '@/stores/analyticsStore'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import StatCard from './StatCard'
-import ExpiryWarningsTable from './ExpiryWarningsTable'
-import TrendChart from './TrendChart'
-import ComplianceOverview from './ComplianceOverview'
-import {
-  FileText,
-  Users,
-  ClipboardCheck,
-  AlertTriangle,
-  RefreshCw,
-  TrendingUp,
-} from 'lucide-react'
-import { useNavigate } from '@tanstack/react-router'
+import { useAnalyticsStore } from "@/stores/analyticsStore"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
+import StatCard from "./StatCard"
+import ExpiryWarningsTable from "./ExpiryWarningsTable"
+import TrendChart from "./TrendChart"
+import ComplianceOverview from "./ComplianceOverview"
+import { FileText, Users, ClipboardCheck, AlertTriangle, RefreshCw, TrendingUp } from "lucide-react"
+import { useNavigate } from "@tanstack/react-router"
 
 export default function AnalyticsDashboard() {
   const navigate = useNavigate()
@@ -82,7 +75,7 @@ export default function AnalyticsDashboard() {
           </p>
         </div>
         <Button onClick={refreshData} variant="outline" disabled={loading}>
-          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -93,10 +86,12 @@ export default function AnalyticsDashboard() {
           title="Total Licenses"
           value={licenseStats?.total || 0}
           icon={FileText}
-          description={`${licenseStats?.active || 0} active, ${licenseStats?.expiringSoon || 0} expiring soon`}
+          description={`${licenseStats?.active || 0} active, ${
+            licenseStats?.expiringSoon || 0
+          } expiring soon`}
           trend={{
             value: 2.5,
-            label: 'from last month',
+            label: "from last month",
             isPositive: true,
           }}
         />
@@ -104,10 +99,12 @@ export default function AnalyticsDashboard() {
           title="Affiliations"
           value={affiliationStats?.total || 0}
           icon={Users}
-          description={`${affiliationStats?.active || 0} active, ${affiliationStats?.pending || 0} pending`}
+          description={`${affiliationStats?.active || 0} active, ${
+            affiliationStats?.pending || 0
+          } pending`}
           trend={{
             value: 4.2,
-            label: 'from last month',
+            label: "from last month",
             isPositive: true,
           }}
         />
@@ -115,10 +112,12 @@ export default function AnalyticsDashboard() {
           title="Inspections"
           value={inspectionStats?.total || 0}
           icon={ClipboardCheck}
-          description={`${inspectionStats?.completed || 0} completed, ${inspectionStats?.scheduled || 0} scheduled`}
+          description={`${inspectionStats?.completed || 0} completed, ${
+            inspectionStats?.scheduled || 0
+          } scheduled`}
           trend={{
             value: 1.8,
-            label: 'from last month',
+            label: "from last month",
             isPositive: true,
           }}
         />
@@ -129,7 +128,7 @@ export default function AnalyticsDashboard() {
           description={`${complianceMetrics?.pendingActions || 0} pending actions`}
           trend={{
             value: 0.5,
-            label: 'from last month',
+            label: "from last month",
             isPositive: true,
           }}
         />
@@ -138,7 +137,10 @@ export default function AnalyticsDashboard() {
       {/* License Status Breakdown */}
       {licenseStats && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-          <Card className="cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => navigate({ to: '/license-management' })}>
+          <Card
+            className="cursor-pointer hover:bg-muted/50 transition-colors"
+            onClick={() => navigate({ to: "/license-management" })}
+          >
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-green-600">Active</CardTitle>
             </CardHeader>
@@ -150,7 +152,10 @@ export default function AnalyticsDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => navigate({ to: '/license-management' })}>
+          <Card
+            className="cursor-pointer hover:bg-muted/50 transition-colors"
+            onClick={() => navigate({ to: "/license-management" })}
+          >
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-amber-600">Expiring Soon</CardTitle>
             </CardHeader>
@@ -160,7 +165,10 @@ export default function AnalyticsDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => navigate({ to: '/license-management' })}>
+          <Card
+            className="cursor-pointer hover:bg-muted/50 transition-colors"
+            onClick={() => navigate({ to: "/license-management" })}
+          >
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-red-600">Expired</CardTitle>
             </CardHeader>
@@ -170,7 +178,10 @@ export default function AnalyticsDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => navigate({ to: '/license-management' })}>
+          <Card
+            className="cursor-pointer hover:bg-muted/50 transition-colors"
+            onClick={() => navigate({ to: "/license-management" })}
+          >
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-orange-600">Suspended</CardTitle>
             </CardHeader>
@@ -180,7 +191,10 @@ export default function AnalyticsDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => navigate({ to: '/license-management' })}>
+          <Card
+            className="cursor-pointer hover:bg-muted/50 transition-colors"
+            onClick={() => navigate({ to: "/license-management" })}
+          >
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-blue-600">Pending</CardTitle>
             </CardHeader>
@@ -195,14 +209,10 @@ export default function AnalyticsDashboard() {
       {/* Charts and Tables */}
       <div className="grid gap-4 md:grid-cols-2">
         {/* Trend Chart */}
-        {trendData.length > 0 && (
-          <TrendChart data={trendData} />
-        )}
+        {trendData.length > 0 && <TrendChart data={trendData} />}
 
         {/* Compliance Overview */}
-        {complianceMetrics && (
-          <ComplianceOverview metrics={complianceMetrics} />
-        )}
+        {complianceMetrics && <ComplianceOverview metrics={complianceMetrics} />}
       </div>
 
       {/* Expiry Warnings */}
@@ -215,11 +225,9 @@ export default function AnalyticsDashboard() {
                   <AlertTriangle className="w-5 h-5 text-amber-500" />
                   License Expiry Warnings
                 </CardTitle>
-                <CardDescription>
-                  Licenses expiring in the next 30 days
-                </CardDescription>
+                <CardDescription>Licenses expiring in the next 30 days</CardDescription>
               </div>
-              <Button variant="outline" onClick={() => navigate({ to: '/license-management' })}>
+              <Button variant="outline" onClick={() => navigate({ to: "/license-management" })}>
                 View All
               </Button>
             </div>

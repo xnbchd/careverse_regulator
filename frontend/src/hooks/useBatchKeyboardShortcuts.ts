@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from "react"
 
 interface UseBatchKeyboardShortcutsOptions {
   onSelectAll?: () => void
@@ -30,37 +30,33 @@ export function useBatchKeyboardShortcuts({
 
       // Check if user is typing in an input/textarea
       const target = event.target as HTMLElement
-      if (
-        target.tagName === 'INPUT' ||
-        target.tagName === 'TEXTAREA' ||
-        target.isContentEditable
-      ) {
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
         return
       }
 
-      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0
       const ctrlOrCmd = isMac ? event.metaKey : event.ctrlKey
 
       // Ctrl/Cmd + A: Select all
-      if (ctrlOrCmd && event.key === 'a' && onSelectAll) {
+      if (ctrlOrCmd && event.key === "a" && onSelectAll) {
         event.preventDefault()
         onSelectAll()
       }
 
       // Escape: Clear selection
-      if (event.key === 'Escape' && onClearSelection) {
+      if (event.key === "Escape" && onClearSelection) {
         event.preventDefault()
         onClearSelection()
       }
 
       // Ctrl/Cmd + Z: Undo
-      if (ctrlOrCmd && event.key === 'z' && !event.shiftKey && onUndo) {
+      if (ctrlOrCmd && event.key === "z" && !event.shiftKey && onUndo) {
         event.preventDefault()
         onUndo()
       }
 
       // Delete key: Delete selected items
-      if (event.key === 'Delete' && onDelete) {
+      if (event.key === "Delete" && onDelete) {
         event.preventDefault()
         onDelete()
       }
@@ -70,9 +66,9 @@ export function useBatchKeyboardShortcuts({
 
   useEffect(() => {
     if (enabled) {
-      document.addEventListener('keydown', handleKeyDown)
+      document.addEventListener("keydown", handleKeyDown)
       return () => {
-        document.removeEventListener('keydown', handleKeyDown)
+        document.removeEventListener("keydown", handleKeyDown)
       }
     }
   }, [enabled, handleKeyDown])

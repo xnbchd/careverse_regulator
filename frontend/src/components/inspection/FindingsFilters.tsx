@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import { Search, Filter, ArrowUpDown } from 'lucide-react'
-import { useResponsive } from '@/hooks/useResponsive'
-import DateRangeSelector, { type DateRange } from './DateRangeSelector'
-import FilterTags, { type FilterTag } from './FilterTags'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Checkbox } from '@/components/ui/checkbox'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
+import { useState } from "react"
+import { Search, Filter, ArrowUpDown } from "lucide-react"
+import { useResponsive } from "@/hooks/useResponsive"
+import DateRangeSelector, { type DateRange } from "./DateRangeSelector"
+import FilterTags, { type FilterTag } from "./FilterTags"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 interface FindingsFiltersProps {
   searchText: string
@@ -19,8 +19,8 @@ interface FindingsFiltersProps {
   onSeverityChange: (severities: string[]) => void
   selectedStatuses: string[]
   onStatusChange: (statuses: string[]) => void
-  sortOrder: 'asc' | 'desc' | 'recent'
-  onSortChange: (order: 'asc' | 'desc' | 'recent') => void
+  sortOrder: "asc" | "desc" | "recent"
+  onSortChange: (order: "asc" | "desc" | "recent") => void
   dateRange: DateRange | null
   onDateRangeChange: (range: DateRange | null) => void
   activeFilterCount?: number
@@ -49,16 +49,16 @@ export default function FindingsFilters({
   const filterTags: FilterTag[] = []
 
   // Severity filter tags
-  if (!selectedSeverities.includes('all')) {
+  if (!selectedSeverities.includes("all")) {
     selectedSeverities.forEach((severity) => {
-      if (severity !== 'all') {
+      if (severity !== "all") {
         const label = severity.charAt(0).toUpperCase() + severity.slice(1)
         filterTags.push({
           key: `severity-${severity}`,
           label: `Severity: ${label}`,
           onRemove: () => {
-            const newSeverities = selectedSeverities.filter(s => s !== severity)
-            onSeverityChange(newSeverities.length === 0 ? ['all'] : newSeverities)
+            const newSeverities = selectedSeverities.filter((s) => s !== severity)
+            onSeverityChange(newSeverities.length === 0 ? ["all"] : newSeverities)
           },
         })
       }
@@ -66,16 +66,16 @@ export default function FindingsFilters({
   }
 
   // Status filter tags
-  if (!selectedStatuses.includes('all')) {
+  if (!selectedStatuses.includes("all")) {
     selectedStatuses.forEach((status) => {
-      if (status !== 'all') {
+      if (status !== "all") {
         const label = status.charAt(0).toUpperCase() + status.slice(1)
         filterTags.push({
           key: `status-${status}`,
           label: `Status: ${label}`,
           onRemove: () => {
-            const newStatuses = selectedStatuses.filter(s => s !== status)
-            onStatusChange(newStatuses.length === 0 ? ['all'] : newStatuses)
+            const newStatuses = selectedStatuses.filter((s) => s !== status)
+            onStatusChange(newStatuses.length === 0 ? ["all"] : newStatuses)
           },
         })
       }
@@ -85,7 +85,7 @@ export default function FindingsFilters({
   // Date range filter tag
   if (dateRange) {
     filterTags.push({
-      key: 'date',
+      key: "date",
       label: dateRange.label,
       onRemove: () => onDateRangeChange(null),
     })
@@ -94,17 +94,17 @@ export default function FindingsFilters({
   // Search filter tag
   if (searchText) {
     filterTags.push({
-      key: 'search',
+      key: "search",
       label: `Search: "${searchText}"`,
-      onRemove: () => onSearchChange(''),
+      onRemove: () => onSearchChange(""),
     })
   }
 
   const handleClearAllFilters = () => {
-    onSeverityChange(['all'])
-    onStatusChange(['all'])
+    onSeverityChange(["all"])
+    onStatusChange(["all"])
     onDateRangeChange(null)
-    onSearchChange('')
+    onSearchChange("")
   }
 
   const handleApplyFilter = () => {
@@ -122,39 +122,37 @@ export default function FindingsFilters({
   }
 
   const handleSeverityToggle = (severity: string) => {
-    if (severity === 'all') {
-      setTempSeverities(['all'])
+    if (severity === "all") {
+      setTempSeverities(["all"])
     } else {
       const newSeverities = tempSeverities.includes(severity)
-        ? tempSeverities.filter(s => s !== severity)
-        : [...tempSeverities.filter(s => s !== 'all'), severity]
-      setTempSeverities(newSeverities.length === 0 ? ['all'] : newSeverities)
+        ? tempSeverities.filter((s) => s !== severity)
+        : [...tempSeverities.filter((s) => s !== "all"), severity]
+      setTempSeverities(newSeverities.length === 0 ? ["all"] : newSeverities)
     }
   }
 
   const handleStatusToggle = (status: string) => {
-    if (status === 'all') {
-      setTempStatuses(['all'])
+    if (status === "all") {
+      setTempStatuses(["all"])
     } else {
       const newStatuses = tempStatuses.includes(status)
-        ? tempStatuses.filter(s => s !== status)
-        : [...tempStatuses.filter(s => s !== 'all'), status]
-      setTempStatuses(newStatuses.length === 0 ? ['all'] : newStatuses)
+        ? tempStatuses.filter((s) => s !== status)
+        : [...tempStatuses.filter((s) => s !== "all"), status]
+      setTempStatuses(newStatuses.length === 0 ? ["all"] : newStatuses)
     }
   }
 
   const filterContent = (
     <div className="w-[280px] p-2">
       <div className="mb-4">
-        <div className="text-sm font-semibold mb-3 text-start">
-          Filter by Severity
-        </div>
+        <div className="text-sm font-semibold mb-3 text-start">Filter by Severity</div>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <Checkbox
               id="severity-all"
-              checked={tempSeverities.includes('all')}
-              onCheckedChange={() => handleSeverityToggle('all')}
+              checked={tempSeverities.includes("all")}
+              onCheckedChange={() => handleSeverityToggle("all")}
             />
             <Label htmlFor="severity-all" className="cursor-pointer text-sm font-normal">
               All Severities
@@ -163,8 +161,8 @@ export default function FindingsFilters({
           <div className="flex items-center gap-2">
             <Checkbox
               id="severity-critical"
-              checked={tempSeverities.includes('critical')}
-              onCheckedChange={() => handleSeverityToggle('critical')}
+              checked={tempSeverities.includes("critical")}
+              onCheckedChange={() => handleSeverityToggle("critical")}
             />
             <Label htmlFor="severity-critical" className="cursor-pointer text-sm font-normal">
               Critical
@@ -173,8 +171,8 @@ export default function FindingsFilters({
           <div className="flex items-center gap-2">
             <Checkbox
               id="severity-major"
-              checked={tempSeverities.includes('major')}
-              onCheckedChange={() => handleSeverityToggle('major')}
+              checked={tempSeverities.includes("major")}
+              onCheckedChange={() => handleSeverityToggle("major")}
             />
             <Label htmlFor="severity-major" className="cursor-pointer text-sm font-normal">
               Major
@@ -183,8 +181,8 @@ export default function FindingsFilters({
           <div className="flex items-center gap-2">
             <Checkbox
               id="severity-minor"
-              checked={tempSeverities.includes('minor')}
-              onCheckedChange={() => handleSeverityToggle('minor')}
+              checked={tempSeverities.includes("minor")}
+              onCheckedChange={() => handleSeverityToggle("minor")}
             />
             <Label htmlFor="severity-minor" className="cursor-pointer text-sm font-normal">
               Minor
@@ -194,15 +192,13 @@ export default function FindingsFilters({
       </div>
 
       <div className="mb-3 pt-3 border-t">
-        <div className="text-sm font-semibold mb-3 text-start">
-          Filter by Status
-        </div>
+        <div className="text-sm font-semibold mb-3 text-start">Filter by Status</div>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <Checkbox
               id="status-all"
-              checked={tempStatuses.includes('all')}
-              onCheckedChange={() => handleStatusToggle('all')}
+              checked={tempStatuses.includes("all")}
+              onCheckedChange={() => handleStatusToggle("all")}
             />
             <Label htmlFor="status-all" className="cursor-pointer text-sm font-normal">
               All Statuses
@@ -211,8 +207,8 @@ export default function FindingsFilters({
           <div className="flex items-center gap-2">
             <Checkbox
               id="status-open"
-              checked={tempStatuses.includes('open')}
-              onCheckedChange={() => handleStatusToggle('open')}
+              checked={tempStatuses.includes("open")}
+              onCheckedChange={() => handleStatusToggle("open")}
             />
             <Label htmlFor="status-open" className="cursor-pointer text-sm font-normal">
               Open
@@ -221,8 +217,8 @@ export default function FindingsFilters({
           <div className="flex items-center gap-2">
             <Checkbox
               id="status-in-progress"
-              checked={tempStatuses.includes('in progress')}
-              onCheckedChange={() => handleStatusToggle('in progress')}
+              checked={tempStatuses.includes("in progress")}
+              onCheckedChange={() => handleStatusToggle("in progress")}
             />
             <Label htmlFor="status-in-progress" className="cursor-pointer text-sm font-normal">
               In Progress
@@ -231,8 +227,8 @@ export default function FindingsFilters({
           <div className="flex items-center gap-2">
             <Checkbox
               id="status-resolved"
-              checked={tempStatuses.includes('resolved')}
-              onCheckedChange={() => handleStatusToggle('resolved')}
+              checked={tempStatuses.includes("resolved")}
+              onCheckedChange={() => handleStatusToggle("resolved")}
             />
             <Label htmlFor="status-resolved" className="cursor-pointer text-sm font-normal">
               Resolved
@@ -246,19 +242,16 @@ export default function FindingsFilters({
           variant="outline"
           className="flex-1"
           onClick={() => {
-            setTempSeverities(['all'])
-            setTempStatuses(['all'])
-            onSeverityChange(['all'])
-            onStatusChange(['all'])
+            setTempSeverities(["all"])
+            setTempStatuses(["all"])
+            onSeverityChange(["all"])
+            onStatusChange(["all"])
             setFilterOpen(false)
           }}
         >
           Clear
         </Button>
-        <Button
-          className="flex-1"
-          onClick={handleApplyFilter}
-        >
+        <Button className="flex-1" onClick={handleApplyFilter}>
           Apply
         </Button>
       </div>
@@ -267,13 +260,11 @@ export default function FindingsFilters({
 
   const sortContent = (
     <div className="w-[220px] p-2">
-      <div className="text-sm font-semibold mb-3 text-start">
-        Sort by
-      </div>
+      <div className="text-sm font-semibold mb-3 text-start">Sort by</div>
       <RadioGroup
         value={sortOrder}
         onValueChange={(value) => {
-          onSortChange(value as 'asc' | 'desc' | 'recent')
+          onSortChange(value as "asc" | "desc" | "recent")
           setSortOpen(false)
         }}
         className="flex flex-col gap-3"
@@ -301,16 +292,16 @@ export default function FindingsFilters({
   )
 
   return (
-    <div className={cn('w-full', !isMobile && 'w-auto')}>
+    <div className={cn("w-full", !isMobile && "w-auto")}>
       {/* Filter Controls */}
       <div
         className={cn(
-          'flex gap-2 items-center',
-          isMobile ? 'flex-col items-stretch' : 'flex-row flex-wrap',
-          filterTags.length > 0 && 'mb-3'
+          "flex gap-2 items-center",
+          isMobile ? "flex-col items-stretch" : "flex-row flex-wrap",
+          filterTags.length > 0 && "mb-3"
         )}
       >
-        <div className={cn('relative', isMobile ? 'w-full' : 'w-full sm:w-[400px]')}>
+        <div className={cn("relative", isMobile ? "w-full" : "w-full sm:w-[400px]")}>
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground shrink-0" />
           <Input
             placeholder="Search by facility name"
@@ -319,12 +310,12 @@ export default function FindingsFilters({
             className="w-full pl-9"
           />
         </div>
-        <div className={cn('flex items-center', isMobile ? 'gap-2 w-full' : 'gap-2')}>
+        <div className={cn("flex items-center", isMobile ? "gap-2 w-full" : "gap-2")}>
           <Popover open={filterOpen} onOpenChange={handleFilterOpenChange}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn('gap-2 whitespace-nowrap', isMobile && 'flex-1')}
+                className={cn("gap-2 whitespace-nowrap", isMobile && "flex-1")}
               >
                 <Filter className="w-4 h-4 shrink-0" />
                 {!isMobile && <span>Filters</span>}
@@ -344,19 +335,15 @@ export default function FindingsFilters({
             </PopoverContent>
           </Popover>
 
-          <div className={cn(isMobile && 'flex-1')}>
-            <DateRangeSelector
-              value={dateRange}
-              onChange={onDateRangeChange}
-              showLabel={false}
-            />
+          <div className={cn(isMobile && "flex-1")}>
+            <DateRangeSelector value={dateRange} onChange={onDateRangeChange} showLabel={false} />
           </div>
 
           <Popover open={sortOpen} onOpenChange={setSortOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn('gap-2 whitespace-nowrap', isMobile && 'flex-1')}
+                className={cn("gap-2 whitespace-nowrap", isMobile && "flex-1")}
               >
                 <ArrowUpDown className="w-4 h-4 shrink-0" />
                 {!isMobile && <span>Sort</span>}
@@ -371,7 +358,10 @@ export default function FindingsFilters({
       </div>
 
       {/* Active Filter Tags */}
-      <FilterTags tags={filterTags} onClearAll={filterTags.length > 1 ? handleClearAllFilters : undefined} />
+      <FilterTags
+        tags={filterTags}
+        onClearAll={filterTags.length > 1 ? handleClearAllFilters : undefined}
+      />
     </div>
   )
 }

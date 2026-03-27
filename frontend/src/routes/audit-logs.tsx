@@ -1,18 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
-import AppLayout from '@/components/AppLayout'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AuditLogViewer, AuditLogDetail, AuditStats } from '@/components/audit'
-import { useAuditStore } from '@/stores/auditStore'
-import { useAuthStore } from '@/stores/authStore'
-import { BarChart3, List } from 'lucide-react'
+import { createFileRoute } from "@tanstack/react-router"
+import { useState } from "react"
+import AppLayout from "@/components/AppLayout"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { AuditLogViewer, AuditLogDetail, AuditStats } from "@/components/audit"
+import { useAuditStore } from "@/stores/auditStore"
+import { useAuthStore } from "@/stores/authStore"
+import { BarChart3, List } from "lucide-react"
 
-export const Route = createFileRoute('/audit-logs')({
+export const Route = createFileRoute("/audit-logs")({
   loader: () =>
-    Promise.all([
-      useAuditStore.getState().fetchLogs(),
-      useAuditStore.getState().fetchStats(),
-    ]),
+    Promise.all([useAuditStore.getState().fetchLogs(), useAuditStore.getState().fetchStats()]),
   component: AuditLogsPage,
 })
 
@@ -27,11 +24,11 @@ function AuditLogsPage() {
   }
 
   const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
+    window.location.href = "/logout?redirect-to=/"
   }
 
   const handleSwitchToDesk = () => {
-    window.location.href = '/app'
+    window.location.href = "/app"
   }
 
   return (
@@ -40,7 +37,7 @@ function AuditLogsPage() {
       pageTitle="Audit Logs"
       pageSubtitle="Complete audit trail and activity tracking"
       onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onOpenNotifications={() => handleNavigate("notifications-center")}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}

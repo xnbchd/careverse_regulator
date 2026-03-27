@@ -1,17 +1,23 @@
-import { FileText, Download, Eye, Trash2, Edit, MoreVertical } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { FileText, Download, Eye, Trash2, Edit, MoreVertical } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import type { Document } from '@/types/document'
-import { getCategoryLabel, getCategoryColor, formatFileSize, getFileIcon, isPreviewSupported } from '@/types/document'
-import { format } from 'date-fns'
+} from "@/components/ui/dropdown-menu"
+import type { Document } from "@/types/document"
+import {
+  getCategoryLabel,
+  getCategoryColor,
+  formatFileSize,
+  getFileIcon,
+  isPreviewSupported,
+} from "@/types/document"
+import { format } from "date-fns"
 
 interface DocumentGridProps {
   documents: Document[]
@@ -126,7 +132,7 @@ export default function DocumentGrid({
 
               <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
                 <span>{formatFileSize(doc.fileSize)}</span>
-                <span>{format(new Date(doc.uploadedAt), 'MMM d, yyyy')}</span>
+                <span>{format(new Date(doc.uploadedAt), "MMM d, yyyy")}</span>
               </div>
 
               <div className="text-xs text-muted-foreground truncate">

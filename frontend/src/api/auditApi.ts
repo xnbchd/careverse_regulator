@@ -1,4 +1,4 @@
-import apiClient from './client'
+import apiClient from "./client"
 import type {
   AuditLog,
   AuditLogSearchParams,
@@ -6,19 +6,15 @@ import type {
   AuditLogStats,
   EntityHistory,
   AuditExportRequest,
-} from '@/types/audit'
-import {
-  AuditAction,
-  AuditEntity,
-  AuditSeverity,
-} from '@/types/audit'
+} from "@/types/audit"
+import { AuditAction, AuditEntity, AuditSeverity } from "@/types/audit"
 
-const API_BASE = '/api/method/compliance_360.api.audit'
+const API_BASE = "/api/method/compliance_360.api.audit"
 
 /**
  * Log an audit event
  */
-export async function logAuditEvent(log: Omit<AuditLog, 'id' | 'timestamp'>): Promise<AuditLog> {
+export async function logAuditEvent(log: Omit<AuditLog, "id" | "timestamp">): Promise<AuditLog> {
   const response = await apiClient.post<{ message: any }>(`${API_BASE}.log_event`, {
     action: log.action,
     entity: log.entity,
@@ -120,7 +116,10 @@ export async function getAuditStats(dateRange?: {
 /**
  * Get entity audit history
  */
-export async function getEntityHistory(entityType: AuditEntity, entityId: string): Promise<EntityHistory> {
+export async function getEntityHistory(
+  entityType: AuditEntity,
+  entityId: string
+): Promise<EntityHistory> {
   const response = await apiClient.get<{ message: any }>(`${API_BASE}.get_entity_history`, {
     params: {
       entity_type: entityType,
@@ -153,11 +152,11 @@ export async function exportAuditLogs(request: AuditExportRequest): Promise<Blob
       // Response will be a file blob
       headers: {
         Accept:
-          request.format === 'pdf'
-            ? 'application/pdf'
-            : request.format === 'csv'
-            ? 'text/csv'
-            : 'application/json',
+          request.format === "pdf"
+            ? "application/pdf"
+            : request.format === "csv"
+            ? "text/csv"
+            : "application/json",
       },
     }
   )
@@ -200,64 +199,64 @@ function transformAuditLog(data: any): AuditLog {
 
 const MOCK_AUDIT_LOGS: AuditLog[] = [
   {
-    id: 'AUDIT-001',
+    id: "AUDIT-001",
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
     action: AuditAction.LICENSE_APPROVE,
     entity: AuditEntity.LICENSE,
-    entityId: 'LIC-2024-001',
-    entityName: 'General Hospital License',
-    userId: 'user-001',
-    userName: 'John Regulator',
-    userEmail: 'john@regulator.gov',
-    userRole: 'Senior Inspector',
+    entityId: "LIC-2024-001",
+    entityName: "General Hospital License",
+    userId: "user-001",
+    userName: "John Regulator",
+    userEmail: "john@regulator.gov",
+    userRole: "Senior Inspector",
     severity: AuditSeverity.HIGH,
-    description: 'Approved license application for General Hospital',
+    description: "Approved license application for General Hospital",
     details: {
-      licenseType: 'Hospital',
-      validityPeriod: '5 years',
+      licenseType: "Hospital",
+      validityPeriod: "5 years",
     },
-    changesBefore: { status: 'Pending' },
-    changesAfter: { status: 'Approved', approvedBy: 'john@regulator.gov' },
-    ipAddress: '192.168.1.100',
-    userAgent: 'Mozilla/5.0...',
+    changesBefore: { status: "Pending" },
+    changesAfter: { status: "Approved", approvedBy: "john@regulator.gov" },
+    ipAddress: "192.168.1.100",
+    userAgent: "Mozilla/5.0...",
     success: true,
   },
   {
-    id: 'AUDIT-002',
+    id: "AUDIT-002",
     timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
     action: AuditAction.DOCUMENT_UPLOAD,
     entity: AuditEntity.DOCUMENT,
-    entityId: 'DOC-001',
-    entityName: 'Facility Plan.pdf',
-    userId: 'user-002',
-    userName: 'Jane Operator',
-    userEmail: 'jane@hospital.com',
-    userRole: 'Facility Manager',
+    entityId: "DOC-001",
+    entityName: "Facility Plan.pdf",
+    userId: "user-002",
+    userName: "Jane Operator",
+    userEmail: "jane@hospital.com",
+    userRole: "Facility Manager",
     severity: AuditSeverity.LOW,
-    description: 'Uploaded facility plan document',
+    description: "Uploaded facility plan document",
     details: {
-      fileSize: '2.4 MB',
-      category: 'Application',
+      fileSize: "2.4 MB",
+      category: "Application",
     },
-    ipAddress: '192.168.1.105',
+    ipAddress: "192.168.1.105",
     success: true,
   },
   {
-    id: 'AUDIT-003',
+    id: "AUDIT-003",
     timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
     action: AuditAction.BULK_APPROVE,
     entity: AuditEntity.AFFILIATION,
-    userId: 'user-001',
-    userName: 'John Regulator',
-    userEmail: 'john@regulator.gov',
+    userId: "user-001",
+    userName: "John Regulator",
+    userEmail: "john@regulator.gov",
     severity: AuditSeverity.HIGH,
-    description: 'Bulk approved 15 affiliation requests',
+    description: "Bulk approved 15 affiliation requests",
     details: {
       totalProcessed: 15,
       succeeded: 15,
       failed: 0,
     },
-    ipAddress: '192.168.1.100',
+    ipAddress: "192.168.1.100",
     success: true,
   },
 ]
@@ -304,13 +303,13 @@ export async function listAuditLogsMock(
   }
 
   // Sort
-  const sortBy = params.sortBy || 'timestamp'
-  const sortOrder = params.sortOrder || 'desc'
+  const sortBy = params.sortBy || "timestamp"
+  const sortOrder = params.sortOrder || "desc"
   filtered.sort((a, b) => {
     const aVal = a[sortBy] as any
     const bVal = b[sortBy] as any
 
-    if (sortOrder === 'desc') {
+    if (sortOrder === "desc") {
       return bVal > aVal ? 1 : -1
     }
     return aVal > bVal ? 1 : -1

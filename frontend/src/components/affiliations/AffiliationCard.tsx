@@ -1,7 +1,7 @@
-import { Card, CardContent } from '@/components/ui/card'
-import type { Affiliation } from '@/types/affiliation'
-import StatusBadge from './StatusBadge'
-import { Building2,  Briefcase, Calendar, IdCard } from 'lucide-react'
+import { Card, CardContent } from "@/components/ui/card"
+import type { Affiliation } from "@/types/affiliation"
+import StatusBadge from "./StatusBadge"
+import { Building2, Briefcase, Calendar, IdCard } from "lucide-react"
 
 interface AffiliationCardProps {
   affiliation: Affiliation
@@ -10,10 +10,7 @@ interface AffiliationCardProps {
 
 export default function AffiliationCard({ affiliation, onClick }: AffiliationCardProps) {
   return (
-    <Card
-      className="cursor-pointer hover:shadow-md transition-shadow"
-      onClick={onClick}
-    >
+    <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={onClick}>
       <CardContent className="pt-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">

@@ -1,13 +1,8 @@
-import { useCallback } from 'react'
-import { useAuditStore } from '@/stores/auditStore'
-import { useAuthStore } from '@/stores/authStore'
-import type {
-  AuditAction,
-  AuditEntity,
-  AuditSeverity,
-  AuditLog,
-} from '@/types/audit'
-import { getActionSeverity } from '@/types/audit'
+import { useCallback } from "react"
+import { useAuditStore } from "@/stores/auditStore"
+import { useAuthStore } from "@/stores/authStore"
+import type { AuditAction, AuditEntity, AuditSeverity, AuditLog } from "@/types/audit"
+import { getActionSeverity } from "@/types/audit"
 
 /**
  * Hook for logging audit events with automatic user context
@@ -57,15 +52,15 @@ export function useAuditLog() {
     }) => {
       try {
         // Get user context
-        const userId = user?.email || 'system'
-        const userName = user?.name || user?.fullName || user?.email || 'System'
-        const userEmail = user?.email || 'system@localhost'
-        const userRole = user?.role || 'Unknown'
+        const userId = user?.email || "system"
+        const userName = user?.name || user?.fullName || user?.email || "System"
+        const userEmail = user?.email || "system@localhost"
+        const userRole = user?.role || "Unknown"
 
         // Get browser context
         const ipAddress = undefined // IP should come from backend
         const userAgent = navigator.userAgent
-        const sessionId = sessionStorage.getItem('sessionId') || undefined
+        const sessionId = sessionStorage.getItem("sessionId") || undefined
 
         // Determine severity if not provided
         const severity = params.severity || getActionSeverity(params.action)
@@ -87,7 +82,7 @@ export function useAuditLog() {
           success,
         })
       } catch (error) {
-        console.error('Failed to log audit event:', error)
+        console.error("Failed to log audit event:", error)
         // Don't throw - audit logging should not break the application
       }
     },
@@ -145,7 +140,7 @@ export function useAuditLog() {
       changesAfter?: Record<string, any>
     }) => {
       await log({
-        action: 'create' as AuditAction,
+        action: "create" as AuditAction,
         description: `Created ${params.entityName}`,
         ...params,
       })
@@ -164,9 +159,9 @@ export function useAuditLog() {
       details?: Record<string, any>
     }) => {
       await log({
-        action: 'read' as AuditAction,
+        action: "read" as AuditAction,
         description: `Viewed ${params.entityName}`,
-        severity: 'low' as AuditSeverity,
+        severity: "low" as AuditSeverity,
         ...params,
       })
     },
@@ -186,7 +181,7 @@ export function useAuditLog() {
       details?: Record<string, any>
     }) => {
       await log({
-        action: 'update' as AuditAction,
+        action: "update" as AuditAction,
         description: `Updated ${params.entityName}`,
         ...params,
       })
@@ -206,9 +201,9 @@ export function useAuditLog() {
       details?: Record<string, any>
     }) => {
       await log({
-        action: 'delete' as AuditAction,
+        action: "delete" as AuditAction,
         description: `Deleted ${params.entityName}`,
-        severity: 'critical' as AuditSeverity,
+        severity: "critical" as AuditSeverity,
         ...params,
       })
     },
@@ -220,23 +215,23 @@ export function useAuditLog() {
    */
   const logAuth = useCallback(
     async (params: {
-      action: 'login' | 'logout' | 'session_expire' | 'password_change'
+      action: "login" | "logout" | "session_expire" | "password_change"
       success?: boolean
       errorMessage?: string
       details?: Record<string, any>
     }) => {
       const descriptions: Record<string, string> = {
-        login: 'User logged in',
-        logout: 'User logged out',
-        session_expire: 'User session expired',
-        password_change: 'User changed password',
+        login: "User logged in",
+        logout: "User logged out",
+        session_expire: "User session expired",
+        password_change: "User changed password",
       }
 
       await log({
         action: params.action as AuditAction,
-        entity: 'user' as AuditEntity,
-        entityId: user?.email || 'unknown',
-        entityName: user?.name || user?.fullName || 'User',
+        entity: "user" as AuditEntity,
+        entityId: user?.email || "unknown",
+        entityName: user?.name || user?.fullName || "User",
         description: descriptions[params.action],
         success: params.success,
         errorMessage: params.errorMessage,
@@ -257,7 +252,7 @@ export function useAuditLog() {
       details?: Record<string, any>
     }) => {
       await log({
-        action: 'export_data' as AuditAction,
+        action: "export_data" as AuditAction,
         entity: params.entity,
         description: params.description || `Exported ${params.entity} data as ${params.format}`,
         details: {

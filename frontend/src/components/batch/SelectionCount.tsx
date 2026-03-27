@@ -1,7 +1,7 @@
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { X } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { X } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface SelectionCountProps {
   count: number
@@ -23,7 +23,7 @@ export function SelectionCount({
   const displayText = totalCount ? `${count} of ${totalCount} selected` : `${count} selected`
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div className={cn("flex items-center gap-2", className)}>
       <Badge variant="secondary" className="text-sm">
         {displayText}
       </Badge>

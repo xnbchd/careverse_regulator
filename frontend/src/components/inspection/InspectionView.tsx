@@ -1,37 +1,37 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
-import { useNavigate, useSearch } from '@tanstack/react-router'
-import { useInspectionStore } from '@/stores/inspectionStore'
-import type { Inspection, Finding } from '@/types/inspection'
-import { useFindingsStore } from '@/stores/findingsStore'
-import * as inspectionApi from '@/api/inspectionApi'
-import { useResponsive } from '@/hooks/useResponsive'
-import { showSuccess, showError, extractErrorMessage } from '@/utils/toast'
-import { useEntityDrawer } from '@/contexts/EntityDrawerContext'
-import InspectionTable from './InspectionTable'
-import InspectionCard from './InspectionCard'
-import InspectionFilters from './InspectionFilters'
-import type { DateRange } from './DateRangeSelector'
-import ScheduleInspectionModal from './ScheduleInspectionModal'
-import FindingsTable from './FindingsTable'
-import FindingCard from './FindingCard'
-import FindingsFilters from './FindingsFilters'
-import FindingsDrawer from './FindingsDrawer'
-import PaginationControls from './PaginationControls'
-import ExportButton from '@/components/shared/ExportButton'
-import SavedFiltersManager from '@/components/shared/SavedFiltersManager'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { FileText, ArrowLeft } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import dayjs from 'dayjs'
+import { useEffect, useState, useMemo, useCallback } from "react"
+import { useNavigate, useSearch } from "@tanstack/react-router"
+import { useInspectionStore } from "@/stores/inspectionStore"
+import type { Inspection, Finding } from "@/types/inspection"
+import { useFindingsStore } from "@/stores/findingsStore"
+import * as inspectionApi from "@/api/inspectionApi"
+import { useResponsive } from "@/hooks/useResponsive"
+import { showSuccess, showError, extractErrorMessage } from "@/utils/toast"
+import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
+import InspectionTable from "./InspectionTable"
+import InspectionCard from "./InspectionCard"
+import InspectionFilters from "./InspectionFilters"
+import type { DateRange } from "./DateRangeSelector"
+import ScheduleInspectionModal from "./ScheduleInspectionModal"
+import FindingsTable from "./FindingsTable"
+import FindingCard from "./FindingCard"
+import FindingsFilters from "./FindingsFilters"
+import FindingsDrawer from "./FindingsDrawer"
+import PaginationControls from "./PaginationControls"
+import ExportButton from "@/components/shared/ExportButton"
+import SavedFiltersManager from "@/components/shared/SavedFiltersManager"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { FileText, ArrowLeft } from "lucide-react"
+import { cn } from "@/lib/utils"
+import dayjs from "dayjs"
 // import type { Inspection, Finding } from '@/types/inspection'
-import type { ExportConfig } from '@/utils/exportUtils'
+import type { ExportConfig } from "@/utils/exportUtils"
 
 interface InspectionFiltersState {
   search?: string
   status?: string[]
   dateRange?: DateRange | null
-  sortOrder?: 'asc' | 'desc' | 'recent'
+  sortOrder?: "asc" | "desc" | "recent"
 }
 
 interface InspectionViewProps {
@@ -39,29 +39,41 @@ interface InspectionViewProps {
 }
 
 export default function InspectionView({ company }: InspectionViewProps) {
-  const navigate = useNavigate({ from: '/inspections/list' })
-  const searchParams = useSearch({ from: '/inspections/list' })
+  const navigate = useNavigate({ from: "/inspections/list" })
+  const searchParams = useSearch({ from: "/inspections/list" })
   const { openDrawer } = useEntityDrawer()
 
-  const { inspections, facilities, professionals, loading, error, pagination, setPage, fetchInspections, createInspection } = useInspectionStore()
+  const {
+    inspections,
+    facilities,
+    professionals,
+    loading,
+    error,
+    pagination,
+    setPage,
+    fetchInspections,
+    createInspection,
+  } = useInspectionStore()
   const { findings, fetchFindings } = useFindingsStore()
   const { isMobile, isTablet } = useResponsive()
 
   // Get filter values from URL params - memoize to prevent infinite loops
-  const activeTab = searchParams.activeTab || 'scheduled'
-  const searchText = searchParams.search || ''
+  const activeTab = searchParams.activeTab || "scheduled"
+  const searchText = searchParams.search || ""
   const modalParam = searchParams.modal
   const selectedStatuses = useMemo(() => {
-    if (!searchParams.status) return ['all']
+    if (!searchParams.status) return ["all"]
     return Array.isArray(searchParams.status) ? searchParams.status : [searchParams.status]
   }, [searchParams.status])
-  const dateRange: DateRange | null = useMemo(() =>
-    searchParams.startDate && searchParams.endDate
-      ? { start: searchParams.startDate, end: searchParams.endDate }
-      : null,
+  const dateRange: DateRange | null = useMemo(
+    () =>
+      searchParams.startDate && searchParams.endDate
+        ? { start: searchParams.startDate, end: searchParams.endDate }
+        : null,
     [searchParams.startDate, searchParams.endDate]
   )
-  const sortOrder = searchParams.sortOrder === 'desc' ? 'desc' : searchParams.sortOrder === 'asc' ? 'asc' : 'recent'
+  const sortOrder =
+    searchParams.sortOrder === "desc" ? "desc" : searchParams.sortOrder === "asc" ? "asc" : "recent"
 
   // Local state for search input debouncing
   const [localSearchText, setLocalSearchText] = useState(searchText)
@@ -70,22 +82,24 @@ export default function InspectionView({ company }: InspectionViewProps) {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [formData, setFormData] = useState({
-    facility: '',
-    inspector: '',
-    date: dayjs().format('DD/MM/YYYY'),
-    note: '',
+    facility: "",
+    inspector: "",
+    date: dayjs().format("DD/MM/YYYY"),
+    note: "",
   })
   const [submitting, setSubmitting] = useState(false)
   const [modalError, setModalError] = useState<string | null>(null)
 
   // Findings tab state (could be moved to URL params in the future)
-  const [findingsSearchText, setFindingsSearchText] = useState('')
+  const [findingsSearchText, setFindingsSearchText] = useState("")
   const [findingsDateRange, setFindingsDateRange] = useState<DateRange | null>(null)
-  const [selectedSeverities, setSelectedSeverities] = useState<string[]>(['all'])
-  const [selectedFindingStatuses, setSelectedFindingStatuses] = useState<string[]>(['all'])
-  const [findingsSortOrder, setFindingsSortOrder] = useState<'asc' | 'desc' | 'recent'>('asc')
+  const [selectedSeverities, setSelectedSeverities] = useState<string[]>(["all"])
+  const [selectedFindingStatuses, setSelectedFindingStatuses] = useState<string[]>(["all"])
+  const [findingsSortOrder, setFindingsSortOrder] = useState<"asc" | "desc" | "recent">("asc")
   const [selectedFindingRowKeys, setSelectedFindingRowKeys] = useState<React.Key[]>([])
-  const [selectedInspectionForDrawer, setSelectedInspectionForDrawer] = useState<Inspection | null>(null)
+  const [selectedInspectionForDrawer, setSelectedInspectionForDrawer] = useState<Inspection | null>(
+    null
+  )
   const [loadingInspectionDetails, setLoadingInspectionDetails] = useState(false)
   const [isFindingModalVisible, setIsFindingModalVisible] = useState(false)
 
@@ -109,7 +123,7 @@ export default function InspectionView({ company }: InspectionViewProps) {
 
   // Handle modal URL param
   useEffect(() => {
-    if (modalParam === 'schedule') {
+    if (modalParam === "schedule") {
       setIsModalVisible(true)
     }
   }, [modalParam])
@@ -117,33 +131,33 @@ export default function InspectionView({ company }: InspectionViewProps) {
   // Calculate active findings filter count
   const activeFindingsFiltersCount =
     (findingsSearchText ? 1 : 0) +
-    (!selectedSeverities.includes('all') ? 1 : 0) +
-    (!selectedFindingStatuses.includes('all') ? 1 : 0) +
+    (!selectedSeverities.includes("all") ? 1 : 0) +
+    (!selectedFindingStatuses.includes("all") ? 1 : 0) +
     (findingsDateRange ? 1 : 0)
 
   // Fetch inspections when URL params change (Scheduled Inspections tab)
   useEffect(() => {
-    if (activeTab === 'scheduled') {
+    if (activeTab === "scheduled") {
       const filters: any = {}
       if (searchText) filters.search = searchText
       if (dateRange) {
         filters.startDate = dateRange.start
         filters.endDate = dateRange.end
       }
-      if (sortOrder === 'asc') {
-        filters.sortBy = 'facility_name'
-        filters.sortOrder = 'asc'
-      } else if (sortOrder === 'desc') {
-        filters.sortBy = 'facility_name'
-        filters.sortOrder = 'desc'
+      if (sortOrder === "asc") {
+        filters.sortBy = "facility_name"
+        filters.sortOrder = "asc"
+      } else if (sortOrder === "desc") {
+        filters.sortBy = "facility_name"
+        filters.sortOrder = "desc"
       } else {
-        filters.sortBy = 'modified'
-        filters.sortOrder = 'desc'
+        filters.sortBy = "modified"
+        filters.sortOrder = "desc"
       }
 
       // Add status filter (only if not 'all')
-      if (!selectedStatuses.includes('all')) {
-        filters.status = selectedStatuses.join(',')
+      if (!selectedStatuses.includes("all")) {
+        filters.status = selectedStatuses.join(",")
       }
 
       fetchInspections(1, filters)
@@ -153,38 +167,45 @@ export default function InspectionView({ company }: InspectionViewProps) {
 
   // Fetch findings when filters change (Findings tab)
   useEffect(() => {
-    if (activeTab === 'findings') {
+    if (activeTab === "findings") {
       const filters: any = {}
       if (findingsSearchText) filters.search = findingsSearchText
       if (findingsDateRange) {
         filters.startDate = findingsDateRange.start
         filters.endDate = findingsDateRange.end
       }
-      if (findingsSortOrder === 'asc') {
-        filters.sortBy = 'facility_name'
-        filters.sortOrder = 'asc'
-      } else if (findingsSortOrder === 'desc') {
-        filters.sortBy = 'facility_name'
-        filters.sortOrder = 'desc'
+      if (findingsSortOrder === "asc") {
+        filters.sortBy = "facility_name"
+        filters.sortOrder = "asc"
+      } else if (findingsSortOrder === "desc") {
+        filters.sortBy = "facility_name"
+        filters.sortOrder = "desc"
       } else {
-        filters.sortBy = 'modified'
-        filters.sortOrder = 'desc'
+        filters.sortBy = "modified"
+        filters.sortOrder = "desc"
       }
 
       // Add severity filter (API-driven)
-      if (!selectedSeverities.includes('all')) {
-        filters.severity = selectedSeverities.join(',')
+      if (!selectedSeverities.includes("all")) {
+        filters.severity = selectedSeverities.join(",")
       }
 
       // Add status filter (API-driven)
-      if (!selectedFindingStatuses.includes('all')) {
-        filters.status = selectedFindingStatuses.join(',')
+      if (!selectedFindingStatuses.includes("all")) {
+        filters.status = selectedFindingStatuses.join(",")
       }
 
       fetchFindings(filters)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [findingsSearchText, selectedSeverities, selectedFindingStatuses, findingsDateRange, findingsSortOrder, activeTab])
+  }, [
+    findingsSearchText,
+    selectedSeverities,
+    selectedFindingStatuses,
+    findingsDateRange,
+    findingsSortOrder,
+    activeTab,
+  ])
 
   // Get facilities and professionals from the store
   const allFacilities = facilities.map((f) => ({ value: f.name, label: f.facility_name }))
@@ -192,24 +213,22 @@ export default function InspectionView({ company }: InspectionViewProps) {
 
   // Calculate active filter count for inspections
   const activeInspectionFiltersCount =
-    (searchText ? 1 : 0) +
-    (!selectedStatuses.includes('all') ? 1 : 0) +
-    (dateRange ? 1 : 0)
+    (searchText ? 1 : 0) + (!selectedStatuses.includes("all") ? 1 : 0) + (dateRange ? 1 : 0)
 
   // Use inspections directly from store (API-filtered)
   const filteredInspections = inspections
 
   // Export configuration for inspections
   const inspectionExportConfig: ExportConfig<Inspection> = {
-    filename: `inspections-${dayjs().format('YYYY-MM-DD')}`,
-    title: 'Scheduled Inspections Report',
+    filename: `inspections-${dayjs().format("YYYY-MM-DD")}`,
+    title: "Scheduled Inspections Report",
     columns: [
-      { key: 'inspectionId', label: 'Inspection ID' },
-      { key: 'facilityName', label: 'Facility Name' },
-      { key: 'inspector', label: 'Inspector' },
-      { key: 'date', label: 'Date' },
-      { key: 'status', label: 'Status' },
-      { key: 'findingCount', label: 'Findings Count' },
+      { key: "inspectionId", label: "Inspection ID" },
+      { key: "facilityName", label: "Facility Name" },
+      { key: "inspector", label: "Inspector" },
+      { key: "date", label: "Date" },
+      { key: "status", label: "Status" },
+      { key: "findingCount", label: "Findings Count" },
     ],
   }
 
@@ -219,13 +238,13 @@ export default function InspectionView({ company }: InspectionViewProps) {
 
     try {
       await createInspection(formData)
-      showSuccess('Inspection scheduled successfully')
+      showSuccess("Inspection scheduled successfully")
       setIsModalVisible(false)
       setFormData({
-        facility: '',
-        inspector: '',
-        date: dayjs().format('DD/MM/YYYY'),
-        note: '',
+        facility: "",
+        inspector: "",
+        date: dayjs().format("DD/MM/YYYY"),
+        note: "",
       })
     } catch (error) {
       const errorMessage = extractErrorMessage(error)
@@ -236,86 +255,104 @@ export default function InspectionView({ company }: InspectionViewProps) {
     }
   }
 
-  const handleViewInspection = useCallback((inspection: Inspection) => {
-    openDrawer('inspection', inspection)
-  }, [openDrawer])
+  const handleViewInspection = useCallback(
+    (inspection: Inspection) => {
+      openDrawer("inspection", inspection)
+    },
+    [openDrawer]
+  )
 
   // Use findings directly from store (API-filtered)
   const filteredFindings = findings
 
   // Export configuration for findings
   const findingsExportConfig: ExportConfig<Finding> = {
-    filename: `findings-${dayjs().format('YYYY-MM-DD')}`,
-    title: 'Inspection Findings Report',
+    filename: `findings-${dayjs().format("YYYY-MM-DD")}`,
+    title: "Inspection Findings Report",
     columns: [
-      { key: 'findingId', label: 'Finding ID' },
-      { key: 'facilityName', label: 'Facility' },
-      { key: 'category', label: 'Category' },
-      { key: 'severity', label: 'Severity' },
-      { key: 'status', label: 'Status' },
-      { key: 'description', label: 'Description' },
+      { key: "findingId", label: "Finding ID" },
+      { key: "facilityName", label: "Facility" },
+      { key: "category", label: "Category" },
+      { key: "severity", label: "Severity" },
+      { key: "status", label: "Status" },
+      { key: "description", label: "Description" },
     ],
   }
 
-  const handleViewFinding = useCallback(async (finding: Finding) => {
-    if (!finding.inspectionId || loadingInspectionDetails) return
+  const handleViewFinding = useCallback(
+    async (finding: Finding) => {
+      if (!finding.inspectionId || loadingInspectionDetails) return
 
-    setLoadingInspectionDetails(true)
-    try {
-      const fullInspection = await inspectionApi.getInspection(finding.inspectionId)
-      setSelectedInspectionForDrawer(fullInspection)
-      setIsFindingModalVisible(true)
-    } catch (error) {
-      showError('Failed to load inspection details')
-    } finally {
-      setLoadingInspectionDetails(false)
-    }
-  }, [loadingInspectionDetails])
+      setLoadingInspectionDetails(true)
+      try {
+        const fullInspection = await inspectionApi.getInspection(finding.inspectionId)
+        setSelectedInspectionForDrawer(fullInspection)
+        setIsFindingModalVisible(true)
+      } catch (error) {
+        showError("Failed to load inspection details")
+      } finally {
+        setLoadingInspectionDetails(false)
+      }
+    },
+    [loadingInspectionDetails]
+  )
 
   // Handler functions that update URL params - memoize to prevent re-creation
-  const handleTabChange = useCallback((tab: 'scheduled' | 'findings') => {
-    navigate({
-      search: (prev) => ({ ...prev, activeTab: tab }),
-    })
-  }, [navigate])
+  const handleTabChange = useCallback(
+    (tab: "scheduled" | "findings") => {
+      navigate({
+        search: (prev) => ({ ...prev, activeTab: tab }),
+      })
+    },
+    [navigate]
+  )
 
-  const handleStatusChange = useCallback((statuses: string[]) => {
-    navigate({
-      search: (prev) => ({ ...prev, status: statuses.includes('all') ? undefined : statuses }),
-    })
-  }, [navigate])
+  const handleStatusChange = useCallback(
+    (statuses: string[]) => {
+      navigate({
+        search: (prev) => ({ ...prev, status: statuses.includes("all") ? undefined : statuses }),
+      })
+    },
+    [navigate]
+  )
 
-  const handleDateRangeChange = useCallback((range: DateRange | null) => {
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        startDate: range?.start,
-        endDate: range?.end,
-      }),
-    })
-  }, [navigate])
+  const handleDateRangeChange = useCallback(
+    (range: DateRange | null) => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          startDate: range?.start,
+          endDate: range?.end,
+        }),
+      })
+    },
+    [navigate]
+  )
 
-  const handleSortChange = useCallback((order: 'asc' | 'desc' | 'recent') => {
-    const sortBy = order === 'recent' ? 'modified' : 'facility_name'
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        sortBy,
-        sortOrder: order === 'recent' ? 'desc' : order,
-      }),
-    })
-  }, [navigate])
+  const handleSortChange = useCallback(
+    (order: "asc" | "desc" | "recent") => {
+      const sortBy = order === "recent" ? "modified" : "facility_name"
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          sortBy,
+          sortOrder: order === "recent" ? "desc" : order,
+        }),
+      })
+    },
+    [navigate]
+  )
 
   // Saved Filters Integration
   const currentInspectionFilters: InspectionFiltersState = {
     search: searchText || undefined,
-    status: selectedStatuses.includes('all') ? undefined : selectedStatuses,
+    status: selectedStatuses.includes("all") ? undefined : selectedStatuses,
     dateRange: dateRange || undefined,
     sortOrder: sortOrder,
   }
 
   const handleApplySavedFilters = (filters: InspectionFiltersState) => {
-    setLocalSearchText(filters.search || '')
+    setLocalSearchText(filters.search || "")
     navigate({
       search: {
         activeTab,
@@ -331,79 +368,81 @@ export default function InspectionView({ company }: InspectionViewProps) {
   const getInspectionFilterSummary = (filters: InspectionFiltersState): string => {
     const parts: string[] = []
     if (filters.search) parts.push(`Search: "${filters.search}"`)
-    if (filters.status && !filters.status.includes('all')) {
-      parts.push(`Status: ${filters.status.join(', ')}`)
+    if (filters.status && !filters.status.includes("all")) {
+      parts.push(`Status: ${filters.status.join(", ")}`)
     }
     if (filters.dateRange) {
       parts.push(`Date: ${filters.dateRange.start} to ${filters.dateRange.end}`)
     }
-    if (filters.sortOrder && filters.sortOrder !== 'recent') {
-      parts.push(`Sort: ${filters.sortOrder === 'asc' ? 'A-Z' : 'Z-A'}`)
+    if (filters.sortOrder && filters.sortOrder !== "recent") {
+      parts.push(`Sort: ${filters.sortOrder === "asc" ? "A-Z" : "Z-A"}`)
     }
-    return parts.join(' • ')
+    return parts.join(" • ")
   }
 
   return (
-    <div className={cn('inspection-shell', isMobile ? 'p-4' : 'p-6')}>
-      <div className={cn('mb-6', isMobile ? 'mb-4' : 'mb-6')}>
-        <div className={cn(
-          'flex justify-between items-start',
-          isMobile ? 'flex-col gap-4' : 'flex-row gap-0'
-        )}>
+    <div className={cn("inspection-shell", isMobile ? "p-4" : "p-6")}>
+      <div className={cn("mb-6", isMobile ? "mb-4" : "mb-6")}>
+        <div
+          className={cn(
+            "flex justify-between items-start",
+            isMobile ? "flex-col gap-4" : "flex-row gap-0"
+          )}
+        >
           <div className="flex-1">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate({ to: '/inspections' })}
-              className={cn('mb-2 -ml-2', isMobile ? 'text-xs' : 'text-sm')}
+              onClick={() => navigate({ to: "/inspections" })}
+              className={cn("mb-2 -ml-2", isMobile ? "text-xs" : "text-sm")}
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Dashboard
             </Button>
-            <h2 className={cn(
-              'font-bold text-foreground m-0',
-              isMobile ? 'text-xl' : 'text-2xl'
-            )}>
+            <h2 className={cn("font-bold text-foreground m-0", isMobile ? "text-xl" : "text-2xl")}>
               Inspection Management
             </h2>
-            <p className={cn(
-              'text-muted-foreground font-semibold mt-1 m-0',
-              isMobile ? 'text-sm' : 'text-base'
-            )}>
+            <p
+              className={cn(
+                "text-muted-foreground font-semibold mt-1 m-0",
+                isMobile ? "text-sm" : "text-base"
+              )}
+            >
               Schedule & View Facility Inspections
             </p>
 
-            <div className={cn(
-              'flex overflow-x-auto',
-              isMobile ? 'gap-3 mt-4' : 'gap-4 mt-7'
-            )}>
+            <div className={cn("flex overflow-x-auto", isMobile ? "gap-3 mt-4" : "gap-4 mt-7")}>
               <div
                 className={cn(
-                  'pb-3 cursor-pointer whitespace-nowrap',
-                  activeTab === 'scheduled' && 'border-b-2 border-primary'
+                  "pb-3 cursor-pointer whitespace-nowrap",
+                  activeTab === "scheduled" && "border-b-2 border-primary"
                 )}
-                onClick={() => handleTabChange('scheduled')}
+                onClick={() => handleTabChange("scheduled")}
               >
-                <span className={cn(
-                  'font-semibold',
-                  isMobile ? 'text-xs' : 'text-sm',
-                  activeTab === 'scheduled' ? 'text-primary' : 'text-muted-foreground'
-                )}>
+                <span
+                  className={cn(
+                    "font-semibold",
+                    isMobile ? "text-xs" : "text-sm",
+                    activeTab === "scheduled" ? "text-primary" : "text-muted-foreground"
+                  )}
+                >
                   Scheduled Inspections
                 </span>
               </div>
               <div
                 className={cn(
-                  'pb-3 cursor-pointer whitespace-nowrap',
-                  activeTab === 'findings' && 'border-b-2 border-primary'
+                  "pb-3 cursor-pointer whitespace-nowrap",
+                  activeTab === "findings" && "border-b-2 border-primary"
                 )}
-                onClick={() => handleTabChange('findings')}
+                onClick={() => handleTabChange("findings")}
               >
-                <span className={cn(
-                  'font-semibold',
-                  isMobile ? 'text-xs' : 'text-sm',
-                  activeTab === 'findings' ? 'text-primary' : 'text-muted-foreground'
-                )}>
+                <span
+                  className={cn(
+                    "font-semibold",
+                    isMobile ? "text-xs" : "text-sm",
+                    activeTab === "findings" ? "text-primary" : "text-muted-foreground"
+                  )}
+                >
                   Inspection Findings
                 </span>
               </div>
@@ -411,14 +450,14 @@ export default function InspectionView({ company }: InspectionViewProps) {
           </div>
 
           <Button
-            size={isMobile ? 'default' : 'lg'}
+            size={isMobile ? "default" : "lg"}
             onClick={() => {
-              navigate({ search: (prev) => ({ ...prev, modal: 'schedule' }) })
+              navigate({ search: (prev) => ({ ...prev, modal: "schedule" }) })
               setModalError(null)
             }}
             className={cn(
-              'font-semibold whitespace-nowrap',
-              isMobile ? 'w-full h-10 text-sm' : 'h-11 text-base'
+              "font-semibold whitespace-nowrap",
+              isMobile ? "w-full h-10 text-sm" : "h-11 text-base"
             )}
           >
             Schedule Inspection
@@ -426,23 +465,47 @@ export default function InspectionView({ company }: InspectionViewProps) {
         </div>
       </div>
 
-      {activeTab === 'scheduled' && (
+      {activeTab === "scheduled" && (
         <>
-          {filteredInspections.length === 0 && searchText === '' && selectedStatuses.includes('all') ? (
+          {filteredInspections.length === 0 &&
+          searchText === "" &&
+          selectedStatuses.includes("all") ? (
             <Card className="mt-20">
-              <CardContent className={cn('flex flex-col items-center justify-center', isMobile ? 'py-12' : 'py-16')}>
-                <FileText className={cn('text-muted-foreground mb-4', isMobile ? 'w-12 h-12' : 'w-16 h-16')} />
-                <p className={cn('font-semibold text-center mb-2', isMobile ? 'text-base' : 'text-lg')}>
+              <CardContent
+                className={cn(
+                  "flex flex-col items-center justify-center",
+                  isMobile ? "py-12" : "py-16"
+                )}
+              >
+                <FileText
+                  className={cn("text-muted-foreground mb-4", isMobile ? "w-12 h-12" : "w-16 h-16")}
+                />
+                <p
+                  className={cn(
+                    "font-semibold text-center mb-2",
+                    isMobile ? "text-base" : "text-lg"
+                  )}
+                >
                   No Scheduled Inspections found
                 </p>
-                <p className={cn('text-muted-foreground text-center m-0', isMobile ? 'text-xs' : 'text-sm')}>
+                <p
+                  className={cn(
+                    "text-muted-foreground text-center m-0",
+                    isMobile ? "text-xs" : "text-sm"
+                  )}
+                >
                   Click on "Schedule Inspection" to input new records
                 </p>
               </CardContent>
             </Card>
           ) : (
             <>
-              <div className={cn('flex justify-between items-start gap-4', isMobile ? 'mb-4 flex-col' : 'mb-6 flex-row')}>
+              <div
+                className={cn(
+                  "flex justify-between items-start gap-4",
+                  isMobile ? "mb-4 flex-col" : "mb-6 flex-row"
+                )}
+              >
                 <InspectionFilters
                   searchText={localSearchText}
                   onSearchChange={setLocalSearchText}
@@ -498,26 +561,48 @@ export default function InspectionView({ company }: InspectionViewProps) {
         </>
       )}
 
-      {activeTab === 'findings' && (
+      {activeTab === "findings" && (
         <>
           {filteredFindings.length === 0 &&
-          findingsSearchText === '' &&
-          selectedSeverities.includes('all') &&
-          selectedFindingStatuses.includes('all') ? (
+          findingsSearchText === "" &&
+          selectedSeverities.includes("all") &&
+          selectedFindingStatuses.includes("all") ? (
             <Card className="mt-20">
-              <CardContent className={cn('flex flex-col items-center justify-center', isMobile ? 'py-12' : 'py-16')}>
-                <FileText className={cn('text-muted-foreground mb-4', isMobile ? 'w-12 h-12' : 'w-16 h-16')} />
-                <p className={cn('font-semibold text-center mb-2', isMobile ? 'text-base' : 'text-lg')}>
+              <CardContent
+                className={cn(
+                  "flex flex-col items-center justify-center",
+                  isMobile ? "py-12" : "py-16"
+                )}
+              >
+                <FileText
+                  className={cn("text-muted-foreground mb-4", isMobile ? "w-12 h-12" : "w-16 h-16")}
+                />
+                <p
+                  className={cn(
+                    "font-semibold text-center mb-2",
+                    isMobile ? "text-base" : "text-lg"
+                  )}
+                >
                   No Inspection Findings available
                 </p>
-                <p className={cn('text-muted-foreground text-center m-0', isMobile ? 'text-xs' : 'text-sm')}>
+                <p
+                  className={cn(
+                    "text-muted-foreground text-center m-0",
+                    isMobile ? "text-xs" : "text-sm"
+                  )}
+                >
                   Inspection findings will appear here once inspections are completed
                 </p>
               </CardContent>
             </Card>
           ) : (
             <>
-              <div className={cn('flex justify-between items-start gap-4', isMobile ? 'mb-4 flex-col' : 'mb-6 flex-row')}>
+              <div
+                className={cn(
+                  "flex justify-between items-start gap-4",
+                  isMobile ? "mb-4 flex-col" : "mb-6 flex-row"
+                )}
+              >
                 <FindingsFilters
                   searchText={findingsSearchText}
                   onSearchChange={setFindingsSearchText}
@@ -541,11 +626,7 @@ export default function InspectionView({ company }: InspectionViewProps) {
               {isMobile || isTablet ? (
                 <div>
                   {filteredFindings.map((finding) => (
-                    <FindingCard
-                      key={finding.id}
-                      finding={finding}
-                      onView={handleViewFinding}
-                    />
+                    <FindingCard key={finding.id} finding={finding} onView={handleViewFinding} />
                   ))}
                 </div>
               ) : (

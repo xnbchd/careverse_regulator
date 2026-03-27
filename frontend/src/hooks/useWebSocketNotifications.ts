@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react'
-import { getWebSocketClient, type WebSocketClient } from '@/lib/websocket'
-import { useNotificationStore } from '@/stores/notificationStore'
-import type { Notification } from '@/stores/notificationStore'
+import { useEffect, useRef } from "react"
+import { getWebSocketClient, type WebSocketClient } from "@/lib/websocket"
+import { useNotificationStore } from "@/stores/notificationStore"
+import type { Notification } from "@/stores/notificationStore"
 
 /**
  * Hook to connect WebSocket to notification store.
@@ -30,8 +30,8 @@ export function useWebSocketNotifications() {
     clientRef.current = client
 
     const unsubscribeNotification = client.on(
-      'notification',
-      (data: Omit<Notification, 'id' | 'timestamp' | 'read'>) => {
+      "notification",
+      (data: Omit<Notification, "id" | "timestamp" | "read">) => {
         if (categoriesRef.current[data.category]) {
           addNotification(data)
         }
@@ -39,15 +39,15 @@ export function useWebSocketNotifications() {
     )
 
     const unsubscribeConnect = client.onConnect(() => {
-      console.log('WebSocket connected for notifications')
+      console.log("WebSocket connected for notifications")
     })
 
     const unsubscribeDisconnect = client.onDisconnect(() => {
-      console.log('WebSocket disconnected')
+      console.log("WebSocket disconnected")
     })
 
     const unsubscribeError = client.onError((error) => {
-      console.error('WebSocket error:', error)
+      console.error("WebSocket error:", error)
     })
 
     if (!client.isConnected) {
@@ -64,6 +64,6 @@ export function useWebSocketNotifications() {
 
   return {
     isConnected: clientRef.current?.isConnected ?? false,
-    state: clientRef.current?.state ?? 'CLOSED',
+    state: clientRef.current?.state ?? "CLOSED",
   }
 }

@@ -1,31 +1,23 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import {
-  Users,
-  Shield,
-  UserPlus,
-  Upload,
-  Activity,
-  UserCheck,
-  UserX,
-} from 'lucide-react'
-import { useUserStore } from '@/stores/userStore'
-import { fetchUsers } from '@/api/userManagementApi'
-import { showError } from '@/utils/toast'
-import UserFilters from './UserFilters'
-import UsersTable from './UsersTable'
-import RolesSection from './RolesSection'
-import ActivityReportSection from './ActivityReportSection'
-import CreateUserDialog from './CreateUserDialog'
-import EditUserDialog from './EditUserDialog'
-import DisableUserDialog from './DisableUserDialog'
-import ResetPasswordDialog from './ResetPasswordDialog'
-import BulkUploadDialog from './BulkUploadDialog'
-import type { FrappeUser, PortalRole } from '@/types/user'
-import type { UserTab } from '@/stores/userStore'
+import { useState, useEffect, useCallback } from "react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Users, Shield, UserPlus, Upload, Activity, UserCheck, UserX } from "lucide-react"
+import { useUserStore } from "@/stores/userStore"
+import { fetchUsers } from "@/api/userManagementApi"
+import { showError } from "@/utils/toast"
+import UserFilters from "./UserFilters"
+import UsersTable from "./UsersTable"
+import RolesSection from "./RolesSection"
+import ActivityReportSection from "./ActivityReportSection"
+import CreateUserDialog from "./CreateUserDialog"
+import EditUserDialog from "./EditUserDialog"
+import DisableUserDialog from "./DisableUserDialog"
+import ResetPasswordDialog from "./ResetPasswordDialog"
+import BulkUploadDialog from "./BulkUploadDialog"
+import type { FrappeUser, PortalRole } from "@/types/user"
+import type { UserTab } from "@/stores/userStore"
 
 export default function UserAdministrationView() {
   const {
@@ -50,13 +42,13 @@ export default function UserAdministrationView() {
   const [resetPwOpen, setResetPwOpen] = useState(false)
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<FrappeUser | null>(null)
-  const [disableAction, setDisableAction] = useState<'disable' | 'enable'>('disable')
+  const [disableAction, setDisableAction] = useState<"disable" | "enable">("disable")
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
     try {
       const enabledFilter =
-        filters.status === 'active' ? 1 : filters.status === 'disabled' ? 0 : undefined
+        filters.status === "active" ? 1 : filters.status === "disabled" ? 0 : undefined
 
       const result = await fetchUsers({
         page: filters.page,
@@ -68,15 +60,13 @@ export default function UserAdministrationView() {
 
       // Client-side role filtering since the backend doesn't support it
       let filteredUsers = result.users
-      if (filters.role && filters.role !== 'all') {
-        filteredUsers = filteredUsers.filter((u) =>
-          u.roles.includes(filters.role as PortalRole),
-        )
+      if (filters.role && filters.role !== "all") {
+        filteredUsers = filteredUsers.filter((u) => u.roles.includes(filters.role as PortalRole))
       }
 
       setUsers(filteredUsers, result.pagination)
     } catch {
-      showError('Failed to load users')
+      showError("Failed to load users")
       setLoading(false)
     }
   }, [filters.page, filters.page_size, filters.search, filters.status, filters.role])
@@ -96,13 +86,13 @@ export default function UserAdministrationView() {
 
   const handleDisable = (user: FrappeUser) => {
     setSelectedUser(user)
-    setDisableAction('disable')
+    setDisableAction("disable")
     setDisableOpen(true)
   }
 
   const handleEnable = (user: FrappeUser) => {
     setSelectedUser(user)
-    setDisableAction('enable')
+    setDisableAction("enable")
     setDisableOpen(true)
   }
 
@@ -244,7 +234,7 @@ export default function UserAdministrationView() {
                 Previous
               </Button>
               <span className="text-sm text-muted-foreground self-center">
-                Page {pagination.current_page} of{' '}
+                Page {pagination.current_page} of{" "}
                 {Math.ceil(pagination.count / pagination.page_size)}
               </span>
               <Button
@@ -271,11 +261,7 @@ export default function UserAdministrationView() {
       </Tabs>
 
       {/* Dialogs */}
-      <CreateUserDialog
-        open={createOpen}
-        onOpenChange={setCreateOpen}
-        onSuccess={loadUsers}
-      />
+      <CreateUserDialog open={createOpen} onOpenChange={setCreateOpen} onSuccess={loadUsers} />
 
       <EditUserDialog
         open={editOpen}
@@ -292,11 +278,7 @@ export default function UserAdministrationView() {
         onSuccess={loadUsers}
       />
 
-      <ResetPasswordDialog
-        open={resetPwOpen}
-        onOpenChange={setResetPwOpen}
-        user={selectedUser}
-      />
+      <ResetPasswordDialog open={resetPwOpen} onOpenChange={setResetPwOpen} user={selectedUser} />
 
       <BulkUploadDialog
         open={bulkUploadOpen}

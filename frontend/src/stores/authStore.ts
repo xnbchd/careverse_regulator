@@ -1,19 +1,19 @@
-import { create } from 'zustand'
-import type { AuthState, PortalUser } from '@/types/auth'
+import { create } from "zustand"
+import type { AuthState, PortalUser } from "@/types/auth"
 import {
   getActiveCompanyFromBoot,
   getBootData,
   getCompanyBrandingFromBoot,
   getPortalAccessFromBoot,
   fetchAndCacheCsrfToken,
-} from '@/utils/boot'
+} from "@/utils/boot"
 
 const allowedRoles = new Set([
-  'System Manager',
-  'Regulator Admin',
-  'Regulator Manager',
-  'Compliance Regulator',
-  'Regulator User',
+  "System Manager",
+  "Regulator Admin",
+  "Regulator Manager",
+  "Compliance Regulator",
+  "Regulator User",
 ])
 
 interface LoggedUserResponse {
@@ -56,7 +56,7 @@ function mapBootUser(): PortalUser | null {
   const sessionUser = boot?.session?.user
   const branding = getCompanyBrandingFromBoot()
 
-  if (!sessionUser || sessionUser === 'Guest') {
+  if (!sessionUser || sessionUser === "Guest") {
     return null
   }
 
@@ -75,29 +75,36 @@ function mapBootUser(): PortalUser | null {
 }
 
 function logoutRedirect(): string {
-  return '/logout?redirect-to=/'
+  return "/logout?redirect-to=/"
 }
 
-function mapAccessFromBoot(): { companyAllowed: boolean; accessIssue: AuthState['accessIssue']; accessMessage: string | null } {
+function mapAccessFromBoot(): {
+  companyAllowed: boolean
+  accessIssue: AuthState["accessIssue"]
+  accessMessage: string | null
+} {
   const portalAccess = getPortalAccessFromBoot()
   if (portalAccess) {
     if (portalAccess.allowed) {
       return { companyAllowed: true, accessIssue: null, accessMessage: null }
     }
 
-    if (portalAccess.reason === 'missing_company_permission') {
+    if (portalAccess.reason === "missing_company_permission") {
       return {
         companyAllowed: false,
-        accessIssue: 'missing_company_permission',
-        accessMessage: portalAccess.message || 'Assign exactly one Company User Permission to this user account.',
+        accessIssue: "missing_company_permission",
+        accessMessage:
+          portalAccess.message ||
+          "Assign exactly one Company User Permission to this user account.",
       }
     }
 
-    if (portalAccess.reason === 'multiple_company_permissions') {
+    if (portalAccess.reason === "multiple_company_permissions") {
       return {
         companyAllowed: false,
-        accessIssue: 'multiple_company_permissions',
-        accessMessage: portalAccess.message || 'This account has multiple Company permissions. Keep only one.',
+        accessIssue: "multiple_company_permissions",
+        accessMessage:
+          portalAccess.message || "This account has multiple Company permissions. Keep only one.",
       }
     }
   }
@@ -106,8 +113,8 @@ function mapAccessFromBoot(): { companyAllowed: boolean; accessIssue: AuthState[
   if (!company) {
     return {
       companyAllowed: false,
-      accessIssue: 'missing_company_permission',
-      accessMessage: 'Assign exactly one Company User Permission to this user account.',
+      accessIssue: "missing_company_permission",
+      accessMessage: "Assign exactly one Company User Permission to this user account.",
     }
   }
 
@@ -115,13 +122,15 @@ function mapAccessFromBoot(): { companyAllowed: boolean; accessIssue: AuthState[
 }
 
 async function fetchUserContext() {
-  const response = await fetch('/api/method/careverse_regulator.api.tenant.get_user_context', { credentials: 'include' })
+  const response = await fetch("/api/method/careverse_regulator.api.tenant.get_user_context", {
+    credentials: "include",
+  })
   const payload = (await response.json().catch(() => ({}))) as UserContextResponse
   return payload?.message || {}
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  status: 'loading',
+  status: "loading",
   user: null,
   hasPortalAccess: false,
   accessIssue: null,
@@ -138,12 +147,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       const roleAllowed = hasRoleAccess(bootUser.roles)
       const accessFromBoot = mapAccessFromBoot()
       const hasPortalAccess = roleAllowed && accessFromBoot.companyAllowed
-      const accessIssue = accessFromBoot.accessIssue || (!roleAllowed ? 'role_forbidden' : null)
-      const accessMessage = accessFromBoot.accessMessage
-        || (!roleAllowed ? 'Your account does not have one of the required portal roles.' : null)
+      const accessIssue = accessFromBoot.accessIssue || (!roleAllowed ? "role_forbidden" : null)
+      const accessMessage =
+        accessFromBoot.accessMessage ||
+        (!roleAllowed ? "Your account does not have one of the required portal roles." : null)
 
       set({
-        status: 'authenticated',
+        status: "authenticated",
         user: bootUser,
         hasPortalAccess,
         accessIssue,
@@ -153,11 +163,19 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
 
     try {
-      const response = await fetch('/api/method/frappe.auth.get_logged_user', { credentials: 'include' })
+      const response = await fetch("/api/method/frappe.auth.get_logged_user", {
+        credentials: "include",
+      })
       const payload = (await response.json().catch(() => ({}))) as LoggedUserResponse
       const user = payload?.message
-      if (!user || user === 'Guest') {
-        set({ status: 'guest', user: null, hasPortalAccess: false, accessIssue: null, accessMessage: null })
+      if (!user || user === "Guest") {
+        set({
+          status: "guest",
+          user: null,
+          hasPortalAccess: false,
+          accessIssue: null,
+          accessMessage: null,
+        })
         return
       }
 
@@ -178,28 +196,42 @@ export const useAuthStore = create<AuthState>((set) => ({
       const context = await fetchUserContext().catch(() => ({}))
       const userRoles = context.roles || []
       const roleAllowed = hasRoleAccess(userRoles)
-      const activeCompany = context.active_company || context.company_display_name || fallbackUser.company || null
+      const activeCompany =
+        context.active_company || context.company_display_name || fallbackUser.company || null
       const branding = context.company_branding || {}
-      const companyDisplayName = branding.display_name || context.company_display_name || fallbackUser.companyDisplayName || activeCompany
+      const companyDisplayName =
+        branding.display_name ||
+        context.company_display_name ||
+        fallbackUser.companyDisplayName ||
+        activeCompany
       const companyAbbr = branding.abbr || context.company_abbr || fallbackUser.companyAbbr || null
       const companyLogo = branding.logo || context.company_logo || fallbackUser.companyLogo || null
-      const faviconUrl = branding.favicon_url || context.favicon_url || companyLogo || fallbackUser.faviconUrl || null
-      const accessAllowed = Boolean(roleAllowed && (context.portal_access?.allowed ?? true) && activeCompany)
-      const accessIssue = context.portal_access?.reason === 'multiple_company_permissions'
-        ? 'multiple_company_permissions'
-        : context.portal_access?.reason === 'missing_company_permission'
-          ? 'missing_company_permission'
+      const faviconUrl =
+        branding.favicon_url ||
+        context.favicon_url ||
+        companyLogo ||
+        fallbackUser.faviconUrl ||
+        null
+      const accessAllowed = Boolean(
+        roleAllowed && (context.portal_access?.allowed ?? true) && activeCompany
+      )
+      const accessIssue =
+        context.portal_access?.reason === "multiple_company_permissions"
+          ? "multiple_company_permissions"
+          : context.portal_access?.reason === "missing_company_permission"
+          ? "missing_company_permission"
           : !roleAllowed
-            ? 'role_forbidden'
-            : !activeCompany
-              ? 'missing_company_permission'
-              : null
-      const accessMessage = context.portal_access?.message
-        || (!roleAllowed ? 'Your account does not have one of the required portal roles.' : null)
-        || (!activeCompany ? 'Assign exactly one Company User Permission to this user account.' : null)
+          ? "role_forbidden"
+          : !activeCompany
+          ? "missing_company_permission"
+          : null
+      const accessMessage =
+        context.portal_access?.message ||
+        (!roleAllowed ? "Your account does not have one of the required portal roles." : null) ||
+        (!activeCompany ? "Assign exactly one Company User Permission to this user account." : null)
 
       set({
-        status: 'authenticated',
+        status: "authenticated",
         user: {
           ...fallbackUser,
           roles: userRoles,
@@ -214,12 +246,24 @@ export const useAuthStore = create<AuthState>((set) => ({
         accessMessage,
       })
     } catch {
-      set({ status: 'guest', user: null, hasPortalAccess: false, accessIssue: null, accessMessage: null })
+      set({
+        status: "guest",
+        user: null,
+        hasPortalAccess: false,
+        accessIssue: null,
+        accessMessage: null,
+      })
     }
   },
 
   logout: async () => {
-    set({ status: 'guest', user: null, hasPortalAccess: false, accessIssue: null, accessMessage: null })
+    set({
+      status: "guest",
+      user: null,
+      hasPortalAccess: false,
+      accessIssue: null,
+      accessMessage: null,
+    })
     window.location.href = logoutRedirect()
   },
 }))

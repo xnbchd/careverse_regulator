@@ -1,18 +1,31 @@
-import { FileText, Download, Eye, Trash2, Edit, MoreVertical } from 'lucide-react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { FileText, Download, Eye, Trash2, Edit, MoreVertical } from "lucide-react"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { useNavigate } from '@tanstack/react-router'
-import type { Document } from '@/types/document'
-import { getCategoryLabel, getCategoryColor, formatFileSize, getFileIcon, isPreviewSupported } from '@/types/document'
-import { format } from 'date-fns'
+} from "@/components/ui/dropdown-menu"
+import { useNavigate } from "@tanstack/react-router"
+import type { Document } from "@/types/document"
+import {
+  getCategoryLabel,
+  getCategoryColor,
+  formatFileSize,
+  getFileIcon,
+  isPreviewSupported,
+} from "@/types/document"
+import { format } from "date-fns"
 
 interface DocumentListProps {
   documents: Document[]
@@ -85,7 +98,7 @@ export default function DocumentList({
                 </div>
               </TableCell>
               <TableCell className="text-sm text-muted-foreground">
-                {format(new Date(doc.uploadedAt), 'MMM d, yyyy')}
+                {format(new Date(doc.uploadedAt), "MMM d, yyyy")}
               </TableCell>
               <TableCell>
                 {doc.tags.length > 0 && (

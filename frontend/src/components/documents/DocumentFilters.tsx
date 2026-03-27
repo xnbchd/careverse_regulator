@@ -1,15 +1,15 @@
-import { Search, X } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Search, X } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { DocumentCategory, DocumentStatus, getCategoryLabel } from '@/types/document'
-import type { DocumentSearchParams } from '@/types/document'
+} from "@/components/ui/select"
+import { DocumentCategory, DocumentStatus, getCategoryLabel } from "@/types/document"
+import type { DocumentSearchParams } from "@/types/document"
 
 interface DocumentFiltersProps {
   searchParams: DocumentSearchParams
@@ -31,7 +31,7 @@ export default function DocumentFilters({
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
         <Input
           placeholder="Search documents..."
-          value={searchParams.query || ''}
+          value={searchParams.query || ""}
           onChange={(e) => onSearchChange({ query: e.target.value })}
           className="pl-9"
         />
@@ -39,9 +39,9 @@ export default function DocumentFilters({
 
       {/* Category Filter */}
       <Select
-        value={searchParams.category || 'all'}
+        value={searchParams.category || "all"}
         onValueChange={(val) =>
-          onSearchChange({ category: val === 'all' ? undefined : (val as DocumentCategory) })
+          onSearchChange({ category: val === "all" ? undefined : (val as DocumentCategory) })
         }
       >
         <SelectTrigger className="w-full md:w-[200px]">
@@ -59,9 +59,9 @@ export default function DocumentFilters({
 
       {/* Status Filter */}
       <Select
-        value={searchParams.status || 'all'}
+        value={searchParams.status || "all"}
         onValueChange={(val) =>
-          onSearchChange({ status: val === 'all' ? undefined : (val as DocumentStatus) })
+          onSearchChange({ status: val === "all" ? undefined : (val as DocumentStatus) })
         }
       >
         <SelectTrigger className="w-full md:w-[180px]">
@@ -76,12 +76,12 @@ export default function DocumentFilters({
 
       {/* Sort */}
       <Select
-        value={`${searchParams.sortBy || 'uploadedAt'}_${searchParams.sortOrder || 'desc'}`}
+        value={`${searchParams.sortBy || "uploadedAt"}_${searchParams.sortOrder || "desc"}`}
         onValueChange={(val) => {
-          const [sortBy, sortOrder] = val.split('_')
+          const [sortBy, sortOrder] = val.split("_")
           onSearchChange({
             sortBy: sortBy as any,
-            sortOrder: sortOrder as 'asc' | 'desc',
+            sortOrder: sortOrder as "asc" | "desc",
           })
         }}
       >

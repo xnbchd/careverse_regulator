@@ -1,27 +1,20 @@
-import { useMemo } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { useLicensingStore } from '@/stores/licensingStore'
+import { useMemo } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { useLicensingStore } from "@/stores/licensingStore"
 import {
   MetricCard,
   StatusDistribution,
   PrioritySection,
   QuickActions,
   TrendChart,
-} from '@/components/dashboard'
-import {
-  CheckCircle,
-  Clock,
-  XCircle,
-  FileText,
-  List,
-  FileQuestion,
-} from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
+} from "@/components/dashboard"
+import { CheckCircle, Clock, XCircle, FileText, List, FileQuestion } from "lucide-react"
+import { formatDistanceToNow } from "date-fns"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
 dayjs.extend(customParseFormat)
-import { Button } from '@/components/ui/button'
-import type { LicenseApplication, ProfessionalLicenseApplication } from '@/types/license'
+import { Button } from "@/components/ui/button"
+import type { LicenseApplication, ProfessionalLicenseApplication } from "@/types/license"
 
 type CombinedApplication = {
   id: string
@@ -30,7 +23,7 @@ type CombinedApplication = {
   licenseTypeName: string
   applicationStatus: string
   applicationDate: string
-  source: 'facility' | 'professional'
+  source: "facility" | "professional"
 }
 
 export function ApplicationsDashboard() {
@@ -51,7 +44,7 @@ export function ApplicationsDashboard() {
       licenseTypeName: a.licenseTypeName,
       applicationStatus: a.applicationStatus,
       applicationDate: a.applicationDate,
-      source: 'facility' as const,
+      source: "facility" as const,
     }))
 
     const profApps: CombinedApplication[] = professionalApplications.map((a) => ({
@@ -61,7 +54,7 @@ export function ApplicationsDashboard() {
       licenseTypeName: a.licenseTypeName,
       applicationStatus: a.applicationStatus,
       applicationDate: a.applicationDate,
-      source: 'professional' as const,
+      source: "professional" as const,
     }))
 
     return [...facilityApps, ...profApps]
@@ -72,20 +65,14 @@ export function ApplicationsDashboard() {
   // Compute metrics
   const metrics = useMemo(() => {
     const newApps = allApplications.filter(
-      (a) => a.applicationStatus === 'Pending' && a.applicationType === 'New'
+      (a) => a.applicationStatus === "Pending" && a.applicationType === "New"
     ).length
 
-    const inReview = allApplications.filter(
-      (a) => a.applicationStatus === 'Info Requested'
-    ).length
+    const inReview = allApplications.filter((a) => a.applicationStatus === "Info Requested").length
 
-    const approvedThisMonth = allApplications.filter(
-      (a) => a.applicationStatus === 'Issued'
-    ).length
+    const approvedThisMonth = allApplications.filter((a) => a.applicationStatus === "Issued").length
 
-    const denied = allApplications.filter(
-      (a) => a.applicationStatus === 'Denied'
-    ).length
+    const denied = allApplications.filter((a) => a.applicationStatus === "Denied").length
 
     const total = allApplications.length
 
@@ -94,35 +81,29 @@ export function ApplicationsDashboard() {
 
   // Status distribution data
   const statusDistribution = useMemo(() => {
-    const statusCounts = allApplications.reduce(
-      (acc, app) => {
-        const status = app.applicationStatus
-        acc[status] = (acc[status] || 0) + 1
-        return acc
-      },
-      {} as Record<string, number>
-    )
+    const statusCounts = allApplications.reduce((acc, app) => {
+      const status = app.applicationStatus
+      acc[status] = (acc[status] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
 
     const statusColors: Record<string, string> = {
-      Pending: '#f59e0b',
-      Issued: '#10b981',
-      'Info Requested': '#3b82f6',
-      Denied: '#ef4444',
+      Pending: "#f59e0b",
+      Issued: "#10b981",
+      "Info Requested": "#3b82f6",
+      Denied: "#ef4444",
     }
 
     return Object.entries(statusCounts).map(([status, count]) => ({
       status,
       count,
-      color: statusColors[status] || '#6b7280',
+      color: statusColors[status] || "#6b7280",
     }))
   }, [allApplications])
 
   // Pending applications for priority section
   const pendingApplications = useMemo(
-    () =>
-      allApplications
-        .filter((a) => a.applicationStatus === 'Pending')
-        .slice(0, 5),
+    () => allApplications.filter((a) => a.applicationStatus === "Pending").slice(0, 5),
     [allApplications]
   )
 
@@ -130,29 +111,29 @@ export function ApplicationsDashboard() {
   const quickActions = useMemo(
     () => [
       {
-        label: 'View All Applications',
-        onClick: () => navigate({ to: '/license-management/applications' }),
-        variant: 'default' as const,
+        label: "View All Applications",
+        onClick: () => navigate({ to: "/license-management/applications" }),
+        variant: "default" as const,
         icon: List,
       },
       {
-        label: 'Review Pending',
+        label: "Review Pending",
         onClick: () =>
           navigate({
-            to: '/license-management/applications',
-            search: { status: 'Pending' },
+            to: "/license-management/applications",
+            search: { status: "Pending" },
           }),
-        variant: 'secondary' as const,
+        variant: "secondary" as const,
         icon: Clock,
       },
       {
-        label: 'Info Requested',
+        label: "Info Requested",
         onClick: () =>
           navigate({
-            to: '/license-management/applications',
-            search: { status: 'Info Requested' },
+            to: "/license-management/applications",
+            search: { status: "Info Requested" },
           }),
-        variant: 'outline' as const,
+        variant: "outline" as const,
         icon: FileQuestion,
       },
     ],
@@ -163,24 +144,24 @@ export function ApplicationsDashboard() {
     return (
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
-          <p className="font-medium text-foreground truncate">
-            {app.name}
-          </p>
+          <p className="font-medium text-foreground truncate">{app.name}</p>
           <p className="text-sm text-muted-foreground truncate">
             {app.applicationType} • {app.licenseTypeName}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            Submitted{' '}
+            Submitted{" "}
             {app.applicationDate
-              ? formatDistanceToNow(dayjs(app.applicationDate, 'DD/MM/YYYY').toDate(), { addSuffix: true })
-              : '—'}
+              ? formatDistanceToNow(dayjs(app.applicationDate, "DD/MM/YYYY").toDate(), {
+                  addSuffix: true,
+                })
+              : "—"}
           </p>
         </div>
         <div className="flex gap-2">
           <Button
             size="sm"
             variant="default"
-            onClick={() => navigate({ to: '/license-management/applications' })}
+            onClick={() => navigate({ to: "/license-management/applications" })}
           >
             Review
           </Button>
@@ -214,8 +195,8 @@ export function ApplicationsDashboard() {
           icon={FileText}
           onClick={() =>
             navigate({
-              to: '/license-management/applications',
-              search: { status: 'Pending', type: 'New' },
+              to: "/license-management/applications",
+              search: { status: "Pending", type: "New" },
             })
           }
         />
@@ -226,8 +207,8 @@ export function ApplicationsDashboard() {
           icon={FileQuestion}
           onClick={() =>
             navigate({
-              to: '/license-management/applications',
-              search: { status: 'Info Requested' },
+              to: "/license-management/applications",
+              search: { status: "Info Requested" },
             })
           }
         />
@@ -237,12 +218,7 @@ export function ApplicationsDashboard() {
           variant="success"
           icon={CheckCircle}
         />
-        <MetricCard
-          title="Denied"
-          value={metrics.denied}
-          variant="danger"
-          icon={XCircle}
-        />
+        <MetricCard title="Denied" value={metrics.denied} variant="danger" icon={XCircle} />
       </div>
 
       {/* Status Distribution and Priority Section */}
@@ -251,7 +227,7 @@ export function ApplicationsDashboard() {
           data={statusDistribution}
           title="Application Status Distribution"
           onSegmentClick={(status) =>
-            navigate({ to: '/license-management/applications', search: { status } })
+            navigate({ to: "/license-management/applications", search: { status } })
           }
         />
         <PrioritySection
@@ -260,14 +236,13 @@ export function ApplicationsDashboard() {
           renderItem={renderPendingItem}
           onViewAll={() =>
             navigate({
-              to: '/license-management/applications',
-              search: { status: 'Pending' },
+              to: "/license-management/applications",
+              search: { status: "Pending" },
             })
           }
           emptyMessage="No pending applications to review"
         />
       </div>
-
     </div>
   )
 }

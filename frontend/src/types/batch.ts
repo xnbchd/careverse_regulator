@@ -11,59 +11,59 @@
  */
 export enum BatchActionType {
   // License actions
-  LICENSE_APPROVE = 'license_approve',
-  LICENSE_REJECT = 'license_reject',
-  LICENSE_SUSPEND = 'license_suspend',
-  LICENSE_RENEW = 'license_renew',
-  LICENSE_REVOKE = 'license_revoke',
-  LICENSE_DELETE = 'license_delete',
+  LICENSE_APPROVE = "license_approve",
+  LICENSE_REJECT = "license_reject",
+  LICENSE_SUSPEND = "license_suspend",
+  LICENSE_RENEW = "license_renew",
+  LICENSE_REVOKE = "license_revoke",
+  LICENSE_DELETE = "license_delete",
 
   // Affiliation actions
-  AFFILIATION_APPROVE = 'affiliation_approve',
-  AFFILIATION_REJECT = 'affiliation_reject',
-  AFFILIATION_ACTIVATE = 'affiliation_activate',
-  AFFILIATION_DEACTIVATE = 'affiliation_deactivate',
-  AFFILIATION_DELETE = 'affiliation_delete',
+  AFFILIATION_APPROVE = "affiliation_approve",
+  AFFILIATION_REJECT = "affiliation_reject",
+  AFFILIATION_ACTIVATE = "affiliation_activate",
+  AFFILIATION_DEACTIVATE = "affiliation_deactivate",
+  AFFILIATION_DELETE = "affiliation_delete",
 
   // Document actions
-  DOCUMENT_DELETE = 'document_delete',
-  DOCUMENT_DOWNLOAD = 'document_download',
-  DOCUMENT_SHARE = 'document_share',
-  DOCUMENT_UPDATE_CATEGORY = 'document_update_category',
-  DOCUMENT_UPDATE_TAGS = 'document_update_tags',
+  DOCUMENT_DELETE = "document_delete",
+  DOCUMENT_DOWNLOAD = "document_download",
+  DOCUMENT_SHARE = "document_share",
+  DOCUMENT_UPDATE_CATEGORY = "document_update_category",
+  DOCUMENT_UPDATE_TAGS = "document_update_tags",
 
   // Inspection actions
-  INSPECTION_SCHEDULE = 'inspection_schedule',
-  INSPECTION_CANCEL = 'inspection_cancel',
-  INSPECTION_RESCHEDULE = 'inspection_reschedule',
+  INSPECTION_SCHEDULE = "inspection_schedule",
+  INSPECTION_CANCEL = "inspection_cancel",
+  INSPECTION_RESCHEDULE = "inspection_reschedule",
 
   // Generic actions
-  BULK_UPDATE = 'bulk_update',
-  BULK_DELETE = 'bulk_delete',
-  BULK_EXPORT = 'bulk_export',
+  BULK_UPDATE = "bulk_update",
+  BULK_DELETE = "bulk_delete",
+  BULK_EXPORT = "bulk_export",
 }
 
 /**
  * Status of a batch operation
  */
 export enum BatchOperationStatus {
-  PENDING = 'pending',
-  RUNNING = 'running',
-  PAUSED = 'paused',
-  COMPLETED = 'completed',
-  CANCELLED = 'cancelled',
-  FAILED = 'failed',
+  PENDING = "pending",
+  RUNNING = "running",
+  PAUSED = "paused",
+  COMPLETED = "completed",
+  CANCELLED = "cancelled",
+  FAILED = "failed",
 }
 
 /**
  * Status of an individual item in a batch operation
  */
 export enum BatchItemStatus {
-  PENDING = 'pending',
-  PROCESSING = 'processing',
-  SUCCESS = 'success',
-  FAILED = 'failed',
-  SKIPPED = 'skipped',
+  PENDING = "pending",
+  PROCESSING = "processing",
+  SUCCESS = "success",
+  FAILED = "failed",
+  SKIPPED = "skipped",
 }
 
 // ============================================================================
@@ -259,28 +259,28 @@ export interface BatchActionContext {
  */
 export function getBatchActionLabel(type: BatchActionType): string {
   const labels: Record<BatchActionType, string> = {
-    [BatchActionType.LICENSE_APPROVE]: 'Approve Licenses',
-    [BatchActionType.LICENSE_REJECT]: 'Reject Licenses',
-    [BatchActionType.LICENSE_SUSPEND]: 'Suspend Licenses',
-    [BatchActionType.LICENSE_RENEW]: 'Renew Licenses',
-    [BatchActionType.LICENSE_REVOKE]: 'Revoke Licenses',
-    [BatchActionType.LICENSE_DELETE]: 'Delete Licenses',
-    [BatchActionType.AFFILIATION_APPROVE]: 'Approve Affiliations',
-    [BatchActionType.AFFILIATION_REJECT]: 'Reject Affiliations',
-    [BatchActionType.AFFILIATION_ACTIVATE]: 'Activate Affiliations',
-    [BatchActionType.AFFILIATION_DEACTIVATE]: 'Deactivate Affiliations',
-    [BatchActionType.AFFILIATION_DELETE]: 'Delete Affiliations',
-    [BatchActionType.DOCUMENT_DELETE]: 'Delete Documents',
-    [BatchActionType.DOCUMENT_DOWNLOAD]: 'Download Documents',
-    [BatchActionType.DOCUMENT_SHARE]: 'Share Documents',
-    [BatchActionType.DOCUMENT_UPDATE_CATEGORY]: 'Update Document Category',
-    [BatchActionType.DOCUMENT_UPDATE_TAGS]: 'Update Document Tags',
-    [BatchActionType.INSPECTION_SCHEDULE]: 'Schedule Inspections',
-    [BatchActionType.INSPECTION_CANCEL]: 'Cancel Inspections',
-    [BatchActionType.INSPECTION_RESCHEDULE]: 'Reschedule Inspections',
-    [BatchActionType.BULK_UPDATE]: 'Bulk Update',
-    [BatchActionType.BULK_DELETE]: 'Bulk Delete',
-    [BatchActionType.BULK_EXPORT]: 'Bulk Export',
+    [BatchActionType.LICENSE_APPROVE]: "Approve Licenses",
+    [BatchActionType.LICENSE_REJECT]: "Reject Licenses",
+    [BatchActionType.LICENSE_SUSPEND]: "Suspend Licenses",
+    [BatchActionType.LICENSE_RENEW]: "Renew Licenses",
+    [BatchActionType.LICENSE_REVOKE]: "Revoke Licenses",
+    [BatchActionType.LICENSE_DELETE]: "Delete Licenses",
+    [BatchActionType.AFFILIATION_APPROVE]: "Approve Affiliations",
+    [BatchActionType.AFFILIATION_REJECT]: "Reject Affiliations",
+    [BatchActionType.AFFILIATION_ACTIVATE]: "Activate Affiliations",
+    [BatchActionType.AFFILIATION_DEACTIVATE]: "Deactivate Affiliations",
+    [BatchActionType.AFFILIATION_DELETE]: "Delete Affiliations",
+    [BatchActionType.DOCUMENT_DELETE]: "Delete Documents",
+    [BatchActionType.DOCUMENT_DOWNLOAD]: "Download Documents",
+    [BatchActionType.DOCUMENT_SHARE]: "Share Documents",
+    [BatchActionType.DOCUMENT_UPDATE_CATEGORY]: "Update Document Category",
+    [BatchActionType.DOCUMENT_UPDATE_TAGS]: "Update Document Tags",
+    [BatchActionType.INSPECTION_SCHEDULE]: "Schedule Inspections",
+    [BatchActionType.INSPECTION_CANCEL]: "Cancel Inspections",
+    [BatchActionType.INSPECTION_RESCHEDULE]: "Reschedule Inspections",
+    [BatchActionType.BULK_UPDATE]: "Bulk Update",
+    [BatchActionType.BULK_DELETE]: "Bulk Delete",
+    [BatchActionType.BULK_EXPORT]: "Bulk Export",
   }
   return labels[type] || type
 }

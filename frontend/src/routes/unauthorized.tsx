@@ -1,17 +1,17 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
-import UnauthorizedPage from '@/components/UnauthorizedPage'
-import { useAuthStore } from '@/stores/authStore'
+import { createFileRoute } from "@tanstack/react-router"
+import { z } from "zod"
+import UnauthorizedPage from "@/components/UnauthorizedPage"
+import { useAuthStore } from "@/stores/authStore"
 
 const unauthorizedSearchSchema = z.object({
-  mode: z.enum(['guest', 'forbidden', 'tenant-misconfigured']).default('guest'),
+  mode: z.enum(["guest", "forbidden", "tenant-misconfigured"]).default("guest"),
 })
 
 type UnauthorizedSearch = z.infer<typeof unauthorizedSearchSchema>
 
 function normalizeRoute(route: string): string {
-  if (!route) return 'dashboard'
-  return route.replace(/^#/, '').replace(/^\/+/, '') || 'dashboard'
+  if (!route) return "dashboard"
+  return route.replace(/^#/, "").replace(/^\/+/, "") || "dashboard"
 }
 
 function readHashRoute(): string {
@@ -23,11 +23,11 @@ function loginUrlForRoute(route: string): string {
 }
 
 function logoutUrl(): string {
-  return '/logout?redirect-to=/'
+  return "/logout?redirect-to=/"
 }
 
 function switchToDesk(): void {
-  window.location.href = '/app'
+  window.location.href = "/app"
 }
 
 function UnauthorizedComponent() {
@@ -40,9 +40,12 @@ function UnauthorizedComponent() {
     window.location.href = logoutUrl()
   }
 
-  const handleContinueLimited = mode === 'forbidden' ? () => {
-    window.location.hash = 'dashboard/empty'
-  } : undefined
+  const handleContinueLimited =
+    mode === "forbidden"
+      ? () => {
+          window.location.hash = "dashboard/empty"
+        }
+      : undefined
 
   return (
     <UnauthorizedPage
@@ -53,13 +56,13 @@ function UnauthorizedComponent() {
         window.location.href = loginUrlForRoute(route)
       }}
       onContinueLimited={handleContinueLimited}
-      onLogout={mode !== 'guest' ? handleLogout : undefined}
+      onLogout={mode !== "guest" ? handleLogout : undefined}
       onSwitchToDesk={switchToDesk}
     />
   )
 }
 
-export const Route = createFileRoute('/unauthorized')({
+export const Route = createFileRoute("/unauthorized")({
   component: UnauthorizedComponent,
   validateSearch: (search): UnauthorizedSearch => unauthorizedSearchSchema.parse(search),
 })

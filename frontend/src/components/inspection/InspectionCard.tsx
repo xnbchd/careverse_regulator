@@ -1,12 +1,12 @@
-import { Calendar, User, FileText } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
-import type { Inspection } from '@/types/inspection'
-import StatusBadge from './StatusBadge'
-import { EntityLink } from '@/components/entities/EntityLink'
-import dayjs from 'dayjs'
+import { Calendar, User, FileText } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import type { Inspection } from "@/types/inspection"
+import StatusBadge from "./StatusBadge"
+import { EntityLink } from "@/components/entities/EntityLink"
+import dayjs from "dayjs"
 
 interface InspectionCardProps {
   inspection: Inspection
@@ -14,9 +14,9 @@ interface InspectionCardProps {
 }
 
 function isInspectionOverdue(inspection: Inspection): boolean {
-  if (inspection.status !== 'Pending') return false
-  const today = dayjs().startOf('day')
-  const inspectionDate = dayjs(inspection.date, 'DD/MM/YYYY')
+  if (inspection.status !== "Pending") return false
+  const today = dayjs().startOf("day")
+  const inspectionDate = dayjs(inspection.date, "DD/MM/YYYY")
   return inspectionDate.isBefore(today)
 }
 
@@ -24,10 +24,7 @@ export default function InspectionCard({ inspection, onView }: InspectionCardPro
   const isOverdue = isInspectionOverdue(inspection)
 
   return (
-    <Card className={cn(
-      'mb-3',
-      isOverdue && 'border-2 border-red-500'
-    )}>
+    <Card className={cn("mb-3", isOverdue && "border-2 border-red-500")}>
       <CardContent className="p-4">
         <div className="mb-3">
           <div className="flex justify-between items-start gap-2 mb-2">
@@ -51,7 +48,9 @@ export default function InspectionCard({ inspection, onView }: InspectionCardPro
                 </div>
               </div>
               {isOverdue && (
-                <Badge variant="destructive" className="shrink-0">Overdue</Badge>
+                <Badge variant="destructive" className="shrink-0">
+                  Overdue
+                </Badge>
               )}
             </div>
             <StatusBadge status={inspection.status} />
@@ -85,10 +84,7 @@ export default function InspectionCard({ inspection, onView }: InspectionCardPro
           </div>
         </div>
 
-        <Button
-          className="w-full mt-4"
-          onClick={() => onView(inspection)}
-        >
+        <Button className="w-full mt-4" onClick={() => onView(inspection)}>
           View Details
         </Button>
       </CardContent>

@@ -1,14 +1,14 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { GlobalSearch } from '../GlobalSearch'
-import { useGlobalSearch } from '@/hooks/useGlobalSearch'
-import { useEntityDrawer } from '@/contexts/EntityDrawerContext'
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
+import { describe, it, expect, vi, beforeEach } from "vitest"
+import { GlobalSearch } from "../GlobalSearch"
+import { useGlobalSearch } from "@/hooks/useGlobalSearch"
+import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
 
 // Mock the hooks
-vi.mock('@/hooks/useGlobalSearch')
-vi.mock('@/contexts/EntityDrawerContext')
+vi.mock("@/hooks/useGlobalSearch")
+vi.mock("@/contexts/EntityDrawerContext")
 
-describe('GlobalSearch', () => {
+describe("GlobalSearch", () => {
   const mockOpenDrawer = vi.fn()
   const mockOnOpenChange = vi.fn()
   const mockClearSearch = vi.fn()
@@ -32,7 +32,7 @@ describe('GlobalSearch', () => {
     })
 
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: '',
+      query: "",
       setQuery: mockSetQuery,
       results: [],
       loading: false,
@@ -41,22 +41,22 @@ describe('GlobalSearch', () => {
     })
   })
 
-  it('renders CommandDialog when open is true', () => {
+  it("renders CommandDialog when open is true", () => {
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
     expect(screen.getByPlaceholderText(/search for professionals/i)).toBeInTheDocument()
   })
 
-  it('displays search input with correct placeholder', () => {
+  it("displays search input with correct placeholder", () => {
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    const input = screen.getByPlaceholderText('Search for professionals, licenses, facilities...')
+    const input = screen.getByPlaceholderText("Search for professionals, licenses, facilities...")
     expect(input).toBeInTheDocument()
   })
 
-  it('shows loading state when hook returns loading=true', () => {
+  it("shows loading state when hook returns loading=true", () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: 'test',
+      query: "test",
       setQuery: mockSetQuery,
       results: [],
       loading: true,
@@ -66,34 +66,34 @@ describe('GlobalSearch', () => {
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    expect(screen.getByText('Searching...')).toBeInTheDocument()
+    expect(screen.getByText("Searching...")).toBeInTheDocument()
   })
 
-  it('displays grouped results by doctype', () => {
+  it("displays grouped results by doctype", () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: 'test',
+      query: "test",
       setQuery: mockSetQuery,
       results: [
         {
-          title: 'Professional',
+          title: "Professional",
           results: [
             {
-              doctype: 'Professional',
-              name: 'PROF-001',
-              title: 'Dr. John Doe',
-              description: 'Cardiology, Active',
+              doctype: "Professional",
+              name: "PROF-001",
+              title: "Dr. John Doe",
+              description: "Cardiology, Active",
               image: null,
             },
           ],
         },
         {
-          title: 'Facility',
+          title: "Facility",
           results: [
             {
-              doctype: 'Facility',
-              name: 'FAC-001',
-              title: 'General Hospital',
-              description: 'Hospital, 100 beds',
+              doctype: "Facility",
+              name: "FAC-001",
+              title: "General Hospital",
+              description: "Hospital, 100 beds",
               image: null,
             },
           ],
@@ -106,28 +106,28 @@ describe('GlobalSearch', () => {
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    expect(screen.getByText('Professional')).toBeInTheDocument()
-    expect(screen.getByText('Dr. John Doe')).toBeInTheDocument()
-    expect(screen.getByText('Cardiology, Active')).toBeInTheDocument()
+    expect(screen.getByText("Professional")).toBeInTheDocument()
+    expect(screen.getByText("Dr. John Doe")).toBeInTheDocument()
+    expect(screen.getByText("Cardiology, Active")).toBeInTheDocument()
 
-    expect(screen.getByText('Facility')).toBeInTheDocument()
-    expect(screen.getByText('General Hospital')).toBeInTheDocument()
-    expect(screen.getByText('Hospital, 100 beds')).toBeInTheDocument()
+    expect(screen.getByText("Facility")).toBeInTheDocument()
+    expect(screen.getByText("General Hospital")).toBeInTheDocument()
+    expect(screen.getByText("Hospital, 100 beds")).toBeInTheDocument()
   })
 
-  it('calls openDrawer with correct type and ID when result clicked', async () => {
+  it("calls openDrawer with correct type and ID when result clicked", async () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: 'test',
+      query: "test",
       setQuery: mockSetQuery,
       results: [
         {
-          title: 'Professional',
+          title: "Professional",
           results: [
             {
-              doctype: 'Professional',
-              name: 'PROF-001',
-              title: 'Dr. John Doe',
-              description: 'Cardiology',
+              doctype: "Professional",
+              name: "PROF-001",
+              title: "Dr. John Doe",
+              description: "Cardiology",
               image: null,
             },
           ],
@@ -140,27 +140,27 @@ describe('GlobalSearch', () => {
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    const result = screen.getByText('Dr. John Doe')
+    const result = screen.getByText("Dr. John Doe")
     fireEvent.click(result)
 
     await waitFor(() => {
-      expect(mockOpenDrawer).toHaveBeenCalledWith('professional', 'PROF-001')
+      expect(mockOpenDrawer).toHaveBeenCalledWith("professional", "PROF-001")
     })
   })
 
-  it('calls onOpenChange(false) after result selected', async () => {
+  it("calls onOpenChange(false) after result selected", async () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: 'test',
+      query: "test",
       setQuery: mockSetQuery,
       results: [
         {
-          title: 'Professional',
+          title: "Professional",
           results: [
             {
-              doctype: 'Professional',
-              name: 'PROF-001',
-              title: 'Dr. John Doe',
-              description: 'Cardiology',
+              doctype: "Professional",
+              name: "PROF-001",
+              title: "Dr. John Doe",
+              description: "Cardiology",
               image: null,
             },
           ],
@@ -173,7 +173,7 @@ describe('GlobalSearch', () => {
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    const result = screen.getByText('Dr. John Doe')
+    const result = screen.getByText("Dr. John Doe")
     fireEvent.click(result)
 
     await waitFor(() => {
@@ -183,7 +183,7 @@ describe('GlobalSearch', () => {
 
   it('shows "Type to search..." when query is empty', () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: '',
+      query: "",
       setQuery: mockSetQuery,
       results: [],
       loading: false,
@@ -193,12 +193,12 @@ describe('GlobalSearch', () => {
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    expect(screen.getByText('Type to search...')).toBeInTheDocument()
+    expect(screen.getByText("Type to search...")).toBeInTheDocument()
   })
 
   it('shows "Type at least 2 characters..." when query length is 1', () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: 'a',
+      query: "a",
       setQuery: mockSetQuery,
       results: [],
       loading: false,
@@ -208,12 +208,12 @@ describe('GlobalSearch', () => {
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    expect(screen.getByText('Type at least 2 characters...')).toBeInTheDocument()
+    expect(screen.getByText("Type at least 2 characters...")).toBeInTheDocument()
   })
 
   it('shows "No results found" when results array is empty and query is valid', () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: 'nonexistent',
+      query: "nonexistent",
       setQuery: mockSetQuery,
       results: [],
       loading: false,
@@ -223,28 +223,26 @@ describe('GlobalSearch', () => {
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    expect(screen.getByText('No results found')).toBeInTheDocument()
+    expect(screen.getByText("No results found")).toBeInTheDocument()
   })
 
-  it('shows error message when hook returns error', () => {
+  it("shows error message when hook returns error", () => {
     vi.mocked(useGlobalSearch).mockReturnValue({
-      query: 'test',
+      query: "test",
       setQuery: mockSetQuery,
       results: [],
       loading: false,
-      error: 'Search unavailable',
+      error: "Search unavailable",
       clearSearch: mockClearSearch,
     })
 
     render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
-    expect(screen.getByText('Search unavailable')).toBeInTheDocument()
+    expect(screen.getByText("Search unavailable")).toBeInTheDocument()
   })
 
-  it('clears search when modal closes', () => {
-    const { rerender } = render(
-      <GlobalSearch open={true} onOpenChange={mockOnOpenChange} />
-    )
+  it("clears search when modal closes", () => {
+    const { rerender } = render(<GlobalSearch open={true} onOpenChange={mockOnOpenChange} />)
 
     rerender(<GlobalSearch open={false} onOpenChange={mockOnOpenChange} />)
 

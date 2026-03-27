@@ -1,29 +1,30 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { lazy } from 'react'
-import AppLayout from '@/components/AppLayout'
-import { useAuthStore } from '@/stores/authStore'
-import { useUserStore } from '@/stores/userStore'
-import { fetchUsers } from '@/api/userManagementApi'
+import { createFileRoute } from "@tanstack/react-router"
+import { lazy } from "react"
+import AppLayout from "@/components/AppLayout"
+import { useAuthStore } from "@/stores/authStore"
+import { useUserStore } from "@/stores/userStore"
+import { fetchUsers } from "@/api/userManagementApi"
 
-const UserAdministrationView = lazy(() => import('@/components/users/UserAdministrationView'))
+const UserAdministrationView = lazy(() => import("@/components/users/UserAdministrationView"))
 
 function UsersRolesComponent() {
   const navigate = Route.useNavigate()
   const user = useAuthStore((state) => state.user)
 
   // Role guard — only Regulator Admin can access this page
-  const hasAccess = user?.roles?.includes('Regulator Admin') || user?.roles?.includes('System Manager')
+  const hasAccess =
+    user?.roles?.includes("Regulator Admin") || user?.roles?.includes("System Manager")
 
   const handleNavigate = (route: string) => {
     navigate({ to: `/${route}` })
   }
 
   const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
+    window.location.href = "/logout?redirect-to=/"
   }
 
   const handleSwitchToDesk = () => {
-    window.location.href = '/app'
+    window.location.href = "/app"
   }
 
   if (!hasAccess) {
@@ -32,7 +33,7 @@ function UsersRolesComponent() {
         currentRoute="users-roles"
         pageTitle="Access Denied"
         onNavigate={handleNavigate}
-        onOpenNotifications={() => handleNavigate('notifications-center')}
+        onOpenNotifications={() => handleNavigate("notifications-center")}
         onLogout={handleLogout}
         onSwitchToDesk={handleSwitchToDesk}
         user={user}
@@ -55,7 +56,7 @@ function UsersRolesComponent() {
       pageTitle="User & Role Administration"
       pageSubtitle="Manage access boundaries and operator permissions."
       onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
+      onOpenNotifications={() => handleNavigate("notifications-center")}
       onLogout={handleLogout}
       onSwitchToDesk={handleSwitchToDesk}
       user={user}
@@ -67,7 +68,7 @@ function UsersRolesComponent() {
   )
 }
 
-export const Route = createFileRoute('/users-roles')({
+export const Route = createFileRoute("/users-roles")({
   loader: async () => {
     const store = useUserStore.getState()
     store.setLoading(true)

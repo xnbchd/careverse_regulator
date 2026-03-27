@@ -1,12 +1,12 @@
-import { Bell, Clock, AlertTriangle, Calendar, MessageSquare, Settings } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { cn } from '@/lib/utils'
-import type { Notification } from '@/types/notification'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
+import { Bell, Clock, AlertTriangle, Calendar, MessageSquare, Settings } from "lucide-react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { cn } from "@/lib/utils"
+import type { Notification } from "@/types/notification"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
 
 dayjs.extend(relativeTime)
 
@@ -26,16 +26,16 @@ const typeIcons = {
 }
 
 const typeColors = {
-  alert: 'text-red-500',
-  reminder: 'text-blue-500',
-  followup: 'text-orange-500',
-  system: 'text-muted-foreground',
+  alert: "text-red-500",
+  reminder: "text-blue-500",
+  followup: "text-orange-500",
+  system: "text-muted-foreground",
 }
 
 const priorityColors = {
-  high: 'border-l-red-500',
-  medium: 'border-l-orange-500',
-  low: 'border-l-gray-300',
+  high: "border-l-red-500",
+  medium: "border-l-orange-500",
+  low: "border-l-gray-300",
 }
 
 export default function NotificationCard({
@@ -51,9 +51,9 @@ export default function NotificationCard({
   return (
     <Card
       className={cn(
-        'mb-3 border-l-4 transition-colors',
+        "mb-3 border-l-4 transition-colors",
         priorityColors[notification.priority],
-        !notification.isRead && 'bg-blue-50/30 dark:bg-blue-950/10'
+        !notification.isRead && "bg-blue-50/30 dark:bg-blue-950/10"
       )}
     >
       <CardContent className="p-4">
@@ -65,15 +65,15 @@ export default function NotificationCard({
             aria-label="Select notification"
           />
 
-          <Icon className={cn('w-5 h-5 shrink-0 mt-0.5', typeColors[notification.type])} />
+          <Icon className={cn("w-5 h-5 shrink-0 mt-0.5", typeColors[notification.type])} />
 
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">
               <h3
                 className={cn(
-                  'text-sm font-semibold',
-                  !notification.isRead && 'text-foreground',
-                  notification.isRead && 'text-muted-foreground'
+                  "text-sm font-semibold",
+                  !notification.isRead && "text-foreground",
+                  notification.isRead && "text-muted-foreground"
                 )}
               >
                 {notification.title}

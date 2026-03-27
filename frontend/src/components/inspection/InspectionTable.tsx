@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState } from "react"
 import {
   useReactTable,
   getCoreRowModel,
@@ -6,21 +6,21 @@ import {
   createColumnHelper,
   flexRender,
   type RowSelectionState,
-} from '@tanstack/react-table'
-import type { Inspection } from '@/types/inspection'
-import StatusBadge from './StatusBadge'
-import dayjs from 'dayjs'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Checkbox } from '@/components/ui/checkbox'
+} from "@tanstack/react-table"
+import type { Inspection } from "@/types/inspection"
+import StatusBadge from "./StatusBadge"
+import dayjs from "dayjs"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -28,10 +28,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+} from "@/components/ui/table"
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
 
-import { EntityLink } from '@/components/entities'
+import { EntityLink } from "@/components/entities"
 
 interface InspectionTableProps {
   inspections: Inspection[]
@@ -41,9 +41,9 @@ interface InspectionTableProps {
 }
 
 function isInspectionOverdue(inspection: Inspection): boolean {
-  if (inspection.status !== 'Pending') return false
-  const today = dayjs().startOf('day')
-  const inspectionDate = dayjs(inspection.date, 'DD/MM/YYYY')
+  if (inspection.status !== "Pending") return false
+  const today = dayjs().startOf("day")
+  const inspectionDate = dayjs(inspection.date, "DD/MM/YYYY")
   return inspectionDate.isBefore(today)
 }
 
@@ -75,7 +75,7 @@ export default function InspectionTable({
   const columns = useMemo(
     () => [
       columnHelper.display({
-        id: 'select',
+        id: "select",
         header: ({ table }) => (
           <Checkbox
             checked={table.getIsAllPageRowsSelected()}
@@ -92,15 +92,13 @@ export default function InspectionTable({
         ),
         size: 40,
       }),
-      columnHelper.accessor('inspectionId', {
-        header: 'Inspection ID',
-        cell: (info) => (
-          <span className="font-medium text-sm">{info.getValue()}</span>
-        ),
+      columnHelper.accessor("inspectionId", {
+        header: "Inspection ID",
+        cell: (info) => <span className="font-medium text-sm">{info.getValue()}</span>,
         size: 150,
       }),
-      columnHelper.accessor('facilityName', {
-        header: 'Facility Name',
+      columnHelper.accessor("facilityName", {
+        header: "Facility Name",
         cell: (info) => (
           <EntityLink
             type="facility"
@@ -111,13 +109,13 @@ export default function InspectionTable({
           </EntityLink>
         ),
       }),
-      columnHelper.accessor('date', {
-        header: 'Date',
+      columnHelper.accessor("date", {
+        header: "Date",
         cell: (info) => <span className="text-sm">{info.getValue()}</span>,
         size: 120,
       }),
-      columnHelper.accessor('inspector', {
-        header: 'Inspector',
+      columnHelper.accessor("inspector", {
+        header: "Inspector",
         cell: (info) => (
           <EntityLink
             type="professional"
@@ -129,16 +127,16 @@ export default function InspectionTable({
         ),
         size: 150,
       }),
-      columnHelper.accessor('noteToInspector', {
-        header: 'Note to Inspector',
+      columnHelper.accessor("noteToInspector", {
+        header: "Note to Inspector",
         cell: (info) => (
           <span className="text-sm text-muted-foreground truncate block max-w-[200px]">
-            {info.getValue() || '-'}
+            {info.getValue() || "-"}
           </span>
         ),
       }),
-      columnHelper.accessor('status', {
-        header: 'Status',
+      columnHelper.accessor("status", {
+        header: "Status",
         cell: (info) => {
           const inspection = info.row.original
           if (isInspectionOverdue(inspection)) {
@@ -154,8 +152,8 @@ export default function InspectionTable({
         size: 130,
       }),
       columnHelper.display({
-        id: 'action',
-        header: 'Action',
+        id: "action",
+        header: "Action",
         cell: (info) => (
           <Button
             size="sm"
@@ -178,8 +176,7 @@ export default function InspectionTable({
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
     onRowSelectionChange: (updater) => {
-      const newSelection =
-        typeof updater === 'function' ? updater(rowSelection) : updater
+      const newSelection = typeof updater === "function" ? updater(rowSelection) : updater
       const selectedIds = Object.keys(newSelection)
         .filter((key) => newSelection[key])
         .map((index) => inspections[parseInt(index)]?.id)
@@ -213,10 +210,7 @@ export default function InspectionTable({
                     >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
                   ))}
                 </TableRow>
@@ -225,29 +219,17 @@ export default function InspectionTable({
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                  >
+                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="whitespace-nowrap"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                      <TableCell key={cell.id} className="whitespace-nowrap">
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
                     <span className="text-muted-foreground">No results.</span>
                   </TableCell>
                 </TableRow>
@@ -264,7 +246,9 @@ export default function InspectionTable({
           <div className="flex items-center gap-2">
             <Select
               value={String(pagination.pageSize)}
-              onValueChange={(val) => setPagination((prev) => ({ ...prev, pageSize: Number(val), pageIndex: 0 }))}
+              onValueChange={(val) =>
+                setPagination((prev) => ({ ...prev, pageSize: Number(val), pageIndex: 0 }))
+              }
             >
               <SelectTrigger className="h-9 w-[100px]">
                 <SelectValue />
