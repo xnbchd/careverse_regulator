@@ -26,11 +26,14 @@ interface LicensesFiltersProps {
 const statusOptions = [
   { value: 'all', label: 'All Statuses' },
   { value: 'Active', label: 'Active' },
-  { value: 'Pending', label: 'Pending' },
   { value: 'Expired', label: 'Expired' },
   { value: 'Suspended', label: 'Suspended' },
   { value: 'Denied', label: 'Denied' },
+  { value: 'Pending', label: 'Pending' },
+  { value: 'In Review', label: 'In Review' },
+  { value: 'Renewal Reviewed', label: 'Renewal Reviewed' },
   { value: 'Approved', label: 'Approved' },
+  { value: 'Info Requested', label: 'Info Requested' },
 ]
 
 const sortOptions = [

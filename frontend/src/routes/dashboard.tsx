@@ -13,7 +13,7 @@ function DashboardComponent() {
   const user = useAuthStore((state) => state.user)
 
   const handleNavigate = (route: string) => {
-    navigate({ to: `/${route}` as any })
+    navigate({ to: `/${route}` })
   }
 
   const handleLogout = () => {

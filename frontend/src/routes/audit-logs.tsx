@@ -23,7 +23,7 @@ function AuditLogsPage() {
   const [showDetail, setShowDetail] = useState(false)
 
   const handleNavigate = (route: string) => {
-    navigate({ to: `/${route}` as any })
+    navigate({ to: `/${route}` })
   }
 
   const handleLogout = () => {

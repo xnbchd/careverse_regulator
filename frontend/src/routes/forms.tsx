@@ -17,7 +17,7 @@ function FormsPage() {
   const { drafts, deleteDraft } = useFormsStore()
 
   const handleNavigate = (route: string) => {
-    navigate({ to: `/${route}` as any })
+    navigate({ to: `/${route}` })
   }
 
   const handleLogout = () => {
