@@ -4,8 +4,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import type { ProfessionalLicenseRecord } from '@/types/license'
 import StatusBadge from './StatusBadge'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Eye } from 'lucide-react'
 import { EntityLink } from '@/components/entities'
 
 interface ProfessionalLicensesTableProps {
@@ -41,34 +39,34 @@ export default function ProfessionalLicensesTable({
     }
   }
 
-  const totalColumns = selectionEnabled ? 12 : 11
+  const totalColumns = selectionEnabled ? 11 : 10
 
   return (
-    <Card>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {selectionEnabled && (
-              <TableHead className="w-12">
-                <Checkbox
-                  checked={allSelected || (someSelected ? 'indeterminate' : false)}
-                  onCheckedChange={handleSelectAll}
-                />
-              </TableHead>
-            )}
-            <TableHead>License #</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Registration #</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>License Type</TableHead>
-            <TableHead>Place of Practice</TableHead>
-            <TableHead>Issuance Date</TableHead>
-            <TableHead>Expiry Date</TableHead>
-            <TableHead>Payment</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
+    <Card className="overflow-hidden">
+      <div className="overflow-x-auto">
+        <Table className="table-fixed w-full">
+          <TableHeader>
+            <TableRow>
+              {selectionEnabled && (
+                <TableHead className="w-12">
+                  <Checkbox
+                    checked={allSelected || (someSelected ? 'indeterminate' : false)}
+                    onCheckedChange={handleSelectAll}
+                  />
+                </TableHead>
+              )}
+              <TableHead className="w-[140px]">License #</TableHead>
+              <TableHead className="w-[200px]">Name</TableHead>
+              <TableHead className="w-[140px]">Registration #</TableHead>
+              <TableHead className="w-[150px]">Category</TableHead>
+              <TableHead className="w-[150px]">License Type</TableHead>
+              <TableHead className="w-[200px]">Place of Practice</TableHead>
+              <TableHead className="w-[120px]">Issuance Date</TableHead>
+              <TableHead className="w-[120px]">Expiry Date</TableHead>
+              <TableHead className="w-[100px]">Payment</TableHead>
+              <TableHead className="w-[120px]">Status</TableHead>
+            </TableRow>
+          </TableHeader>
         <TableBody>
           {loading && licenses.length === 0 ? (
             <TableRow>
@@ -101,21 +99,33 @@ export default function ProfessionalLicensesTable({
                       />
                     </TableCell>
                   )}
-                  <TableCell className="font-mono text-sm font-medium">
-                    {license.licenseNumber}
+                  <TableCell className="font-mono text-sm font-medium w-[140px]">
+                    <div className="truncate text-left">{license.licenseNumber}</div>
                   </TableCell>
-                  <TableCell>
-                    <EntityLink type="professional" id={license.registrationNumber}>
-                      {license.name || '—'}
+                  <TableCell className="w-[200px]">
+                    <EntityLink type="professional" id={license.registrationNumber} className="w-full">
+                      <div className="truncate text-left">{license.name || '—'}</div>
                     </EntityLink>
                   </TableCell>
-                  <TableCell className="font-mono text-sm">{license.registrationNumber || '—'}</TableCell>
-                  <TableCell>{license.category || '—'}</TableCell>
-                  <TableCell>{license.licenseType || '—'}</TableCell>
-                  <TableCell>{license.placeOfPractice || '—'}</TableCell>
-                  <TableCell>{license.dateOfIssuance || '—'}</TableCell>
-                  <TableCell>{license.dateOfExpiry || '—'}</TableCell>
-                  <TableCell>
+                  <TableCell className="font-mono text-sm w-[140px]">
+                    <div className="truncate text-left">{license.registrationNumber || '—'}</div>
+                  </TableCell>
+                  <TableCell className="w-[150px]">
+                    <div className="truncate text-left">{license.category || '—'}</div>
+                  </TableCell>
+                  <TableCell className="w-[150px]">
+                    <div className="truncate text-left">{license.licenseType || '—'}</div>
+                  </TableCell>
+                  <TableCell className="w-[200px]">
+                    <div className="truncate text-left">{license.placeOfPractice || '—'}</div>
+                  </TableCell>
+                  <TableCell className="w-[120px]">
+                    <div className="truncate text-left">{license.dateOfIssuance || '—'}</div>
+                  </TableCell>
+                  <TableCell className="w-[120px]">
+                    <div className="truncate text-left">{license.dateOfExpiry || '—'}</div>
+                  </TableCell>
+                  <TableCell className="w-[100px]">
                     <Badge
                       variant={license.paymentStatus === 'Paid' ? 'default' : 'secondary'}
                       className="capitalize"
@@ -123,21 +133,16 @@ export default function ProfessionalLicensesTable({
                       {license.paymentStatus || '—'}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="w-[120px]">
                     <StatusBadge status={license.licenseStatus} />
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground" onClick={() => onRowClick(license.licenseNumber)}>
-                      <Eye className="h-4 w-4" />
-                      View
-                    </Button>
                   </TableCell>
                 </TableRow>
               )
             })
           )}
         </TableBody>
-      </Table>
+        </Table>
+      </div>
     </Card>
   )
 }

@@ -102,19 +102,54 @@ interface ComplianceApiResponse<T> {
   }
 }
 
+// --- Filter Interfaces ---
+
+export interface FacilityFilters {
+  search?: string
+  category?: string // comma-separated
+  type?: string // comma-separated
+  county?: string // comma-separated
+  keph_level?: string // comma-separated
+  sortBy?: 'facility_name' | 'facility_code' | 'county'
+  sortOrder?: 'asc' | 'desc'
+  page_size?: number
+}
+
+export interface ProfessionalFilters {
+  search?: string
+  category?: string // comma-separated for category_of_practice
+  county?: string // comma-separated
+  active?: 'true' | 'false'
+  sortBy?: 'full_name' | 'registration_number'
+  sortOrder?: 'asc' | 'desc'
+  page_size?: number
+}
+
 // --- API Functions ---
 
 export async function listFacilityRecords(
   page: number = 1,
   pageSize: number = 1000,
+  filters?: FacilityFilters,
+  signal?: AbortSignal
 ): Promise<{ data: FacilityRecord[]; pagination: ComplianceApiResponse<FacilityRecord>['pagination'] }> {
   const params = new URLSearchParams({
     page: page.toString(),
     page_size: pageSize.toString(),
   })
 
+  // Add filter params
+  if (filters?.search) params.append('search', filters.search)
+  if (filters?.category) params.append('category', filters.category)
+  if (filters?.type) params.append('type', filters.type)
+  if (filters?.county) params.append('county', filters.county)
+  if (filters?.keph_level) params.append('keph_level', filters.keph_level)
+  if (filters?.sortBy) params.append('sort_by', filters.sortBy)
+  if (filters?.sortOrder) params.append('sort_order', filters.sortOrder)
+
   const response = await apiRequest<ComplianceApiResponse<FacilityRecord>>(
-    `/api/method/compliance_360.api.license_management.health_facility.get_health_facilities?${params.toString()}`
+    `/api/method/compliance_360.api.license_management.health_facility.get_health_facilities?${params.toString()}`,
+    { signal }
   )
 
   return {
@@ -126,14 +161,25 @@ export async function listFacilityRecords(
 export async function listProfessionalRecords(
   page: number = 1,
   pageSize: number = 1000,
+  filters?: ProfessionalFilters,
+  signal?: AbortSignal
 ): Promise<{ data: ProfessionalRecord[]; pagination: ComplianceApiResponse<ProfessionalRecord>['pagination'] }> {
   const params = new URLSearchParams({
     page: page.toString(),
     page_size: pageSize.toString(),
   })
 
+  // Add filter params
+  if (filters?.search) params.append('search', filters.search)
+  if (filters?.category) params.append('category', filters.category)
+  if (filters?.county) params.append('county', filters.county)
+  if (filters?.active) params.append('active', filters.active)
+  if (filters?.sortBy) params.append('sort_by', filters.sortBy)
+  if (filters?.sortOrder) params.append('sort_order', filters.sortOrder)
+
   const response = await apiRequest<ComplianceApiResponse<ProfessionalRecord>>(
-    `/api/method/compliance_360.api.license_management.health_professional.get_health_professionals?${params.toString()}`
+    `/api/method/compliance_360.api.license_management.health_professional.get_health_professionals?${params.toString()}`,
+    { signal }
   )
 
   return {
