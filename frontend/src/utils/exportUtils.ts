@@ -66,7 +66,7 @@ export function exportToPDF<T extends Record<string, any>>(
   const cols = columns || Object.keys(data[0]).map((key) => ({ key, label: key }))
 
   // Build HTML table
-  let html = `
+  const html = `
 <!DOCTYPE html>
 <html>
 <head>
