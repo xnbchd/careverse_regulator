@@ -12,7 +12,7 @@ export function LicensesDashboard() {
     <div className="space-y-6 p-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground">License Management</h1>
+        <h1 className="text-2xl font-semibold text-foreground">License Management</h1>
         <p className="text-muted-foreground mt-1">
           Monitor and manage health facility and professional licenses and applications
         </p>

@@ -1,8 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useLicensingStore } from '@/stores/licensingStore'
-import { useAuthStore } from '@/stores/authStore'
-import AppLayout from '@/components/AppLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import StatusBadge from '@/components/licensing/StatusBadge'
@@ -22,24 +20,11 @@ import type { License, LicenseAction } from '@/types/license'
 function LicenseDetailPage() {
   const { licenseNumber } = Route.useParams()
   const navigate = useNavigate()
-  const user = useAuthStore((state) => state.user)
   const { getLicense, updateLicense } = useLicensingStore()
 
   const loaderData = Route.useLoaderData()
   const [license, setLicense] = useState<License | null>(loaderData)
   const [actionLoading, setActionLoading] = useState(false)
-
-  const handleNavigate = (route: string) => {
-    navigate({ to: `/${route}` as any })
-  }
-
-  const handleLogout = () => {
-    window.location.href = '/logout?redirect-to=/'
-  }
-
-  const handleSwitchToDesk = () => {
-    window.location.href = '/app'
-  }
 
   const handleBack = () => {
     navigate({ to: '/license-management' })
@@ -52,7 +37,6 @@ function LicenseDetailPage() {
     try {
       await updateLicense(license.licenseNumber, action)
       showSuccess(`License ${actionName.toLowerCase()} successfully`)
-      // Refresh the license
       const updated = await getLicense(licenseNumber)
       setLicense(updated)
     } catch (err) {
@@ -65,71 +49,63 @@ function LicenseDetailPage() {
   const canPerformActions = license && ['Pending', 'In Review'].includes(license.status)
 
   return (
-    <AppLayout
-      currentRoute="license-management"
-      pageTitle="License Details"
-      pageSubtitle="View and manage facility license"
-      onNavigate={handleNavigate}
-      onOpenNotifications={() => handleNavigate('notifications-center')}
-      onLogout={handleLogout}
-      onSwitchToDesk={handleSwitchToDesk}
-      user={user}
-    >
-      <div className="hq-page-wrap">
-        <div className="mb-6">
-          <Button variant="ghost" onClick={handleBack} className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Back to License Management
-          </Button>
+    <div className="hq-page-wrap">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" onClick={handleBack} className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Back
+            </Button>
+            {license && (
+              <>
+                <div className="h-6 w-px bg-border" />
+                <h2 className="text-lg font-semibold font-mono text-foreground">{license.licenseNumber}</h2>
+                <StatusBadge status={license.status} className="text-sm" />
+              </>
+            )}
+          </div>
+          {canPerformActions && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button disabled={actionLoading}>
+                  Actions
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => handleAction('APPROVE', 'Approved')}>
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Approve
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleAction('DENY', 'Denied')}>
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Deny
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleAction('REVIEW', 'Under Review')}>
+                  <Eye className="h-4 w-4 mr-2" />
+                  Review
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleAction('REQUEST_INFO', 'Info Requested')}>
+                  <AlertCircle className="h-4 w-4 mr-2" />
+                  Request Info
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleAction('SUSPEND', 'Suspended')} className="text-orange-600">
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Suspend
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleAction('SET_EXPIRED', 'Expired')} className="text-muted-foreground">
+                  <XCircle className="h-4 w-4 mr-2" />
+                  Set Expired
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
 
         {license && (
           <div className="space-y-6">
-            {/* Page Header - License Number, Status, Actions */}
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-3">
-                <h2 className="text-2xl font-bold font-mono text-foreground">{license.licenseNumber}</h2>
-                <StatusBadge status={license.status} className="text-sm" />
-              </div>
-              {canPerformActions && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button disabled={actionLoading}>
-                      Actions
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem onClick={() => handleAction('APPROVE', 'Approved')}>
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Approve
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleAction('DENY', 'Denied')}>
-                      <XCircle className="h-4 w-4 mr-2" />
-                      Deny
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => handleAction('REVIEW', 'Under Review')}>
-                      <Eye className="h-4 w-4 mr-2" />
-                      Review
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleAction('REQUEST_INFO', 'Info Requested')}>
-                      <AlertCircle className="h-4 w-4 mr-2" />
-                      Request Info
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => handleAction('SUSPEND', 'Suspended')} className="text-orange-600">
-                      <XCircle className="h-4 w-4 mr-2" />
-                      Suspend
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleAction('SET_EXPIRED', 'Expired')} className="text-muted-foreground">
-                      <XCircle className="h-4 w-4 mr-2" />
-                      Set Expired
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-            </div>
-
             {/* License Details */}
             <Card>
               <CardHeader>
@@ -247,7 +223,7 @@ function LicenseDetailPage() {
           </div>
         )}
       </div>
-    </AppLayout>
+    </div>
   )
 }
 

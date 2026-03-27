@@ -97,7 +97,7 @@ export default function UnauthorizedPage({
       <div className="absolute w-[400px] h-[400px] rounded-full bg-green-500/10 dark:bg-green-500/20 blur-[80px] -bottom-12 -right-12 pointer-events-none" />
 
       <header className="sticky top-0 z-10 bg-background/70 dark:bg-background/70 backdrop-blur-lg border-b border-border px-5 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="max-w-7xl w-full mx-auto flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img
               src="/assets/careverse_regulator/compliance-360/compliance-logo.svg"
@@ -128,7 +128,7 @@ export default function UnauthorizedPage({
                       <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground block mb-2.5">
                         Organization Portal
                       </span>
-                      <h1 className={`font-semibold tracking-tight leading-tight ${isMobile ? 'text-2xl' : 'text-3xl'}`}>
+                      <h1 className={`font-medium tracking-tight leading-tight ${isMobile ? 'text-2xl' : 'text-3xl'}`}>
                         {pageTitle}
                       </h1>
                       <p className="text-sm leading-relaxed text-muted-foreground mt-3">
@@ -139,7 +139,7 @@ export default function UnauthorizedPage({
                     <Button
                       size="lg"
                       onClick={handlePrimaryAction}
-                      className="w-full h-12 text-sm font-semibold bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 shadow-lg shadow-primary/25"
+                      className="w-full h-12 text-sm font-medium bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 shadow-lg shadow-primary/25"
                     >
                       <LogIn className="w-4 h-4 mr-2" />
                       {primaryLabel}
@@ -152,7 +152,7 @@ export default function UnauthorizedPage({
                           <Button
                             variant="outline"
                             onClick={onSwitchToDesk}
-                            className="h-10 font-semibold"
+                            className="h-10 font-medium"
                           >
                             <Monitor className="w-4 h-4 mr-2" />
                             Open Desk
@@ -162,7 +162,7 @@ export default function UnauthorizedPage({
                           <Button
                             variant="destructive"
                             onClick={onLogout}
-                            className="h-10 font-semibold"
+                            className="h-10 font-medium"
                           >
                             <LogOut className="w-4 h-4 mr-2" />
                             Log Out
@@ -198,7 +198,7 @@ export default function UnauthorizedPage({
                 <span className="text-xs font-medium uppercase tracking-wider text-primary dark:text-green-400 block mb-3">
                   Executive Platform
                 </span>
-                <h2 className="text-3xl font-semibold mb-2.5">
+                <h2 className="text-3xl font-medium mb-2.5">
                   Smarter Organization Management
                 </h2>
                 <p className="text-sm text-muted-foreground">
@@ -217,7 +217,7 @@ export default function UnauthorizedPage({
                             <Icon className="w-5 h-5" />
                           </div>
                           <div className="flex-1">
-                            <h5 className="font-semibold mb-1">
+                            <h5 className="font-medium mb-1">
                               {feature.title}
                             </h5>
                             <p className="text-sm text-muted-foreground">
