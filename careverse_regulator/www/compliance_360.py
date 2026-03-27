@@ -12,11 +12,20 @@ no_cache = True
 def get_vite_assets():
     """Read the Vite manifest to get current asset filenames."""
     app_path = frappe.get_app_path("careverse_regulator")
-    manifest_path = os.path.join(app_path, "public", "compliance-360", ".vite", "manifest.json")
+    manifest_path = os.path.join(
+        app_path,
+        "public",
+        "compliance-360",
+        ".vite",
+        "manifest.json")
     try:
         with open(manifest_path) as f:
             manifest = json.load(f)
-        entry = manifest.get("index.html", {}) or manifest.get("src/main.tsx", {})
+        entry = manifest.get(
+            "index.html",
+            {}) or manifest.get(
+            "src/main.tsx",
+            {})
         return {
             "main_js": entry.get("file", ""),
             "main_css": entry.get("css", [""])[0] if entry.get("css") else "",
@@ -63,12 +72,15 @@ def get_boot():
     user = frappe.session.user
     is_guest = user == "Guest"
     full_name = "Guest" if is_guest else frappe.utils.get_fullname(user)
-    user_image = None if is_guest else frappe.db.get_value("User", user, "user_image")
+    user_image = None if is_guest else frappe.db.get_value(
+        "User", user, "user_image")
     roles = [] if is_guest else frappe.get_roles(user)
     tenant_payload = build_tenant_payload(user)
     active_company = tenant_payload.get("active_company")
     allowed_companies = tenant_payload.get("allowed_companies", [])
-    portal_access = tenant_payload.get("portal_access", {"allowed": is_guest, "reason": "guest", "message": None})
+    portal_access = tenant_payload.get(
+        "portal_access", {
+            "allowed": is_guest, "reason": "guest", "message": None})
     company_display_name = tenant_payload.get("company_display_name")
     company_abbr = tenant_payload.get("company_abbr")
     company_logo = tenant_payload.get("company_logo")

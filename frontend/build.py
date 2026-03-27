@@ -28,7 +28,8 @@ def build() -> bool:
 
         try:
             print("\n[1/3] Running npm build...")
-            subprocess.run(["npm", "run", "build"], capture_output=True, text=True, check=True)
+            subprocess.run(["npm", "run", "build"],
+                           capture_output=True, text=True, check=True)
             print("[ok] Build completed successfully")
 
             print("\n[2/3] Extracting asset hashes from Vite manifest...")
@@ -77,9 +78,9 @@ def extract_asset_hashes() -> tuple[str | None, str | None]:
     css_file = css_files[0] if css_files else None
 
     if js_file and js_file.startswith("assets/"):
-        js_file = js_file[len("assets/") :]
+        js_file = js_file[len("assets/"):]
     if css_file and css_file.startswith("assets/"):
-        css_file = css_file[len("assets/") :]
+        css_file = css_file[len("assets/"):]
 
     return js_file, css_file
 

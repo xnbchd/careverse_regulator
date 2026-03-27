@@ -39,7 +39,8 @@ def sanitize_redirect(redirect_url):
     fragment = parsed_redirect.fragment or ""
     safe_prefixes = ["/", "/login", "/compliance-360", "/app", "/desk"]
 
-    if not any(path == prefix or path.startswith(f"{prefix.rstrip('/')}/") for prefix in safe_prefixes if prefix != "/"):
+    if not any(path == prefix or path.startswith(
+            f"{prefix.rstrip('/')}/") for prefix in safe_prefixes if prefix != "/"):
         if path != "/":
             return default_redirect
 

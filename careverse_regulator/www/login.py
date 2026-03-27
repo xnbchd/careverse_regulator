@@ -25,16 +25,21 @@ def get_context(context):
     context.title = _("Sign In - Compliance 360")
 
     context.app_name = "Compliance 360"
-    context.logo = get_app_logo() or "/assets/careverse_regulator/compliance-360/favicon.svg?v=20260313a"
+    context.logo = get_app_logo(
+    ) or "/assets/careverse_regulator/compliance-360/favicon.svg?v=20260313a"
 
     context.disable_signup = frappe.get_website_settings("disable_signup") or 0
-    context.disable_user_pass_login = frappe.get_system_settings("disable_user_pass_login") or 0
-    context.login_with_email_link = frappe.get_system_settings("login_with_email_link") or 0
+    context.disable_user_pass_login = frappe.get_system_settings(
+        "disable_user_pass_login") or 0
+    context.login_with_email_link = frappe.get_system_settings(
+        "login_with_email_link") or 0
 
     login_label = []
-    if frappe.utils.cint(frappe.get_system_settings("allow_login_using_mobile_number")):
+    if frappe.utils.cint(frappe.get_system_settings(
+            "allow_login_using_mobile_number")):
         login_label.append(_("Mobile"))
-    if frappe.utils.cint(frappe.get_system_settings("allow_login_using_user_name")):
+    if frappe.utils.cint(frappe.get_system_settings(
+            "allow_login_using_user_name")):
         login_label.append(_("Username"))
     login_label.append(_("Email"))
     context.login_label = f" {_('or')} ".join(login_label)

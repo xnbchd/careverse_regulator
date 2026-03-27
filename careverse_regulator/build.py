@@ -15,7 +15,9 @@ def before_build():
     try:
         call_frontend_build_script()
     except Exception as exc:
-        frappe.log_error(f"Frontend build failed: {exc}", "Careverse Regulator Build Error")
+        frappe.log_error(
+            f"Frontend build failed: {exc}",
+            "Careverse Regulator Build Error")
         print(f"Warning: Frontend build failed: {exc}")
 
 
@@ -24,7 +26,9 @@ def after_build():
     try:
         verify_build_assets()
     except Exception as exc:
-        frappe.log_error(f"Build verification failed: {exc}", "Careverse Regulator Build Verification")
+        frappe.log_error(
+            f"Build verification failed: {exc}",
+            "Careverse Regulator Build Verification")
         print(f"Warning: Build verification failed: {exc}")
 
 
@@ -34,7 +38,10 @@ def _resolve_app_root() -> str:
         app_path = frappe.get_app_path(APP_NAME)
         return os.path.dirname(app_path)
     except Exception:
-        return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        return os.path.dirname(
+            os.path.dirname(
+                os.path.dirname(
+                    os.path.abspath(__file__))))
 
 
 def call_frontend_build_script():
@@ -63,7 +70,9 @@ def call_frontend_build_script():
         print(result.stderr)
 
     if result.returncode != 0:
-        raise Exception(f"Frontend build script failed with return code {result.returncode}")
+        raise Exception(
+            f"Frontend build script failed with return code {
+                result.returncode}")
 
     print("=" * 60)
     print("Frontend build script completed successfully")
@@ -79,7 +88,8 @@ def verify_build_assets():
     html_file = os.path.join(app_dir, "www", WWW_TEMPLATE)
 
     if not os.path.exists(assets_dir):
-        raise Exception(f"Assets directory not found after build: {assets_dir}")
+        raise Exception(
+            f"Assets directory not found after build: {assets_dir}")
 
     if not os.path.exists(html_file):
         raise Exception(f"HTML file not found in www directory: {html_file}")
@@ -106,7 +116,8 @@ def run_frontend_build():
     try:
         frappe.logger().info("Starting Careverse Regulator frontend build after migration...")
         call_frontend_build_script()
-        frappe.logger().info("Careverse Regulator frontend build completed successfully after migration")
+        frappe.logger().info(
+            "Careverse Regulator frontend build completed successfully after migration")
     except Exception as exc:
         frappe.log_error(
             f"Frontend build failed after migration: {exc}",

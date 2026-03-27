@@ -17,7 +17,8 @@ def main():
         frontend_build_script = os.path.join(app_root, "frontend", "build.py")
 
         if not os.path.exists(frontend_build_script):
-            print(f"Error: Frontend build script not found at {frontend_build_script}")
+            print(
+                f"Error: Frontend build script not found at {frontend_build_script}")
             return 1
 
         print("=" * 60)
@@ -34,7 +35,9 @@ def main():
         )
 
         if result.returncode != 0:
-            print(f"Error: Frontend build script failed with return code {result.returncode}")
+            print(
+                f"Error: Frontend build script failed with return code {
+                    result.returncode}")
             return 1
 
         print("=" * 60)
