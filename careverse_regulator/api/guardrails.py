@@ -42,7 +42,7 @@ def set_doc_company(doc: Any, user: str | None = None) -> None:
 	if doc_company and str(doc_company).strip() != company:
 		frappe.throw(_("Company mismatch in request payload."), frappe.PermissionError)
 
-	setattr(doc, "company", company)
+	doc.company = company
 
 
 def has_company_permission(doc: Any, user: str | None = None, permission_type: str | None = None) -> bool | None:

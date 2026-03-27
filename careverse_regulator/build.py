@@ -84,7 +84,7 @@ def verify_build_assets():
     if not os.path.exists(html_file):
         raise Exception(f"HTML file not found in www directory: {html_file}")
 
-    with open(html_file, "r", encoding="utf-8") as handle:
+    with open(html_file, encoding="utf-8") as handle:
         html_content = handle.read()
 
     js_matches = re.findall(r'src="[^"]*assets/([^"]*\.js)"', html_content)
