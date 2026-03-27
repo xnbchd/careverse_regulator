@@ -30,6 +30,51 @@ export function StatusDistribution({
     [data]
   )
 
+  // Pie/donut chart segments (computed for all types to avoid conditional hooks)
+  const segments = useMemo(() => {
+    if (total === 0) return []
+
+    const nonZero = data.filter((item) => item.count > 0)
+
+    // Single segment — full circle, can't use an arc
+    if (nonZero.length === 1) {
+      return [
+        {
+          ...nonZero[0],
+          percentage: '100.0',
+          path: '',
+          isFullCircle: true,
+        },
+      ]
+    }
+
+    let currentAngle = -90
+    return nonZero.map((item) => {
+      const fraction = item.count / total
+      const angle = fraction * 360
+      // Clamp to just under 360 to avoid SVG arc collapse
+      const clampedAngle = Math.min(angle, 359.99)
+      const startAngle = currentAngle
+      const endAngle = currentAngle + clampedAngle
+      currentAngle += angle
+
+      const startRad = (Math.PI * startAngle) / 180
+      const endRad = (Math.PI * endAngle) / 180
+      const x1 = 100 + 80 * Math.cos(startRad)
+      const y1 = 100 + 80 * Math.sin(startRad)
+      const x2 = 100 + 80 * Math.cos(endRad)
+      const y2 = 100 + 80 * Math.sin(endRad)
+      const largeArc = clampedAngle > 180 ? 1 : 0
+
+      return {
+        ...item,
+        percentage: (fraction * 100).toFixed(1),
+        path: `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`,
+        isFullCircle: false,
+      }
+    })
+  }, [data, total])
+
   if (type === 'bar') {
     return (
       <Card>
@@ -76,51 +121,6 @@ export function StatusDistribution({
       </Card>
     )
   }
-
-  // Pie/donut chart
-  const segments = useMemo(() => {
-    if (total === 0) return []
-
-    const nonZero = data.filter((item) => item.count > 0)
-
-    // Single segment — full circle, can't use an arc
-    if (nonZero.length === 1) {
-      return [
-        {
-          ...nonZero[0],
-          percentage: '100.0',
-          path: '',
-          isFullCircle: true,
-        },
-      ]
-    }
-
-    let currentAngle = -90
-    return nonZero.map((item) => {
-      const fraction = item.count / total
-      const angle = fraction * 360
-      // Clamp to just under 360 to avoid SVG arc collapse
-      const clampedAngle = Math.min(angle, 359.99)
-      const startAngle = currentAngle
-      const endAngle = currentAngle + clampedAngle
-      currentAngle += angle
-
-      const startRad = (Math.PI * startAngle) / 180
-      const endRad = (Math.PI * endAngle) / 180
-      const x1 = 100 + 80 * Math.cos(startRad)
-      const y1 = 100 + 80 * Math.sin(startRad)
-      const x2 = 100 + 80 * Math.cos(endRad)
-      const y2 = 100 + 80 * Math.sin(endRad)
-      const largeArc = clampedAngle > 180 ? 1 : 0
-
-      return {
-        ...item,
-        percentage: (fraction * 100).toFixed(1),
-        path: `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`,
-        isFullCircle: false,
-      }
-    })
-  }, [data, total])
 
   return (
     <Card>
