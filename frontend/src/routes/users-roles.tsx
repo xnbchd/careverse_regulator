@@ -15,7 +15,7 @@ function UsersRolesComponent() {
   const hasAccess = user?.roles?.includes('Regulator Admin') || user?.roles?.includes('System Manager')
 
   const handleNavigate = (route: string) => {
-    navigate({ to: `/${route}` as any })
+    navigate({ to: `/${route}` })
   }
 
   const handleLogout = () => {
