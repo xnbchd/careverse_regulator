@@ -10,7 +10,6 @@ import json
 import os
 import re
 import subprocess
-from typing import Optional, Tuple
 
 MANIFEST_PATH = "../careverse_regulator/public/compliance-360/.vite/manifest.json"
 HTML_TEMPLATE_PATH = "../careverse_regulator/www/compliance_360.html"
@@ -60,12 +59,12 @@ def build() -> bool:
         return False
 
 
-def extract_asset_hashes() -> Tuple[Optional[str], Optional[str]]:
+def extract_asset_hashes() -> tuple[str | None, str | None]:
     if not os.path.exists(MANIFEST_PATH):
         print(f"Warning: Manifest not found at {MANIFEST_PATH}")
         return None, None
 
-    with open(MANIFEST_PATH, "r", encoding="utf-8") as handle:
+    with open(MANIFEST_PATH, encoding="utf-8") as handle:
         manifest = json.load(handle)
 
     # Look for main entry point (src/main.tsx)
@@ -85,12 +84,12 @@ def extract_asset_hashes() -> Tuple[Optional[str], Optional[str]]:
     return js_file, css_file
 
 
-def update_html_template(js_file: Optional[str], css_file: Optional[str]) -> None:
+def update_html_template(js_file: str | None, css_file: str | None) -> None:
     if not os.path.exists(HTML_TEMPLATE_PATH):
         print(f"Warning: HTML template not found at {HTML_TEMPLATE_PATH}")
         return
 
-    with open(HTML_TEMPLATE_PATH, "r", encoding="utf-8") as handle:
+    with open(HTML_TEMPLATE_PATH, encoding="utf-8") as handle:
         html_content = handle.read()
 
     if css_file:
