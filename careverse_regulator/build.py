@@ -85,9 +85,8 @@ def verify_build_assets():
 		raise Exception(f"HTML file not found in www directory: {html_file}")
 
 	# Safe: Build-time script with controlled path derived from app structure, not user input
-	with open(
-		html_file, encoding="utf-8"
-	) as handle:  # nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	with open(html_file, encoding="utf-8") as handle:
 		html_content = handle.read()
 
 	js_matches = re.findall(r'src="[^"]*assets/([^"]*\.js)"', html_content)
