@@ -29,8 +29,8 @@ export default function ComplianceOverview({ metrics }: ComplianceOverviewProps)
             {metrics.complianceRate >= 90
               ? "Excellent compliance performance"
               : metrics.complianceRate >= 75
-              ? "Good compliance performance"
-              : "Needs improvement"}
+                ? "Good compliance performance"
+                : "Needs improvement"}
           </p>
         </div>
 
@@ -72,19 +72,19 @@ export default function ComplianceOverview({ metrics }: ComplianceOverviewProps)
               {metrics.complianceRate >= 90
                 ? "A"
                 : metrics.complianceRate >= 80
-                ? "B"
-                : metrics.complianceRate >= 70
-                ? "C"
-                : "D"}
+                  ? "B"
+                  : metrics.complianceRate >= 70
+                    ? "C"
+                    : "D"}
             </div>
             <p className="text-xs text-muted-foreground">
               {metrics.complianceRate >= 90
                 ? "Excellent"
                 : metrics.complianceRate >= 80
-                ? "Good"
-                : metrics.complianceRate >= 70
-                ? "Fair"
-                : "Poor"}
+                  ? "Good"
+                  : metrics.complianceRate >= 70
+                    ? "Fair"
+                    : "Poor"}
             </p>
           </div>
         </div>

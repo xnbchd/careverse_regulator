@@ -209,8 +209,8 @@ function LicenseDetailPage() {
                             isExpired
                               ? ""
                               : isExpiringSoon
-                              ? "border-orange-500 text-orange-700 dark:text-orange-400"
-                              : "text-green-700 dark:text-green-400 border-green-500"
+                                ? "border-orange-500 text-orange-700 dark:text-orange-400"
+                                : "text-green-700 dark:text-green-400 border-green-500"
                           }`}
                         >
                           <Clock className="h-3.5 w-3.5" />

@@ -81,11 +81,14 @@ export function ApplicationsDashboard() {
 
   // Status distribution data
   const statusDistribution = useMemo(() => {
-    const statusCounts = allApplications.reduce((acc, app) => {
-      const status = app.applicationStatus
-      acc[status] = (acc[status] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
+    const statusCounts = allApplications.reduce(
+      (acc, app) => {
+        const status = app.applicationStatus
+        acc[status] = (acc[status] || 0) + 1
+        return acc
+      },
+      {} as Record<string, number>
+    )
 
     const statusColors: Record<string, string> = {
       Pending: "#f59e0b",

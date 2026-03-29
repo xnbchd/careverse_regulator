@@ -75,8 +75,8 @@ export default function ProfessionalApplicationPage({
           selectedAction === "Issued"
             ? "issued"
             : selectedAction === "Denied"
-            ? "denied"
-            : "info requested"
+              ? "denied"
+              : "info requested"
         } successfully`
       )
       useLicensingStore.getState().fetchProfessionalApplications()
@@ -97,8 +97,8 @@ export default function ProfessionalApplicationPage({
     selectedAction === "Issued"
       ? "Issue License"
       : selectedAction === "Denied"
-      ? "Deny Application"
-      : "Request Info"
+        ? "Deny Application"
+        : "Request Info"
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -325,8 +325,8 @@ export default function ProfessionalApplicationPage({
             selectedAction === "Denied"
               ? "border-destructive/50"
               : selectedAction === "Info Requested"
-              ? "border-blue-500/50"
-              : "border-green-500/50"
+                ? "border-blue-500/50"
+                : "border-green-500/50"
           }`}
         >
           <CardHeader className="pb-3">
@@ -352,8 +352,8 @@ export default function ProfessionalApplicationPage({
               {selectedAction === "Info Requested"
                 ? "Describe the specific information needed before this application can proceed"
                 : selectedAction === "Denied"
-                ? "Provide the reason for denying this application"
-                : "Add any comments for this approval (required)"}
+                  ? "Provide the reason for denying this application"
+                  : "Add any comments for this approval (required)"}
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -381,8 +381,8 @@ export default function ProfessionalApplicationPage({
                   selectedAction === "Issued"
                     ? "bg-green-600 hover:bg-green-700 text-white"
                     : selectedAction === "Info Requested"
-                    ? "bg-blue-600 hover:bg-blue-700 text-white"
-                    : ""
+                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      : ""
                 }
                 disabled={!remarks.trim() || !!submitting}
                 onClick={handleSubmitAction}

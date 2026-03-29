@@ -48,8 +48,8 @@ export function FacilitiesListView() {
     facilitiesFilters.sortOrder === "asc"
       ? "asc"
       : facilitiesFilters.sortOrder === "desc"
-      ? "desc"
-      : "recent"
+        ? "desc"
+        : "recent"
   )
 
   // Debounce search

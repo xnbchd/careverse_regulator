@@ -32,8 +32,8 @@ export function SelectAllCheckbox({
   const tooltipContent = isAllSelected
     ? "Deselect all"
     : isIndeterminate
-    ? `${selectedCount} of ${totalCount} selected. Click to select all.`
-    : "Select all"
+      ? `${selectedCount} of ${totalCount} selected. Click to select all.`
+      : "Select all"
 
   return (
     <TableHead className="w-12 pr-0">

@@ -49,8 +49,8 @@ export function FacilitiesDashboardView() {
     facilitiesFilters.sortOrder === "asc"
       ? "asc"
       : facilitiesFilters.sortOrder === "desc"
-      ? "desc"
-      : "recent"
+        ? "desc"
+        : "recent"
   )
 
   // Debounce search

@@ -77,14 +77,17 @@ export default function FindingsDrawer({ open, onClose, inspection }: FindingsDr
 
     return inspection.findings
       .filter((finding) => finding.category && finding.category.trim())
-      .reduce((acc, finding) => {
-        const category = finding.category.trim()
-        if (!acc[category]) {
-          acc[category] = []
-        }
-        acc[category].push(finding)
-        return acc
-      }, {} as Record<string, Finding[]>)
+      .reduce(
+        (acc, finding) => {
+          const category = finding.category.trim()
+          if (!acc[category]) {
+            acc[category] = []
+          }
+          acc[category].push(finding)
+          return acc
+        },
+        {} as Record<string, Finding[]>
+      )
   }, [inspection?.findings])
 
   const categories = Object.keys(findingsByCategory)

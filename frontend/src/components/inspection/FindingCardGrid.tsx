@@ -33,14 +33,17 @@ export default function FindingCardGrid({ findings, onViewFinding }: FindingCard
   })
 
   // Group findings by severity
-  const groupedFindings = findings.reduce((acc, finding) => {
-    const severity = finding.severity
-    if (!acc[severity]) {
-      acc[severity] = []
-    }
-    acc[severity].push(finding)
-    return acc
-  }, {} as Record<string, Finding[]>)
+  const groupedFindings = findings.reduce(
+    (acc, finding) => {
+      const severity = finding.severity
+      if (!acc[severity]) {
+        acc[severity] = []
+      }
+      acc[severity].push(finding)
+      return acc
+    },
+    {} as Record<string, Finding[]>
+  )
 
   const toggleGroup = (severity: string) => {
     setExpandedGroups((prev) => ({

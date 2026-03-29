@@ -270,8 +270,8 @@ export function FacilityDrawer({ facility, loading }: FacilityDrawerProps) {
                               affiliation.status === "Active"
                                 ? "default"
                                 : affiliation.status === "Pending"
-                                ? "secondary"
-                                : "outline"
+                                  ? "secondary"
+                                  : "outline"
                             }
                           >
                             {affiliation.status}

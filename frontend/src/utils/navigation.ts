@@ -17,10 +17,10 @@ export const VALID_STATUSES = {
   inspection: ["Pending", "Completed", "Non Compliant"] as const,
 } as const
 
-export type AffiliationStatus = typeof VALID_STATUSES.affiliation[number]
-export type LicenseStatus = typeof VALID_STATUSES.license[number]
-export type ApplicationStatus = typeof VALID_STATUSES.application[number]
-export type InspectionStatus = typeof VALID_STATUSES.inspection[number]
+export type AffiliationStatus = (typeof VALID_STATUSES.affiliation)[number]
+export type LicenseStatus = (typeof VALID_STATUSES.license)[number]
+export type ApplicationStatus = (typeof VALID_STATUSES.application)[number]
+export type InspectionStatus = (typeof VALID_STATUSES.inspection)[number]
 
 /**
  * Navigation paths

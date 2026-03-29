@@ -207,7 +207,7 @@ export default function AppLayout({
     setOpenGroups((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]))
   }
 
-  const renderNavItem = (item: typeof menuItems[0], depth = 0) => {
+  const renderNavItem = (item: (typeof menuItems)[0], depth = 0) => {
     const Icon = item.icon
     const isSelected = selectedMenuKey === item.key
     const hasChildren = "children" in item && item.children

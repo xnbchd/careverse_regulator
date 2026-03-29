@@ -219,12 +219,12 @@ export const useAuthStore = create<AuthState>((set) => ({
         context.portal_access?.reason === "multiple_company_permissions"
           ? "multiple_company_permissions"
           : context.portal_access?.reason === "missing_company_permission"
-          ? "missing_company_permission"
-          : !roleAllowed
-          ? "role_forbidden"
-          : !activeCompany
-          ? "missing_company_permission"
-          : null
+            ? "missing_company_permission"
+            : !roleAllowed
+              ? "role_forbidden"
+              : !activeCompany
+                ? "missing_company_permission"
+                : null
       const accessMessage =
         context.portal_access?.message ||
         (!roleAllowed ? "Your account does not have one of the required portal roles." : null) ||

@@ -181,10 +181,10 @@ export default function DocumentAttachments({
               {licenseNumber
                 ? "license"
                 : affiliationId
-                ? "affiliation"
-                : inspectionId
-                ? "inspection"
-                : "application"}
+                  ? "affiliation"
+                  : inspectionId
+                    ? "inspection"
+                    : "application"}
             </DialogDescription>
           </DialogHeader>
           <DocumentUpload

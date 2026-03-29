@@ -230,8 +230,8 @@ export function ProfessionalDrawer({ professional, loading }: ProfessionalDrawer
                               affiliation.status === "Active"
                                 ? "default"
                                 : affiliation.status === "Pending"
-                                ? "secondary"
-                                : "outline"
+                                  ? "secondary"
+                                  : "outline"
                             }
                           >
                             {affiliation.status}

@@ -31,7 +31,12 @@ const inFlightRequests = new Map<string, Promise<any>>()
  * API Error class for better error handling
  */
 export class ApiError extends Error {
-  constructor(message: string, public status?: number, public code?: string, public details?: any) {
+  constructor(
+    message: string,
+    public status?: number,
+    public code?: string,
+    public details?: any
+  ) {
     super(message)
     this.name = "ApiError"
   }

@@ -77,11 +77,8 @@ body {
   margin: 0;
   color: var(--portal-text);
   font-family: "Plus Jakarta Sans", "Manrope", sans-serif;
-  background: radial-gradient(
-      900px 520px at 8% -10%,
-      rgba(14, 116, 144, 0.24),
-      rgba(14, 116, 144, 0)
-    ),
+  background:
+    radial-gradient(900px 520px at 8% -10%, rgba(14, 116, 144, 0.24), rgba(14, 116, 144, 0)),
     radial-gradient(780px 420px at 100% -4%, rgba(15, 118, 110, 0.18), rgba(15, 118, 110, 0)),
     linear-gradient(180deg, var(--portal-bg) 0%, var(--portal-bg-deep) 100%);
 }
@@ -230,7 +227,8 @@ body {
   font-size: 1rem;
   font-weight: 800;
   color: #0f172a;
-  background: radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)),
+  background:
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)),
     linear-gradient(135deg, rgba(15, 118, 110, 0.28), rgba(14, 116, 144, 0.24));
   border: 1px solid rgba(255, 255, 255, 0.82);
 }
@@ -307,7 +305,9 @@ body {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.05);
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
 .portal-collapse-trigger:hover {
@@ -326,7 +326,9 @@ body {
 .portal-header-icon,
 .portal-header-btn,
 .portal-user-trigger {
-  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
 .portal-header-actions {
@@ -537,7 +539,8 @@ body {
 }
 
 .enforcement-hero-card {
-  background: radial-gradient(circle at top right, rgba(15, 118, 110, 0.2), rgba(15, 118, 110, 0)),
+  background:
+    radial-gradient(circle at top right, rgba(15, 118, 110, 0.2), rgba(15, 118, 110, 0)),
     linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(236, 250, 248, 0.74)) !important;
 }
 
@@ -667,7 +670,10 @@ body {
   border-radius: var(--portal-radius-md);
   padding: 12px 14px;
   cursor: pointer;
-  transition: border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  transition:
+    border-color 0.16s ease,
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
 .workspace-tab:hover {
@@ -787,7 +793,10 @@ body {
   text-align: left;
   padding: 14px;
   cursor: pointer;
-  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
 }
 
 .board-score-card:hover,
@@ -927,7 +936,10 @@ body {
   text-align: left;
   padding: 12px 13px;
   cursor: pointer;
-  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
 }
 
 .directive-head {
@@ -1437,7 +1449,8 @@ body {
 }
 
 .dashboard-hero {
-  background: radial-gradient(circle at top right, rgba(15, 118, 110, 0.14), rgba(15, 118, 110, 0)),
+  background:
+    radial-gradient(circle at top right, rgba(15, 118, 110, 0.14), rgba(15, 118, 110, 0)),
     linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(242, 249, 250, 0.8)) !important;
 }
 
@@ -2031,7 +2044,8 @@ body {
 }
 
 .dashboard-command-card {
-  background: radial-gradient(circle at 88% -5%, rgba(15, 118, 110, 0.14), rgba(15, 118, 110, 0)),
+  background:
+    radial-gradient(circle at 88% -5%, rgba(15, 118, 110, 0.14), rgba(15, 118, 110, 0)),
     linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(250, 253, 255, 0.88)) !important;
   border: 1px solid rgba(216, 225, 235, 0.9) !important;
   box-shadow: var(--portal-shadow-soft) !important;
@@ -2313,11 +2327,8 @@ body {
 }
 
 html[data-theme="dark"] body {
-  background: radial-gradient(
-      900px 520px at 8% -10%,
-      rgba(20, 184, 166, 0.16),
-      rgba(20, 184, 166, 0)
-    ),
+  background:
+    radial-gradient(900px 520px at 8% -10%, rgba(20, 184, 166, 0.16), rgba(20, 184, 166, 0)),
     radial-gradient(780px 420px at 100% -4%, rgba(56, 189, 248, 0.1), rgba(56, 189, 248, 0)),
     linear-gradient(180deg, var(--portal-bg) 0%, var(--portal-bg-deep) 100%);
 }
@@ -2367,7 +2378,10 @@ html[data-theme="dark"] .header-company-chip {
   border: 1px solid var(--portal-control-border) !important;
   background: var(--portal-control-bg) !important;
   color: var(--portal-text) !important;
-  transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease,
+  transition:
+    transform 0.16s ease,
+    border-color 0.16s ease,
+    background-color 0.16s ease,
     color 0.16s ease;
 }
 
@@ -2540,7 +2554,10 @@ html[data-theme="dark"] .header-company-chip {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .reg-header-icon-btn.ant-btn.ant-btn-text:hover {
@@ -2575,7 +2592,9 @@ html[data-theme="dark"] .header-company-chip {
   color: var(--portal-text);
   padding: 4px 10px 4px 6px;
   cursor: pointer;
-  transition: border-color 0.18s ease, background-color 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease;
 }
 
 .reg-header-user-trigger:hover {
@@ -2835,11 +2854,8 @@ html[data-theme="dark"] .ant-btn-text:hover {
 }
 
 body {
-  background: radial-gradient(
-      900px 520px at 8% -10%,
-      rgba(15, 118, 110, 0.15),
-      rgba(15, 118, 110, 0)
-    ),
+  background:
+    radial-gradient(900px 520px at 8% -10%, rgba(15, 118, 110, 0.15), rgba(15, 118, 110, 0)),
     radial-gradient(780px 420px at 100% -4%, rgba(21, 128, 61, 0.12), rgba(21, 128, 61, 0)),
     linear-gradient(180deg, var(--portal-bg) 0%, var(--portal-bg-deep) 100%) !important;
 }
@@ -2942,7 +2958,8 @@ body {
 }
 
 .dashboard-command-card {
-  background: radial-gradient(circle at 88% -5%, rgba(15, 118, 110, 0.12), rgba(15, 118, 110, 0)),
+  background:
+    radial-gradient(circle at 88% -5%, rgba(15, 118, 110, 0.12), rgba(15, 118, 110, 0)),
     linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(252, 254, 253, 0.9)) !important;
 }
 
@@ -3033,11 +3050,8 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] body {
-  background: radial-gradient(
-      900px 520px at 8% -10%,
-      rgba(15, 118, 110, 0.16),
-      rgba(15, 118, 110, 0)
-    ),
+  background:
+    radial-gradient(900px 520px at 8% -10%, rgba(15, 118, 110, 0.16), rgba(15, 118, 110, 0)),
     radial-gradient(780px 420px at 100% -4%, rgba(21, 128, 61, 0.14), rgba(21, 128, 61, 0)),
     linear-gradient(180deg, var(--portal-bg) 0%, var(--portal-bg-deep) 100%) !important;
 }
