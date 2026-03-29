@@ -65,9 +65,8 @@ def extract_asset_hashes() -> tuple[str | None, str | None]:
 		return None, None
 
 	# Safe: Build-time script with hardcoded constant path, not user input
-	with open(
-		MANIFEST_PATH, encoding="utf-8"
-	) as handle:  # nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	with open(MANIFEST_PATH, encoding="utf-8") as handle:
 		manifest = json.load(handle)
 
 	# Look for main entry point (src/main.tsx)
@@ -93,9 +92,8 @@ def update_html_template(js_file: str | None, css_file: str | None) -> None:
 		return
 
 	# Safe: Build-time script with hardcoded constant path, not user input
-	with open(
-		HTML_TEMPLATE_PATH, encoding="utf-8"
-	) as handle:  # nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	with open(HTML_TEMPLATE_PATH, encoding="utf-8") as handle:
 		html_content = handle.read()
 
 	if css_file:
@@ -117,9 +115,8 @@ def update_html_template(js_file: str | None, css_file: str | None) -> None:
 		)
 
 	# Safe: Build-time script with hardcoded constant path, not user input
-	with open(
-		HTML_TEMPLATE_PATH, "w", encoding="utf-8"
-	) as handle:  # nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	with open(HTML_TEMPLATE_PATH, "w", encoding="utf-8") as handle:
 		handle.write(html_content)
 
 
