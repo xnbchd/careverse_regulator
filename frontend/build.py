@@ -64,6 +64,8 @@ def extract_asset_hashes() -> tuple[str | None, str | None]:
 		print(f"Warning: Manifest not found at {MANIFEST_PATH}")
 		return None, None
 
+	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	# Safe: Build-time script with hardcoded constant path, not user input
 	with open(MANIFEST_PATH, encoding="utf-8") as handle:
 		manifest = json.load(handle)
 
@@ -89,6 +91,8 @@ def update_html_template(js_file: str | None, css_file: str | None) -> None:
 		print(f"Warning: HTML template not found at {HTML_TEMPLATE_PATH}")
 		return
 
+	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	# Safe: Build-time script with hardcoded constant path, not user input
 	with open(HTML_TEMPLATE_PATH, encoding="utf-8") as handle:
 		html_content = handle.read()
 

@@ -84,6 +84,8 @@ def verify_build_assets():
 	if not os.path.exists(html_file):
 		raise Exception(f"HTML file not found in www directory: {html_file}")
 
+	# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+	# Safe: Build-time script with controlled path derived from app structure, not user input
 	with open(html_file, encoding="utf-8") as handle:
 		html_content = handle.read()
 
