@@ -13,7 +13,7 @@ vulnerabilities. This is a good security practice for **runtime code** that hand
 
 The following `open()` calls have been suppressed with `nosemgrep` comments:
 
-#### 1. `careverse_regulator/build.py:87`
+#### 1. `careverse_regulator/build.py:88`
 
 ```python
 # nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
@@ -31,7 +31,7 @@ with open(html_file, encoding="utf-8") as handle:
 - No user input influences the file path
 - Called only during `bench build` or migration, not during user requests
 
-#### 2. `frontend/build.py:67`
+#### 2. `frontend/build.py:68`
 
 ```python
 # nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
@@ -49,7 +49,7 @@ with open(MANIFEST_PATH, encoding="utf-8") as handle:
 - No user input or dynamic path construction
 - Only executed during frontend build process
 
-#### 3. `frontend/build.py:92`
+#### 3. `frontend/build.py:94`
 
 ```python
 # nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
@@ -67,9 +67,28 @@ with open(HTML_TEMPLATE_PATH, encoding="utf-8") as handle:
 - No user input or dynamic path construction
 - Only executed during frontend build process
 
+#### 4. `frontend/build.py:116`
+
+```python
+# nosemgrep: frappe-semgrep-rules.rules.security.frappe-security-file-traversal
+# Safe: Build-time script with hardcoded constant path, not user input
+with open(HTML_TEMPLATE_PATH, "w", encoding="utf-8") as handle:
+    handle.write(html_content)
+```
+
+**Why it's safe:**
+
+- `HTML_TEMPLATE_PATH` is a **hardcoded module-level constant**:
+  ```python
+  HTML_TEMPLATE_PATH = "../careverse_regulator/www/compliance_360.html"
+  ```
+- No user input or dynamic path construction
+- Only executed during frontend build process
+- Writing hashed asset references to HTML template file
+
 ## Security Review Conclusion
 
-All three suppressed findings are **false positives** in the context of build scripts. The Semgrep
+All four suppressed findings are **false positives** in the context of build scripts. The Semgrep
 rule is correctly identifying file operations, but these particular operations:
 
 1. ✅ Run only at **build time**, not at request time

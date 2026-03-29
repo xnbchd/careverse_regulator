@@ -55,14 +55,14 @@ export function GlobalSearch({ open, onOpenChange }: GlobalSearchProps) {
           {error !== null
             ? error
             : loading
-            ? "Searching..."
-            : query.length === 0
-            ? "Type to search..."
-            : query.length < 2
-            ? "Type at least 2 characters..."
-            : results.length === 0
-            ? "No results found"
-            : "No results found"}
+              ? "Searching..."
+              : query.length === 0
+                ? "Type to search..."
+                : query.length < 2
+                  ? "Type at least 2 characters..."
+                  : results.length === 0
+                    ? "No results found"
+                    : "No results found"}
         </CommandEmpty>
 
         {results.map((group) => (

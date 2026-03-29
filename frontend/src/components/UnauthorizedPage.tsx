@@ -46,19 +46,19 @@ export default function UnauthorizedPage({
   const pageTitle = isGuest
     ? "Sign In Required"
     : isTenantMisconfigured
-    ? "Company Setup Required"
-    : "Access Restricted"
+      ? "Company Setup Required"
+      : "Access Restricted"
   const pageDescription = isGuest
     ? "Welcome to Compliance 360. Sign in with your authorized credentials to continue."
     : isTenantMisconfigured
-    ? "Your account needs exactly one assigned company before this portal can open."
-    : "Your current role does not include this workspace."
+      ? "Your account needs exactly one assigned company before this portal can open."
+      : "Your current role does not include this workspace."
   const guidance = isTenantMisconfigured
     ? accessMessage ||
       "Ask your administrator to assign one Company User Permission to this account."
     : isGuest
-    ? "Use your work credentials to continue."
-    : accessMessage || "Ask your administrator to assign the correct portal role."
+      ? "Use your work credentials to continue."
+      : accessMessage || "Ask your administrator to assign the correct portal role."
 
   const features = [
     {
@@ -91,10 +91,10 @@ export default function UnauthorizedPage({
   const primaryLabel = isGuest
     ? "Sign In to Dashboard"
     : isTenantMisconfigured
-    ? "Re-open Sign In"
-    : onContinueLimited
-    ? "Continue (Limited Access)"
-    : "Sign In to Dashboard"
+      ? "Re-open Sign In"
+      : onContinueLimited
+        ? "Continue (Limited Access)"
+        : "Sign In to Dashboard"
 
   return (
     <div className="min-h-screen bg-linear-to-br from-background via-background to-secondary/20 relative overflow-hidden">

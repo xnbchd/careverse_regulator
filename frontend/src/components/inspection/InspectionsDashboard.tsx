@@ -61,15 +61,15 @@ export function InspectionsDashboard() {
                   daysUntilDue === 0
                     ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400"
                     : daysUntilDue <= 3
-                    ? "bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-400"
-                    : "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400"
+                      ? "bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-400"
+                      : "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400"
                 }`}
               >
                 {daysUntilDue === 0
                   ? "Today"
                   : daysUntilDue === 1
-                  ? "Tomorrow"
-                  : `${daysUntilDue}d`}
+                    ? "Tomorrow"
+                    : `${daysUntilDue}d`}
               </span>
             )}
           </div>

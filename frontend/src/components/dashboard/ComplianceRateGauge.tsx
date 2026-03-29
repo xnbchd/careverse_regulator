@@ -74,10 +74,10 @@ export function ComplianceRateGauge({
             {rate >= 90
               ? "Excellent compliance"
               : rate >= 75
-              ? "Good compliance"
-              : rate >= 50
-              ? "Needs improvement"
-              : "Critical attention required"}
+                ? "Good compliance"
+                : rate >= 50
+                  ? "Needs improvement"
+                  : "Critical attention required"}
           </p>
         </div>
       </CardContent>

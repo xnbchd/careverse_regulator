@@ -155,8 +155,8 @@ export async function exportAuditLogs(request: AuditExportRequest): Promise<Blob
           request.format === "pdf"
             ? "application/pdf"
             : request.format === "csv"
-            ? "text/csv"
-            : "application/json",
+              ? "text/csv"
+              : "application/json",
       },
     }
   )

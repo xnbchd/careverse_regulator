@@ -47,8 +47,8 @@ export function ProfessionalsListView() {
     professionalsFilters.active === "true"
       ? "active"
       : professionalsFilters.active === "false"
-      ? "inactive"
-      : "all"
+        ? "inactive"
+        : "all"
   )
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">(
     professionalsFilters.sortOrder || "asc"

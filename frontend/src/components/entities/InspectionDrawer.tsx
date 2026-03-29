@@ -59,10 +59,10 @@ export function InspectionDrawer({ inspection, loading }: InspectionDrawerProps)
             inspection.status === "Scheduled"
               ? "secondary"
               : inspection.status === "In Progress"
-              ? "default"
-              : inspection.status === "Completed"
-              ? "outline"
-              : "secondary"
+                ? "default"
+                : inspection.status === "Completed"
+                  ? "outline"
+                  : "secondary"
           }
         >
           {inspection.status}

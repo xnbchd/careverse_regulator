@@ -343,8 +343,8 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
                       idx === 0
                         ? "sticky left-0 z-10 bg-card"
                         : idx === 1
-                        ? "sticky left-0 z-10 bg-card border-r border-border/70"
-                        : undefined
+                          ? "sticky left-0 z-10 bg-card border-r border-border/70"
+                          : undefined
                     }
                   >
                     {header.isPlaceholder
@@ -384,8 +384,8 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
                         idx === 0
                           ? "sticky left-0 z-10 bg-card"
                           : idx === 1
-                          ? "sticky left-0 z-10 bg-card border-r border-border/70"
-                          : undefined
+                            ? "sticky left-0 z-10 bg-card border-r border-border/70"
+                            : undefined
                       }
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

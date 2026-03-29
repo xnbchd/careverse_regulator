@@ -48,8 +48,8 @@ export default function InspectionFilters({
       selectedStatuses[0] === "completed"
         ? "Completed"
         : selectedStatuses[0] === "non compliant"
-        ? "Non Compliant"
-        : "Pending"
+          ? "Non Compliant"
+          : "Pending"
     filterTags.push({
       key: "status",
       label: `Status: ${statusLabel}`,
