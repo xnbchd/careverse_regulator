@@ -134,7 +134,9 @@ export default function UnauthorizedPage({
                       <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground block mb-2.5">
                         Organization Portal
                       </span>
-                      <h1 className={`font-medium tracking-tight leading-tight ${isMobile ? 'text-2xl' : 'text-3xl'}`}>
+                      <h1
+                        className={`font-medium tracking-tight leading-tight ${isMobile ? "text-2xl" : "text-3xl"}`}
+                      >
                         {pageTitle}
                       </h1>
                       <p className="text-sm leading-relaxed text-muted-foreground mt-3">
@@ -200,9 +202,7 @@ export default function UnauthorizedPage({
                 <span className="text-xs font-medium uppercase tracking-wider text-primary dark:text-green-400 block mb-3">
                   Executive Platform
                 </span>
-                <h2 className="text-3xl font-medium mb-2.5">
-                  Smarter Organization Management
-                </h2>
+                <h2 className="text-3xl font-medium mb-2.5">Smarter Organization Management</h2>
                 <p className="text-sm text-muted-foreground">
                   Compliance 360 provides integrated oversight of health workers, facilities,
                   licenses, and compliance actions.
@@ -223,12 +223,8 @@ export default function UnauthorizedPage({
                             <Icon className="w-5 h-5" />
                           </div>
                           <div className="flex-1">
-                            <h5 className="font-medium mb-1">
-                              {feature.title}
-                            </h5>
-                            <p className="text-sm text-muted-foreground">
-                              {feature.description}
-                            </p>
+                            <h5 className="font-medium mb-1">{feature.title}</h5>
+                            <p className="text-sm text-muted-foreground">{feature.description}</p>
                           </div>
                           <CheckCircle className="w-5 h-5 text-green-500 dark:text-green-400 ml-auto self-center shrink-0" />
                         </div>

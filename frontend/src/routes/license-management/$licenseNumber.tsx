@@ -1,12 +1,23 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-import { useLicensingStore } from '@/stores/licensingStore'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import StatusBadge from '@/components/licensing/StatusBadge'
-import { ArrowLeft, FileText, Building2, Calendar, CreditCard, CheckCircle, XCircle, AlertCircle, Eye, Clock } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import dayjs from 'dayjs'
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { useState } from "react"
+import { useLicensingStore } from "@/stores/licensingStore"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import StatusBadge from "@/components/licensing/StatusBadge"
+import {
+  ArrowLeft,
+  FileText,
+  Building2,
+  Calendar,
+  CreditCard,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Eye,
+  Clock,
+} from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import dayjs from "dayjs"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -62,7 +73,9 @@ function LicenseDetailPage() {
             {license && (
               <>
                 <div className="h-6 w-px bg-border" />
-                <h2 className="text-lg font-semibold font-mono text-foreground">{license.licenseNumber}</h2>
+                <h2 className="text-lg font-semibold font-mono text-foreground">
+                  {license.licenseNumber}
+                </h2>
                 <StatusBadge status={license.status} className="text-sm" />
               </>
             )}
@@ -70,34 +83,38 @@ function LicenseDetailPage() {
           {canPerformActions && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button disabled={actionLoading}>
-                  Actions
-                </Button>
+                <Button disabled={actionLoading}>Actions</Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={() => handleAction('APPROVE', 'Approved')}>
+                <DropdownMenuItem onClick={() => handleAction("APPROVE", "Approved")}>
                   <CheckCircle className="h-4 w-4 mr-2" />
                   Approve
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAction('DENY', 'Denied')}>
+                <DropdownMenuItem onClick={() => handleAction("DENY", "Denied")}>
                   <XCircle className="h-4 w-4 mr-2" />
                   Deny
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleAction('REVIEW', 'Under Review')}>
+                <DropdownMenuItem onClick={() => handleAction("REVIEW", "Under Review")}>
                   <Eye className="h-4 w-4 mr-2" />
                   Review
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAction('REQUEST_INFO', 'Info Requested')}>
+                <DropdownMenuItem onClick={() => handleAction("REQUEST_INFO", "Info Requested")}>
                   <AlertCircle className="h-4 w-4 mr-2" />
                   Request Info
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleAction('SUSPEND', 'Suspended')} className="text-orange-600">
+                <DropdownMenuItem
+                  onClick={() => handleAction("SUSPEND", "Suspended")}
+                  className="text-orange-600"
+                >
                   <XCircle className="h-4 w-4 mr-2" />
                   Suspend
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAction('SET_EXPIRED', 'Expired')} className="text-muted-foreground">
+                <DropdownMenuItem
+                  onClick={() => handleAction("SET_EXPIRED", "Expired")}
+                  className="text-muted-foreground"
+                >
                   <XCircle className="h-4 w-4 mr-2" />
                   Set Expired
                 </DropdownMenuItem>
