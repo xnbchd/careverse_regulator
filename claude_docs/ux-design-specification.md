@@ -38,7 +38,7 @@ Users are professional government/regulatory staff: moderate tech-savviness, des
 
 ### Key Design Challenges
 
-- **Three overlapping token systems** (portal-*, shadcn OKLch, antd bridge) that need unification into a single source of truth for agents
+- **Three overlapping token systems** (portal-\*, shadcn OKLch, antd bridge) that need unification into a single source of truth for agents
 - **Dual dark mode selectors** (`data-theme='dark'` + `.dark` class) must remain synchronized
 - **No formalized semantic color system** — status colors are hardcoded across components rather than mapped through tokens
 - **Typography loads 5 font families** with inconsistent usage — needs clear hierarchy rules
@@ -60,11 +60,11 @@ The design system's core purpose is **visual consistency across all feature doma
 
 ### Platform Strategy
 
-| Platform | Breakpoint | Primary Interaction | Layout Strategy |
-|----------|-----------|-------------------|-----------------|
-| Desktop | >= 1200px | Mouse/keyboard | Data-dense tables, multi-column layouts, action dropdowns |
-| Tablet | 768-1199px | Touch/mouse | Collapsed navigation, adjusted grids, condensed spacing |
-| Mobile | < 768px | Touch | Card-based layouts, stacked filters, focused single-column |
+| Platform | Breakpoint | Primary Interaction | Layout Strategy                                            |
+| -------- | ---------- | ------------------- | ---------------------------------------------------------- |
+| Desktop  | >= 1200px  | Mouse/keyboard      | Data-dense tables, multi-column layouts, action dropdowns  |
+| Tablet   | 768-1199px | Touch/mouse         | Collapsed navigation, adjusted grids, condensed spacing    |
+| Mobile   | < 768px    | Touch               | Card-based layouts, stacked filters, focused single-column |
 
 - Responsive behavior controlled via `useResponsive()` hook returning `isMobile`, `isTablet`, `isDesktop`
 - No offline requirement — always connected to Frappe backend
@@ -103,13 +103,13 @@ The design system's core purpose is **visual consistency across all feature doma
 
 ### Emotional Journey Mapping
 
-| Stage | Desired Feeling | Design System Support |
-|-------|----------------|----------------------|
-| Login/Landing | Oriented, welcomed | Company branding, clean dashboard, clear navigation |
-| Data browsing | Focused, efficient | Consistent table/card patterns, effective filters, clear pagination |
-| Taking action | Confident, decisive | Obvious action buttons, confirmation feedback, audit trail awareness |
-| Error/failure | Informed, not alarmed | Clear error states, actionable messages, no destructive red overuse |
-| Returning | Familiar, productive | Consistent layouts across sessions, remembered preferences |
+| Stage         | Desired Feeling       | Design System Support                                                |
+| ------------- | --------------------- | -------------------------------------------------------------------- |
+| Login/Landing | Oriented, welcomed    | Company branding, clean dashboard, clear navigation                  |
+| Data browsing | Focused, efficient    | Consistent table/card patterns, effective filters, clear pagination  |
+| Taking action | Confident, decisive   | Obvious action buttons, confirmation feedback, audit trail awareness |
+| Error/failure | Informed, not alarmed | Clear error states, actionable messages, no destructive red overuse  |
+| Returning     | Familiar, productive  | Consistent layouts across sessions, remembered preferences           |
 
 ### Micro-Emotions
 
@@ -120,13 +120,13 @@ The design system's core purpose is **visual consistency across all feature doma
 
 ### Design Implications
 
-| Emotional Goal | Design System Choice |
-|---|---|
-| Confidence | Consistent component patterns, clear action feedback, predictable layouts |
-| Efficiency | High data density on desktop, scannable tables, keyboard shortcuts, debounced search |
-| Calm authority | Teal primary palette, generous whitespace, smooth 0.15-0.16s transitions |
-| Trust | No jarring animations, seamless dark mode, professional typography |
-| Clarity | Semantic status colors, clear visual hierarchy, distinct surface boundaries |
+| Emotional Goal | Design System Choice                                                                 |
+| -------------- | ------------------------------------------------------------------------------------ |
+| Confidence     | Consistent component patterns, clear action feedback, predictable layouts            |
+| Efficiency     | High data density on desktop, scannable tables, keyboard shortcuts, debounced search |
+| Calm authority | Teal primary palette, generous whitespace, smooth 0.15-0.16s transitions             |
+| Trust          | No jarring animations, seamless dark mode, professional typography                   |
+| Clarity        | Semantic status colors, clear visual hierarchy, distinct surface boundaries          |
 
 ### Emotional Design Principles
 
@@ -140,22 +140,22 @@ The design system's core purpose is **visual consistency across all feature doma
 
 ### Inspiring Products Analysis
 
-| Product | Key UX Strength | Relevance to Careverse Regulator |
-|---------|----------------|----------------------------------|
-| **Linear** | Keyboard-first, information density, seamless dark mode, glass effects | Sidebar/content layout, dark mode approach, glassmorphism |
-| **Vercel Dashboard** | Clean data tables, status badges, minimal palette, strong hierarchy | Table/card responsive pattern, status badge conventions |
+| Product              | Key UX Strength                                                              | Relevance to Careverse Regulator                                  |
+| -------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Linear**           | Keyboard-first, information density, seamless dark mode, glass effects       | Sidebar/content layout, dark mode approach, glassmorphism         |
+| **Vercel Dashboard** | Clean data tables, status badges, minimal palette, strong hierarchy          | Table/card responsive pattern, status badge conventions           |
 | **Stripe Dashboard** | Professional data-heavy UI, clear typography, powerful filters, detail pages | Tabs pattern, detail-page-not-modal philosophy, filter bar design |
 
 ### Transferable UX Patterns
 
-| Pattern | Implementation | Design System Codification |
-|---------|---------------|---------------------------|
-| Glass surfaces | `backdrop-filter: blur(10-14px)` with portal surface tokens | Use existing `.glass-pro-card` class (defined in `index.css`) — do NOT create a new `surface-glass` token |
-| Status badge system | Color-coded with semantic meaning per status | Formalize as semantic status token map |
-| Table → Card responsive | `useResponsive()` hook toggling layouts | Document as required pattern for all list views |
-| Command palette | cmdk library, keyboard shortcut triggered | Document trigger convention and placement |
-| Toast feedback | Sonner toasts on all mutations | Document toast patterns (success/error/info) |
-| Detail pages over modals | Route-based detail pages, no modal patterns | Enforce as architectural rule |
+| Pattern                  | Implementation                                              | Design System Codification                                                                                |
+| ------------------------ | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Glass surfaces           | `backdrop-filter: blur(10-14px)` with portal surface tokens | Use existing `.glass-pro-card` class (defined in `index.css`) — do NOT create a new `surface-glass` token |
+| Status badge system      | Color-coded with semantic meaning per status                | Formalize as semantic status token map                                                                    |
+| Table → Card responsive  | `useResponsive()` hook toggling layouts                     | Document as required pattern for all list views                                                           |
+| Command palette          | cmdk library, keyboard shortcut triggered                   | Document trigger convention and placement                                                                 |
+| Toast feedback           | Sonner toasts on all mutations                              | Document toast patterns (success/error/info)                                                              |
+| Detail pages over modals | Route-based detail pages, no modal patterns                 | Enforce as architectural rule                                                                             |
 
 ### Anti-Patterns to Avoid
 
@@ -170,15 +170,18 @@ The design system's core purpose is **visual consistency across all feature doma
 ### Design Inspiration Strategy
 
 **Adopt directly:**
+
 - Linear's glass surface treatment for headers and elevated panels
 - Stripe's detail-page architecture for entity views
 - Vercel's status badge visual language for consistency
 
 **Adapt for regulatory context:**
+
 - Linear's keyboard-first approach — add shortcuts for common regulatory actions (approve, reject, next item)
 - Stripe's filter bar — extend with saved filter presets for compliance workflows
 
 **Avoid:**
+
 - Consumer app patterns (gamification, engagement metrics, social features)
 - Complex animated transitions that slow down high-volume workflows
 - Nested modals or drawer-within-drawer patterns
@@ -203,23 +206,23 @@ This project uses a layered design system where components are owned (not import
 
 The design system is already implemented with a **three-layer token architecture**:
 
-| Layer | Scope | Selector | Purpose |
-|-------|-------|----------|---------|
-| **shadcn/ui OKLch tokens** | Component-level | `:root` / `.dark` | Colors for all UI primitives (buttons, cards, inputs, badges) |
-| **Portal CSS variables** | Application shell | `:root` / `:root[data-theme='dark']` | Background gradients, glass surfaces, header/sidebar, shadows |
-| **Ant Design bridge** | Legacy/CSS-only | `:root` / `:root[data-theme='dark']` | CSS token bridge from prior Ant Design usage. **No `antd` imports remain in frontend code.** Bridge CSS persists in `index.css` (e.g., `.glass-pro-card .ant-pro-card-*` selectors) but no Ant components are rendered. Safe to ignore for new development — do NOT import `antd`. |
+| Layer                      | Scope             | Selector                             | Purpose                                                                                                                                                                                                                                                                            |
+| -------------------------- | ----------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **shadcn/ui OKLch tokens** | Component-level   | `:root` / `.dark`                    | Colors for all UI primitives (buttons, cards, inputs, badges)                                                                                                                                                                                                                      |
+| **Portal CSS variables**   | Application shell | `:root` / `:root[data-theme='dark']` | Background gradients, glass surfaces, header/sidebar, shadows                                                                                                                                                                                                                      |
+| **Ant Design bridge**      | Legacy/CSS-only   | `:root` / `:root[data-theme='dark']` | CSS token bridge from prior Ant Design usage. **No `antd` imports remain in frontend code.** Bridge CSS persists in `index.css` (e.g., `.glass-pro-card .ant-pro-card-*` selectors) but no Ant components are rendered. Safe to ignore for new development — do NOT import `antd`. |
 
 ### Token Layer Decision Rules
 
 When building or styling a component, use this decision tree to pick the correct token layer:
 
-| You're styling... | Use this layer | Token prefix | Example |
-|------------------|---------------|-------------|---------|
-| A shadcn/ui component (button, card, input, badge) | **shadcn OKLch tokens** | `--background`, `--primary`, `--card`, etc. via Tailwind classes | `bg-card`, `text-primary`, `border-border` |
-| The app shell (header, sidebar, page background) | **Portal CSS variables** | `--portal-*` | `var(--portal-bg)`, `var(--portal-surface)` |
-| A glass/elevated surface in the shell | **Portal CSS variables** | `--portal-surface`, `.glass-pro-card` | `background: var(--portal-surface)` |
-| A chart or data visualization | **shadcn chart tokens** | `--chart-1` through `--chart-5` | `hsl(var(--chart-1))` |
-| An Ant Design component (legacy, if any remain) | **Ant Design bridge** | `--ant-*` | Avoid — no antd imports remain in frontend |
+| You're styling...                                  | Use this layer           | Token prefix                                                     | Example                                     |
+| -------------------------------------------------- | ------------------------ | ---------------------------------------------------------------- | ------------------------------------------- |
+| A shadcn/ui component (button, card, input, badge) | **shadcn OKLch tokens**  | `--background`, `--primary`, `--card`, etc. via Tailwind classes | `bg-card`, `text-primary`, `border-border`  |
+| The app shell (header, sidebar, page background)   | **Portal CSS variables** | `--portal-*`                                                     | `var(--portal-bg)`, `var(--portal-surface)` |
+| A glass/elevated surface in the shell              | **Portal CSS variables** | `--portal-surface`, `.glass-pro-card`                            | `background: var(--portal-surface)`         |
+| A chart or data visualization                      | **shadcn chart tokens**  | `--chart-1` through `--chart-5`                                  | `hsl(var(--chart-1))`                       |
+| An Ant Design component (legacy, if any remain)    | **Ant Design bridge**    | `--ant-*`                                                        | Avoid — no antd imports remain in frontend  |
 
 **Rule of thumb:** If you're in `components/ui/` or feature domain components, use shadcn tokens via Tailwind classes. If you're in layout/shell code, use portal variables. Never mix portal tokens into component-level styling.
 
@@ -249,6 +252,7 @@ This loop must feel identical across Affiliations, Licensing, Inspections, and a
 ### User Mental Model
 
 Regulatory staff think in terms of **queues and decisions**:
+
 - "What needs my attention?" → Filtered list sorted by urgency/status
 - "What's the full picture?" → Detail page with all relevant context
 - "What action should I take?" → Clear action buttons with confirmation
@@ -258,29 +262,29 @@ They bring mental models from email (inbox/detail), spreadsheets (filter/sort), 
 
 ### Success Criteria
 
-| Criteria | Metric | Design System Implication |
-|----------|--------|--------------------------|
-| Recognition | User identifies item status in < 1 second | Semantic status colors, consistent badge placement |
-| Navigation | List-to-detail in 1 click, back-to-list in 1 click | Route-based navigation, breadcrumbs, browser back support |
-| Action confidence | User knows exactly what will happen before clicking | Clear button labels, confirmation dialogs for destructive actions |
-| Feedback loop | Action result visible within 500ms | Toast notification + immediate status badge update |
-| Cross-domain consistency | New module feels familiar on first use | Shared layout patterns, identical filter/table/pagination components |
+| Criteria                 | Metric                                              | Design System Implication                                            |
+| ------------------------ | --------------------------------------------------- | -------------------------------------------------------------------- |
+| Recognition              | User identifies item status in < 1 second           | Semantic status colors, consistent badge placement                   |
+| Navigation               | List-to-detail in 1 click, back-to-list in 1 click  | Route-based navigation, breadcrumbs, browser back support            |
+| Action confidence        | User knows exactly what will happen before clicking | Clear button labels, confirmation dialogs for destructive actions    |
+| Feedback loop            | Action result visible within 500ms                  | Toast notification + immediate status badge update                   |
+| Cross-domain consistency | New module feels familiar on first use              | Shared layout patterns, identical filter/table/pagination components |
 
 ### Established Patterns (No Novel UX Required)
 
 This project uses **exclusively established UX patterns** — no user education needed:
 
-| Pattern | Usage | Implementation |
-|---------|-------|---------------|
-| Data table with sort/filter | All list views | Shared table component + filter bar |
-| Card grid for mobile | Mobile list views | Responsive card component |
-| Detail page (not modal) | Entity review | Route-based page with breadcrumb back |
-| Action dropdown | Regulatory decisions | DropdownMenu with role-gated items |
-| Status badge | State indication | Semantic color-coded Badge component |
-| Toast notification | Action feedback | Sonner toast (success/error/info) |
-| Tabs | Sub-categorization | Tabs component (e.g., Licenses \| Applications) |
-| Pagination | Large datasets | Shared pagination with page numbers |
-| Search with debounce | Quick filtering | 300ms debounced text input |
+| Pattern                     | Usage                | Implementation                                  |
+| --------------------------- | -------------------- | ----------------------------------------------- |
+| Data table with sort/filter | All list views       | Shared table component + filter bar             |
+| Card grid for mobile        | Mobile list views    | Responsive card component                       |
+| Detail page (not modal)     | Entity review        | Route-based page with breadcrumb back           |
+| Action dropdown             | Regulatory decisions | DropdownMenu with role-gated items              |
+| Status badge                | State indication     | Semantic color-coded Badge component            |
+| Toast notification          | Action feedback      | Sonner toast (success/error/info)               |
+| Tabs                        | Sub-categorization   | Tabs component (e.g., Licenses \| Applications) |
+| Pagination                  | Large datasets       | Shared pagination with page numbers             |
+| Search with debounce        | Quick filtering      | 300ms debounced text input                      |
 
 ### Experience Mechanics
 
@@ -304,90 +308,91 @@ The color system uses OKLch color space for perceptually uniform color manipulat
 
 **Core Semantic Tokens (Light Mode):**
 
-| Token | OKLch Value | Tailwind Class | Usage |
-|-------|-------------|---------------|-------|
-| `--background` | `oklch(0.975 0.002 106.424)` | `bg-background` | Page background |
-| `--foreground` | `oklch(0.147 0.004 49.25)` | `text-foreground` | Primary text |
-| `--card` | `oklch(1 0 0)` | `bg-card` | Card/surface background |
-| `--card-foreground` | `oklch(0.147 0.004 49.25)` | `text-card-foreground` | Card text |
-| `--primary` | `oklch(0.694 0.123 181.083)` | `bg-primary`, `text-primary` | Primary actions, links, accents |
-| `--primary-foreground` | `oklch(0.985 0.02 181)` | `text-primary-foreground` | Text on primary |
-| `--secondary` | `oklch(0.967 0.001 286.375)` | `bg-secondary` | Secondary surfaces |
-| `--secondary-foreground` | `oklch(0.21 0.006 285.885)` | `text-secondary-foreground` | Text on secondary |
-| `--muted` | `oklch(0.94 0.003 106.424)` | `bg-muted` | Muted backgrounds |
-| `--muted-foreground` | `oklch(0.553 0.013 58.071)` | `text-muted-foreground` | Secondary text |
-| `--accent` | `oklch(0.94 0.003 106.424)` | `bg-accent` | Accent backgrounds |
-| `--destructive` | `oklch(0.577 0.245 27.325)` | `bg-destructive`, `text-destructive` | Destructive actions |
-| `--border` | `oklch(0.923 0.003 48.717)` | `border-border` | Borders |
-| `--input` | `oklch(0.923 0.003 48.717)` | `border-input` | Input borders |
-| `--ring` | `oklch(0.709 0.01 56.259)` | `ring-ring` | Focus rings |
+| Token                    | OKLch Value                  | Tailwind Class                       | Usage                           |
+| ------------------------ | ---------------------------- | ------------------------------------ | ------------------------------- |
+| `--background`           | `oklch(0.975 0.002 106.424)` | `bg-background`                      | Page background                 |
+| `--foreground`           | `oklch(0.147 0.004 49.25)`   | `text-foreground`                    | Primary text                    |
+| `--card`                 | `oklch(1 0 0)`               | `bg-card`                            | Card/surface background         |
+| `--card-foreground`      | `oklch(0.147 0.004 49.25)`   | `text-card-foreground`               | Card text                       |
+| `--primary`              | `oklch(0.694 0.123 181.083)` | `bg-primary`, `text-primary`         | Primary actions, links, accents |
+| `--primary-foreground`   | `oklch(0.985 0.02 181)`      | `text-primary-foreground`            | Text on primary                 |
+| `--secondary`            | `oklch(0.967 0.001 286.375)` | `bg-secondary`                       | Secondary surfaces              |
+| `--secondary-foreground` | `oklch(0.21 0.006 285.885)`  | `text-secondary-foreground`          | Text on secondary               |
+| `--muted`                | `oklch(0.94 0.003 106.424)`  | `bg-muted`                           | Muted backgrounds               |
+| `--muted-foreground`     | `oklch(0.553 0.013 58.071)`  | `text-muted-foreground`              | Secondary text                  |
+| `--accent`               | `oklch(0.94 0.003 106.424)`  | `bg-accent`                          | Accent backgrounds              |
+| `--destructive`          | `oklch(0.577 0.245 27.325)`  | `bg-destructive`, `text-destructive` | Destructive actions             |
+| `--border`               | `oklch(0.923 0.003 48.717)`  | `border-border`                      | Borders                         |
+| `--input`                | `oklch(0.923 0.003 48.717)`  | `border-input`                       | Input borders                   |
+| `--ring`                 | `oklch(0.709 0.01 56.259)`   | `ring-ring`                          | Focus rings                     |
 
 **Core Semantic Tokens (Dark Mode):**
 
 Dark mode values are applied automatically via the `.dark` selector in `index.css`. Agents do NOT need to specify dark variants for these tokens — Tailwind resolves them automatically. The values below are for reference.
 
-| Token | OKLch Value | Usage |
-|-------|-------------|-------|
-| `--background` | `oklch(0.147 0.004 49.25)` | Page background |
-| `--foreground` | `oklch(0.985 0.001 106.423)` | Primary text |
-| `--card` | `oklch(0.216 0.006 56.043)` | Card/surface background |
-| `--primary` | `oklch(0.694 0.123 181.083)` | Primary (same hue, adapts context) |
-| `--muted` | `oklch(0.268 0.007 34.298)` | Muted backgrounds |
-| `--muted-foreground` | `oklch(0.709 0.01 56.259)` | Secondary text |
-| `--destructive` | `oklch(0.704 0.191 22.216)` | Destructive (lighter for dark bg) |
-| `--border` | `oklch(1 0 0 / 10%)` | Borders (translucent white) |
-| `--input` | `oklch(1 0 0 / 15%)` | Input borders (translucent white) |
+| Token                | OKLch Value                  | Usage                              |
+| -------------------- | ---------------------------- | ---------------------------------- |
+| `--background`       | `oklch(0.147 0.004 49.25)`   | Page background                    |
+| `--foreground`       | `oklch(0.985 0.001 106.423)` | Primary text                       |
+| `--card`             | `oklch(0.216 0.006 56.043)`  | Card/surface background            |
+| `--primary`          | `oklch(0.694 0.123 181.083)` | Primary (same hue, adapts context) |
+| `--muted`            | `oklch(0.268 0.007 34.298)`  | Muted backgrounds                  |
+| `--muted-foreground` | `oklch(0.709 0.01 56.259)`   | Secondary text                     |
+| `--destructive`      | `oklch(0.704 0.191 22.216)`  | Destructive (lighter for dark bg)  |
+| `--border`           | `oklch(1 0 0 / 10%)`         | Borders (translucent white)        |
+| `--input`            | `oklch(1 0 0 / 15%)`         | Input borders (translucent white)  |
 
 **Portal Shell Tokens:**
 
-| Token | Light | Dark | Usage |
-|-------|-------|------|-------|
-| `--portal-bg` | #f4f7fb | #08101d | App background |
-| `--portal-bg-deep` | #edf2f7 | #0b1728 | Deep background |
-| `--portal-surface` | rgba(255,255,255,0.82) | rgba(15,23,42,0.68) | Glass surfaces |
-| `--portal-surface-strong` | rgba(255,255,255,0.92) | rgba(15,23,42,0.82) | Solid surfaces |
-| `--portal-text` | #0f172a | #e2e8f0 | Shell text |
-| `--portal-body` | #334155 | #cbd5e1 | Body text |
-| `--portal-muted` | #64748b | #94a3b8 | Muted text |
-| `--portal-teal` | #0f766e | #0f766e | Brand accent |
-| `--portal-danger` | #dc2626 | #dc2626 | Danger accent |
-| `--portal-border` | #d8e1eb | rgba(71,85,105,0.48) | Shell borders |
+| Token                     | Light                  | Dark                 | Usage           |
+| ------------------------- | ---------------------- | -------------------- | --------------- |
+| `--portal-bg`             | #f4f7fb                | #08101d              | App background  |
+| `--portal-bg-deep`        | #edf2f7                | #0b1728              | Deep background |
+| `--portal-surface`        | rgba(255,255,255,0.82) | rgba(15,23,42,0.68)  | Glass surfaces  |
+| `--portal-surface-strong` | rgba(255,255,255,0.92) | rgba(15,23,42,0.82)  | Solid surfaces  |
+| `--portal-text`           | #0f172a                | #e2e8f0              | Shell text      |
+| `--portal-body`           | #334155                | #cbd5e1              | Body text       |
+| `--portal-muted`          | #64748b                | #94a3b8              | Muted text      |
+| `--portal-teal`           | #0f766e                | #0f766e              | Brand accent    |
+| `--portal-danger`         | #dc2626                | #dc2626              | Danger accent   |
+| `--portal-border`         | #d8e1eb                | rgba(71,85,105,0.48) | Shell borders   |
 
 **Chart Colors (Data Visualization):**
 
-| Token | OKLch Value | Usage |
-|-------|-------------|-------|
-| `--chart-1` | `oklch(0.871 0.15 154.449)` | Primary data series |
-| `--chart-2` | `oklch(0.723 0.219 149.579)` | Secondary series |
-| `--chart-3` | `oklch(0.627 0.194 149.214)` | Tertiary series |
-| `--chart-4` | `oklch(0.527 0.154 150.069)` | Quaternary series |
-| `--chart-5` | `oklch(0.448 0.119 151.328)` | Quinary series |
+| Token       | OKLch Value                  | Usage               |
+| ----------- | ---------------------------- | ------------------- |
+| `--chart-1` | `oklch(0.871 0.15 154.449)`  | Primary data series |
+| `--chart-2` | `oklch(0.723 0.219 149.579)` | Secondary series    |
+| `--chart-3` | `oklch(0.627 0.194 149.214)` | Tertiary series     |
+| `--chart-4` | `oklch(0.527 0.154 150.069)` | Quaternary series   |
+| `--chart-5` | `oklch(0.448 0.119 151.328)` | Quinary series      |
 
 **Sidebar Tokens:**
 
-| Token | Light OKLch | Dark OKLch |
-|-------|-------------|------------|
-| `--sidebar` | `oklch(0.985 0.001 106.423)` | `oklch(0.216 0.006 56.043)` |
-| `--sidebar-primary` | `oklch(0.596 0.145 163.225)` | `oklch(0.696 0.17 162.48)` |
-| `--sidebar-accent` | `oklch(0.94 0.003 106.424)` | `oklch(0.268 0.007 34.298)` |
+| Token               | Light OKLch                  | Dark OKLch                  |
+| ------------------- | ---------------------------- | --------------------------- |
+| `--sidebar`         | `oklch(0.985 0.001 106.423)` | `oklch(0.216 0.006 56.043)` |
+| `--sidebar-primary` | `oklch(0.596 0.145 163.225)` | `oklch(0.696 0.17 162.48)`  |
+| `--sidebar-accent`  | `oklch(0.94 0.003 106.424)`  | `oklch(0.268 0.007 34.298)` |
 
 #### Semantic Status Colors
 
 Status colors MUST be used consistently across all domains. These are NOT yet defined as CSS custom properties (TODO: create `--status-*` tokens in `index.css`). Until then, agents must use the Tailwind classes below — never raw hex values.
 
-| Status Semantic | Tailwind Classes (Light) | Tailwind Classes (Dark) | Usage |
-|----------------|-------------------------|------------------------|-------|
-| Success/Active/Approved | `text-teal-700 bg-teal-50` | `dark:text-teal-400 dark:bg-teal-950/30` | Active licenses, approved items |
-| Warning/Attention | `text-amber-700 bg-amber-50` | `dark:text-amber-400 dark:bg-amber-950/30` | Expiring, needs attention |
-| Danger/Rejected/Suspended | `text-red-600 bg-red-50` | `dark:text-red-400 dark:bg-red-950/30` | Rejected, suspended, revoked |
-| Info/In Review | `text-cyan-700 bg-cyan-50` | `dark:text-cyan-400 dark:bg-cyan-950/30` | Under review, processing |
-| Neutral/Pending | `text-slate-500 bg-slate-50` | `dark:text-slate-400 dark:bg-slate-800/30` | Pending, draft, inactive |
+| Status Semantic           | Tailwind Classes (Light)     | Tailwind Classes (Dark)                    | Usage                           |
+| ------------------------- | ---------------------------- | ------------------------------------------ | ------------------------------- |
+| Success/Active/Approved   | `text-teal-700 bg-teal-50`   | `dark:text-teal-400 dark:bg-teal-950/30`   | Active licenses, approved items |
+| Warning/Attention         | `text-amber-700 bg-amber-50` | `dark:text-amber-400 dark:bg-amber-950/30` | Expiring, needs attention       |
+| Danger/Rejected/Suspended | `text-red-600 bg-red-50`     | `dark:text-red-400 dark:bg-red-950/30`     | Rejected, suspended, revoked    |
+| Info/In Review            | `text-cyan-700 bg-cyan-50`   | `dark:text-cyan-400 dark:bg-cyan-950/30`   | Under review, processing        |
+| Neutral/Pending           | `text-slate-500 bg-slate-50` | `dark:text-slate-400 dark:bg-slate-800/30` | Pending, draft, inactive        |
 
 > **Implementation note:** Each domain currently has its own `StatusBadge.tsx` with a status-to-color map. When building a new domain, copy the pattern from an existing `StatusBadge.tsx` and adjust the status enum. Consolidating to shared `--status-*` tokens is planned but not yet done.
 
 #### Background Gradients
 
 **Page Background (applied to `.hq-portal`):**
+
 ```css
 /* Light */
 radial-gradient(900px 520px at 8% -10%, rgba(15, 118, 110, 0.15), transparent),
@@ -406,27 +411,27 @@ linear-gradient(180deg, var(--portal-bg), var(--portal-bg-deep))
 
 > **Known issue:** 5 font families are loaded (Public Sans, Manrope, Plus Jakarta Sans, Raleway, Roboto). This is tech debt from organic growth. The rules below define which to use — do NOT introduce additional fonts.
 
-| Role | Font Family | Defined In | Weights | Usage |
-|------|------------|-----------|---------|-------|
-| **Body (primary)** | Public Sans, Manrope, Plus Jakarta Sans | `index.css` `font-family` rule (line ~1934 override) | 400-700 | All body text, UI labels, descriptions |
-| **Headings** | Roboto Variable (`font-heading`) | Tailwind `@theme inline` `--font-heading` | 500, 600, 700 | Section headings, page titles (use `font-heading` class) |
-| **Tailwind sans fallback** | Raleway Variable (`font-sans`) | Tailwind `@theme inline` `--font-sans` | 400-700 | Applied when using Tailwind `font-sans` class |
+| Role                       | Font Family                             | Defined In                                           | Weights       | Usage                                                    |
+| -------------------------- | --------------------------------------- | ---------------------------------------------------- | ------------- | -------------------------------------------------------- |
+| **Body (primary)**         | Public Sans, Manrope, Plus Jakarta Sans | `index.css` `font-family` rule (line ~1934 override) | 400-700       | All body text, UI labels, descriptions                   |
+| **Headings**               | Roboto Variable (`font-heading`)        | Tailwind `@theme inline` `--font-heading`            | 500, 600, 700 | Section headings, page titles (use `font-heading` class) |
+| **Tailwind sans fallback** | Raleway Variable (`font-sans`)          | Tailwind `@theme inline` `--font-sans`               | 400-700       | Applied when using Tailwind `font-sans` class            |
 
 **Agent guidance:** Body text inherits from the CSS `font-family` rule (Public Sans stack). For headings, explicitly use `font-heading` Tailwind class. Do not reference fonts by name in component styles — use the Tailwind classes or inherit.
 
 #### Type Scale
 
-| Level | Size | Weight | Line Height | Usage |
-|-------|------|--------|-------------|-------|
-| Display | clamp(1.5rem, 4vw, 2rem) | 800 | 1.1 | Hero titles, brand marks |
-| H1 | 1.75rem (28px) | 700 | 1.2 | Page titles |
-| H2 | 1.5rem (24px) | 700 | 1.25 | Section headings |
-| H3 | 1.25rem (20px) | 600 | 1.3 | Subsection headings |
-| H4 | 1rem (16px) | 600 | 1.4 | Card titles, labels |
-| Body | 0.875rem (14px) | 400-500 | 1.5 | Default text |
-| Small | 0.8125rem (13px) | 500 | 1.4 | Secondary text, metadata |
-| XS | 0.75rem (12px) | 500 | 1.4 | Badges, captions, timestamps |
-| XXS | 0.6875rem (11px) | 500 | 1.3 | Micro labels |
+| Level   | Size                     | Weight  | Line Height | Usage                        |
+| ------- | ------------------------ | ------- | ----------- | ---------------------------- |
+| Display | clamp(1.5rem, 4vw, 2rem) | 800     | 1.1         | Hero titles, brand marks     |
+| H1      | 1.75rem (28px)           | 700     | 1.2         | Page titles                  |
+| H2      | 1.5rem (24px)            | 700     | 1.25        | Section headings             |
+| H3      | 1.25rem (20px)           | 600     | 1.3         | Subsection headings          |
+| H4      | 1rem (16px)              | 600     | 1.4         | Card titles, labels          |
+| Body    | 0.875rem (14px)          | 400-500 | 1.5         | Default text                 |
+| Small   | 0.8125rem (13px)         | 500     | 1.4         | Secondary text, metadata     |
+| XS      | 0.75rem (12px)           | 500     | 1.4         | Badges, captions, timestamps |
+| XXS     | 0.6875rem (11px)         | 500     | 1.3         | Micro labels                 |
 
 #### Typography Rules for Agents
 
@@ -442,64 +447,65 @@ linear-gradient(180deg, var(--portal-bg), var(--portal-bg-deep))
 
 Base unit: **4px (0.25rem)**. All spacing derives from this unit.
 
-| Token | Value | Tailwind | Usage |
-|-------|-------|----------|-------|
-| space-1 | 4px | `gap-1`, `p-1` | Tight inline spacing |
-| space-2 | 8px | `gap-2`, `p-2` | Compact element spacing |
-| space-3 | 12px | `gap-3`, `p-3` | Default element spacing |
-| space-4 | 16px | `gap-4`, `p-4` | Card padding (mobile) |
-| space-5 | 20px | `gap-5`, `p-5` | Section spacing |
-| space-6 | 24px | `gap-6`, `p-6` | Card padding (desktop) |
-| space-8 | 32px | `gap-8`, `p-8` | Major section gaps |
+| Token   | Value | Tailwind       | Usage                   |
+| ------- | ----- | -------------- | ----------------------- |
+| space-1 | 4px   | `gap-1`, `p-1` | Tight inline spacing    |
+| space-2 | 8px   | `gap-2`, `p-2` | Compact element spacing |
+| space-3 | 12px  | `gap-3`, `p-3` | Default element spacing |
+| space-4 | 16px  | `gap-4`, `p-4` | Card padding (mobile)   |
+| space-5 | 20px  | `gap-5`, `p-5` | Section spacing         |
+| space-6 | 24px  | `gap-6`, `p-6` | Card padding (desktop)  |
+| space-8 | 32px  | `gap-8`, `p-8` | Major section gaps      |
 
 #### Border Radius Scale
 
-| Token | Value | Tailwind | Usage |
-|-------|-------|----------|-------|
-| radius-sm | ~4.3px | `rounded-sm` | Inputs, small elements |
-| radius-md | ~5.8px | `rounded-md` | Buttons, form controls |
-| radius-lg | 7.2px | `rounded-lg` | Default component radius |
-| radius-xl | ~10px | `rounded-xl` | Cards, panels |
-| radius-2xl | ~13px | `rounded-2xl` | Large cards, modals |
-| radius-full | 999px | `rounded-full` | Badges, pills, avatars |
-| portal-sm | 10px | custom | Portal compact elements |
-| portal-md | 14px | custom | Portal medium surfaces |
-| portal-lg | 20px | custom | Portal large surfaces |
+| Token       | Value  | Tailwind       | Usage                    |
+| ----------- | ------ | -------------- | ------------------------ |
+| radius-sm   | ~4.3px | `rounded-sm`   | Inputs, small elements   |
+| radius-md   | ~5.8px | `rounded-md`   | Buttons, form controls   |
+| radius-lg   | 7.2px  | `rounded-lg`   | Default component radius |
+| radius-xl   | ~10px  | `rounded-xl`   | Cards, panels            |
+| radius-2xl  | ~13px  | `rounded-2xl`  | Large cards, modals      |
+| radius-full | 999px  | `rounded-full` | Badges, pills, avatars   |
+| portal-sm   | 10px   | custom         | Portal compact elements  |
+| portal-md   | 14px   | custom         | Portal medium surfaces   |
+| portal-lg   | 20px   | custom         | Portal large surfaces    |
 
 #### Shadow Scale
 
-| Token | Light Value | Dark Value | Usage |
-|-------|------------|------------|-------|
-| shadow-soft | `0 12px 24px rgba(15,23,42,0.06)` | `0 12px 26px rgba(2,6,23,0.52)` | Elevated cards |
-| shadow-strong | `0 24px 52px rgba(15,23,42,0.12)` | `0 24px 56px rgba(2,6,23,0.62)` | Modals, overlays |
-| shadow-md | Tailwind default | — | Standard card elevation |
-| dark:shadow-none | — | No shadow | Cards in dark mode use border only |
+| Token            | Light Value                       | Dark Value                      | Usage                              |
+| ---------------- | --------------------------------- | ------------------------------- | ---------------------------------- |
+| shadow-soft      | `0 12px 24px rgba(15,23,42,0.06)` | `0 12px 26px rgba(2,6,23,0.52)` | Elevated cards                     |
+| shadow-strong    | `0 24px 52px rgba(15,23,42,0.12)` | `0 24px 56px rgba(2,6,23,0.62)` | Modals, overlays                   |
+| shadow-md        | Tailwind default                  | —                               | Standard card elevation            |
+| dark:shadow-none | —                                 | No shadow                       | Cards in dark mode use border only |
 
 **Card shadow pattern:**
+
 - Light: `shadow-md border border-border/60`
 - Dark: `dark:shadow-none dark:border-foreground/15`
 
 #### Layout Dimensions
 
-| Element | Value | Tailwind / CSS | Notes |
-|---------|-------|---------------|-------|
-| Header height | 64px (4rem) | `h-16` | Sticky, `z-40`, `bg-card/80 backdrop-blur-lg` |
-| Sidebar width (expanded) | 256px (16rem) | `w-64` / `var(--sidebar-width)` | Collapsible |
-| Sidebar width (collapsed) | 80px (5rem) | `w-20` | Icon-only mode |
-| Sidebar width (mobile) | 288px (18rem) | `SIDEBAR_WIDTH_MOBILE` | Full-width overlay |
-| Content max-width | 1360px | `max-width: 1360px` (portal container) | Dashboard pages only; standard pages are full-width |
-| Content padding (desktop) | 24px (1.5rem) | `p-6` | Main content area |
-| Content padding (mobile) | 16px (1rem) | `p-4` | Main content area |
-| Dashboard padding | 22px horizontal, 38px bottom | CSS `!important` override | Legacy portal container |
-| Table row height | 44px min | `min-h-[44px]` | Touch target compliance |
+| Element                   | Value                        | Tailwind / CSS                         | Notes                                               |
+| ------------------------- | ---------------------------- | -------------------------------------- | --------------------------------------------------- |
+| Header height             | 64px (4rem)                  | `h-16`                                 | Sticky, `z-40`, `bg-card/80 backdrop-blur-lg`       |
+| Sidebar width (expanded)  | 256px (16rem)                | `w-64` / `var(--sidebar-width)`        | Collapsible                                         |
+| Sidebar width (collapsed) | 80px (5rem)                  | `w-20`                                 | Icon-only mode                                      |
+| Sidebar width (mobile)    | 288px (18rem)                | `SIDEBAR_WIDTH_MOBILE`                 | Full-width overlay                                  |
+| Content max-width         | 1360px                       | `max-width: 1360px` (portal container) | Dashboard pages only; standard pages are full-width |
+| Content padding (desktop) | 24px (1.5rem)                | `p-6`                                  | Main content area                                   |
+| Content padding (mobile)  | 16px (1rem)                  | `p-4`                                  | Main content area                                   |
+| Dashboard padding         | 22px horizontal, 38px bottom | CSS `!important` override              | Legacy portal container                             |
+| Table row height          | 44px min                     | `min-h-[44px]`                         | Touch target compliance                             |
 
 #### Responsive Breakpoints
 
-| Name | Width | Behavior |
-|------|-------|----------|
-| Mobile | < 768px | Single column, cards replace tables, stacked filters |
-| Tablet | 768-1199px | Adjusted grids, condensed spacing, collapsible sidebar |
-| Desktop | >= 1200px | Full layout, data tables, multi-column |
+| Name    | Width      | Behavior                                               |
+| ------- | ---------- | ------------------------------------------------------ |
+| Mobile  | < 768px    | Single column, cards replace tables, stacked filters   |
+| Tablet  | 768-1199px | Adjusted grids, condensed spacing, collapsible sidebar |
+| Desktop | >= 1200px  | Full layout, data tables, multi-column                 |
 
 ### Accessibility Considerations
 
@@ -522,6 +528,7 @@ The visual direction for Careverse Regulator is already implemented and proven. 
 **Visual Identity:** Clean, modern regulatory portal with glassmorphism accents, teal-driven color palette, and warm neutral foundations.
 
 **Key Characteristics:**
+
 - **Surface model**: White cards on warm grey background (light), dark slate cards on deep navy (dark)
 - **Glass effects**: Semi-transparent header and sidebar with `backdrop-filter: blur(10px)`
 - **Elevation**: Shadows in light mode (`shadow-md`), border-only in dark mode (`shadow-none`)
@@ -533,15 +540,15 @@ The visual direction for Careverse Regulator is already implemented and proven. 
 
 ### Design Rationale
 
-| Decision | Rationale |
-|----------|-----------|
-| Teal primary over blue | Healthcare affinity + warmth. Blue is overused in government tools and feels cold. |
-| Warm grey (stone) over cool grey | Softens the institutional feel. Stone base gives warmth without being unprofessional. |
-| Glassmorphism on header/sidebar | Creates visual hierarchy between shell and content. Feels modern without being trendy. |
-| Shadow in light, border in dark | Shadows disappear on dark backgrounds. Borders provide structure without fake depth. |
-| OKLch color space | Perceptually uniform — colors look equally vivid across the palette. Future-proof for CSS color manipulation. |
+| Decision                                    | Rationale                                                                                                                                                                     |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Teal primary over blue                      | Healthcare affinity + warmth. Blue is overused in government tools and feels cold.                                                                                            |
+| Warm grey (stone) over cool grey            | Softens the institutional feel. Stone base gives warmth without being unprofessional.                                                                                         |
+| Glassmorphism on header/sidebar             | Creates visual hierarchy between shell and content. Feels modern without being trendy.                                                                                        |
+| Shadow in light, border in dark             | Shadows disappear on dark backgrounds. Borders provide structure without fake depth.                                                                                          |
+| OKLch color space                           | Perceptually uniform — colors look equally vivid across the palette. Future-proof for CSS color manipulation.                                                                 |
 | No modals for detail views or complex forms | Regulatory decisions need full context. Modals constrain information. Detail pages allow deep review. Exception: simple creation dialogs (≤6 fields) like `CreateUserDialog`. |
-| 14px default body text | Balances density with readability. Smaller than most apps but appropriate for professional data-heavy UI. |
+| 14px default body text                      | Balances density with readability. Smaller than most apps but appropriate for professional data-heavy UI.                                                                     |
 
 ### Implementation Approach
 
@@ -643,16 +650,16 @@ flowchart TD
 
 These patterns repeat across ALL domains and must be implemented consistently:
 
-| Pattern | Description | Components Used |
-|---------|------------|-----------------|
-| **List → Detail** | Table/card click navigates to `/{domain}/$id` route | Table, Card, Router Link |
-| **Filter Bar** | Search + status dropdown + sort, above the list | Input, Select, Button Group |
-| **Action Feedback** | Action → toast → badge update → audit entry | Sonner, Badge, useAuditLog |
-| **Empty State** | No results message with suggestion to adjust filters | Empty component with icon |
-| **Loading State** | Skeleton placeholders during data fetch | Skeleton component |
-| **Error State** | Error message with retry option | Alert component + retry button |
-| **Pagination** | Page numbers + prev/next below list | PaginationControls component |
-| **Responsive Switch** | Table on desktop, cards on mobile | useResponsive + conditional render |
+| Pattern               | Description                                          | Components Used                    |
+| --------------------- | ---------------------------------------------------- | ---------------------------------- |
+| **List → Detail**     | Table/card click navigates to `/{domain}/$id` route  | Table, Card, Router Link           |
+| **Filter Bar**        | Search + status dropdown + sort, above the list      | Input, Select, Button Group        |
+| **Action Feedback**   | Action → toast → badge update → audit entry          | Sonner, Badge, useAuditLog         |
+| **Empty State**       | No results message with suggestion to adjust filters | Empty component with icon          |
+| **Loading State**     | Skeleton placeholders during data fetch              | Skeleton component                 |
+| **Error State**       | Error message with retry option                      | Alert component + retry button     |
+| **Pagination**        | Page numbers + prev/next below list                  | PaginationControls component       |
+| **Responsive Switch** | Table on desktop, cards on mobile                    | useResponsive + conditional render |
 
 ### Flow Optimization Principles
 
@@ -771,33 +778,33 @@ These are project-specific components built on top of shadcn/ui primitives. Each
 
 **Button variants agents should use:**
 
-| Variant | Class | Usage |
-|---------|-------|-------|
-| `default` | `bg-primary text-primary-foreground` | Primary actions (Submit, Save) |
-| `outline` | `border-border bg-background` | Secondary actions (Cancel, Back) |
-| `secondary` | `bg-secondary text-secondary-foreground` | Tertiary actions |
-| `ghost` | `hover:bg-muted` | Minimal actions (icon buttons in toolbars) |
-| `destructive` | `bg-destructive/10 text-destructive` | Dangerous actions (Delete, Revoke) |
-| `link` | `text-primary underline-offset-4` | Inline links |
+| Variant       | Class                                    | Usage                                      |
+| ------------- | ---------------------------------------- | ------------------------------------------ |
+| `default`     | `bg-primary text-primary-foreground`     | Primary actions (Submit, Save)             |
+| `outline`     | `border-border bg-background`            | Secondary actions (Cancel, Back)           |
+| `secondary`   | `bg-secondary text-secondary-foreground` | Tertiary actions                           |
+| `ghost`       | `hover:bg-muted`                         | Minimal actions (icon buttons in toolbars) |
+| `destructive` | `bg-destructive/10 text-destructive`     | Dangerous actions (Delete, Revoke)         |
+| `link`        | `text-primary underline-offset-4`        | Inline links                               |
 
 **Button sizes:**
 
-| Size | Class | Usage |
-|------|-------|-------|
-| `xs` | `h-6 px-2 text-xs` | Compact inline actions |
-| `sm` | `h-8 px-2.5` | Table row actions |
-| `default` | `h-9 px-2.5` | Standard buttons |
-| `lg` | `h-10 px-2.5` | Prominent actions |
-| `icon` | `size-9` | Icon-only buttons |
+| Size      | Class              | Usage                  |
+| --------- | ------------------ | ---------------------- |
+| `xs`      | `h-6 px-2 text-xs` | Compact inline actions |
+| `sm`      | `h-8 px-2.5`       | Table row actions      |
+| `default` | `h-9 px-2.5`       | Standard buttons       |
+| `lg`      | `h-10 px-2.5`      | Prominent actions      |
+| `icon`    | `size-9`           | Icon-only buttons      |
 
 **Badge variants:**
 
-| Variant | Usage |
-|---------|-------|
-| `default` | Primary status |
-| `secondary` | Neutral/informational |
-| `destructive` | Error/danger status |
-| `outline` | Subtle status indicator |
+| Variant       | Usage                   |
+| ------------- | ----------------------- |
+| `default`     | Primary status          |
+| `secondary`   | Neutral/informational   |
+| `destructive` | Error/danger status     |
+| `outline`     | Subtle status indicator |
 
 ## UX Consistency Patterns
 
@@ -805,15 +812,16 @@ These are project-specific components built on top of shadcn/ui primitives. Each
 
 Every view follows this action hierarchy:
 
-| Priority | Variant | Placement | Example |
-|----------|---------|-----------|---------|
-| Primary action | `default` (teal) | Top-right of page or card header | "Save", "Submit", "Create" |
-| Secondary action | `outline` | Next to primary | "Cancel", "Back", "Reset" |
-| Destructive action | `destructive` | Separated from primary (dropdown or far right) | "Delete", "Revoke", "Suspend" |
-| Tertiary/toolbar | `ghost` | Inline or toolbar | Icon buttons, "More options" |
-| Inline link | `link` | Within text | "View details", "Learn more" |
+| Priority           | Variant          | Placement                                      | Example                       |
+| ------------------ | ---------------- | ---------------------------------------------- | ----------------------------- |
+| Primary action     | `default` (teal) | Top-right of page or card header               | "Save", "Submit", "Create"    |
+| Secondary action   | `outline`        | Next to primary                                | "Cancel", "Back", "Reset"     |
+| Destructive action | `destructive`    | Separated from primary (dropdown or far right) | "Delete", "Revoke", "Suspend" |
+| Tertiary/toolbar   | `ghost`          | Inline or toolbar                              | Icon buttons, "More options"  |
+| Inline link        | `link`           | Within text                                    | "View details", "Learn more"  |
 
 **Rules:**
+
 - Maximum ONE primary button per visible context
 - Destructive actions require confirmation via AlertDialog
 - Icon-only buttons must have `aria-label` and Tooltip
@@ -821,16 +829,17 @@ Every view follows this action hierarchy:
 
 ### Feedback Patterns
 
-| Feedback Type | Component | Duration | Usage |
-|--------------|-----------|----------|-------|
-| Success | `toast.success()` | 4s auto-dismiss | After successful mutations (approve, save, update) |
-| Error | `toast.error()` | Sticky until dismissed | API failures, validation errors |
-| Info | `toast.info()` | 4s auto-dismiss | Informational messages |
-| Loading | Skeleton / Spinner | Until data loads | Initial page load, data refresh |
-| Empty | Empty component | Persistent | No results matching filters |
-| Confirmation | AlertDialog | Until user responds | Before destructive actions only |
+| Feedback Type | Component          | Duration               | Usage                                              |
+| ------------- | ------------------ | ---------------------- | -------------------------------------------------- |
+| Success       | `toast.success()`  | 4s auto-dismiss        | After successful mutations (approve, save, update) |
+| Error         | `toast.error()`    | Sticky until dismissed | API failures, validation errors                    |
+| Info          | `toast.info()`     | 4s auto-dismiss        | Informational messages                             |
+| Loading       | Skeleton / Spinner | Until data loads       | Initial page load, data refresh                    |
+| Empty         | Empty component    | Persistent             | No results matching filters                        |
+| Confirmation  | AlertDialog        | Until user responds    | Before destructive actions only                    |
 
 **Rules:**
+
 - Every mutation shows a toast on success AND failure
 - Failed mutations also log to audit via `useAuditLog`
 - Never show raw API error messages — always user-friendly text
@@ -838,39 +847,40 @@ Every view follows this action hierarchy:
 
 ### Form Patterns
 
-| Pattern | Implementation | Notes |
-|---------|---------------|-------|
-| Form library | React Hook Form + Zod schema | All forms use this stack |
-| Validation | Zod schema validates on submit | Show inline errors below fields |
-| Error display | Field component wraps input + error | Red text below input, border turns destructive |
-| Submit button | Primary variant, disabled during submission | Shows Spinner inside button |
-| Cancel | Outline variant, navigates back | No confirmation if form is pristine |
-| Dirty check | Warn before navigation if form changed | Use browser beforeunload or router guard |
-| Field layout | Single column on mobile, 2-column on desktop | Use `grid grid-cols-1 md:grid-cols-2 gap-4` |
+| Pattern       | Implementation                               | Notes                                          |
+| ------------- | -------------------------------------------- | ---------------------------------------------- |
+| Form library  | React Hook Form + Zod schema                 | All forms use this stack                       |
+| Validation    | Zod schema validates on submit               | Show inline errors below fields                |
+| Error display | Field component wraps input + error          | Red text below input, border turns destructive |
+| Submit button | Primary variant, disabled during submission  | Shows Spinner inside button                    |
+| Cancel        | Outline variant, navigates back              | No confirmation if form is pristine            |
+| Dirty check   | Warn before navigation if form changed       | Use browser beforeunload or router guard       |
+| Field layout  | Single column on mobile, 2-column on desktop | Use `grid grid-cols-1 md:grid-cols-2 gap-4`    |
 
 ### Navigation Patterns
 
-| Pattern | Implementation | Usage |
-|---------|---------------|-------|
-| Primary navigation | Sidebar with collapsible groups | Always visible on desktop, hamburger on mobile |
-| Page navigation | Breadcrumbs at top of content area | Shows: Home > Domain > Entity |
-| Tab navigation | Tabs component within a page | Sub-categories (e.g., Licenses \| Applications) |
-| Back navigation | Breadcrumb link or browser back | Both must work — detail pages are bookmarkable |
-| Deep linking | URL contains all state for current view | Filters stored in Zustand, entity ID in URL |
+| Pattern            | Implementation                          | Usage                                           |
+| ------------------ | --------------------------------------- | ----------------------------------------------- |
+| Primary navigation | Sidebar with collapsible groups         | Always visible on desktop, hamburger on mobile  |
+| Page navigation    | Breadcrumbs at top of content area      | Shows: Home > Domain > Entity                   |
+| Tab navigation     | Tabs component within a page            | Sub-categories (e.g., Licenses \| Applications) |
+| Back navigation    | Breadcrumb link or browser back         | Both must work — detail pages are bookmarkable  |
+| Deep linking       | URL contains all state for current view | Filters stored in Zustand, entity ID in URL     |
 
 ### Search & Filter Patterns
 
-| Pattern | Implementation | Timing |
-|---------|---------------|--------|
-| Text search | Input with search icon | 300ms debounce |
-| Status filter | Select dropdown | Immediate on change |
-| Sort | Button group or Select | Immediate on change |
-| Date range | Calendar picker | Apply on selection |
-| Clear all | "Clear filters" link/button | Resets all to defaults |
-| Filter persistence | Zustand store per domain | Survives navigation to detail and back |
-| Results count | Text above table | "Showing 1-20 of 156 results" |
+| Pattern            | Implementation              | Timing                                 |
+| ------------------ | --------------------------- | -------------------------------------- |
+| Text search        | Input with search icon      | 300ms debounce                         |
+| Status filter      | Select dropdown             | Immediate on change                    |
+| Sort               | Button group or Select      | Immediate on change                    |
+| Date range         | Calendar picker             | Apply on selection                     |
+| Clear all          | "Clear filters" link/button | Resets all to defaults                 |
+| Filter persistence | Zustand store per domain    | Survives navigation to detail and back |
+| Results count      | Text above table            | "Showing 1-20 of 156 results"          |
 
 **Rules:**
+
 - Filter changes always reset pagination to page 1. **Mechanism:** The Zustand store's `setFilters` action must set `currentPage: 1` before fetching: `set({ filters, currentPage: 1 }); get().fetchItems(1, filters);`
 - All list views must support: search, status filter, sort (minimum)
 - Filters are client-side when dataset < 500 items, server-side otherwise
@@ -879,6 +889,7 @@ Every view follows this action hierarchy:
 ### Loading & Empty States
 
 **Loading sequence:**
+
 1. Page skeleton appears immediately (no blank flash)
 2. Data fetches via store action
 3. Skeleton replaced with content on success
@@ -896,28 +907,29 @@ Every view follows this action hierarchy:
 
 **Icon library:** Lucide React — never introduce other icon libraries.
 
-| Size | Tailwind | Usage |
-|------|----------|-------|
-| 12px | `size-3` | Inline with XS text |
-| 16px | `size-4` | Default UI icons, button icons, table actions |
-| 20px | `size-5` | Standalone icons, empty state secondary |
-| 24px | `size-6` | Page header icons, large actions |
-| 32px+ | `size-8` | Empty state primary icon |
+| Size  | Tailwind | Usage                                         |
+| ----- | -------- | --------------------------------------------- |
+| 12px  | `size-3` | Inline with XS text                           |
+| 16px  | `size-4` | Default UI icons, button icons, table actions |
+| 20px  | `size-5` | Standalone icons, empty state secondary       |
+| 24px  | `size-6` | Page header icons, large actions              |
+| 32px+ | `size-8` | Empty state primary icon                      |
 
 **Color:** Icons inherit text color. Use `text-muted-foreground` for secondary icons, `text-destructive` for danger.
 
 ### Animation & Transition Patterns
 
-| Element | Transition | Duration | Easing |
-|---------|-----------|----------|--------|
-| Button hover | background-color, border-color | 0.15s | ease |
-| Card hover | transform (translateY -1px), box-shadow | 0.16s | ease |
-| Focus ring | ring appearance | 0.15s | ease |
-| Page entrance | portalRise (translateY 8px → 0, opacity) | 0.28s | ease |
-| Glass surfaces | backdrop-filter | — | — (always applied) |
-| Disabled state | opacity to 0.5 | 0s | — (immediate) |
+| Element        | Transition                               | Duration | Easing             |
+| -------------- | ---------------------------------------- | -------- | ------------------ |
+| Button hover   | background-color, border-color           | 0.15s    | ease               |
+| Card hover     | transform (translateY -1px), box-shadow  | 0.16s    | ease               |
+| Focus ring     | ring appearance                          | 0.15s    | ease               |
+| Page entrance  | portalRise (translateY 8px → 0, opacity) | 0.28s    | ease               |
+| Glass surfaces | backdrop-filter                          | —        | — (always applied) |
+| Disabled state | opacity to 0.5                           | 0s       | — (immediate)      |
 
 **Rules:**
+
 - Maximum transition duration: 0.28s
 - No spring physics, no bouncing, no attention-seeking animation
 - `prefers-reduced-motion` is NOT yet implemented in existing code (TODO). New animations SHOULD use Tailwind `motion-safe:` prefix to build support incrementally
@@ -930,6 +942,7 @@ Every view follows this action hierarchy:
 **Approach:** Desktop-first with progressive simplification for smaller screens. The `useResponsive()` hook is the primary mechanism — not CSS media queries alone.
 
 **Desktop (>= 1200px) — Full experience:**
+
 - Data tables with all columns visible
 - Sidebar always expanded
 - Multi-column form layouts (`grid-cols-2`)
@@ -937,6 +950,7 @@ Every view follows this action hierarchy:
 - Full filter bar horizontal layout
 
 **Tablet (768-1199px) — Condensed:**
+
 - Tables retain but hide non-essential columns
 - Sidebar collapsible (hamburger trigger)
 - Forms remain 2-column where space allows
@@ -944,6 +958,7 @@ Every view follows this action hierarchy:
 - Header actions condensed
 
 **Mobile (< 768px) — Focused:**
+
 - Tables replaced with card layouts entirely
 - Sidebar hidden, hamburger navigation
 - Forms single column
@@ -952,6 +967,7 @@ Every view follows this action hierarchy:
 - Pagination simplified (prev/next only)
 
 **Implementation rules for agents:**
+
 - Always use `useResponsive()` hook — never CSS-only `hidden md:block` for layout switching
 - Table and Card components are separate — don't try to make one component serve both
 - Touch targets: minimum 44px on all interactive elements at all breakpoints
@@ -962,12 +978,14 @@ Every view follows this action hierarchy:
 **Compliance target:** WCAG 2.1 AA
 
 **Color & Contrast:**
+
 - Text on background: minimum 4.5:1 contrast ratio (normal text), 3:1 (large text)
 - Interactive elements: 3:1 against adjacent colors
 - Status colors must not rely on color alone — always pair with text label or icon
 - All status badges include text, not just a colored dot
 
 **Keyboard Navigation:**
+
 - All interactive elements reachable via Tab key
 - Logical tab order following visual layout
 - Focus ring visible on all focusable elements (3px ring, `ring/50` opacity)
@@ -976,6 +994,7 @@ Every view follows this action hierarchy:
 - Arrow keys navigate within menus and dropdowns (handled by Radix)
 
 **Screen Reader Support:**
+
 - Semantic HTML: `<nav>`, `<main>`, `<header>`, `<section>`, `<table>`
 - Icon-only buttons must have `aria-label`
 - Dynamic content updates use `aria-live` regions (toast announcements)
@@ -983,6 +1002,7 @@ Every view follows this action hierarchy:
 - Form fields linked to labels via `htmlFor`/`id`
 
 **Motion & Animation:**
+
 - All transitions under 0.28s
 - `prefers-reduced-motion` NOT yet implemented (TODO). New animations SHOULD use `motion-safe:` Tailwind prefix
 - No auto-playing animations or carousels
@@ -991,6 +1011,7 @@ Every view follows this action hierarchy:
 ### Testing Strategy
 
 **Responsive testing checklist (per feature):**
+
 - [ ] Desktop: table view renders with all columns, filters horizontal
 - [ ] Tablet: sidebar collapses, non-essential columns hidden
 - [ ] Mobile: card layout replaces table, filters stack, actions full-width
@@ -998,6 +1019,7 @@ Every view follows this action hierarchy:
 - [ ] Touch targets meet 44px minimum
 
 **Accessibility testing checklist (per feature):**
+
 - [ ] Tab through entire view — all interactive elements reachable
 - [ ] Screen reader announces page title, headings, table data
 - [ ] Status badges readable without color (text label present)
