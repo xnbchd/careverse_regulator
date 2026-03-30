@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { lazy } from "react"
 import { useAuthStore } from "@/stores/authStore"
 import { useInspectionStore } from "@/stores/inspectionStore"
+import { useUserStore } from "@/stores/userStore"
 
 const InspectionView = lazy(() => import("@/components/inspection"))
 
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/inspections/list")({
   loader: () =>
     Promise.all([
       useInspectionStore.getState().fetchFacilities(),
-      useInspectionStore.getState().fetchProfessionals(),
+      useUserStore.getState().fetchInspectors(),
     ]),
   component: InspectionsListComponent,
 })

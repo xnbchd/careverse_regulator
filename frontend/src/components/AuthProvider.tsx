@@ -17,7 +17,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [timedOut, setTimedOut] = useState(false)
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null
+    let timeoutId: number | null = null
     let mounted = true
 
     const initializeAuth = async () => {

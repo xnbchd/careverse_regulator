@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from "react"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useInspectionStore } from "@/stores/inspectionStore"
+import { useUserStore } from "@/stores/userStore"
 import type { Inspection, Finding } from "@/types/inspection"
 import { useFindingsStore } from "@/stores/findingsStore"
 import * as inspectionApi from "@/api/inspectionApi"
@@ -46,7 +47,6 @@ export default function InspectionView({ company }: InspectionViewProps) {
   const {
     inspections,
     facilities,
-    professionals,
     loading,
     error,
     pagination,
@@ -207,9 +207,8 @@ export default function InspectionView({ company }: InspectionViewProps) {
     activeTab,
   ])
 
-  // Get facilities and professionals from the store
+  // Get facilities from the store
   const allFacilities = facilities.map((f) => ({ value: f.name, label: f.facility_name }))
-  const allInspectors = professionals.map((p) => ({ value: p.name, label: p.full_name }))
 
   // Calculate active filter count for inspections
   const activeInspectionFiltersCount =
@@ -654,7 +653,6 @@ export default function InspectionView({ company }: InspectionViewProps) {
         formData={formData}
         setFormData={setFormData}
         facilities={allFacilities}
-        inspectors={allInspectors}
         loading={submitting}
         error={modalError}
       />

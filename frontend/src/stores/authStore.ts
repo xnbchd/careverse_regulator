@@ -14,6 +14,8 @@ const allowedRoles = new Set([
   "Regulator Manager",
   "Compliance Regulator",
   "Regulator User",
+  "Chief Inspector",
+  "Field Inspector",
 ])
 
 interface LoggedUserResponse {

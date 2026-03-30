@@ -114,16 +114,10 @@ export default function InspectionTable({
         cell: (info) => <span className="text-sm">{info.getValue()}</span>,
         size: 120,
       }),
-      columnHelper.accessor("inspector", {
+      columnHelper.accessor("inspectorName", {
         header: "Inspector",
         cell: (info) => (
-          <EntityLink
-            type="professional"
-            id={info.row.original.professionalId}
-            className="text-sm truncate block max-w-[150px]"
-          >
-            {info.getValue()}
-          </EntityLink>
+          <span className="text-sm truncate block max-w-[150px]">{info.getValue() || "-"}</span>
         ),
         size: 150,
       }),
