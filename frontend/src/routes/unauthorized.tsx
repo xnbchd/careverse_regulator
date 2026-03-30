@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
+import { useEffect } from "react"
 import UnauthorizedPage from "@/components/UnauthorizedPage"
 import { useAuthStore } from "@/stores/authStore"
 
@@ -31,10 +32,19 @@ function switchToDesk(): void {
 }
 
 function UnauthorizedComponent() {
+  const navigate = useNavigate()
   const { mode } = Route.useSearch()
   const user = useAuthStore((state) => state.user)
+  const hasPortalAccess = useAuthStore((state) => state.hasPortalAccess)
   const accessMessage = useAuthStore((state) => state.accessMessage)
   const route = readHashRoute()
+
+  // Redirect to dashboard if user is logged in and has portal access
+  useEffect(() => {
+    if (user && hasPortalAccess) {
+      navigate({ to: "/dashboard" })
+    }
+  }, [user, hasPortalAccess, navigate])
 
   const handleLogout = () => {
     window.location.href = logoutUrl()

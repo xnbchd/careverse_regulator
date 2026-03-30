@@ -6,6 +6,8 @@ import type {
   RoleDefinition,
   UserActivityReport,
 } from "@/types/user"
+import type { Inspector } from "@/types/inspection"
+import * as inspectionApi from "@/api/inspectionApi"
 
 // ---------------------------------------------------------------------------
 // Static role definitions — the 3 portal roles
@@ -67,6 +69,10 @@ interface UserManagementState {
   activityReportsPagination: PaginationInfo | null
   isLoadingReports: boolean
 
+  // Inspectors (users with Field Inspector role)
+  inspectors: Inspector[]
+  inspectorsLoading: boolean
+
   // UI state
   activeTab: UserTab
 
@@ -79,6 +85,8 @@ interface UserManagementState {
   setLoading: (loading: boolean) => void
   setActivityReports: (reports: UserActivityReport[], pagination: PaginationInfo | null) => void
   setLoadingReports: (loading: boolean) => void
+  fetchInspectors: (search?: string) => Promise<void>
+  searchInspectors: (searchTerm: string) => Promise<Inspector[]>
 }
 
 export const useUserStore = create<UserManagementState>((set) => ({
@@ -100,6 +108,9 @@ export const useUserStore = create<UserManagementState>((set) => ({
   activityReports: [],
   activityReportsPagination: null,
   isLoadingReports: false,
+
+  inspectors: [],
+  inspectorsLoading: false,
 
   activeTab: "users",
 
@@ -135,4 +146,24 @@ export const useUserStore = create<UserManagementState>((set) => ({
     }),
 
   setLoadingReports: (loading) => set({ isLoadingReports: loading }),
+
+  fetchInspectors: async (search?: string) => {
+    set({ inspectorsLoading: true })
+    try {
+      const inspectors = await inspectionApi.listInspectors(search)
+      set({ inspectors, inspectorsLoading: false })
+    } catch (error) {
+      console.error("Failed to fetch inspectors:", error)
+      set({ inspectors: [], inspectorsLoading: false })
+    }
+  },
+
+  searchInspectors: async (searchTerm: string) => {
+    try {
+      return await inspectionApi.searchInspectors(searchTerm)
+    } catch (error) {
+      console.error("Failed to search inspectors:", error)
+      return []
+    }
+  },
 }))

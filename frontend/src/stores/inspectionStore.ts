@@ -1,15 +1,13 @@
 import { create } from "zustand"
-import type { Inspection, Facility, Professional, PaginationMeta } from "@/types/inspection"
+import type { Inspection, Facility, PaginationMeta } from "@/types/inspection"
 import * as inspectionApi from "@/api/inspectionApi"
 import type { InspectionFilters } from "@/api/inspectionApi"
 
 export interface InspectionState {
   inspections: Inspection[]
   facilities: Facility[]
-  professionals: Professional[]
   loading: boolean
   facilitiesLoading: boolean
-  professionalsLoading: boolean
   error: string | null
   activeTab: "scheduled" | "findings"
   pagination: PaginationMeta | null
@@ -20,7 +18,6 @@ export interface InspectionState {
   setPage: (page: number) => void
   setPageSize: (pageSize: number) => void
   fetchFacilities: () => Promise<void>
-  fetchProfessionals: () => Promise<void>
   createInspection: (formData: {
     facility: string
     inspector: string
@@ -33,10 +30,8 @@ export interface InspectionState {
 export const useInspectionStore = create<InspectionState>((set, get) => ({
   inspections: [],
   facilities: [],
-  professionals: [],
   loading: false,
   facilitiesLoading: false,
-  professionalsLoading: false,
   error: null,
   activeTab: "scheduled",
   pagination: null,
@@ -88,23 +83,16 @@ export const useInspectionStore = create<InspectionState>((set, get) => ({
     }
   },
 
-  fetchProfessionals: async () => {
-    set({ professionalsLoading: true })
-    try {
-      const professionals = await inspectionApi.listProfessionals()
-      set({ professionals, professionalsLoading: false })
-    } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : "Failed to fetch professionals",
-        professionalsLoading: false,
-      })
-    }
-  },
-
   createInspection: async (formData) => {
     set({ loading: true, error: null })
     try {
-      const payload = inspectionApi.createInspectionFromForm(formData)
+      // Add default values for inspectionType and priority
+      const formDataWithDefaults = {
+        ...formData,
+        inspectionType: "Routine" as const,
+        priority: "Routine" as const,
+      }
+      const payload = inspectionApi.createInspectionFromForm(formDataWithDefaults)
       const newInspection = await inspectionApi.createInspection(payload)
       set({
         inspections: [...get().inspections, newInspection],

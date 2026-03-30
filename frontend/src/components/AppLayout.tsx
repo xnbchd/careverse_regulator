@@ -109,6 +109,17 @@ export default function AppLayout({
   const brandTitle = user?.companyDisplayName || user?.company || "Compliance360"
   const brandSubtitle = user?.companyAbbr || "Regulator Portal"
 
+  // Check if user should see "Switch to Desk" link
+  // Hide for Field Inspector and Chief Inspector roles (they should use portal only)
+  const canSwitchToDesk = user?.roles?.some(
+    (role) =>
+      role === "System Manager" ||
+      role === "Regulator Admin" ||
+      role === "Regulator Manager" ||
+      role === "Compliance Regulator" ||
+      role === "Regulator User"
+  )
+
   // Keyboard shortcut: Cmd+K / Ctrl+K to open search
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -449,10 +460,12 @@ export default function AppLayout({
                     <User className="w-4 h-4 mr-2" />
                     View profile
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={onSwitchToDesk}>
-                    <LinkIcon className="w-4 h-4 mr-2" />
-                    Switch to Desk
-                  </DropdownMenuItem>
+                  {canSwitchToDesk && (
+                    <DropdownMenuItem onClick={onSwitchToDesk}>
+                      <LinkIcon className="w-4 h-4 mr-2" />
+                      Switch to Desk
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={onLogout} className="text-destructive">
                     <LogOut className="w-4 h-4 mr-2" />

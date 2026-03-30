@@ -1,7 +1,15 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useResponsive } from "@/hooks/useResponsive"
+import { useUserStore } from "@/stores/userStore"
 import dayjs from "dayjs"
-import { Calendar as CalendarIcon, AlertCircle, X, ChevronsUpDown, Check } from "lucide-react"
+import {
+  Calendar as CalendarIcon,
+  AlertCircle,
+  X,
+  ChevronsUpDown,
+  Check,
+  Loader2,
+} from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -37,7 +45,6 @@ interface ScheduleInspectionModalProps {
   }
   setFormData: (data: ScheduleInspectionModalProps["formData"]) => void
   facilities: Array<{ value: string; label: string }>
-  inspectors: Array<{ value: string; label: string }>
   loading?: boolean
   error?: string | null
 }
@@ -49,14 +56,17 @@ export default function ScheduleInspectionModal({
   formData,
   setFormData,
   facilities,
-  inspectors,
   loading = false,
   error = null,
 }: ScheduleInspectionModalProps) {
   const { isMobile } = useResponsive()
+  const { inspectors, searchInspectors } = useUserStore()
   const [facilityOpen, setFacilityOpen] = useState(false)
   const [inspectorOpen, setInspectorOpen] = useState(false)
   const [datePickerOpen, setDatePickerOpen] = useState(false)
+  const [inspectorSearchValue, setInspectorSearchValue] = useState("")
+  const [searchedInspectors, setSearchedInspectors] = useState(inspectors)
+  const [inspectorSearchLoading, setInspectorSearchLoading] = useState(false)
 
   const selectedDate = formData.date ? dayjs(formData.date, "DD/MM/YYYY").toDate() : undefined
 
@@ -65,10 +75,44 @@ export default function ScheduleInspectionModal({
     [facilities, formData.facility]
   )
 
-  const selectedInspectorLabel = useMemo(
-    () => inspectors.find((i) => i.value === formData.inspector)?.label || "",
-    [inspectors, formData.inspector]
-  )
+  const selectedInspectorLabel = useMemo(() => {
+    const allInspectors = [...inspectors, ...searchedInspectors]
+    const inspector = allInspectors.find((i) => i.name === formData.inspector)
+    return inspector?.full_name || ""
+  }, [inspectors, searchedInspectors, formData.inspector])
+
+  // Debounced search for inspectors
+  useEffect(() => {
+    if (!inspectorOpen) return
+
+    const timer = setTimeout(async () => {
+      if (inspectorSearchValue.trim().length === 0) {
+        setSearchedInspectors(inspectors)
+        return
+      }
+
+      setInspectorSearchLoading(true)
+      try {
+        const results = await searchInspectors(inspectorSearchValue)
+        setSearchedInspectors(results)
+      } catch (error) {
+        console.error("Failed to search inspectors:", error)
+        setSearchedInspectors(inspectors)
+      } finally {
+        setInspectorSearchLoading(false)
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [inspectorSearchValue, inspectorOpen, inspectors, searchInspectors])
+
+  // Reset search when modal opens/closes
+  useEffect(() => {
+    if (open) {
+      setSearchedInspectors(inspectors)
+      setInspectorSearchValue("")
+    }
+  }, [open, inspectors])
 
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
@@ -176,30 +220,43 @@ export default function ScheduleInspectionModal({
                   className="w-[var(--radix-popover-trigger-width)] p-0"
                   align="start"
                 >
-                  <Command>
-                    <CommandInput placeholder="Search inspector..." />
+                  <Command shouldFilter={false}>
+                    <CommandInput
+                      placeholder="Search inspector..."
+                      value={inspectorSearchValue}
+                      onValueChange={setInspectorSearchValue}
+                    />
                     <CommandList>
-                      <CommandEmpty>No inspector found.</CommandEmpty>
-                      <CommandGroup>
-                        {inspectors.map((inspector) => (
-                          <CommandItem
-                            key={inspector.value}
-                            value={inspector.label}
-                            onSelect={() => {
-                              setFormData({ ...formData, inspector: inspector.value })
-                              setInspectorOpen(false)
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4 shrink-0",
-                                formData.inspector === inspector.value ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                            <span className="truncate">{inspector.label}</span>
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
+                      {inspectorSearchLoading ? (
+                        <div className="flex items-center justify-center py-6">
+                          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                        </div>
+                      ) : searchedInspectors.length === 0 ? (
+                        <CommandEmpty>No inspector found.</CommandEmpty>
+                      ) : (
+                        <CommandGroup>
+                          {searchedInspectors.map((inspector) => (
+                            <CommandItem
+                              key={inspector.name}
+                              value={inspector.full_name}
+                              onSelect={() => {
+                                setFormData({ ...formData, inspector: inspector.name })
+                                setInspectorOpen(false)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4 shrink-0",
+                                  formData.inspector === inspector.name
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              <span className="truncate">{inspector.full_name}</span>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      )}
                     </CommandList>
                   </Command>
                 </PopoverContent>

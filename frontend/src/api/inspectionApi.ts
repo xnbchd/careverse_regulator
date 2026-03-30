@@ -11,7 +11,7 @@ import type {
   CreateInspectionPayload,
   UpdateInspectionPayload,
   Facility,
-  Professional,
+  Inspector,
   PaginatedResponse,
   PaginationMeta,
 } from "@/types/inspection"
@@ -39,8 +39,8 @@ export function transformFinding(
     // Add context from parent inspection if provided
     facilityId: parentInspection?.facilityId,
     facilityName: parentInspection?.facilityName,
-    professionalId: parentInspection?.professionalId,
-    inspectorName: parentInspection?.inspector,
+    professionalId: parentInspection?.assignedTo,
+    inspectorName: parentInspection?.inspectorName,
     inspectionId: parentInspection?.inspectionId,
     inspectionDate: parentInspection?.date,
   }
@@ -53,14 +53,24 @@ export function transformInspection(backendInspection: BackendInspection): Inspe
     facilityId: backendInspection.facility,
     facilityName: backendInspection.facility_name || backendInspection.facility,
     date: formatDateForFrontend(backendInspection.scheduled_date),
-    professionalId: backendInspection.professional,
-    inspector: backendInspection.professional_name || backendInspection.professional,
+    assignedTo: backendInspection.assigned_to,
+    inspectorName: backendInspection.inspector_name || backendInspection.assigned_to,
     noteToInspector: backendInspection.note_to_inspector,
     status: backendInspection.status,
+    inspectionType: backendInspection.inspection_type,
+    priority: backendInspection.priority,
     company: backendInspection.company,
     inspectedDate: backendInspection.inspected_date
       ? formatDateForFrontend(backendInspection.inspected_date)
       : undefined,
+    submittedDate: backendInspection.submitted_date
+      ? formatDateForFrontend(backendInspection.submitted_date)
+      : undefined,
+    reviewedDate: backendInspection.reviewed_date
+      ? formatDateForFrontend(backendInspection.reviewed_date)
+      : undefined,
+    reviewedBy: backendInspection.reviewed_by,
+    reviewComments: backendInspection.review_comments,
     findingCount: backendInspection.finding_count,
   }
 
@@ -109,7 +119,7 @@ export async function listInspections(
   if (filters?.sortOrder) params.append("sort_order", filters.sortOrder)
   if (filters?.status) params.append("status", filters.status)
 
-  // Fetch scheduled inspections (defaults to Pending if no status specified)
+  // Fetch scheduled inspections (defaults to Assigned if no status specified)
   const response = await apiRequest<{ message: PaginatedResponse<BackendInspection> }>(
     `/api/method/compliance_360.api.inspection.get_scheduled_inspections?${params.toString()}`
   )
@@ -158,18 +168,60 @@ export async function deleteInspection(name: string): Promise<void> {
   })
 }
 
+export async function transitionInspectionStatus(
+  name: string,
+  newStatus: "Assigned" | "In Progress" | "Submitted" | "Reviewed" | "Cancelled",
+  reviewComments?: string
+): Promise<Inspection> {
+  // Validate required parameters
+  if (!name || !newStatus) {
+    throw new Error("Inspection name and new status are required")
+  }
+
+  // Validate review comments are provided when transitioning to Reviewed
+  if (newStatus === "Reviewed" && !reviewComments?.trim()) {
+    throw new Error("Review comments are required when marking as Reviewed")
+  }
+
+  try {
+    const response = await apiRequest<{ message: BackendInspection }>(
+      `/api/method/compliance_360.api.inspection.transition_inspection_status`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          inspection_name: name,
+          new_status: newStatus,
+          review_comments: reviewComments,
+        }),
+      }
+    )
+    return transformInspection(response.message)
+  } catch (error) {
+    // Re-throw with more context
+    throw new Error(
+      `Failed to transition inspection ${name} to ${newStatus}: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    )
+  }
+}
+
 export function createInspectionFromForm(formData: {
   facility: string
   inspector: string
   date: string
+  inspectionType: "Routine" | "Follow-up" | "Complaint-driven" | "License Renewal"
+  priority?: "Routine" | "Urgent" | "High Priority"
   note: string
 }): CreateInspectionPayload {
   return {
     facility: formData.facility,
-    professional: formData.inspector,
+    assigned_to: formData.inspector,
     scheduled_date: formatDateForBackend(formData.date),
+    inspection_type: formData.inspectionType,
+    priority: formData.priority,
     note_to_inspector: formData.note,
-    status: "Pending",
+    status: "Assigned",
   }
 }
 
@@ -180,11 +232,26 @@ export async function listFacilities(): Promise<Facility[]> {
   return response.data
 }
 
-export async function listProfessionals(): Promise<Professional[]> {
-  const response = await apiRequest<FrappeListResponse<Professional>>(
-    `/api/resource/Professional Record?fields=["name","full_name"]`
+export async function listInspectors(search?: string): Promise<Inspector[]> {
+  // Fetch users who have Field Inspector role only
+  const filters = [["Has Role", "role", "=", "Field Inspector"]]
+
+  // Add search filter if provided
+  if (search) {
+    filters.push(["full_name", "like", `%${search}%`])
+  }
+
+  const response = await apiRequest<FrappeListResponse<Inspector>>(
+    `/api/resource/User?fields=["name","full_name","email"]&filters=${JSON.stringify(filters)}&limit_page_length=50`
   )
   return response.data
+}
+
+export async function searchInspectors(searchTerm: string): Promise<Inspector[]> {
+  if (!searchTerm || searchTerm.trim().length === 0) {
+    return listInspectors()
+  }
+  return listInspectors(searchTerm)
 }
 
 export async function listFindings(filters?: InspectionFilters): Promise<Finding[]> {
@@ -202,7 +269,7 @@ export async function listFindings(filters?: InspectionFilters): Promise<Finding
   if (filters?.severity) params.append("severity", filters.severity)
   if (filters?.status) params.append("status", filters.status)
 
-  // Fetch ONLY Completed or Non Compliant inspections
+  // Fetch ONLY Submitted or Reviewed inspections
   const response = await apiRequest<{ message: PaginatedResponse<BackendInspection> }>(
     `/api/method/compliance_360.api.inspection.get_inspection_findings?${params.toString()}`
   )
@@ -226,9 +293,9 @@ export async function listFindings(filters?: InspectionFilters): Promise<Finding
 
 export interface DashboardStats {
   metrics: {
-    due_soon: number
-    completed: number
-    non_compliant: number
+    assigned: number
+    submitted: number
+    reviewed: number
     overdue: number
     total: number
   }

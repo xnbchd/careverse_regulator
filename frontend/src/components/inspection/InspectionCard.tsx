@@ -64,19 +64,7 @@ export default function InspectionCard({ inspection, onView }: InspectionCardPro
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <User className="w-4 h-4 shrink-0" />
-            <span className="truncate">
-              {inspection.professionalId ? (
-                <EntityLink
-                  type="professional"
-                  id={inspection.professionalId}
-                  className="underline hover:no-underline"
-                >
-                  {inspection.inspector}
-                </EntityLink>
-              ) : (
-                inspection.inspector
-              )}
-            </span>
+            <span className="truncate">{inspection.inspectorName || "-"}</span>
           </div>
           <div className="flex items-start gap-2 text-sm text-muted-foreground">
             <FileText className="w-4 h-4 mt-0.5 shrink-0" />
