@@ -15,10 +15,16 @@ function InspectionsListComponent() {
 }
 
 export const Route = createFileRoute("/inspections/list")({
-  loader: () =>
-    Promise.all([
+  loader: async () => {
+    const results = await Promise.allSettled([
       useInspectionStore.getState().fetchFacilities(),
       useUserStore.getState().fetchInspectors(),
-    ]),
+    ])
+    results.forEach((r, i) => {
+      if (r.status === "rejected") {
+        console.warn(`Inspections list loader: fetch ${i} failed —`, r.reason)
+      }
+    })
+  },
   component: InspectionsListComponent,
 })

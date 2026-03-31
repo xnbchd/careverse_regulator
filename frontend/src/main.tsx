@@ -21,7 +21,7 @@ createRoot(rootElement).render(
       <AuthProvider>
         <TooltipProvider>
           <RouterProvider router={router} />
-          <Toaster />
+          <Toaster richColors theme="system" position="bottom-right" closeButton duration={4000} />
         </TooltipProvider>
       </AuthProvider>
     </RouterErrorBoundary>

@@ -3,6 +3,12 @@ import { ProfessionalsListView } from "@/components/affiliations/ProfessionalsLi
 import { useRegistryStore } from "@/stores/registryStore"
 
 export const Route = createFileRoute("/affiliations/professionals")({
-  loader: () => useRegistryStore.getState().fetchProfessionals(1, { page_size: 20 }),
+  loader: async () => {
+    try {
+      await useRegistryStore.getState().fetchProfessionals(1, { page_size: 20 })
+    } catch (err) {
+      console.warn("Professionals loader failed:", err)
+    }
+  },
   component: ProfessionalsListView,
 })

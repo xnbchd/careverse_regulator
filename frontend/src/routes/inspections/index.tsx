@@ -3,6 +3,13 @@ import { InspectionsDashboard } from "@/components/inspection/InspectionsDashboa
 import { getDashboardStats } from "@/api/inspectionApi"
 
 export const Route = createFileRoute("/inspections/")({
-  loader: () => getDashboardStats(),
+  loader: async () => {
+    try {
+      return await getDashboardStats()
+    } catch (err) {
+      console.warn("Inspections dashboard loader failed:", err)
+      return null
+    }
+  },
   component: InspectionsDashboard,
 })
