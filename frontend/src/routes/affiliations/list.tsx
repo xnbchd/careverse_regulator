@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { listAffiliations } from "@/api/affiliationApi"
 import AffiliationsListTable from "@/components/affiliations/AffiliationsListTable"
-import type { Affiliation } from "@/types/affiliation"
 
 function AffiliationsListPage() {
   const affiliations = Route.useLoaderData() as Affiliation[]

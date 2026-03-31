@@ -3,17 +3,12 @@ import { AffiliationsDashboard } from "@/components/affiliations/AffiliationsDas
 import { useRegistryStore } from "@/stores/registryStore"
 
 export const Route = createFileRoute("/affiliations/")({
-  loader: async () => {
+  loader: () => {
     const store = useRegistryStore.getState()
-    const results = await Promise.allSettled([
-      store.fetchFacilities(1),
-      store.fetchProfessionals(1),
-    ])
-    results.forEach((r, i) => {
-      if (r.status === "rejected") {
-        console.warn(`Affiliations dashboard loader: fetch ${i} failed —`, r.reason)
-      }
-    })
+    // Fetch first page at normal page_size — pagination.total_count gives the dashboard
+    // its totals, and the data is ready when the user navigates to the list views.
+    // Avoids page_size=1 which poisoned the store with only 1 record.
+    return Promise.all([store.fetchFacilities(1), store.fetchProfessionals(1)])
   },
   component: AffiliationsDashboard,
 })
