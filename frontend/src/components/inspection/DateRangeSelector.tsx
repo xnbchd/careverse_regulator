@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import dayjs, { Dayjs } from "dayjs"
+import dayjs from "dayjs"
 import type { DateRange as CalendarDateRange } from "react-day-picker"
 
 export interface DateRange {
@@ -189,7 +189,7 @@ export default function DateRangeSelector({
           variant="outline"
           className={cn(
             "flex items-center gap-2",
-            value && "bg-blue-50 border-primary text-primary dark:bg-blue-950"
+            value && "bg-primary/10 border-primary text-primary"
           )}
         >
           <CalendarIcon className="w-4 h-4 shrink-0" />
@@ -197,7 +197,7 @@ export default function DateRangeSelector({
           {!showLabel && value && <span className="text-xs">●</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="end">
+      <PopoverContent className="w-auto p-0 max-h-[85vh] overflow-y-auto" align="end">
         {content}
       </PopoverContent>
     </Popover>

@@ -102,14 +102,9 @@ export function InspectionsDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <PageHeader
-        breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "Inspections" }]}
+        breadcrumbs={[{ label: "Inspections" }]}
         title="Inspections"
         subtitle="Monitor facility inspections and track compliance status"
-        actions={
-          <Button size="sm" onClick={() => navigate({ to: "/inspections/list" })}>
-            View All Inspections
-          </Button>
-        }
       />
 
       {/* Quick Actions */}

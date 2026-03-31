@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { lazy } from "react"
 import { listAffiliations } from "@/api/affiliationApi"
-
-const AffiliationsListTable = lazy(() => import("@/components/affiliations/AffiliationsListTable"))
+import AffiliationsListTable from "@/components/affiliations/AffiliationsListTable"
 
 function AffiliationsListPage() {
   const affiliations = Route.useLoaderData()

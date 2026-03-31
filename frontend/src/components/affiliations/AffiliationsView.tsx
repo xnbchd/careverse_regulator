@@ -117,7 +117,6 @@ export default function AffiliationsView(_props: AffiliationsViewProps) {
     <div className="space-y-6">
       <PageHeader
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
           { label: "Affiliations", href: "/affiliations" },
           { label: "All Affiliations" },
         ]}

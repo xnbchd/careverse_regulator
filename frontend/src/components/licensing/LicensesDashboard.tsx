@@ -13,7 +13,7 @@ export function LicensesDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <PageHeader
-        breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "License Management" }]}
+        breadcrumbs={[{ label: "License Management" }]}
         title="License Management"
         subtitle="Monitor and manage health facility and professional licenses and applications"
       />

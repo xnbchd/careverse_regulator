@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import type React from "react"
 
 export interface QuickAction {
@@ -14,30 +14,32 @@ export interface QuickActionsProps {
   title?: string
 }
 
-export function QuickActions({ actions, title = "Quick Actions" }: QuickActionsProps) {
+export function QuickActions({ actions, title }: QuickActionsProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap gap-2">
-          {actions.map((action, index) => {
-            const Icon = action.icon
-            return (
-              <Button
-                key={index}
-                onClick={action.onClick}
-                variant={action.variant || "default"}
-                className="flex items-center gap-2"
-              >
-                {Icon && <Icon className="h-4 w-4" />}
-                {action.label}
-              </Button>
-            )
-          })}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex items-center gap-2 flex-wrap">
+      {title && (
+        <>
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground shrink-0">
+            {title}
+          </span>
+          <Separator orientation="vertical" className="h-4 shrink-0" />
+        </>
+      )}
+      {actions.map((action, index) => {
+        const Icon = action.icon
+        return (
+          <Button
+            key={index}
+            size="sm"
+            onClick={action.onClick}
+            variant={action.variant || "outline"}
+            className="flex items-center gap-1.5 h-8"
+          >
+            {Icon && <Icon className="h-3.5 w-3.5" />}
+            {action.label}
+          </Button>
+        )
+      })}
+    </div>
   )
 }

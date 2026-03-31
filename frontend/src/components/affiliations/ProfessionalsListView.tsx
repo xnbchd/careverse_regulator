@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "@tanstack/react-router"
 import { useRegistryStore } from "@/stores/registryStore"
 import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import ProfessionalsFilters from "./ProfessionalsFilters"
 import ProfessionalsTable from "./ProfessionalsTable"
 import PaginationControls from "./PaginationControls"
 import ExportButton from "@/components/shared/ExportButton"
+import { PageHeader } from "@/components/shared/PageHeader"
 import type { ExportConfig } from "@/utils/exportUtils"
 import type { ProfessionalRecord } from "@/api/registryApi"
 import dayjs from "dayjs"
@@ -27,8 +25,6 @@ const professionalExportConfig: ExportConfig<ProfessionalRecord> = {
 }
 
 export function ProfessionalsListView() {
-  const navigate = useNavigate()
-
   const {
     professionals,
     professionalsLoading,
@@ -40,6 +36,7 @@ export function ProfessionalsListView() {
   } = useRegistryStore()
 
   const { openDrawer } = useEntityDrawer()
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   // Local state for filters
   const [searchText, setSearchText] = useState(professionalsFilters.search || "")
@@ -99,45 +96,26 @@ export function ProfessionalsListView() {
     (searchText ? 1 : 0) + (selectedStatus !== "all" ? 1 : 0) + (sortOrder !== "asc" ? 1 : 0)
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header with Back Button */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate({ to: "/affiliations" })}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-          <div>
-            <h1 className="text-2xl font-semibold text-foreground">Professionals</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Browse all registered health professionals
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        breadcrumbs={[{ label: "Affiliations", href: "/affiliations" }, { label: "Professionals" }]}
+        title="Professionals"
+        subtitle="Browse all registered health professionals"
+      />
 
       {/* Filters and Actions */}
-      <div className="flex justify-between items-start gap-4 flex-wrap">
-        <div className="flex-1">
-          <ProfessionalsFilters
-            searchText={searchText}
-            onSearchChange={setSearchText}
-            selectedStatus={selectedStatus}
-            onStatusChange={handleStatusChange}
-            sortOrder={sortOrder}
-            onSortChange={handleSortChange}
-            activeFiltersCount={activeFiltersCount}
-            onClearFilters={handleClearFilters}
-          />
-        </div>
-        <div className="flex gap-2">
-          <ExportButton data={professionals} config={professionalExportConfig} size="default" />
-        </div>
+      <div className="flex items-start gap-3 flex-wrap justify-between">
+        <ProfessionalsFilters
+          searchText={searchText}
+          onSearchChange={setSearchText}
+          selectedStatus={selectedStatus}
+          onStatusChange={handleStatusChange}
+          sortOrder={sortOrder}
+          onSortChange={handleSortChange}
+          activeFiltersCount={activeFiltersCount}
+          onClearFilters={handleClearFilters}
+        />
+        <ExportButton data={professionals} config={professionalExportConfig} size="sm" />
       </div>
 
       {/* Error State */}
@@ -152,6 +130,20 @@ export function ProfessionalsListView() {
         professionals={professionals}
         loading={professionalsLoading}
         onRowClick={handleRowClick}
+        selectedIds={selectedIds}
+        onToggleSelection={(id) =>
+          setSelectedIds((prev) => {
+            const next = new Set(prev)
+            if (next.has(id)) {
+              next.delete(id)
+            } else {
+              next.add(id)
+            }
+            return next
+          })
+        }
+        onSelectAll={() => setSelectedIds(new Set(professionals.map((p) => p.registration_number)))}
+        onDeselectAll={() => setSelectedIds(new Set())}
         emptyState={
           activeFiltersCount > 0
             ? "No professionals match your current filters."

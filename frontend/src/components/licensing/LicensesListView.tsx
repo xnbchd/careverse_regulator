@@ -323,7 +323,6 @@ export default function LicensesListView(_: LicensesListViewProps) {
     <div className="space-y-6">
       <PageHeader
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
           { label: "License Management", href: "/license-management" },
           { label: "Licenses" },
         ]}
@@ -331,22 +330,20 @@ export default function LicensesListView(_: LicensesListViewProps) {
       />
 
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as TabValue)} className="w-full">
-        <div className="mb-6">
-          <TabsList>
-            <TabsTrigger value="facility-licenses">
-              <Building2 className="h-4 w-4 mr-1.5" />
-              Facility Licenses
-            </TabsTrigger>
-            <TabsTrigger value="professional-licenses">
-              <UserRound className="h-4 w-4 mr-1.5" />
-              Professional Licenses
-            </TabsTrigger>
-          </TabsList>
-        </div>
+        <TabsList>
+          <TabsTrigger value="facility-licenses">
+            <Building2 className="h-4 w-4 mr-1.5" />
+            Facility Licenses
+          </TabsTrigger>
+          <TabsTrigger value="professional-licenses">
+            <UserRound className="h-4 w-4 mr-1.5" />
+            Professional Licenses
+          </TabsTrigger>
+        </TabsList>
 
         {/* ==================== Facility Licenses ==================== */}
-        <TabsContent value="facility-licenses" className="space-y-6">
-          <div className="flex justify-between items-start gap-4 flex-wrap">
+        <TabsContent value="facility-licenses" className="space-y-6 mt-4">
+          <div className="flex items-start gap-3 flex-wrap justify-between">
             <LicensesFilters
               searchText={facilitySearchText}
               onSearchChange={setFacilitySearchText}
@@ -372,7 +369,7 @@ export default function LicensesListView(_: LicensesListViewProps) {
                 }
                 getFilterSummary={getLicenseFilterSummary}
               />
-              <ExportButton data={licenses} config={facilityLicenseExportConfig} size="default" />
+              <ExportButton data={licenses} config={facilityLicenseExportConfig} size="sm" />
             </div>
           </div>
 
@@ -459,8 +456,8 @@ export default function LicensesListView(_: LicensesListViewProps) {
         </TabsContent>
 
         {/* ==================== Professional Licenses ==================== */}
-        <TabsContent value="professional-licenses" className="space-y-6">
-          <div className="flex justify-between items-start gap-4 flex-wrap">
+        <TabsContent value="professional-licenses" className="space-y-6 mt-4">
+          <div className="flex items-start gap-3 flex-wrap justify-between">
             <LicensesFilters
               searchText={profLicSearchText}
               onSearchChange={setProfLicSearchText}
@@ -489,7 +486,7 @@ export default function LicensesListView(_: LicensesListViewProps) {
               <ExportButton
                 data={professionalLicenses}
                 config={profLicenseExportConfig}
-                size="default"
+                size="sm"
               />
             </div>
           </div>

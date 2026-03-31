@@ -163,6 +163,7 @@ export default function InspectionTable({
     [onViewInspection]
   )
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table API; not memoizable by design
   const table = useReactTable({
     data: inspections,
     columns,
@@ -189,10 +190,10 @@ export default function InspectionTable({
   const currentPage = pagination.pageIndex + 1
 
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardContent className="p-0">
-        <div className="rounded-lg border">
-          <Table>
+        <div className="overflow-x-auto">
+          <Table className="table-fixed w-full">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -213,7 +214,11 @@ export default function InspectionTable({
             <TableBody>
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="hover:bg-muted/50 transition-colors cursor-pointer"
+                  >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="whitespace-nowrap">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -233,7 +238,7 @@ export default function InspectionTable({
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex items-center justify-between px-4 py-4 border-t">
+        <div className="flex items-center justify-between px-4 py-3 border-t">
           <p className="text-sm text-muted-foreground">
             Showing {table.getRowModel().rows.length} of {inspections.length} inspections
           </p>
@@ -244,7 +249,7 @@ export default function InspectionTable({
                 setPagination((prev) => ({ ...prev, pageSize: Number(val), pageIndex: 0 }))
               }
             >
-              <SelectTrigger className="h-9 w-[100px]">
+              <SelectTrigger className="h-8 w-[100px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -264,7 +269,7 @@ export default function InspectionTable({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 w-9 p-0"
+                className="h-8 w-8 p-0"
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
               >
@@ -273,7 +278,7 @@ export default function InspectionTable({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 w-9 p-0"
+                className="h-8 w-8 p-0"
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
               >
@@ -282,7 +287,7 @@ export default function InspectionTable({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 w-9 p-0"
+                className="h-8 w-8 p-0"
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
               >
@@ -291,7 +296,7 @@ export default function InspectionTable({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 w-9 p-0"
+                className="h-8 w-8 p-0"
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}
               >

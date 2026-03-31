@@ -111,11 +111,24 @@ export const useRegistryStore = create<RegistryStore>((set, get) => ({
         abortController.signal
       )
 
-      // Only update if this request wasn't aborted
       if (!abortController.signal.aborted) {
+        const raw = response.pagination as {
+          current_page: number
+          page_size: number
+          start: number
+          end: number
+          count: number
+        }
         set({
           facilities: response.data,
-          facilitiesPagination: response.pagination,
+          facilitiesPagination: {
+            page: raw.current_page,
+            page_size: raw.page_size,
+            total_count: raw.count,
+            total_pages: Math.ceil(raw.count / raw.page_size),
+            has_next: raw.current_page * raw.page_size < raw.count,
+            has_prev: raw.current_page > 1,
+          },
           facilitiesLoading: false,
           facilitiesAbortController: null,
         })
@@ -178,11 +191,24 @@ export const useRegistryStore = create<RegistryStore>((set, get) => ({
         abortController.signal
       )
 
-      // Only update if this request wasn't aborted
       if (!abortController.signal.aborted) {
+        const raw = response.pagination as {
+          current_page: number
+          page_size: number
+          start: number
+          end: number
+          count: number
+        }
         set({
           professionals: response.data,
-          professionalsPagination: response.pagination,
+          professionalsPagination: {
+            page: raw.current_page,
+            page_size: raw.page_size,
+            total_count: raw.count,
+            total_pages: Math.ceil(raw.count / raw.page_size),
+            has_next: raw.current_page * raw.page_size < raw.count,
+            has_prev: raw.current_page > 1,
+          },
           professionalsLoading: false,
           professionalsAbortController: null,
         })

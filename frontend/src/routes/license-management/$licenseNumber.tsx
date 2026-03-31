@@ -1,11 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { useLicensingStore } from "@/stores/licensingStore"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import StatusBadge from "@/components/licensing/StatusBadge"
 import {
-  ArrowLeft,
   FileText,
   Building2,
   Calendar,
@@ -27,19 +26,15 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { showSuccess, showError } from "@/utils/toast"
 import type { License, LicenseAction } from "@/types/license"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 function LicenseDetailPage() {
   const { licenseNumber } = Route.useParams()
-  const navigate = useNavigate()
   const { getLicense, updateLicense } = useLicensingStore()
 
   const loaderData = Route.useLoaderData()
   const [license, setLicense] = useState<License | null>(loaderData)
   const [actionLoading, setActionLoading] = useState(false)
-
-  const handleBack = () => {
-    navigate({ to: "/license-management" })
-  }
 
   const handleAction = async (action: LicenseAction, actionName: string) => {
     if (!license) return
@@ -64,64 +59,58 @@ function LicenseDetailPage() {
   return (
     <div className="hq-page-wrap">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" onClick={handleBack} className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Button>
-            {license && (
-              <>
-                <div className="h-6 w-px bg-border" />
-                <h2 className="text-lg font-semibold font-mono text-foreground">
-                  {license.licenseNumber}
-                </h2>
-                <StatusBadge status={license.status} className="text-sm" />
-              </>
-            )}
-          </div>
-          {canPerformActions && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button disabled={actionLoading}>Actions</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={() => handleAction("APPROVE", "Approved")}>
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Approve
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAction("DENY", "Denied")}>
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Deny
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleAction("REVIEW", "Under Review")}>
-                  <Eye className="h-4 w-4 mr-2" />
-                  Review
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAction("REQUEST_INFO", "Info Requested")}>
-                  <AlertCircle className="h-4 w-4 mr-2" />
-                  Request Info
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => handleAction("SUSPEND", "Suspended")}
-                  className="text-orange-600"
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Suspend
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => handleAction("SET_EXPIRED", "Expired")}
-                  className="text-muted-foreground"
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Set Expired
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-        </div>
+        <PageHeader
+          breadcrumbs={[
+            { label: "License Management", href: "/license-management" },
+            { label: "Licenses", href: "/license-management/licenses" },
+            { label: licenseNumber },
+          ]}
+          title={license ? license.licenseNumber : licenseNumber}
+          badge={license ? <StatusBadge status={license.status} className="text-sm" /> : undefined}
+          actions={
+            canPerformActions ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button disabled={actionLoading}>Actions</Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => handleAction("APPROVE", "Approved")}>
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Approve
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAction("DENY", "Denied")}>
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Deny
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => handleAction("REVIEW", "Under Review")}>
+                    <Eye className="h-4 w-4 mr-2" />
+                    Review
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAction("REQUEST_INFO", "Info Requested")}>
+                    <AlertCircle className="h-4 w-4 mr-2" />
+                    Request Info
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => handleAction("SUSPEND", "Suspended")}
+                    className="text-orange-600"
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Suspend
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleAction("SET_EXPIRED", "Expired")}
+                    className="text-muted-foreground"
+                  >
+                    <XCircle className="h-4 w-4 mr-2" />
+                    Set Expired
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : undefined
+          }
+        />
 
         {license && (
           <div className="space-y-6">

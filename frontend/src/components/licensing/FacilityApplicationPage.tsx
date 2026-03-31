@@ -1,12 +1,10 @@
 import { useState, useRef } from "react"
-import { useNavigate } from "@tanstack/react-router"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import StatusBadge from "./StatusBadge"
 import {
-  ArrowLeft,
   Building2,
   MapPin,
   Phone,
@@ -27,6 +25,7 @@ import { updateFacilityApplicationStatus } from "@/api/licensingApi"
 import { useLicensingStore } from "@/stores/licensingStore"
 import { showSuccess, showError } from "@/utils/toast"
 import type { LicenseApplication } from "@/types/license"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 interface FacilityApplicationPageProps {
   application: LicenseApplication
@@ -35,7 +34,6 @@ interface FacilityApplicationPageProps {
 export default function FacilityApplicationPage({
   application: initialApp,
 }: FacilityApplicationPageProps) {
-  const navigate = useNavigate()
   const [application, setApplication] = useState(initialApp)
   const [remarks, setRemarks] = useState("")
   const [submitting, setSubmitting] = useState<string | null>(null)
@@ -100,82 +98,61 @@ export default function FacilityApplicationPage({
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top bar */}
-      <div className="flex items-center justify-between mb-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => navigate({ to: "/license-management/applications" })}
-          className="-ml-2"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Back to Applications
-        </Button>
-        {isPending && (
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              variant={selectedAction === "Issued" ? "default" : "outline"}
-              className={
-                selectedAction !== "Issued"
-                  ? "text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-950"
-                  : "bg-green-600 hover:bg-green-700 text-white"
-              }
-              onClick={() => handleSelectAction("Issued")}
-            >
-              <CheckCircle className="h-4 w-4 mr-1.5" />
-              Issue
-            </Button>
-            <Button
-              size="sm"
-              variant={selectedAction === "Denied" ? "destructive" : "outline"}
-              className={
-                selectedAction !== "Denied"
-                  ? "text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-950"
-                  : ""
-              }
-              onClick={() => handleSelectAction("Denied")}
-            >
-              <XCircle className="h-4 w-4 mr-1.5" />
-              Deny
-            </Button>
-            <Button
-              size="sm"
-              variant={selectedAction === "Info Requested" ? "default" : "outline"}
-              className={
-                selectedAction !== "Info Requested"
-                  ? "text-blue-600 border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
-              }
-              onClick={() => handleSelectAction("Info Requested")}
-            >
-              <AlertCircle className="h-4 w-4 mr-1.5" />
-              Request Info
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {/* Page heading */}
-      <div className="mb-5">
-        <h1 className="text-2xl font-semibold text-foreground">New Facility License Application</h1>
-        <p className="text-lg font-medium text-foreground mt-1">{application.facilityName}</p>
-        <p className="text-sm text-muted-foreground font-mono">{application.registrationNumber}</p>
-        <div className="flex items-center gap-4 mt-2">
-          <StatusBadge status={application.applicationStatus} />
-          <span className="text-xs text-muted-foreground">
-            ID: <span className="font-mono">{application.licenseApplicationId}</span>
-          </span>
-          {application.regulatoryBody && (
-            <span className="text-xs text-muted-foreground">{application.regulatoryBody}</span>
-          )}
-          {application.applicationDate && (
-            <span className="text-xs text-muted-foreground">
-              Applied: {application.applicationDate}
-            </span>
-          )}
-        </div>
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "License Management", href: "/license-management" },
+          { label: "Applications", href: "/license-management/applications" },
+          { label: application.facilityName },
+        ]}
+        title="Facility License Application"
+        subtitle={`${application.facilityName} · ${application.registrationNumber}`}
+        badge={<StatusBadge status={application.applicationStatus} />}
+        actions={
+          isPending ? (
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant={selectedAction === "Issued" ? "default" : "outline"}
+                className={
+                  selectedAction !== "Issued"
+                    ? "text-green-600 border-green-300 hover:bg-green-50 dark:hover:bg-green-950"
+                    : "bg-green-600 hover:bg-green-700 text-white"
+                }
+                onClick={() => handleSelectAction("Issued")}
+              >
+                <CheckCircle className="h-4 w-4 mr-1.5" />
+                Issue
+              </Button>
+              <Button
+                size="sm"
+                variant={selectedAction === "Denied" ? "destructive" : "outline"}
+                className={
+                  selectedAction !== "Denied"
+                    ? "text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-950"
+                    : ""
+                }
+                onClick={() => handleSelectAction("Denied")}
+              >
+                <XCircle className="h-4 w-4 mr-1.5" />
+                Deny
+              </Button>
+              <Button
+                size="sm"
+                variant={selectedAction === "Info Requested" ? "default" : "outline"}
+                className={
+                  selectedAction !== "Info Requested"
+                    ? "text-blue-600 border-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950"
+                    : "bg-blue-600 hover:bg-blue-700 text-white"
+                }
+                onClick={() => handleSelectAction("Info Requested")}
+              >
+                <AlertCircle className="h-4 w-4 mr-1.5" />
+                Request Info
+              </Button>
+            </div>
+          ) : undefined
+        }
+      />
 
       {/* Data cards — 2 columns */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

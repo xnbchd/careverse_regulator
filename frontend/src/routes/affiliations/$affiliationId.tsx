@@ -1,13 +1,12 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router"
 import { useAffiliationStore } from "@/stores/affiliationStore"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import StatusBadge from "@/components/affiliations/StatusBadge"
-import { ArrowLeft, Building2, User, Briefcase, Calendar } from "lucide-react"
+import { Building2, User, Briefcase, Calendar } from "lucide-react"
 import type { Affiliation } from "@/types/affiliation"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 function AffiliationDetailPage() {
-  const navigate = useNavigate()
   const affiliation = Route.useLoaderData() as Affiliation | null
 
   if (!affiliation) return null
@@ -15,33 +14,15 @@ function AffiliationDetailPage() {
   return (
     <div className="hq-page-wrap">
       <div className="max-w-6xl mx-auto">
-        {/* Top bar */}
-        <div className="mb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate({ to: "/affiliations" })}
-            className="-ml-2"
-          >
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            Back to Affiliations
-          </Button>
-        </div>
-
-        {/* Page heading */}
-        <div className="mb-5">
-          <h1 className="text-2xl font-semibold text-foreground">Professional Affiliation</h1>
-          <p className="text-lg font-medium text-foreground mt-1">
-            {affiliation.healthProfessional.fullName} — {affiliation.healthFacility.facilityName}
-          </p>
-          <div className="flex items-center gap-4 mt-2">
-            <StatusBadge status={affiliation.affiliationStatus} />
-            <span className="text-xs text-muted-foreground capitalize">
-              {affiliation.employmentType}
-            </span>
-            <span className="text-xs text-muted-foreground">Started: {affiliation.startDate}</span>
-          </div>
-        </div>
+        <PageHeader
+          breadcrumbs={[
+            { label: "Affiliations", href: "/affiliations" },
+            { label: affiliation.healthFacility.facilityName },
+          ]}
+          title="Professional Affiliation"
+          subtitle={`${affiliation.healthProfessional.fullName} — ${affiliation.healthFacility.facilityName}`}
+          badge={<StatusBadge status={affiliation.affiliationStatus} />}
+        />
 
         {/* Data cards — 2 columns */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

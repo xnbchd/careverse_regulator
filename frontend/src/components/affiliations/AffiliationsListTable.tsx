@@ -270,7 +270,6 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
     <div className="space-y-6">
       <PageHeader
         breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
           { label: "Affiliations", href: "/affiliations" },
           { label: "Affiliations List" },
         ]}

@@ -24,7 +24,7 @@ export default function FilterTags({ tags, onClearAll }: FilterTagsProps) {
         <Badge
           key={tag.key}
           variant="outline"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-sm bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-400"
+          className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs bg-primary/10 border-primary/20 text-primary"
         >
           {tag.label}
           <button

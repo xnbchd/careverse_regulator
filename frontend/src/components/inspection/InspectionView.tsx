@@ -20,9 +20,10 @@ import PaginationControls from "./PaginationControls"
 import ExportButton from "@/components/shared/ExportButton"
 import SavedFiltersManager from "@/components/shared/SavedFiltersManager"
 import { PageHeader } from "@/components/shared/PageHeader"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { FileText } from "lucide-react"
+import { FileText, Calendar, Search as SearchIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import dayjs from "dayjs"
 import type { ExportConfig } from "@/utils/exportUtils"
@@ -362,11 +363,7 @@ export default function InspectionView(_: InspectionViewProps) {
   return (
     <div className="space-y-6">
       <PageHeader
-        breadcrumbs={[
-          { label: "Dashboard", href: "/dashboard" },
-          { label: "Inspections", href: "/inspections" },
-          { label: "All Inspections" },
-        ]}
+        breadcrumbs={[{ label: "Inspections", href: "/inspections" }, { label: "All Inspections" }]}
         title="Inspection Management"
         subtitle="Schedule & View Facility Inspections"
         actions={
@@ -382,48 +379,29 @@ export default function InspectionView(_: InspectionViewProps) {
         }
       />
 
-      {/* Tab navigation */}
-      <div className="flex overflow-x-auto gap-4 border-b border-border">
-        <div
-          className={cn(
-            "pb-3 cursor-pointer whitespace-nowrap",
-            activeTab === "scheduled" && "border-b-2 border-primary"
-          )}
-          onClick={() => handleTabChange("scheduled")}
-        >
-          <span
-            className={cn(
-              "text-sm font-semibold",
-              activeTab === "scheduled" ? "text-primary" : "text-muted-foreground"
-            )}
-          >
+      {/* shadcn Tabs — value wired to URL activeTab param */}
+      <Tabs
+        value={activeTab}
+        onValueChange={(val) => handleTabChange(val as "scheduled" | "findings")}
+        className="w-full"
+      >
+        <TabsList>
+          <TabsTrigger value="scheduled">
+            <Calendar className="h-4 w-4 mr-1.5" />
             Scheduled Inspections
-          </span>
-        </div>
-        <div
-          className={cn(
-            "pb-3 cursor-pointer whitespace-nowrap",
-            activeTab === "findings" && "border-b-2 border-primary"
-          )}
-          onClick={() => handleTabChange("findings")}
-        >
-          <span
-            className={cn(
-              "text-sm font-semibold",
-              activeTab === "findings" ? "text-primary" : "text-muted-foreground"
-            )}
-          >
+          </TabsTrigger>
+          <TabsTrigger value="findings">
+            <SearchIcon className="h-4 w-4 mr-1.5" />
             Inspection Findings
-          </span>
-        </div>
-      </div>
+          </TabsTrigger>
+        </TabsList>
 
-      {activeTab === "scheduled" && (
-        <>
+        {/* ── Scheduled Inspections tab ── */}
+        <TabsContent value="scheduled" className="space-y-4 mt-4">
           {filteredInspections.length === 0 &&
           searchText === "" &&
           selectedStatuses.includes("all") ? (
-            <Card className="mt-20">
+            <Card>
               <CardContent
                 className={cn(
                   "flex flex-col items-center justify-center",
@@ -456,7 +434,7 @@ export default function InspectionView(_: InspectionViewProps) {
               <div
                 className={cn(
                   "flex justify-between items-start gap-4",
-                  isMobile ? "mb-4 flex-col" : "mb-6 flex-row"
+                  isMobile ? "flex-col" : "flex-row"
                 )}
               >
                 <InspectionFilters
@@ -480,7 +458,7 @@ export default function InspectionView(_: InspectionViewProps) {
                   <ExportButton
                     data={filteredInspections}
                     config={inspectionExportConfig}
-                    size="default"
+                    size="sm"
                   />
                 </div>
               </div>
@@ -511,16 +489,15 @@ export default function InspectionView(_: InspectionViewProps) {
               />
             </>
           )}
-        </>
-      )}
+        </TabsContent>
 
-      {activeTab === "findings" && (
-        <>
+        {/* ── Inspection Findings tab ── */}
+        <TabsContent value="findings" className="space-y-4 mt-4">
           {filteredFindings.length === 0 &&
           findingsSearchText === "" &&
           selectedSeverities.includes("all") &&
           selectedFindingStatuses.includes("all") ? (
-            <Card className="mt-20">
+            <Card>
               <CardContent
                 className={cn(
                   "flex flex-col items-center justify-center",
@@ -553,7 +530,7 @@ export default function InspectionView(_: InspectionViewProps) {
               <div
                 className={cn(
                   "flex justify-between items-start gap-4",
-                  isMobile ? "mb-4 flex-col" : "mb-6 flex-row"
+                  isMobile ? "flex-col" : "flex-row"
                 )}
               >
                 <FindingsFilters
@@ -569,11 +546,7 @@ export default function InspectionView(_: InspectionViewProps) {
                   onSortChange={setFindingsSortOrder}
                   activeFilterCount={activeFindingsFiltersCount}
                 />
-                <ExportButton
-                  data={filteredFindings}
-                  config={findingsExportConfig}
-                  size="default"
-                />
+                <ExportButton data={filteredFindings} config={findingsExportConfig} size="sm" />
               </div>
 
               {isMobile || isTablet ? (
@@ -592,15 +565,14 @@ export default function InspectionView(_: InspectionViewProps) {
               )}
             </>
           )}
-        </>
-      )}
+        </TabsContent>
+      </Tabs>
 
       <ScheduleInspectionModal
         open={isModalVisible}
         onClose={() => {
           setIsModalVisible(false)
           setModalError(null)
-          // Clear modal param from URL
           navigate({ search: (prev) => ({ ...prev, modal: undefined }) })
         }}
         onSubmit={handleScheduleInspection}

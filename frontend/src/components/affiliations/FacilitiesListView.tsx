@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "@tanstack/react-router"
 import { useRegistryStore } from "@/stores/registryStore"
 import { useEntityDrawer } from "@/contexts/EntityDrawerContext"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import FacilitiesFilters from "./FacilitiesFilters"
 import FacilitiesTable from "./FacilitiesTable"
 import PaginationControls from "./PaginationControls"
 import ExportButton from "@/components/shared/ExportButton"
+import { PageHeader } from "@/components/shared/PageHeader"
 import type { ExportConfig } from "@/utils/exportUtils"
 import type { FacilityRecord } from "@/api/registryApi"
 import dayjs from "dayjs"
@@ -28,8 +26,6 @@ const facilityExportConfig: ExportConfig<FacilityRecord> = {
 }
 
 export function FacilitiesListView() {
-  const navigate = useNavigate()
-
   const {
     facilities,
     facilitiesLoading,
@@ -41,6 +37,7 @@ export function FacilitiesListView() {
   } = useRegistryStore()
 
   const { openDrawer } = useEntityDrawer()
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   // Local state for filters
   const [searchText, setSearchText] = useState(facilitiesFilters.search || "")
@@ -98,43 +95,24 @@ export function FacilitiesListView() {
   const activeFiltersCount = (searchText ? 1 : 0) + (sortOrder !== "recent" ? 1 : 0)
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header with Back Button */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate({ to: "/affiliations" })}
-            className="flex items-center gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-          <div>
-            <h1 className="text-2xl font-semibold text-foreground">Facilities</h1>
-            <p className="text-sm text-muted-foreground mt-1">
-              Browse all registered health facilities
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        breadcrumbs={[{ label: "Affiliations", href: "/affiliations" }, { label: "Facilities" }]}
+        title="Facilities"
+        subtitle="Browse all registered health facilities"
+      />
 
       {/* Filters and Actions */}
-      <div className="flex justify-between items-start gap-4 flex-wrap">
-        <div className="flex-1">
-          <FacilitiesFilters
-            searchText={searchText}
-            onSearchChange={setSearchText}
-            sortOrder={sortOrder}
-            onSortChange={handleSortChange}
-            activeFiltersCount={activeFiltersCount}
-            onClearFilters={handleClearFilters}
-          />
-        </div>
-        <div className="flex gap-2">
-          <ExportButton data={facilities} config={facilityExportConfig} size="default" />
-        </div>
+      <div className="flex items-start gap-3 flex-wrap justify-between">
+        <FacilitiesFilters
+          searchText={searchText}
+          onSearchChange={setSearchText}
+          sortOrder={sortOrder}
+          onSortChange={handleSortChange}
+          activeFiltersCount={activeFiltersCount}
+          onClearFilters={handleClearFilters}
+        />
+        <ExportButton data={facilities} config={facilityExportConfig} size="sm" />
       </div>
 
       {/* Error State */}
@@ -149,6 +127,20 @@ export function FacilitiesListView() {
         facilities={facilities}
         loading={facilitiesLoading}
         onRowClick={handleRowClick}
+        selectedIds={selectedIds}
+        onToggleSelection={(id) =>
+          setSelectedIds((prev) => {
+            const next = new Set(prev)
+            if (next.has(id)) {
+              next.delete(id)
+            } else {
+              next.add(id)
+            }
+            return next
+          })
+        }
+        onSelectAll={() => setSelectedIds(new Set(facilities.map((f) => f.registration_number)))}
+        onDeselectAll={() => setSelectedIds(new Set())}
         emptyState={
           activeFiltersCount > 0
             ? "No facilities match your current filters."

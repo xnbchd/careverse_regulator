@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { lazy } from "react"
 import { useAuthStore } from "@/stores/authStore"
-
-const LicensesListView = lazy(() => import("@/components/licensing/LicensesListView"))
+import LicensesListView from "@/components/licensing/LicensesListView"
 
 function LicensesListComponent() {
   const user = useAuthStore((state) => state.user)

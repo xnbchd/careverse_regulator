@@ -1,22 +1,19 @@
-import { useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
-import { Button } from "@/components/ui/button"
-import { Building2, UserRound } from "lucide-react"
+import { Building2, UserRound, List } from "lucide-react"
 import { useRegistryStore } from "@/stores/registryStore"
 import { PageHeader } from "@/components/shared/PageHeader"
 import { ModuleStatStrip } from "@/components/dashboard/ModuleStatStrip"
+import { QuickActions } from "@/components/dashboard"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function AffiliationsDashboard() {
-  const [viewMode, setViewMode] = useState<"facilities" | "professionals">("facilities")
   const navigate = useNavigate()
 
   const { facilitiesPagination, facilitiesLoading, professionalsPagination, professionalsLoading } =
     useRegistryStore()
 
-  const facilitiesTotal = facilitiesPagination?.count || 0
-  const professionalsTotal = professionalsPagination?.count || 0
-
-  const isLoading = facilitiesLoading || professionalsLoading
+  const facilitiesTotal = facilitiesPagination?.total_count || 0
+  const professionalsTotal = professionalsPagination?.total_count || 0
 
   const facilityStats = [
     { label: "Total Facilities", value: facilitiesTotal },
@@ -32,69 +29,66 @@ export function AffiliationsDashboard() {
     { label: "Inactive", value: 0 },
   ]
 
+  const facilityActions = [
+    {
+      label: "View All Facilities",
+      onClick: () => navigate({ to: "/affiliations/facilities" }),
+      variant: "default" as const,
+      icon: Building2,
+    },
+    {
+      label: "All Affiliations",
+      onClick: () => navigate({ to: "/affiliations/list" }),
+      variant: "outline" as const,
+      icon: List,
+    },
+  ]
+
+  const professionalActions = [
+    {
+      label: "View All Professionals",
+      onClick: () => navigate({ to: "/affiliations/professionals" }),
+      variant: "default" as const,
+      icon: UserRound,
+    },
+    {
+      label: "All Affiliations",
+      onClick: () => navigate({ to: "/affiliations/list" }),
+      variant: "outline" as const,
+      icon: List,
+    },
+  ]
+
   return (
     <div className="space-y-6">
       <PageHeader
-        breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "Affiliations" }]}
+        breadcrumbs={[{ label: "Affiliations" }]}
         title="Affiliations"
         subtitle="Overview of health facility and professional registries"
-        actions={
-          <div className="flex items-center gap-2">
-            <Button
-              variant={viewMode === "facilities" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("facilities")}
-              className="flex items-center gap-2"
-            >
-              <Building2 className="h-3.5 w-3.5" />
-              Facilities
-            </Button>
-            <Button
-              variant={viewMode === "professionals" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setViewMode("professionals")}
-              className="flex items-center gap-2"
-            >
-              <UserRound className="h-3.5 w-3.5" />
-              Professionals
-            </Button>
-          </div>
-        }
       />
 
-      {/* Stats */}
-      <ModuleStatStrip
-        stats={viewMode === "facilities" ? facilityStats : professionalStats}
-        loading={isLoading}
-      />
+      <Tabs defaultValue="facilities" className="w-full">
+        <TabsList>
+          <TabsTrigger value="facilities">
+            <Building2 className="h-4 w-4 mr-1.5" />
+            Facilities
+          </TabsTrigger>
+          <TabsTrigger value="professionals">
+            <UserRound className="h-4 w-4 mr-1.5" />
+            Professionals
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Quick navigation — inline buttons, never full-width */}
-      <div className="flex items-center gap-2">
-        {viewMode === "facilities" ? (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => navigate({ to: "/affiliations/facilities" })}
-            className="flex items-center gap-2"
-          >
-            <Building2 className="h-3.5 w-3.5" />
-            View All Facilities
-          </Button>
-        ) : (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => navigate({ to: "/affiliations/professionals" })}
-            className="flex items-center gap-2"
-          >
-            <UserRound className="h-3.5 w-3.5" />
-            View All Professionals
-          </Button>
-        )}
-        <Button size="sm" variant="outline" onClick={() => navigate({ to: "/affiliations/list" })}>
-          All Affiliations
-        </Button>
-      </div>
+        <TabsContent value="facilities" className="space-y-4 mt-4">
+          <QuickActions actions={facilityActions} title="Quick Actions" />
+          <ModuleStatStrip stats={facilityStats} loading={facilitiesLoading} />
+        </TabsContent>
+
+        <TabsContent value="professionals" className="space-y-4 mt-4">
+          <QuickActions actions={professionalActions} title="Quick Actions" />
+          <ModuleStatStrip stats={professionalStats} loading={professionalsLoading} />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
