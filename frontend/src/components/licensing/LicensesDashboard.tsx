@@ -4,19 +4,19 @@ import { FacilityLicensesDashboard } from "./FacilityLicensesDashboard"
 import { ApplicationsDashboard } from "./ApplicationsDashboard"
 import { LicenseAppealsDashboard } from "./LicenseAppealsDashboard"
 import { Scale, ShieldCheck, FileText } from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 export function LicensesDashboard() {
   const [activeTab, setActiveTab] = useState("licenses")
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-semibold text-foreground">License Management</h1>
-        <p className="text-muted-foreground mt-1">
-          Monitor and manage health facility and professional licenses and applications
-        </p>
-      </div>
+      <PageHeader
+        breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "License Management" }]}
+        title="License Management"
+        subtitle="Monitor and manage health facility and professional licenses and applications"
+      />
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>

@@ -11,7 +11,6 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import { Search, Filter, X, ArrowUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
 
 interface AffiliationsFiltersProps {
   searchText: string

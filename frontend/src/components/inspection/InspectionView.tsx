@@ -1,7 +1,6 @@
-import { useEffect, useState, useMemo, useCallback } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useInspectionStore } from "@/stores/inspectionStore"
-import { useUserStore } from "@/stores/userStore"
 import type { Inspection, Finding } from "@/types/inspection"
 import { useFindingsStore } from "@/stores/findingsStore"
 import * as inspectionApi from "@/api/inspectionApi"
@@ -20,12 +19,12 @@ import FindingsDrawer from "./FindingsDrawer"
 import PaginationControls from "./PaginationControls"
 import ExportButton from "@/components/shared/ExportButton"
 import SavedFiltersManager from "@/components/shared/SavedFiltersManager"
+import { PageHeader } from "@/components/shared/PageHeader"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { FileText, ArrowLeft } from "lucide-react"
+import { FileText } from "lucide-react"
 import { cn } from "@/lib/utils"
 import dayjs from "dayjs"
-// import type { Inspection, Finding } from '@/types/inspection'
 import type { ExportConfig } from "@/utils/exportUtils"
 
 interface InspectionFiltersState {
@@ -39,39 +38,39 @@ interface InspectionViewProps {
   company?: string | null
 }
 
-export default function InspectionView({ company }: InspectionViewProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function InspectionView(_: InspectionViewProps) {
   const navigate = useNavigate({ from: "/inspections/list" })
   const searchParams = useSearch({ from: "/inspections/list" })
   const { openDrawer } = useEntityDrawer()
 
-  const {
-    inspections,
-    facilities,
-    loading,
-    error,
-    pagination,
-    setPage,
-    fetchInspections,
-    createInspection,
-  } = useInspectionStore()
+  const { inspections, facilities, pagination, setPage, fetchInspections, createInspection } =
+    useInspectionStore()
   const { findings, fetchFindings } = useFindingsStore()
   const { isMobile, isTablet } = useResponsive()
 
-  // Get filter values from URL params - memoize to prevent infinite loops
+  // Get filter values from URL params — inlined (no useMemo per React Compiler rules)
   const activeTab = searchParams.activeTab || "scheduled"
   const searchText = searchParams.search || ""
   const modalParam = searchParams.modal
-  const selectedStatuses = useMemo(() => {
-    if (!searchParams.status) return ["all"]
-    return Array.isArray(searchParams.status) ? searchParams.status : [searchParams.status]
-  }, [searchParams.status])
-  const dateRange: DateRange | null = useMemo(
-    () =>
-      searchParams.startDate && searchParams.endDate
-        ? { start: searchParams.startDate, end: searchParams.endDate }
-        : null,
-    [searchParams.startDate, searchParams.endDate]
-  )
+
+  // Stable string key for selectedStatuses — avoids new array reference every render
+  // which would re-trigger the fetch useEffect on every render (infinite loop)
+  const selectedStatusesKey = searchParams.status
+    ? Array.isArray(searchParams.status)
+      ? searchParams.status.join(",")
+      : searchParams.status
+    : "all"
+  // Array form kept for passing to child components
+  const selectedStatuses = selectedStatusesKey === "all" ? ["all"] : selectedStatusesKey.split(",")
+
+  // Stable primitives for dateRange — avoids new object reference every render
+  const dateRangeStart = searchParams.startDate ?? null
+  const dateRangeEnd = searchParams.endDate ?? null
+  // Object form kept for passing to child components
+  const dateRange: DateRange | null =
+    dateRangeStart && dateRangeEnd ? { start: dateRangeStart, end: dateRangeEnd } : null
+
   const sortOrder =
     searchParams.sortOrder === "desc" ? "desc" : searchParams.sortOrder === "asc" ? "asc" : "recent"
 
@@ -163,7 +162,7 @@ export default function InspectionView({ company }: InspectionViewProps) {
       fetchInspections(1, filters)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchText, selectedStatuses, dateRange, sortOrder, activeTab])
+  }, [searchText, selectedStatusesKey, dateRangeStart, dateRangeEnd, sortOrder, activeTab])
 
   // Fetch findings when filters change (Findings tab)
   useEffect(() => {
@@ -254,12 +253,9 @@ export default function InspectionView({ company }: InspectionViewProps) {
     }
   }
 
-  const handleViewInspection = useCallback(
-    (inspection: Inspection) => {
-      openDrawer("inspection", inspection)
-    },
-    [openDrawer]
-  )
+  const handleViewInspection = (inspection: Inspection) => {
+    openDrawer("inspection", inspection)
+  }
 
   // Use findings directly from store (API-filtered)
   const filteredFindings = findings
@@ -278,69 +274,53 @@ export default function InspectionView({ company }: InspectionViewProps) {
     ],
   }
 
-  const handleViewFinding = useCallback(
-    async (finding: Finding) => {
-      if (!finding.inspectionId || loadingInspectionDetails) return
+  const handleViewFinding = async (finding: Finding) => {
+    if (!finding.inspectionId || loadingInspectionDetails) return
 
-      setLoadingInspectionDetails(true)
-      try {
-        const fullInspection = await inspectionApi.getInspection(finding.inspectionId)
-        setSelectedInspectionForDrawer(fullInspection)
-        setIsFindingModalVisible(true)
-      } catch (error) {
-        showError("Failed to load inspection details")
-      } finally {
-        setLoadingInspectionDetails(false)
-      }
-    },
-    [loadingInspectionDetails]
-  )
+    setLoadingInspectionDetails(true)
+    try {
+      const fullInspection = await inspectionApi.getInspection(finding.inspectionId)
+      setSelectedInspectionForDrawer(fullInspection)
+      setIsFindingModalVisible(true)
+    } catch {
+      showError("Failed to load inspection details")
+    } finally {
+      setLoadingInspectionDetails(false)
+    }
+  }
 
-  // Handler functions that update URL params - memoize to prevent re-creation
-  const handleTabChange = useCallback(
-    (tab: "scheduled" | "findings") => {
-      navigate({
-        search: (prev) => ({ ...prev, activeTab: tab }),
-      })
-    },
-    [navigate]
-  )
+  const handleTabChange = (tab: "scheduled" | "findings") => {
+    navigate({
+      search: (prev) => ({ ...prev, activeTab: tab }),
+    })
+  }
 
-  const handleStatusChange = useCallback(
-    (statuses: string[]) => {
-      navigate({
-        search: (prev) => ({ ...prev, status: statuses.includes("all") ? undefined : statuses }),
-      })
-    },
-    [navigate]
-  )
+  const handleStatusChange = (statuses: string[]) => {
+    navigate({
+      search: (prev) => ({ ...prev, status: statuses.includes("all") ? undefined : statuses }),
+    })
+  }
 
-  const handleDateRangeChange = useCallback(
-    (range: DateRange | null) => {
-      navigate({
-        search: (prev) => ({
-          ...prev,
-          startDate: range?.start,
-          endDate: range?.end,
-        }),
-      })
-    },
-    [navigate]
-  )
+  const handleDateRangeChange = (range: DateRange | null) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        startDate: range?.start,
+        endDate: range?.end,
+      }),
+    })
+  }
 
-  const handleSortChange = useCallback(
-    (order: "asc" | "desc" | "recent") => {
-      const sortBy = order === "recent" ? "modified" : "facility_name"
-      navigate({
-        search: (prev) => ({
-          ...prev,
-          sortBy,
-          sortOrder: order === "recent" ? "desc" : order,
-        }),
-      })
-    },
-    [navigate]
-  )
+  const handleSortChange = (order: "asc" | "desc" | "recent") => {
+    const sortBy = order === "recent" ? "modified" : "facility_name"
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        sortBy,
+        sortOrder: order === "recent" ? "desc" : order,
+      }),
+    })
+  }
 
   // Saved Filters Integration
   const currentInspectionFilters: InspectionFiltersState = {
@@ -380,87 +360,61 @@ export default function InspectionView({ company }: InspectionViewProps) {
   }
 
   return (
-    <div className={cn("inspection-shell", isMobile ? "p-4" : "p-6")}>
-      <div className={cn("mb-6", isMobile ? "mb-4" : "mb-6")}>
-        <div
-          className={cn(
-            "flex justify-between items-start",
-            isMobile ? "flex-col gap-4" : "flex-row gap-0"
-          )}
-        >
-          <div className="flex-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate({ to: "/inspections" })}
-              className={cn("mb-2 -ml-2", isMobile ? "text-xs" : "text-sm")}
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              Back to Dashboard
-            </Button>
-            <h2 className={cn("font-bold text-foreground m-0", isMobile ? "text-xl" : "text-2xl")}>
-              Inspection Management
-            </h2>
-            <p
-              className={cn(
-                "text-muted-foreground font-semibold mt-1 m-0",
-                isMobile ? "text-sm" : "text-base"
-              )}
-            >
-              Schedule & View Facility Inspections
-            </p>
-
-            <div className={cn("flex overflow-x-auto", isMobile ? "gap-3 mt-4" : "gap-4 mt-7")}>
-              <div
-                className={cn(
-                  "pb-3 cursor-pointer whitespace-nowrap",
-                  activeTab === "scheduled" && "border-b-2 border-primary"
-                )}
-                onClick={() => handleTabChange("scheduled")}
-              >
-                <span
-                  className={cn(
-                    "font-semibold",
-                    isMobile ? "text-xs" : "text-sm",
-                    activeTab === "scheduled" ? "text-primary" : "text-muted-foreground"
-                  )}
-                >
-                  Scheduled Inspections
-                </span>
-              </div>
-              <div
-                className={cn(
-                  "pb-3 cursor-pointer whitespace-nowrap",
-                  activeTab === "findings" && "border-b-2 border-primary"
-                )}
-                onClick={() => handleTabChange("findings")}
-              >
-                <span
-                  className={cn(
-                    "font-semibold",
-                    isMobile ? "text-xs" : "text-sm",
-                    activeTab === "findings" ? "text-primary" : "text-muted-foreground"
-                  )}
-                >
-                  Inspection Findings
-                </span>
-              </div>
-            </div>
-          </div>
-
+    <div className="space-y-6">
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Inspections", href: "/inspections" },
+          { label: "All Inspections" },
+        ]}
+        title="Inspection Management"
+        subtitle="Schedule & View Facility Inspections"
+        actions={
           <Button
-            size={isMobile ? "default" : "lg"}
+            size="sm"
             onClick={() => {
               navigate({ search: (prev) => ({ ...prev, modal: "schedule" }) })
               setModalError(null)
             }}
-            className={cn(
-              "font-semibold whitespace-nowrap",
-              isMobile ? "w-full h-10 text-sm" : "h-11 text-base"
-            )}
           >
             Schedule Inspection
           </Button>
+        }
+      />
+
+      {/* Tab navigation */}
+      <div className="flex overflow-x-auto gap-4 border-b border-border">
+        <div
+          className={cn(
+            "pb-3 cursor-pointer whitespace-nowrap",
+            activeTab === "scheduled" && "border-b-2 border-primary"
+          )}
+          onClick={() => handleTabChange("scheduled")}
+        >
+          <span
+            className={cn(
+              "text-sm font-semibold",
+              activeTab === "scheduled" ? "text-primary" : "text-muted-foreground"
+            )}
+          >
+            Scheduled Inspections
+          </span>
+        </div>
+        <div
+          className={cn(
+            "pb-3 cursor-pointer whitespace-nowrap",
+            activeTab === "findings" && "border-b-2 border-primary"
+          )}
+          onClick={() => handleTabChange("findings")}
+        >
+          <span
+            className={cn(
+              "text-sm font-semibold",
+              activeTab === "findings" ? "text-primary" : "text-muted-foreground"
+            )}
+          >
+            Inspection Findings
+          </span>
         </div>
       </div>
 

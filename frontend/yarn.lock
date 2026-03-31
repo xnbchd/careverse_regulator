@@ -408,11 +408,6 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.11.tgz"
   integrity sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==
 
-"@fontsource-variable/raleway@^5.2.8":
-  version "5.2.8"
-  resolved "https://registry.npmjs.org/@fontsource-variable/raleway/-/raleway-5.2.8.tgz"
-  integrity sha512-PahqGI7bkz4a80m91Jt65DRsuFQmRip5vGDbI9sChVSKjLrdDfXbeGIwnTPi/ZVCOoQrbLnqzBOLQpLohnz+WA==
-
 "@fontsource-variable/roboto@^5.2.10":
   version "5.2.10"
   resolved "https://registry.npmjs.org/@fontsource-variable/roboto/-/roboto-5.2.10.tgz"

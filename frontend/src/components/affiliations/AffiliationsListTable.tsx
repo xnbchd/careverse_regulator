@@ -22,7 +22,6 @@ import {
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   Select,
@@ -34,10 +33,10 @@ import {
 import { EntityLink } from "@/components/entities"
 import ExportButton from "@/components/shared/ExportButton"
 import StatusBadge from "./StatusBadge"
+import { PageHeader } from "@/components/shared/PageHeader"
 import {
   Search,
   Users,
-  ArrowLeft,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
@@ -48,7 +47,6 @@ import {
   ChevronsRight,
   X,
 } from "lucide-react"
-import { useNavigate } from "@tanstack/react-router"
 import type { Affiliation } from "@/types/affiliation"
 import type { ExportConfig } from "@/utils/exportUtils"
 import dayjs from "dayjs"
@@ -229,12 +227,12 @@ interface AffiliationsListTableProps {
 }
 
 export default function AffiliationsListTable({ affiliations }: AffiliationsListTableProps) {
-  const navigate = useNavigate()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table API; not memoizable by design
   const table = useReactTable({
     data: affiliations,
     columns,
@@ -270,26 +268,16 @@ export default function AffiliationsListTable({ affiliations }: AffiliationsList
 
   return (
     <div className="space-y-6">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => navigate({ to: "/affiliations" })}
-        className="-ml-2"
-      >
-        <ArrowLeft className="h-4 w-4 mr-1" />
-        Back to Dashboard
-      </Button>
-
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-foreground">Professional Affiliations</h2>
-          <p className="text-muted-foreground mt-1">
-            Registry of {affiliations.length} affiliations
-            {selectedCount > 0 && <span className="ml-1">({selectedCount} selected)</span>}
-          </p>
-        </div>
-        <ExportButton data={exportData} config={affiliationExportConfig} size="default" />
-      </div>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Affiliations", href: "/affiliations" },
+          { label: "Affiliations List" },
+        ]}
+        title="Professional Affiliations"
+        subtitle={`Registry of ${affiliations.length} affiliation${affiliations.length !== 1 ? "s" : ""}${selectedCount > 0 ? ` (${selectedCount} selected)` : ""}`}
+        actions={<ExportButton data={exportData} config={affiliationExportConfig} size="sm" />}
+      />
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">

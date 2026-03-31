@@ -10,7 +10,6 @@ import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import type { Affiliation } from "@/types/affiliation"
 import StatusBadge from "./StatusBadge"
-import { cn } from "@/lib/utils"
 import { EntityLink } from "@/components/entities"
 
 interface AffiliationsTableProps {

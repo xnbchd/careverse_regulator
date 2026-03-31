@@ -53,12 +53,14 @@ export function FacilitiesDashboardView() {
         : "recent"
   )
 
-  // Debounce search
+  // Debounce search — intentionally omits facilitiesFilters/setFacilitiesFilters from deps
+  // to avoid re-triggering on every filter object reference change (infinite loop risk)
   useEffect(() => {
     const timer = setTimeout(() => {
       setFacilitiesFilters({ ...facilitiesFilters, search: searchText || undefined })
     }, 300)
     return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText])
 
   const handleSortChange = (order: "asc" | "desc" | "recent") => {

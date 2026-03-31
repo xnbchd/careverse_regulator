@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
-import { Search, Filter, X, ArrowUpDown } from "lucide-react"
+import { Search, X, ArrowUpDown } from "lucide-react"
 
 interface FacilitiesFiltersProps {
   searchText: string

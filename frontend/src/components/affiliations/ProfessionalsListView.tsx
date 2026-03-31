@@ -54,12 +54,14 @@ export function ProfessionalsListView() {
     professionalsFilters.sortOrder || "asc"
   )
 
-  // Debounce search
+  // Debounce search — intentionally omits professionalsFilters/setProfessionalsFilters from deps
+  // to avoid re-triggering on every filter object reference change (infinite loop risk)
   useEffect(() => {
     const timer = setTimeout(() => {
       setProfessionalsFilters({ ...professionalsFilters, search: searchText || undefined })
     }, 300)
     return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText])
 
   const handleStatusChange = (status: "all" | "active" | "inactive") => {

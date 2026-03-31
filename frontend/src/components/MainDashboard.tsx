@@ -1,466 +1,378 @@
-import { useMemo } from "react"
 import { useNavigate } from "@tanstack/react-router"
+import { differenceInDays, isBefore } from "date-fns"
+import { Clock, AlertTriangle, Users, FileText, Calendar, Activity } from "lucide-react"
 import { useAffiliationStore } from "@/stores/affiliationStore"
 import { useLicensingStore } from "@/stores/licensingStore"
 import { useInspectionStore } from "@/stores/inspectionStore"
-import { MetricCard, StatusDistribution, QuickActions } from "@/components/dashboard"
-import {
-  Clock,
-  AlertTriangle,
-  Users,
-  FileText,
-  Calendar,
-  ShieldCheck,
-  TrendingUp,
-  Activity,
-  ArrowRight,
-} from "lucide-react"
+import { useAuthStore } from "@/stores/authStore"
+import { PageHeader } from "@/components/shared/PageHeader"
+import { ActivityFeed, type ActivityItem } from "@/components/shared/ActivityFeed"
+import { AttentionCard } from "@/components/dashboard/AttentionCard"
+import { ModuleStatStrip } from "@/components/dashboard/ModuleStatStrip"
+import { ModuleStatusDonut } from "@/components/dashboard/ModuleStatusDonut"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { differenceInDays, isBefore } from "date-fns"
 
-interface MainDashboardProps {
-  onNavigate: (route: string) => void
-  company?: string | null
+function getGreeting(fullName: string | null | undefined): string {
+  const firstName = fullName?.trim().split(" ")[0] || null
+  const hour = new Date().getHours()
+  const salutation = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"
+  return firstName ? `${salutation}, ${firstName}` : salutation
 }
 
-export default function MainDashboard({}: MainDashboardProps) {
+function formatDate(): string {
+  return new Date().toLocaleDateString("en-GB", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
+
+// Typed route paths — validated against routeTree.gen.ts
+const MODULE_ROUTES = {
+  affiliationsList: "/affiliations/list",
+  licenses: "/license-management/licenses",
+  inspectionsList: "/inspections/list",
+  affiliations: "/affiliations",
+  licenseManagement: "/license-management",
+  inspections: "/inspections",
+} as const satisfies Record<string, string>
+
+// ── Per-module status color palettes ─────────────────────────────────────────
+// CSS custom properties used where a semantic token exists; raw hex only for
+// statuses that have no semantic equivalent in the design token system.
+
+const AFFILIATION_COLORS: Record<string, string> = {
+  Active: "var(--primary)",
+  Pending: "var(--status-pending-dot)",
+  Inactive: "var(--status-inactive-dot)",
+  Rejected: "var(--status-expired-dot)",
+}
+
+const LICENSE_COLORS: Record<string, string> = {
+  Active: "var(--primary)",
+  Pending: "var(--status-pending-dot)",
+  "In Review": "#60a5fa", // blue-400
+  "Info Requested": "#a78bfa", // violet-400
+  Approved: "#34d399", // emerald-400
+  "Renewal Reviewed": "#2dd4bf", // teal-400 (lighter)
+  Expired: "var(--status-expired-dot)",
+  Suspended: "var(--status-suspended-dot)",
+  Denied: "#f43f5e", // rose-500
+}
+
+const INSPECTION_COLORS: Record<string, string> = {
+  Assigned: "var(--status-pending-dot)", // amber — awaiting action
+  "In Progress": "var(--primary)", // teal — active
+  Submitted: "#60a5fa", // blue-400
+  Reviewed: "#34d399", // emerald-400 — complete
+  Cancelled: "var(--status-inactive-dot)", // neutral
+}
+
+export default function MainDashboard() {
   const navigate = useNavigate()
+  const user = useAuthStore((state) => state.user)
 
-  // Load data from all stores (fetched by route loader)
   const { affiliations, loading: affiliationsLoading } = useAffiliationStore()
-
-  const { licenses, applications, licensesLoading, applicationsLoading } = useLicensingStore()
-
+  const { licenses, licensesLoading } = useLicensingStore()
   const { inspections, loading: inspectionsLoading } = useInspectionStore()
 
-  // Aggregate metrics across all sections
-  const aggregateMetrics = useMemo(() => {
-    const now = new Date()
+  const isLoading = affiliationsLoading || licensesLoading || inspectionsLoading
 
-    // Affiliations metrics
-    const pendingAffiliations = affiliations.filter((a) => a.affiliationStatus === "Pending").length
-    const activeAffiliations = affiliations.filter((a) => a.affiliationStatus === "Active").length
+  const now = new Date()
 
-    // Licenses metrics
-    const expiringSoonLicenses = licenses.filter((l) => {
-      const daysUntilExpiry = differenceInDays(new Date(l.dateOfExpiry), now)
-      return daysUntilExpiry > 0 && daysUntilExpiry <= 30 && l.status === "Active"
-    }).length
+  // ── Attention counts ─────────────────────────────────────────────────────────
+  const pendingAffiliations = affiliations.filter((a) => a.affiliationStatus === "Pending").length
 
-    const activeLicenses = licenses.filter((l) => l.status === "Active").length
-    const suspendedLicenses = licenses.filter((l) => l.status === "Suspended").length
-    const deniedLicenses = licenses.filter((l) => l.status === "Denied").length
+  const expiringSoonLicenses = licenses.filter((l) => {
+    const days = differenceInDays(new Date(l.dateOfExpiry), now)
+    return days >= 0 && days <= 30 && l.status === "Active"
+  }).length
 
-    // Applications metrics
-    const pendingApplications = applications.filter((a) => a.applicationStatus === "Pending").length
-    const inReviewApplications = applications.filter(
-      (a) => a.applicationStatus === "In Review"
-    ).length
+  const expiredLicenses = licenses.filter((l) => l.status === "Expired").length
 
-    // Inspections metrics
-    const overdueInspections = inspections.filter((i) => {
-      const inspectionDate = new Date(i.date)
-      return i.status === "Pending" && isBefore(inspectionDate, now)
-    }).length
+  // Inspections due — use real statuses (Assigned | In Progress), not phantom "Pending"
+  const overdueInspections = inspections.filter(
+    (i) =>
+      (i.status === "Assigned" || i.status === "In Progress") && isBefore(new Date(i.date), now)
+  ).length
 
-    const dueSoonInspections = inspections.filter((i) => {
-      const inspectionDate = new Date(i.date)
-      const daysUntilDue = differenceInDays(inspectionDate, now)
-      return i.status === "Pending" && daysUntilDue >= 0 && daysUntilDue <= 7
-    }).length
+  const dueSoonInspections = inspections.filter((i) => {
+    if (i.status !== "Assigned" && i.status !== "In Progress") return false
+    const days = differenceInDays(new Date(i.date), now)
+    return days >= 0 && days <= 7
+  }).length
 
-    const completedInspections = inspections.filter((i) => i.status === "Completed").length
+  // ── KPI snapshot ─────────────────────────────────────────────────────────────
+  const activeLicenses = licenses.filter((l) => l.status === "Active").length
+  const totalLicenses = licenses.length
+  const complianceRate = totalLicenses > 0 ? Math.round((activeLicenses / totalLicenses) * 100) : 0
 
-    const nonCompliantInspections = inspections.filter((i) => i.status === "Non Compliant").length
+  const activeAffiliations = affiliations.filter((a) => a.affiliationStatus === "Active").length
+  // "Reviewed" is the real terminal status for completed inspections
+  const reviewedInspections = inspections.filter((i) => i.status === "Reviewed").length
 
-    // Total items requiring attention
-    const totalRequiringAttention =
-      pendingAffiliations + expiringSoonLicenses + pendingApplications + overdueInspections
+  const kpiStats = [
+    { label: "Total Affiliations", value: affiliations.length },
+    { label: "Active Licenses", value: activeLicenses, color: "primary" as const },
+    { label: "Total Inspections", value: inspections.length },
+    {
+      label: "Compliance Rate",
+      value: `${complianceRate}%`,
+      color: complianceRate >= 80 ? ("primary" as const) : ("amber" as const),
+    },
+  ]
 
-    // Compliance rate
-    const totalLicenses = licenses.length
-    const complianceRate =
-      totalLicenses > 0 ? Math.round((activeLicenses / totalLicenses) * 100) : 0
+  // ── Donut chart segments — per module, per real status ───────────────────────
 
-    return {
-      pendingAffiliations,
-      activeAffiliations,
-      expiringSoonLicenses,
-      activeLicenses,
-      suspendedLicenses,
-      deniedLicenses,
-      pendingApplications,
-      inReviewApplications,
-      overdueInspections,
-      dueSoonInspections,
-      completedInspections,
-      nonCompliantInspections,
-      totalRequiringAttention,
-      complianceRate,
-      totalAffiliations: affiliations.length,
-      totalLicenses: licenses.length,
-      totalApplications: applications.length,
-      totalInspections: inspections.length,
-    }
-  }, [affiliations, licenses, applications, inspections])
-
-  // Status distribution across all sections
-  const overallStatusDistribution = useMemo(() => {
-    return [
-      {
-        status: "Pending Review",
-        count: aggregateMetrics.pendingAffiliations + aggregateMetrics.pendingApplications,
-        color: "#f59e0b",
-      },
-      {
-        status: "Active/Compliant",
-        count: aggregateMetrics.activeAffiliations + aggregateMetrics.activeLicenses,
-        color: "#10b981",
-      },
-      {
-        status: "Expiring Soon",
-        count: aggregateMetrics.expiringSoonLicenses,
-        color: "#ef4444",
-      },
-      {
-        status: "Overdue",
-        count: aggregateMetrics.overdueInspections,
-        color: "#dc2626",
-      },
-    ].filter((item) => item.count > 0)
-  }, [aggregateMetrics])
-
-  // Quick actions for main dashboard
-  const quickActions = useMemo(
-    () => [
-      {
-        label: "Affiliations",
-        onClick: () => navigate({ to: "/affiliations" }),
-        variant: "default" as const,
-        icon: Users,
-      },
-      {
-        label: "Licenses",
-        onClick: () => navigate({ to: "/license-management" }),
-        variant: "default" as const,
-        icon: FileText,
-      },
-      {
-        label: "Inspections",
-        onClick: () => navigate({ to: "/inspections" }),
-        variant: "default" as const,
-        icon: Calendar,
-      },
-    ],
-    [navigate]
+  // Affiliations: 4 real statuses
+  const affiliationSegments = (["Active", "Pending", "Inactive", "Rejected"] as const).map(
+    (status) => ({
+      label: status,
+      value: affiliations.filter((a) => a.affiliationStatus === status).length,
+      color: AFFILIATION_COLORS[status],
+    })
   )
 
-  const isLoading =
-    affiliationsLoading || licensesLoading || applicationsLoading || inspectionsLoading
+  // Licenses: 9 real statuses, ordered most relevant first
+  const licenseStatuses = [
+    "Active",
+    "Pending",
+    "In Review",
+    "Info Requested",
+    "Approved",
+    "Renewal Reviewed",
+    "Expired",
+    "Suspended",
+    "Denied",
+  ] as const
+  const licenseSegments = licenseStatuses.map((status) => ({
+    label: status,
+    value: licenses.filter((l) => l.status === status).length,
+    color: LICENSE_COLORS[status],
+  }))
 
-  if (isLoading && aggregateMetrics.totalRequiringAttention === 0) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading dashboard...</p>
-        </div>
-      </div>
+  // Inspections: 5 real statuses
+  const inspectionStatuses = [
+    "Assigned",
+    "In Progress",
+    "Submitted",
+    "Reviewed",
+    "Cancelled",
+  ] as const
+  const inspectionSegments = inspectionStatuses.map((status) => ({
+    label: status,
+    value: inspections.filter((i) => i.status === status).length,
+    color: INSPECTION_COLORS[status],
+  }))
+
+  // ── Activity feed — synthesised from store data ───────────────────────────────
+  const activityItems: ActivityItem[] = []
+
+  // Overdue inspections → red
+  inspections
+    .filter(
+      (i) =>
+        (i.status === "Assigned" || i.status === "In Progress") && isBefore(new Date(i.date), now)
     )
-  }
+    .slice(0, 2)
+    .forEach((i) => {
+      activityItems.push({
+        id: `insp-overdue-${i.id}`,
+        text: (
+          <>
+            Inspection overdue: <strong className="text-foreground">{i.facilityName}</strong>
+          </>
+        ),
+        timestamp: `Due ${new Date(i.date).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
+        datetime: i.date,
+        color: "red",
+      })
+    })
+
+  // Expiring licenses → amber
+  licenses
+    .filter((l) => {
+      const days = differenceInDays(new Date(l.dateOfExpiry), now)
+      return days >= 0 && days <= 30 && l.status === "Active"
+    })
+    .slice(0, 2)
+    .forEach((l) => {
+      const days = differenceInDays(new Date(l.dateOfExpiry), now)
+      activityItems.push({
+        id: `lic-expiring-${l.id}`,
+        text: (
+          <>
+            <strong className="text-foreground">{l.facilityName ?? l.owner}</strong> license expires
+            in {days} day{days !== 1 ? "s" : ""}
+          </>
+        ),
+        timestamp: `Expires ${new Date(l.dateOfExpiry).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
+        datetime: l.dateOfExpiry,
+        color: "amber",
+      })
+    })
+
+  // Pending affiliations → amber
+  affiliations
+    .filter((a) => a.affiliationStatus === "Pending")
+    .slice(0, 2)
+    .forEach((a) => {
+      activityItems.push({
+        id: `aff-pending-${a.id}`,
+        text: (
+          <>
+            <strong className="text-foreground">{a.healthFacility.facilityName}</strong> affiliation
+            awaiting review
+          </>
+        ),
+        timestamp: "Recently submitted",
+        color: "amber",
+      })
+    })
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-end justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Regulator Dashboard</h1>
-          <p className="text-muted-foreground mt-1">
-            Overview of all compliance activities and priority actions
-          </p>
-        </div>
-        <Badge variant="outline" className="text-xs gap-1.5 py-1">
-          <Activity className="h-3 w-3" />
-          {aggregateMetrics.complianceRate}% compliance rate
-        </Badge>
-      </div>
-
-      {/* Quick Actions */}
-      <QuickActions actions={quickActions} title="Navigate to Sections" />
-
-      {/* Priority Attention + Key Stats Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Priority Actions Card */}
-        <Card className="bg-gradient-to-br from-orange-50 to-yellow-50 border-orange-200 shadow-md dark:from-orange-950/40 dark:to-yellow-950/30 dark:border-orange-800 dark:shadow-none">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm font-medium text-orange-900 dark:text-orange-300 mb-1">
-                  Priority Actions Required
-                </p>
-                <p className="text-4xl font-bold text-orange-900 dark:text-orange-200">
-                  {aggregateMetrics.totalRequiringAttention}
-                </p>
-                <p className="text-sm text-orange-700 dark:text-orange-400 mt-2">
-                  {aggregateMetrics.pendingAffiliations} affiliations •{" "}
-                  {aggregateMetrics.pendingApplications} applications •{" "}
-                  {aggregateMetrics.expiringSoonLicenses} expiring •{" "}
-                  {aggregateMetrics.overdueInspections} overdue
-                </p>
-              </div>
-              <AlertTriangle className="h-10 w-10 text-orange-600 dark:text-orange-400" />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Total Entities Card */}
-        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200 shadow-md dark:from-blue-950/40 dark:to-indigo-950/30 dark:border-blue-800 dark:shadow-none">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm font-medium text-blue-900 dark:text-blue-300 mb-1">
-                  Total Regulated Entities
-                </p>
-                <p className="text-4xl font-bold text-blue-900 dark:text-blue-200">
-                  {aggregateMetrics.totalLicenses + aggregateMetrics.totalAffiliations}
-                </p>
-                <p className="text-sm text-blue-700 dark:text-blue-400 mt-2">
-                  {aggregateMetrics.totalLicenses} licenses • {aggregateMetrics.totalAffiliations}{" "}
-                  affiliations
-                </p>
-              </div>
-              <ShieldCheck className="h-10 w-10 text-blue-600 dark:text-blue-400" />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Inspections Overview Card */}
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200 shadow-md dark:from-green-950/40 dark:to-emerald-950/30 dark:border-green-800 dark:shadow-none">
-          <CardContent className="p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-sm font-medium text-green-900 dark:text-green-300 mb-1">
-                  Inspections Overview
-                </p>
-                <p className="text-4xl font-bold text-green-900 dark:text-green-200">
-                  {aggregateMetrics.totalInspections}
-                </p>
-                <p className="text-sm text-green-700 dark:text-green-400 mt-2">
-                  {aggregateMetrics.completedInspections} completed •{" "}
-                  {aggregateMetrics.dueSoonInspections} due soon
-                </p>
-              </div>
-              <TrendingUp className="h-10 w-10 text-green-600 dark:text-green-400" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Overview Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Pending Affiliations"
-          value={aggregateMetrics.pendingAffiliations}
-          variant="warning"
-          icon={Users}
-          onClick={() => navigate({ to: "/affiliations/list", search: { status: "Pending" } })}
-        />
-        <MetricCard
-          title="Expiring Licenses"
-          value={aggregateMetrics.expiringSoonLicenses}
-          variant="danger"
-          icon={AlertTriangle}
-          onClick={() => navigate({ to: "/license-management/licenses" })}
-        />
-        <MetricCard
-          title="Pending Applications"
-          value={aggregateMetrics.pendingApplications}
-          variant="info"
-          icon={FileText}
-          onClick={() =>
-            navigate({
-              to: "/license-management/applications",
-              search: { applicationStatus: "Pending" },
-            })
-          }
-        />
-        <MetricCard
-          title="Overdue Inspections"
-          value={aggregateMetrics.overdueInspections}
-          variant="danger"
-          icon={Clock}
-          onClick={() => navigate({ to: "/inspections/list", search: { status: "Pending" } })}
-        />
-      </div>
-
-      {/* Additional metrics row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Active Licenses"
-          value={aggregateMetrics.activeLicenses}
-          variant="success"
-          icon={ShieldCheck}
-          onClick={() =>
-            navigate({ to: "/license-management/licenses", search: { status: "Active" } })
-          }
-        />
-        <MetricCard
-          title="Suspended Licenses"
-          value={aggregateMetrics.suspendedLicenses}
-          variant="warning"
-          icon={AlertTriangle}
-        />
-        <MetricCard
-          title="In Review Applications"
-          value={aggregateMetrics.inReviewApplications}
-          variant="info"
-          icon={FileText}
-        />
-        <MetricCard
-          title="Non-Compliant"
-          value={aggregateMetrics.nonCompliantInspections}
-          variant="danger"
-          icon={AlertTriangle}
-        />
-      </div>
-
-      {/* Section Summaries */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Affiliations Summary */}
-        <Card className="shadow-md border-border/60 dark:shadow-none dark:border-foreground/15">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Affiliations
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Total</span>
-              <span className="text-2xl font-bold">{aggregateMetrics.totalAffiliations}</span>
-            </div>
-            <div className="space-y-2 min-h-[72px]">
-              <div className="flex justify-between text-sm">
-                <span>Pending Review</span>
-                <span className="font-medium text-yellow-600 dark:text-yellow-400">
-                  {aggregateMetrics.pendingAffiliations}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Active</span>
-                <span className="font-medium text-green-600 dark:text-green-400">
-                  {aggregateMetrics.activeAffiliations}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Total Professionals</span>
-                <span className="font-medium">{aggregateMetrics.totalAffiliations}</span>
-              </div>
-            </div>
-            <button
-              onClick={() => navigate({ to: "/affiliations" })}
-              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
-            >
-              View Dashboard
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </CardContent>
-        </Card>
-
-        {/* Licenses Summary */}
-        <Card className="shadow-md border-border/60 dark:shadow-none dark:border-foreground/15">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Licenses
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Total</span>
-              <span className="text-2xl font-bold">{aggregateMetrics.totalLicenses}</span>
-            </div>
-            <div className="space-y-2 min-h-[72px]">
-              <div className="flex justify-between text-sm">
-                <span>Expiring Soon</span>
-                <span className="font-medium text-red-600 dark:text-red-400">
-                  {aggregateMetrics.expiringSoonLicenses}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Active Licenses</span>
-                <span className="font-medium text-green-600 dark:text-green-400">
-                  {aggregateMetrics.activeLicenses}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Pending Applications</span>
-                <span className="font-medium text-yellow-600 dark:text-yellow-400">
-                  {aggregateMetrics.pendingApplications}
-                </span>
-              </div>
-            </div>
-            <button
-              onClick={() => navigate({ to: "/license-management" })}
-              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
-            >
-              View Dashboard
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </CardContent>
-        </Card>
-
-        {/* Inspections Summary */}
-        <Card className="shadow-md border-border/60 dark:shadow-none dark:border-foreground/15">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
-              Inspections
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Total</span>
-              <span className="text-2xl font-bold">{aggregateMetrics.totalInspections}</span>
-            </div>
-            <div className="space-y-2 min-h-[72px]">
-              <div className="flex justify-between text-sm">
-                <span>Overdue</span>
-                <span className="font-medium text-red-600 dark:text-red-400">
-                  {aggregateMetrics.overdueInspections}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Due This Week</span>
-                <span className="font-medium text-yellow-600 dark:text-yellow-400">
-                  {aggregateMetrics.dueSoonInspections}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Completed</span>
-                <span className="font-medium text-green-600 dark:text-green-400">
-                  {aggregateMetrics.completedInspections}
-                </span>
-              </div>
-            </div>
-            <button
-              onClick={() => navigate({ to: "/inspections" })}
-              className="w-full mt-4 px-4 py-2 bg-primary text-primary-foreground dark:text-background rounded-md hover:bg-primary/90 transition-colors text-sm font-medium flex items-center justify-center gap-2"
-            >
-              View Dashboard
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Overall Status Distribution */}
-      <StatusDistribution
-        data={overallStatusDistribution}
-        title="Overall Compliance Status"
-        type="bar"
+    <div className="space-y-5 p-6">
+      {/* Page header */}
+      <PageHeader
+        breadcrumbs={[{ label: "Dashboard" }]}
+        title={getGreeting(user?.fullName)}
+        subtitle={`${formatDate()}${user?.companyDisplayName ? ` · ${user.companyDisplayName}` : ""}`}
       />
+
+      {/* Attention strip */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <AttentionCard
+          count={pendingAffiliations}
+          label="Affiliations Pending Review"
+          sublabel={
+            pendingAffiliations > 0
+              ? `${pendingAffiliations} awaiting your action`
+              : "No pending affiliations"
+          }
+          variant="amber"
+          icon={Users}
+          href={MODULE_ROUTES.affiliationsList}
+          loading={affiliationsLoading}
+        />
+        <AttentionCard
+          count={expiringSoonLicenses + expiredLicenses}
+          label="Licenses Requiring Attention"
+          sublabel={
+            expiredLicenses > 0
+              ? `${expiredLicenses} expired · ${expiringSoonLicenses} expiring soon`
+              : expiringSoonLicenses > 0
+                ? `${expiringSoonLicenses} expiring within 30 days`
+                : "All licenses current"
+          }
+          variant="red"
+          icon={AlertTriangle}
+          href={MODULE_ROUTES.licenses}
+          loading={licensesLoading}
+        />
+        <AttentionCard
+          count={overdueInspections + dueSoonInspections}
+          label="Inspections This Week"
+          sublabel={
+            overdueInspections > 0
+              ? `${overdueInspections} overdue · ${dueSoonInspections} due this week`
+              : dueSoonInspections > 0
+                ? `${dueSoonInspections} due this week`
+                : "No inspections due"
+          }
+          variant="teal"
+          icon={Calendar}
+          href={MODULE_ROUTES.inspectionsList}
+          loading={inspectionsLoading}
+        />
+      </div>
+
+      {/* KPI snapshot */}
+      <ModuleStatStrip stats={kpiStats} loading={isLoading} />
+
+      {/* Module status donuts — one per module, each showing its own real status set */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <ModuleStatusDonut
+          title="Affiliations"
+          segments={affiliationSegments}
+          loading={affiliationsLoading}
+        />
+        <ModuleStatusDonut title="Licenses" segments={licenseSegments} loading={licensesLoading} />
+        <ModuleStatusDonut
+          title="Inspections"
+          segments={inspectionSegments}
+          loading={inspectionsLoading}
+        />
+      </div>
+
+      {/* Attention items feed — full-width below donuts */}
+      <Card className="border border-border/60">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-semibold flex items-center gap-2">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            Attention Items
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {activityItems.length === 0 && !isLoading ? (
+            <div className="py-8 text-center">
+              <Activity className="h-8 w-8 text-muted-foreground mx-auto mb-2" strokeWidth={1.5} />
+              <p className="text-sm font-medium text-foreground">All clear</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                No items requiring immediate attention
+              </p>
+            </div>
+          ) : (
+            <ActivityFeed items={activityItems.slice(0, 6)} loading={isLoading} />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Module navigation row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {(
+          [
+            {
+              label: "Affiliations",
+              icon: Users,
+              to: MODULE_ROUTES.affiliations,
+              count: affiliations.length,
+              sub: `${activeAffiliations} active`,
+            },
+            {
+              label: "License Management",
+              icon: FileText,
+              to: MODULE_ROUTES.licenseManagement,
+              count: totalLicenses,
+              sub: `${activeLicenses} active`,
+            },
+            {
+              label: "Inspections",
+              icon: Calendar,
+              to: MODULE_ROUTES.inspections,
+              count: inspections.length,
+              sub: `${reviewedInspections} reviewed`,
+            },
+          ] as const
+        ).map((mod) => (
+          <button
+            key={mod.label}
+            type="button"
+            onClick={() => navigate({ to: mod.to })}
+            className="group flex items-center gap-3 p-4 rounded-lg border border-border/60 bg-card hover:border-primary/30 hover:bg-primary/5 transition-all duration-150 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <div className="shrink-0 w-9 h-9 rounded-md bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <mod.icon className="h-4 w-4 text-primary" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-foreground">{mod.label}</p>
+              <p className="text-xs text-muted-foreground">
+                {mod.count} total · {mod.sub}
+              </p>
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   )
 }

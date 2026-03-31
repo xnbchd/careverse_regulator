@@ -1,14 +1,14 @@
 import { useNavigate, getRouteApi } from "@tanstack/react-router"
 import {
-  MetricCard,
-  StatusDistribution,
   PrioritySection,
   RecentActivity,
   QuickActions,
   ComplianceRateGauge,
   TrendChart,
 } from "@/components/dashboard"
-import { CheckCircle, Clock, AlertTriangle, FileText, List, Calendar } from "lucide-react"
+import { ModuleStatStrip } from "@/components/dashboard/ModuleStatStrip"
+import { PageHeader } from "@/components/shared/PageHeader"
+import { AlertTriangle, List, Calendar } from "lucide-react"
 import { differenceInDays } from "date-fns"
 import dayjs from "dayjs"
 import customParseFormat from "dayjs/plugin/customParseFormat"
@@ -59,10 +59,10 @@ export function InspectionsDashboard() {
               <span
                 className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${
                   daysUntilDue === 0
-                    ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400"
+                    ? "[background:var(--status-expired-bg)] [color:var(--status-expired-text)]"
                     : daysUntilDue <= 3
-                      ? "bg-orange-100 text-orange-700 dark:bg-orange-950/50 dark:text-orange-400"
-                      : "bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400"
+                      ? "[background:var(--status-suspended-bg)] [color:var(--status-suspended-text)]"
+                      : "bg-primary/10 text-primary"
                 }`}
               >
                 {daysUntilDue === 0
@@ -99,49 +99,35 @@ export function InspectionsDashboard() {
     })) || []
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Inspections Management</h1>
-        <p className="text-muted-foreground mt-1">
-          Monitor facility inspections and track compliance status
-        </p>
-      </div>
+      <PageHeader
+        breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }, { label: "Inspections" }]}
+        title="Inspections"
+        subtitle="Monitor facility inspections and track compliance status"
+        actions={
+          <Button size="sm" onClick={() => navigate({ to: "/inspections/list" })}>
+            View All Inspections
+          </Button>
+        }
+      />
 
       {/* Quick Actions */}
       <QuickActions actions={quickActions} title="Quick Actions" />
 
-      {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          title="Due This Week"
-          value={dashboardData?.metrics.due_soon || 0}
-          variant="warning"
-          icon={Clock}
-          onClick={() => navigate({ to: "/inspections/list", search: { status: "Pending" } })}
-        />
-        <MetricCard
-          title="Completed"
-          value={dashboardData?.metrics.completed || 0}
-          variant="success"
-          icon={CheckCircle}
-          onClick={() => navigate({ to: "/inspections/list", search: { status: "Completed" } })}
-        />
-        <MetricCard
-          title="Non-Compliant"
-          value={dashboardData?.metrics.non_compliant || 0}
-          variant="danger"
-          icon={AlertTriangle}
-          onClick={() => navigate({ to: "/inspections/list", search: { status: "Non Compliant" } })}
-        />
-        <MetricCard
-          title="Overdue"
-          value={dashboardData?.metrics.overdue || 0}
-          variant="danger"
-          icon={Clock}
-          onClick={() => navigate({ to: "/inspections/list", search: { status: "Pending" } })}
-        />
-      </div>
+      {/* Metrics Strip */}
+      <ModuleStatStrip
+        stats={[
+          { label: "Due This Week", value: dashboardData?.metrics.due_soon || 0, color: "amber" },
+          { label: "Completed", value: dashboardData?.metrics.completed || 0, color: "primary" },
+          {
+            label: "Non-Compliant",
+            value: dashboardData?.metrics.non_compliant || 0,
+            color: "red",
+          },
+          { label: "Overdue", value: dashboardData?.metrics.overdue || 0, color: "red" },
+        ]}
+      />
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

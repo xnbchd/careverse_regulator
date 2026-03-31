@@ -8,13 +8,15 @@ import AffiliationsFilters from "./AffiliationsFilters"
 import PaginationControls from "./PaginationControls"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Users, ArrowLeft } from "lucide-react"
+import { Users } from "lucide-react"
+import { PageHeader } from "@/components/shared/PageHeader"
 
 interface AffiliationsViewProps {
   company?: string | null
 }
 
-export default function AffiliationsView({}: AffiliationsViewProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function AffiliationsView(_props: AffiliationsViewProps) {
   const navigate = useNavigate()
   const {
     affiliations,
@@ -40,13 +42,15 @@ export default function AffiliationsView({}: AffiliationsViewProps) {
     filters.sortOrder === "desc" ? "desc" : filters.sortOrder === "asc" ? "asc" : "recent"
   )
 
-  // Debounce search text
+  // Debounce search text — intentionally omits filters/setFilters from deps
+  // to avoid triggering on every filter object reference change (would cause infinite loop)
   useEffect(() => {
     const timer = setTimeout(() => {
       setFilters({ ...filters, search: searchText || undefined })
     }, 300)
 
     return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText])
 
   // Handle status filter change
@@ -111,16 +115,14 @@ export default function AffiliationsView({}: AffiliationsViewProps) {
 
   return (
     <div className="space-y-6">
-      {/* Back to Dashboard */}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={() => navigate({ to: "/affiliations" })}
-        className="-ml-2"
-      >
-        <ArrowLeft className="h-4 w-4 mr-1" />
-        Back to Dashboard
-      </Button>
+      <PageHeader
+        breadcrumbs={[
+          { label: "Dashboard", href: "/dashboard" },
+          { label: "Affiliations", href: "/affiliations" },
+          { label: "All Affiliations" },
+        ]}
+        title="All Affiliations"
+      />
 
       {/* Filters */}
       <AffiliationsFilters

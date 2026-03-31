@@ -82,7 +82,7 @@ export default function AppLayout({
   children,
   currentRoute,
   pageTitle,
-  pageSubtitle,
+  // pageSubtitle unused — kept in props for future use
   onNavigate,
   onLogout,
   onSwitchToDesk,
@@ -102,8 +102,6 @@ export default function AppLayout({
   }, [isTablet])
 
   const selectedMenuKey = useMemo(() => selectedMenuKeyForRoute(currentRoute), [currentRoute])
-  const pageContext =
-    selectedMenuKey === "dashboard" ? "Workspace overview" : "Operational workspace"
   const displayUsername = user?.name || user?.email || "User"
   const displayCompany = user?.companyDisplayName || user?.company || "Company not configured"
   const brandTitle = user?.companyDisplayName || user?.company || "Compliance360"
@@ -125,7 +123,7 @@ export default function AppLayout({
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((event.metaKey || event.ctrlKey) && event.key === "k") {
         event.preventDefault()
-        setSearchOpen((prev) => true)
+        setSearchOpen(true)
       }
     }
 
@@ -355,15 +353,15 @@ export default function AppLayout({
         )}
       >
         <header className="sticky top-0 z-40 h-16 border-b border-border bg-card/80 backdrop-blur-lg px-3 md:px-6">
-          <div className="flex items-center justify-between h-full">
-            <div className="flex items-center gap-3">
+          <div className="relative flex items-center justify-between h-full gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() =>
                   isMobile || isTablet ? setMobileMenuVisible(true) : setCollapsed(!collapsed)
                 }
-                className={cn(isMobile ? "w-9 h-9" : "w-10 h-10")}
+                className={cn("shrink-0", isMobile ? "w-9 h-9" : "w-10 h-10")}
               >
                 {isMobile || isTablet ? (
                   <PanelLeft className="w-4 h-4" />
@@ -374,88 +372,114 @@ export default function AppLayout({
                 )}
               </Button>
 
-              <div className="h-8 w-px bg-border" />
+              <div className="h-8 w-px bg-border shrink-0" />
 
+              {/* Logo — always visible; smaller on mobile */}
               <img
                 src={`${import.meta.env.BASE_URL}compliance-logo.svg`}
                 alt="Compliance360"
-                className="h-7 w-auto object-contain"
+                className={cn(
+                  "object-contain shrink-0",
+                  isMobile ? "h-5 max-w-[90px] w-auto" : "h-7 w-auto"
+                )}
               />
 
-              <div className="h-8 w-px bg-border" />
+              <div className="h-8 w-px bg-border shrink-0" />
 
-              <div className="flex flex-col">
-                <h1 className="text-sm font-semibold leading-tight">{pageTitle}</h1>
+              <div className="min-w-0 flex flex-col">
+                <h1 className="text-sm font-semibold leading-tight truncate">{pageTitle}</h1>
               </div>
             </div>
 
-            {/* Search bar for desktop */}
+            {/* Search bar — desktop only, absolutely centred in the header */}
             {!isMobile && !isTablet && (
-              <Button
-                variant="outline"
-                className="w-80 justify-between text-muted-foreground font-normal"
-                onClick={() => setSearchOpen(true)}
-              >
-                <span className="flex items-center">
-                  <Search className="w-4 h-4 mr-2" />
-                  Search...
-                </span>
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                  <span className="text-xs">⌘</span>K
-                </kbd>
-              </Button>
+              <div className="absolute left-1/2 -translate-x-1/2 pointer-events-none">
+                <Button
+                  variant="outline"
+                  className="w-72 justify-between text-muted-foreground font-normal pointer-events-auto"
+                  onClick={() => setSearchOpen(true)}
+                >
+                  <span className="flex items-center">
+                    <Search className="w-4 h-4 mr-2" />
+                    Search...
+                  </span>
+                  <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-0.5 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                    <span className="text-xs">⌘</span>K
+                  </kbd>
+                </Button>
+              </div>
             )}
 
-            <div className="flex items-center gap-2">
-              {/* Search icon for mobile/tablet */}
-              {(isMobile || isTablet) && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setSearchOpen(true)}
-                  className={cn(isMobile ? "w-9 h-9" : "w-10 h-10")}
-                >
-                  <Search className="w-4 h-4" />
-                </Button>
-              )}
-
+            <div className="flex items-center gap-1 shrink-0">
+              {/* Notifications — always visible in header (bell icon only, compact) */}
               <NotificationCenter />
 
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={toggleMode}
-                    className={cn(isMobile ? "w-9 h-9" : "w-10 h-10")}
-                  >
-                    {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>{isDarkMode ? "Light Mode" : "Dark Mode"}</TooltipContent>
-              </Tooltip>
+              {/* Theme toggle — desktop only; on mobile moves to dropdown */}
+              {!isMobile && !isTablet && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" onClick={toggleMode} className="w-10 h-10">
+                      {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{isDarkMode ? "Light Mode" : "Dark Mode"}</TooltipContent>
+                </Tooltip>
+              )}
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-accent transition-colors">
-                    <Avatar className="w-8 h-8">
+                  <button className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-accent transition-colors max-w-[160px]">
+                    <Avatar className="w-8 h-8 shrink-0">
                       <AvatarImage src={user?.userImage || undefined} alt={displayUsername} />
                       <AvatarFallback className="text-xs">
                         {getUserInitials(user?.fullName, user?.email)}
                       </AvatarFallback>
                     </Avatar>
                     {!isMobile && (
-                      <div className="flex flex-col items-start">
-                        <span className="text-sm font-medium leading-tight">{displayUsername}</span>
-                        <span className="text-xs text-muted-foreground leading-tight">
-                          {displayCompany}
+                      <div className="flex flex-col items-start min-w-0">
+                        <span className="text-sm font-medium leading-tight truncate max-w-[100px]">
+                          {displayUsername}
+                        </span>
+                        <span className="text-xs text-muted-foreground leading-tight truncate max-w-[100px]">
+                          {user?.companyAbbr || brandSubtitle}
                         </span>
                       </div>
                     )}
-                    {!isMobile && <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                    {!isMobile && (
+                      <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+                    )}
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
+                  {/* User info header — always shown */}
+                  <div className="px-3 py-2 border-b border-border">
+                    <p className="text-xs font-semibold text-foreground truncate">
+                      {displayUsername}
+                    </p>
+                    <p className="text-[11px] text-muted-foreground truncate">{displayCompany}</p>
+                  </div>
+
+                  {/* Mobile-only actions: search and theme toggle */}
+                  {(isMobile || isTablet) && (
+                    <>
+                      <div className="py-1">
+                        <DropdownMenuItem onClick={() => setSearchOpen(true)}>
+                          <Search className="w-4 h-4 mr-2" />
+                          Search
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={toggleMode}>
+                          {isDarkMode ? (
+                            <Sun className="w-4 h-4 mr-2" />
+                          ) : (
+                            <Moon className="w-4 h-4 mr-2" />
+                          )}
+                          {isDarkMode ? "Light Mode" : "Dark Mode"}
+                        </DropdownMenuItem>
+                      </div>
+                      <DropdownMenuSeparator />
+                    </>
+                  )}
+
                   <DropdownMenuItem onClick={() => onNavigate("profile")}>
                     <User className="w-4 h-4 mr-2" />
                     View profile
